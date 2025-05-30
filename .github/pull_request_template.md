@@ -15,3 +15,6 @@ ex) <img src="" width="300" height="600"/>
 ### 개발 결과
 - ex) 로그인 페이지 생성 완료
 - ex) 위젯 분리 및 컴포넌트 완료
+
+### issue
+Closes #
