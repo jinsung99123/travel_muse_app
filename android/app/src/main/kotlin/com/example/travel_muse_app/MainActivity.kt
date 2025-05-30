@@ -1,4 +1,4 @@
-package com.example.travel_muse_app
+package com.travelmuse.travelmuse
 
 import io.flutter.embedding.android.FlutterActivity
 
