@@ -31,6 +31,15 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
+  bool isBetween(DateTime day) {
+    if (_startDay == null || _endDay == null) return false;
+    return day.isAfter(_startDay!) && day.isBefore(_endDay!);
+  }
+
+  bool isSelected(DateTime day) {
+    return day == _startDay || day == _endDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +50,39 @@ class _CalendarPageState extends State<CalendarPage> {
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(2100, 12, 31),
           focusedDay: _focusedDay,
-          selectedDayPredicate: (day) => day == _startDay || day == _endDay,
+          selectedDayPredicate: isSelected,
           onDaySelected: _onDaySelected,
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, day, focusedDay) {
+              final inRange = isBetween(day);
+              return Container(
+                margin: const EdgeInsets.all(4.0),
+                decoration: BoxDecoration(
+                  color: inRange ? Colors.lightBlue.shade100 : null,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Center(child: Text('${day.day}')),
+              );
+            },
+            selectedBuilder: (context, day, focusedDay) {
+              return Container(
+                margin: const EdgeInsets.all(4.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Center(
+                  child: Text(
+                    '${day.day}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
