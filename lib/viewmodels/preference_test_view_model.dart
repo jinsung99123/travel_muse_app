@@ -29,7 +29,7 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<(String, String)>> {
           .map((a) => '${a['question']} => ${a['selectedOption']}')
           .join(', ');
 
-      final prompt = """
+      final prompt = '''
 사용자의 여행 성향 테스트 결과:
 $resultSummary
 
@@ -42,7 +42,7 @@ c: 자연친화형 여행가
 d: 도시탐험형 여행가
 e: 혼합형 여행가
 f: 새로운 것 탐험형 여행가
-""";
+''';
 
       final typeCode = await _aiService.getTypeCodeFromAI(prompt);
       final description = typeDescriptions[typeCode] ?? '알 수 없는 유형';

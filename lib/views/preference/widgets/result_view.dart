@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/viewmodels/preference_test_view_model.dart';
-import '../preference_test_page.dart';
+import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class ResultView extends ConsumerWidget {
-  final List<Map<String, String>> answers;
-  final VoidCallback onRestart;
 
   const ResultView({super.key, required this.answers, required this.onRestart});
+  final List<Map<String, String>> answers;
+  final VoidCallback onRestart;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
