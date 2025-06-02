@@ -4,11 +4,6 @@ import 'package:travel_muse_app/viewmodels/calendar_view_model.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_day_builder.dart';
 
 class CalendarWidget extends StatelessWidget {
-  final CalendarState state;
-  final bool Function(DateTime) isSelected;
-  final bool Function(DateTime) isBetween;
-  final void Function(DateTime, DateTime) onDaySelected;
-
   const CalendarWidget({
     super.key,
     required this.state,
@@ -16,6 +11,10 @@ class CalendarWidget extends StatelessWidget {
     required this.isBetween,
     required this.onDaySelected,
   });
+  final CalendarState state;
+  final bool Function(DateTime) isSelected;
+  final bool Function(DateTime) isBetween;
+  final void Function(DateTime, DateTime) onDaySelected;
 
   @override
   Widget build(BuildContext context) {
