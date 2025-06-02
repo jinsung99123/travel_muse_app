@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/my_page/sheet/widgets/appbar_button.dart';
-import 'package:travel_muse_app/views/my_page/sheet/widgets/edit_nickname.dart';
-import 'package:travel_muse_app/views/my_page/sheet/widgets/edit_profile_image.dart';
+import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
+import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
 class EditProfileSheet extends StatelessWidget {
   const EditProfileSheet({super.key});
@@ -32,7 +32,7 @@ class EditProfileSheet extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 20),
-            EditProfileImage(),
+            EditProfileImage(widgetSize: 120, iconSize: 40),
             SizedBox(height: 20),
             EditNickname(),
           ],

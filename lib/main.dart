@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/views/my_page/sheet/edit_profile_sheet.dart';
 import 'package:travel_muse_app/views/login/login_page.dart';
 
 void main() {
@@ -13,6 +12,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: EditProfileSheet());
+    return MaterialApp(home: LoginPage());
   }
 }

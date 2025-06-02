@@ -19,8 +19,7 @@ class EditNickname extends StatelessWidget {
         SizedBox(height: 10),
         TextFormField(
           decoration: InputDecoration(
-            // 추후 유저 기존 닉네임 연결
-            hintText: '기존 닉네임',
+            hintText: '닉네임', // 추후 유저 기존 닉네임 연결
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey, width: 1),
               borderRadius: BorderRadius.circular(10),
