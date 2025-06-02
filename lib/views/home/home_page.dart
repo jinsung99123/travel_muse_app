@@ -8,7 +8,7 @@ import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
