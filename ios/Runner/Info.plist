@@ -55,5 +55,18 @@
 	<string>현재 위치 사용을 허용해주세요</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>GIDClientID</key>
+	<string>241683645756-d6uqecrq0rl9q08abd7eoo0gmj40mp27.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+    	<dict>
+        	<key>CFBundleTypeRole</key>
+        	<string>Editor</string>
+        	<key>CFBundleURLSchemes</key>
+        	<array>
+            	<string>com.googleusercontent.apps.241683645756-d6uqecrq0rl9q08abd7eoo0gmj40mp27</string>
+        	</array>
+    	</dict>
+	</array>
 </dict>
 </plist>
