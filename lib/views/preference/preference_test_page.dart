@@ -41,6 +41,18 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
       'type': 'preference',
       'details': '혼자, 친구, 가족',
     },
+    {
+      'questionId': 'q5',
+      'question': '여행 중 가장 기대되는 순간은?',
+      'type': 'preference',
+      'details': '맛집 탐방, 유명 명소, 현지 문화 체험',
+    },
+    {
+      'questionId': 'q6',
+      'question': '여행에서 사진을 얼마나 찍나요?',
+      'type': 'preference',
+      'details': '엄청 많이, 적당히, 별로 안찍어요',
+    },
   ];
 
   int _currentIndex = 0;
