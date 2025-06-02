@@ -1,39 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_1.dart';
 import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_2.dart';
 import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_3.dart';
 
-class OnboardingViewModel extends ChangeNotifier {
-  final PageController pageController = PageController();
-  int currentPageIndex = 0;
+class OnboardingState {
+  final int currentPageIndex;
+
+  const OnboardingState({this.currentPageIndex = 0});
+}
+
+class OnboardingViewModel extends Notifier<OnboardingState> {
+  late final PageController pageController;
 
   final List<Widget> pages = const [
     OnboardingTab1(),
     OnboardingTab2(),
     OnboardingTab3(),
   ];
+  @override
+  OnboardingState build() {
+    pageController = PageController();
+    return const OnboardingState();
+  }
 
   void nextPage() {
-    if (currentPageIndex < pages.length - 1) {
-      currentPageIndex++;
+    if (state.currentPageIndex < pages.length - 1) {
+      final next = state.currentPageIndex + 1;
       pageController.animateToPage(
-        currentPageIndex,
-        duration: Duration(milliseconds: 300),
+        next,
+        duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
       );
-      notifyListeners();
+      state = OnboardingState(currentPageIndex: next);
     }
   }
 
   void previousPage() {
-    if (currentPageIndex > 0) {
-      currentPageIndex--;
+    if (state.currentPageIndex > 0) {
+      final prev = state.currentPageIndex - 1;
       pageController.animateToPage(
-        currentPageIndex,
-        duration: Duration(milliseconds: 300),
+        prev,
+        duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
       );
-      notifyListeners();
+      state = OnboardingState(currentPageIndex: prev);
     }
   }
+
+  void setPageIndex(int index) {
+    state = OnboardingState(currentPageIndex: index);
+  }
 }
+
+final onboardingProvider =
+    NotifierProvider<OnboardingViewModel, OnboardingState>(
+      () => OnboardingViewModel(),
+    );
