@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class InfoBanner extends StatelessWidget {
-
-  const InfoBanner({
-    super.key,
-    required this.primaryColor,
-    required this.secondaryColor,
-  });
   final Color primaryColor;
   final Color secondaryColor;
+
+  const InfoBanner({
+    Key? key,
+    required this.primaryColor,
+    required this.secondaryColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

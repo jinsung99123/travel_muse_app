@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class RecommendedRestaurantsList extends StatelessWidget {
-
-  const RecommendedRestaurantsList({super.key, required this.color});
   final Color color;
+
+  const RecommendedRestaurantsList({Key? key, required this.color})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
-import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
-import 'package:travel_muse_app/views/preference/widgets/previousButton.dart';
+import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/preference/widgets/option_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/question_card.dart';
-import 'package:travel_muse_app/views/preference/widgets/question_list_view.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
 
 const Color kPrimaryColor = Color(0xFF03A9F4);
@@ -18,17 +16,42 @@ class PreferenceTestPage extends StatefulWidget {
 }
 
 class _PreferenceTestPageState extends State<PreferenceTestPage> {
+  final List<Map<String, String>> _questions = [
+    {
+      'questionId': 'q1',
+      'question': '어떤 여행지를 선호하시나요?',
+      'type': 'preference',
+      'details': '도시, 자연, 둘다',
+    },
+    {
+      'questionId': 'q2',
+      'question': '여행 스타일은 어떤가요?',
+      'type': 'preference',
+      'details': '계획형, 즉흥형, 둘다',
+    },
+    {
+      'questionId': 'q3',
+      'question': '여행 시 선호하는 교통수단은?',
+      'type': 'preference',
+      'details': '대중교통, 자가용, 도보',
+    },
+    {
+      'questionId': 'q4',
+      'question': '여행 동반자는 누구인가요?',
+      'type': 'preference',
+      'details': '혼자, 친구, 가족',
+    },
+  ];
+
   int _currentIndex = 0;
   final List<Map<String, String>> _answers = [];
 
-  Map<String, String> get _currentQuestion =>
-      preferenceQuestions[_currentIndex];
+  Map<String, String> get _currentQuestion => _questions[_currentIndex];
   List<String> get _currentOptions => _currentQuestion['details']!.split(', ');
 
   void _onAnswerSelected(String selectedOption) {
     final answer = {
       'questionId': _currentQuestion['questionId']!,
-      'question': _currentQuestion['question']!,
       'selectedOption': selectedOption,
       'type': _currentQuestion['type']!,
       'details': _currentQuestion['details']!,
@@ -44,7 +67,13 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
       _answers.add(answer);
     }
 
-    _nextQuestion();
+    setState(() {
+      if (_currentIndex < _questions.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = _questions.length;
+      }
+    });
   }
 
   void _onNextPressed() {
@@ -53,37 +82,19 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
     );
 
     if (!hasAnswered) return;
-    _nextQuestion();
-  }
 
-  void _previousQuestion() {
     setState(() {
-      if (_currentIndex > 0) {
-        _currentIndex--;
-      }
-    });
-  }
-
-  void _nextQuestion() {
-    setState(() {
-      if (_currentIndex < preferenceQuestions.length - 1) {
+      if (_currentIndex < _questions.length - 1) {
         _currentIndex++;
       } else {
-        _currentIndex = preferenceQuestions.length;
+        _currentIndex = _questions.length;
       }
-    });
-  }
-
-  void _restartTest() {
-    setState(() {
-      _currentIndex = 0;
-      _answers.clear();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isFinished = _currentIndex >= preferenceQuestions.length;
+    final bool isFinished = _currentIndex >= _questions.length;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -93,23 +104,47 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
       child: SafeArea(
         child:
             isFinished
-                ? ResultView(answers: _answers, onRestart: _restartTest)
+                ? ResultView(
+                  answers: _answers,
+                  onRestart: () {
+                    setState(() {
+                      _currentIndex = 0;
+                      _answers.clear();
+                    });
+                  },
+                )
                 : Column(
                   children: [
                     const SizedBox(height: 20),
                     QuestionCard(question: _currentQuestion['question']!),
                     const SizedBox(height: 20),
-                    QuestionListView(
-                      options: _currentOptions,
-                      onOptionSelected: _onAnswerSelected,
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: _currentOptions.length,
+                        itemBuilder: (context, index) {
+                          final option = _currentOptions[index];
+                          final color =
+                              index % 2 == 0 ? kPrimaryColor : kSecondaryColor;
+                          return OptionButton(
+                            text: option,
+                            color: color,
+                            onPressed: () => _onAnswerSelected(option),
+                          );
+                        },
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        if (_currentIndex > 0)
-                          PreviousButton(onPressed: _previousQuestion),
-                        NextButton(onPressed: _onNextPressed),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: CupertinoButton(
+                        color: kSecondaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                        onPressed: _onNextPressed,
+                        child: const Text(
+                          '다음',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ],
                 ),

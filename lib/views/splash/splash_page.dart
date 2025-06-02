@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
+import 'package:travel_muse_app/views/my_page/my_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

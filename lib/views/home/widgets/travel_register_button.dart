@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TravelRegisterButton extends StatelessWidget {
-
-  const TravelRegisterButton({
-    super.key,
-    required this.onPressed,
-    required this.backgroundColor,
-  });
   final VoidCallback onPressed;
   final Color backgroundColor;
+
+  const TravelRegisterButton({
+    Key? key,
+    required this.onPressed,
+    required this.backgroundColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
