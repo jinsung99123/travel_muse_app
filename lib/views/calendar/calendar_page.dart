@@ -10,6 +10,26 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
+  DateTime? _startDay;
+  DateTime? _endDay;
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    setState(() {
+      _focusedDay = focusedDay;
+
+      if (_startDay == null || (_startDay != null && _endDay != null)) {
+        _startDay = selectedDay;
+        _endDay = null;
+      } else if (_startDay != null && _endDay == null) {
+        if (selectedDay.isBefore(_startDay!)) {
+          _endDay = _startDay;
+          _startDay = selectedDay;
+        } else {
+          _endDay = selectedDay;
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +41,8 @@ class _CalendarPageState extends State<CalendarPage> {
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(2100, 12, 31),
           focusedDay: _focusedDay,
-          onDaySelected: (_, __) {}, // 클릭 이벤트는 아직 없음
+          selectedDayPredicate: (day) => day == _startDay || day == _endDay,
+          onDaySelected: _onDaySelected,
         ),
       ),
     );
