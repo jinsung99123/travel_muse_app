@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738403933845",
+    "project_id": "travelmuse-3633e",
+    "storage_bucket": "travelmuse-3633e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738403933845:android:002991580c65f7bf99059c",
+        "android_client_info": {
+          "package_name": "com.travelmuse.travelmuse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc7uWbskTRgGSdU-LwlPQh8OYLUFLSDgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
