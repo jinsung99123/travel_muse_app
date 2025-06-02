@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/home/widgets/bottom_nav_bar.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/popular_trips_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
+      bottomNavigationBar: BottomBar(
         primaryColor: primaryColor,
         currentIndex: 0,
         onTap: (index) {
