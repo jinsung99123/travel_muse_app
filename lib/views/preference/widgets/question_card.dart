@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import '../preference_test_page.dart';
+import 'package:flutter/material.dart';
 
 class QuestionCard extends StatelessWidget {
   final String question;
@@ -8,15 +8,24 @@ class QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemGrey6,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.black12, offset: Offset(0, 4), blurRadius: 8),
+        ],
+      ),
       child: Text(
         question,
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: kPrimaryColor,
+          color: Colors.black,
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }
