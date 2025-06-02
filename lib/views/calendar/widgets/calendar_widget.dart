@@ -36,7 +36,6 @@ class CalendarWidget extends StatelessWidget {
       calendarBuilders: CalendarBuilders(
         defaultBuilder:
             (context, day, _) => buildDayCell(day, isBetween(day), false),
-
         selectedBuilder: (context, day, _) => buildDayCell(day, false, true),
       ),
     );
