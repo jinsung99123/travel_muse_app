@@ -19,7 +19,7 @@ class BottomBar extends StatelessWidget {
       onTap: onTap,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.grey,
-      items: const [
+      items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
         BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: '일정'),
         BottomNavigationBarItem(icon: Icon(Icons.place), label: '추천명소'),
