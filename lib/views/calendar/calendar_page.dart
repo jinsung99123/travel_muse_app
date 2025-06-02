@@ -40,10 +40,35 @@ class _CalendarPageState extends State<CalendarPage> {
     return day == _startDay || day == _endDay;
   }
 
+  void _goToPreviousMonth() {
+    setState(() {
+      _focusedDay = DateTime(_focusedDay.year, _focusedDay.month - 1, 1);
+    });
+  }
+
+  void _goToNextMonth() {
+    setState(() {
+      _focusedDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('달력'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('달력'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: _goToPreviousMonth,
+          ),
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: _goToNextMonth,
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TableCalendar(
