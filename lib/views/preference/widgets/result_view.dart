@@ -5,7 +5,6 @@ import 'package:travel_muse_app/viewmodels/preference_test_view_model.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class ResultView extends ConsumerWidget {
-
   const ResultView({super.key, required this.answers, required this.onRestart});
   final List<Map<String, String>> answers;
   final VoidCallback onRestart;
@@ -20,10 +19,12 @@ class ResultView extends ConsumerWidget {
         final description = data.$2;
 
         if (typeCode.isEmpty) {
-          // 처음 진입 시 AI 호출
-          ref
-              .read(preferenceTestViewModelProvider.notifier)
-              .classifyPersonality(answers);
+          // 처음 진입 시 AI 호출 - 빌드가 끝난 뒤 안전하게 호출
+          Future.microtask(() {
+            ref
+                .read(preferenceTestViewModelProvider.notifier)
+                .classifyPersonality(answers);
+          });
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -109,14 +110,28 @@ class ResultView extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: CupertinoButton(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(12),
-                onPressed: onRestart,
-                child: const Text(
-                  '처음으로',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Column(
+                children: [
+                  CupertinoButton(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                    onPressed: onRestart,
+                    child: const Text(
+                      '처음으로',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  CupertinoButton(
+                    color: CupertinoColors.activeGreen,
+                    borderRadius: BorderRadius.circular(12),
+                    onPressed: () {},
+                    child: const Text(
+                      '완료',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
