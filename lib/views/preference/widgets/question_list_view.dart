@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'option_button.dart';
+import 'package:travel_muse_app/views/preference/widgets/option_button.dart';
 
 class QuestionListView extends StatelessWidget {
-  final List<String> options;
-  final void Function(String) onOptionSelected;
 
   const QuestionListView({
     super.key,
     required this.options,
     required this.onOptionSelected,
   });
+  final List<String> options;
+  final void Function(String) onOptionSelected;
 
   @override
   Widget build(BuildContext context) {

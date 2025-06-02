@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class OptionButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
 
   const OptionButton({super.key, required this.text, required this.onPressed});
+  final String text;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {

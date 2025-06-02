@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class QuestionCard extends StatelessWidget {
-  final String question;
 
   const QuestionCard({super.key, required this.question});
+  final String question;
 
   @override
   Widget build(BuildContext context) {

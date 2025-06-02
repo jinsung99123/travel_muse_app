@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
 import 'package:travel_muse_app/views/preference/widgets/previousButton.dart';
-import 'widgets/question_card.dart';
-import 'widgets/question_list_view.dart';
-import 'widgets/next_button.dart';
-import 'widgets/result_view.dart';
+import 'package:travel_muse_app/views/preference/widgets/question_card.dart';
+import 'package:travel_muse_app/views/preference/widgets/question_list_view.dart';
+import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
 
 const Color kPrimaryColor = Color(0xFF03A9F4);
 const Color kSecondaryColor = Color(0xFF2979FF);

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class NextButton extends StatelessWidget {
-  final VoidCallback onPressed;
 
   const NextButton({super.key, required this.onPressed});
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
