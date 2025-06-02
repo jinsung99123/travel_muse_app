@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_1.dart';
-import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_2.dart';
-import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_3.dart';
+import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_image.dart';
+import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_nickname.dart';
+import 'package:travel_muse_app/views/onboarding/tabs/onboarding_tab_start_test.dart';
 
 class OnboardingState {
-  final int currentPageIndex;
-
   const OnboardingState({this.currentPageIndex = 0});
+  final int currentPageIndex;
 }
 
 class OnboardingViewModel extends Notifier<OnboardingState> {
   late final PageController pageController;
 
   final List<Widget> pages = const [
-    OnboardingTab1(),
-    OnboardingTab2(),
-    OnboardingTab3(),
+    OnboardingTabNickname(),
+    OnboardingTabImage(),
+    OnboardingTabStartTest(),
   ];
   @override
   OnboardingState build() {

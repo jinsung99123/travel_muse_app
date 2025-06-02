@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class OnboardingTab3 extends StatelessWidget {
-  const OnboardingTab3({super.key});
+class OnboardingTabStartTest extends StatelessWidget {
+  const OnboardingTabStartTest({super.key});
 
   @override
   Widget build(BuildContext context) {

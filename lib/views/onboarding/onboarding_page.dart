@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/viewmodels/onboarding_view_model.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/onboarding_tab_section.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({super.key});
@@ -21,53 +22,8 @@ class OnboardingPage extends ConsumerWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView(
-                controller: viewModel.pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: viewModel.setPageIndex,
-                children: viewModel.pages,
-              ),
-            ),
-            nextButton(state, viewModel),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
-    );
-  }
-  // ui 종료
-
-  // 위젯
-  Widget nextButton(OnboardingState state, OnboardingViewModel viewModel) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed:
-            state.currentPageIndex != viewModel.pages.length - 1
-                ? viewModel.nextPage
-                : () {
-                  // TODO: 성향 테스트 시작
-                },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xff025ADF),
-        ),
-        child: Text(
-          state.currentPageIndex != viewModel.pages.length - 1
-              ? '다음'
-              : '성향 테스트 시작하기',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
+      // 온보딩 탭 영역
+      body: OnboardingTabSection(viewModel: viewModel, state: state),
     );
   }
 }

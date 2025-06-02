@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class OnboardingTab1 extends StatelessWidget {
-  const OnboardingTab1({super.key});
+class OnboardingTabNickname extends StatelessWidget {
+  const OnboardingTabNickname({super.key});
 
   @override
   Widget build(BuildContext context) {
