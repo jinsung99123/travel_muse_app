@@ -13,11 +13,7 @@ class CalendarPage extends ConsumerWidget {
     final state = ref.watch(calendarViewModelProvider);
 
     return Scaffold(
-      appBar: CalendarHeader(
-        focusedDay: state.focusedDay,
-        onPrev: () => viewModel.goToPreviousMonth(),
-        onNext: () => viewModel.goToNextMonth(),
-      ),
+      appBar: CalendarHeader(focusedDay: state.focusedDay),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: CalendarWidget(
