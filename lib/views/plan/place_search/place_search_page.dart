@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/plan/widgets/search_bar.dart';
-import 'package:travel_muse_app/views/plan/widgets/search_result_list.dart';
+import 'package:travel_muse_app/views/plan/place_search/widgets/search_bar.dart';
+import 'package:travel_muse_app/views/plan/place_search/widgets/search_result_list.dart';
 
 class PlaceSearchPage extends StatefulWidget {
   const PlaceSearchPage({super.key});
