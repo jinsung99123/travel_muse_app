@@ -23,7 +23,9 @@ class EditProfileSheet extends StatelessWidget {
           // 완료, 제출
           AppbarButton(
             widget: const Text('완료', style: TextStyle(fontSize: 18)),
-            onPressed: () {},
+            onPressed: () {
+              //
+            },
           ),
         ],
       ),
@@ -31,9 +33,10 @@ class EditProfileSheet extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             EditProfileImage(widgetSize: 120, iconSize: 40),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+            // TODO: 텍스트 컨트롤러 관리 - 생성, 할당, dispose
             EditNickname(),
           ],
         ),
