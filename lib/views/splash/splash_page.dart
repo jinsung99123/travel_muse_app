@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashPage> {
     Timer(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MyPage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     });
   }
