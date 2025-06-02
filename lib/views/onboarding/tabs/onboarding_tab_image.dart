@@ -8,7 +8,7 @@ class OnboardingTabImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('프로필 사진을 설정해 주세요.', style: TextStyle(fontSize: 20)),
+        const Text('프로필 사진을 설정해 주세요.', style: TextStyle(fontSize: 20)),
         SizedBox(height: 20),
         EditProfileImage(widgetSize: 200, iconSize: 50),
       ],

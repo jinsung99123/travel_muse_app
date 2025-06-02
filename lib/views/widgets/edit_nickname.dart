@@ -9,7 +9,7 @@ class EditNickname extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
+            const Text(
               '닉네임',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),

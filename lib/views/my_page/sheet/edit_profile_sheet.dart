@@ -12,7 +12,7 @@ class EditProfileSheet extends StatelessWidget {
       appBar: AppBar(
         // 취소
         leading: AppbarButton(
-          widget: Icon(Icons.close, size: 30),
+          widget: const Icon(Icons.close, size: 30),
           onPressed: () {},
         ),
         title: const Text(
@@ -22,7 +22,7 @@ class EditProfileSheet extends StatelessWidget {
         actions: [
           // 완료, 제출
           AppbarButton(
-            widget: Text('완료', style: TextStyle(fontSize: 18)),
+            widget: const Text('완료', style: TextStyle(fontSize: 18)),
             onPressed: () {},
           ),
         ],
