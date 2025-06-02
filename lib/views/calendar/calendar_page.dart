@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/calendar_view_model.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_header.dart';
-import 'package:travel_muse_app/views/calendar/widgets/calendar_utils.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_widget.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarPage extends ConsumerWidget {
   const CalendarPage({super.key});
 
   @override
-  State<CalendarPage> createState() => _CalendarPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(calendarViewModelProvider.notifier);
+    final state = ref.watch(calendarViewModelProvider);
 
-class _CalendarPageState extends State<CalendarPage> {
-  final calendarState = CalendarSelectionState();
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CalendarHeader(
-        focusedDay: calendarState.focusedDay,
-        onPrev: () => setState(calendarState.goToPreviousMonth),
-        onNext: () => setState(calendarState.goToNextMonth),
+        focusedDay: state.focusedDay,
+        onPrev: () => viewModel.goToPreviousMonth(),
+        onNext: () => viewModel.goToNextMonth(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: CalendarWidget(
-          state: calendarState,
-          onDaySelected:
-              (selectedDay, focusedDay) => setState(
-                () => calendarState.selectDay(selectedDay, focusedDay),
-              ),
+          state: state,
+          isSelected: viewModel.isSelected,
+          isBetween: viewModel.isBetween,
+          onDaySelected: viewModel.selectDay,
         ),
       ),
     );
