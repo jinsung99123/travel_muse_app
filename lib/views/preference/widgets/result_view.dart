@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:travel_muse_app/viewmodels/preference_test_view_model.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
@@ -125,7 +126,9 @@ class ResultView extends ConsumerWidget {
                   CupertinoButton(
                     color: CupertinoColors.activeGreen,
                     borderRadius: BorderRadius.circular(12),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go('/home');
+                    },
                     child: const Text(
                       '완료',
                       style: TextStyle(color: Colors.white),
