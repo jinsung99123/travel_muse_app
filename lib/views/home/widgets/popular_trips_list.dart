@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PopularTripsList extends StatelessWidget {
-  final Color color;
 
-  const PopularTripsList({Key? key, required this.color}) : super(key: key);
+  const PopularTripsList({super.key, required this.color});
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {
-  final Color primaryColor;
-  final int currentIndex;
-  final Function(int) onTap;
 
   const BottomBar({
-    Key? key,
+    super.key,
     required this.primaryColor,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
+  final Color primaryColor;
+  final int currentIndex;
+  final Function(int) onTap;
 
   @override
   Widget build(BuildContext context) {
