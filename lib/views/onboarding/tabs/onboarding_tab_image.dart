@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
 class OnboardingTabImage extends StatelessWidget {
   const OnboardingTabImage({super.key});
@@ -7,20 +8,9 @@ class OnboardingTabImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('프로필 사진을 설정해 주세요.', style: TextStyle(fontSize: 20)),
+        const Text('프로필 사진을 설정해 주세요.', style: TextStyle(fontSize: 20)),
         SizedBox(height: 20),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            width: 180,
-            height: 180,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Colors.grey,
-            ),
-            child: Icon(Icons.image, size: 60),
-          ),
-        ),
+        EditProfileImage(widgetSize: 200, iconSize: 50),
       ],
     );
   }
