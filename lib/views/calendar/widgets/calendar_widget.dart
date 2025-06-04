@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:travel_muse_app/viewmodels/calendar_view_model.dart';
+import 'package:travel_muse_app/models/calendar_model.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_day_builder.dart';
 
 class CalendarWidget extends StatelessWidget {
