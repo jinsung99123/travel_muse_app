@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
+import 'package:travel_muse_app/services/preference_test_service.dart';
 
 final preferenceTestViewModelProvider =
-    NotifierProvider<PreferenceTestViewModel, AsyncValue<(String, String)>>(
+    NotifierProvider<PreferenceTestViewModel, AsyncValue<PreferenceTest?>>(
       () => PreferenceTestViewModel(),
     );
 
-class PreferenceTestViewModel extends Notifier<AsyncValue<(String, String)>> {
+class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
   final _aiService = AiService();
+  final _service = PreferenceTestService();
 
   final Map<String, String> typeDescriptions = {
     'a': '계획형 여행가: 여행을 철저하게 계획하고 준비하는 성향입니다.',
@@ -19,13 +22,16 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<(String, String)>> {
   };
 
   @override
-  AsyncValue<(String, String)> build() => const AsyncValue.data(('', ''));
+  AsyncValue<PreferenceTest?> build() {
+    return const AsyncValue.data(null);
+  }
 
-  Future<void> classifyPersonality(List<Map<String, String>> answers) async {
+  /// AI 분석만 실행
+  Future<void> classifyTestOnly(List<Map<String, String>> answersRaw) async {
     state = const AsyncValue.loading();
 
     try {
-      final resultSummary = answers
+      final resultSummary = answersRaw
           .map((a) => '${a['question']} => ${a['selectedOption']}')
           .join(', ');
 
@@ -46,7 +52,54 @@ f: 새로운 것 탐험형 여행가
 
       final typeCode = await _aiService.getTypeCodeFromAI(prompt);
       final description = typeDescriptions[typeCode] ?? '알 수 없는 유형';
-      state = AsyncValue.data((typeCode, description));
+      final now = DateTime.now();
+
+      final answers =
+          answersRaw
+              .map(
+                (a) => PreferenceAnswer(
+                  questionId: a['questionId']!,
+                  selectedOption: a['selectedOption']!,
+                ),
+              )
+              .toList();
+
+      final test = PreferenceTest(
+        testId: '',
+        userId: '',
+        answers: answers,
+        result: {'type': typeCode, 'details': description},
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      state = AsyncValue.data(test);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  /// 저장 실행 (AI 분석 이후 상태 기반으로 Firestore 저장)
+  Future<void> saveTestToFirestore() async {
+    final current = state.value;
+    if (current == null) return;
+
+    if (current.testId.isEmpty) {
+      // 새로 생성
+      final newId = await _service.saveTest(current);
+      state = AsyncValue.data(current.copyWith(testId: newId));
+    } else {
+      // 기존 문서 덮어쓰기
+      await _service.saveOrUpdateTest(current);
+    }
+  }
+
+  /// 단건 로드
+  Future<void> loadTest(String testId) async {
+    state = const AsyncValue.loading();
+    try {
+      final test = await _service.fetchTest(testId);
+      state = AsyncValue.data(test);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
