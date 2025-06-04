@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/views/Location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/Location/widgets/place_card.dart';
 
@@ -19,6 +20,13 @@ class MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
     'day3': ['전망대', '오코노미야끼 맛집'],
     'day4': ['공원', '도보 산책길'],
   };
+
+  // late GoogleMapController _mapController; 추후 사용 예정
+
+  final CameraPosition _initialPosition = const CameraPosition(
+    target: LatLng(33.4996, 126.5312), // 제주 시내 예시
+    zoom: 12,
+  );
 
   @override
   void initState() {
@@ -41,9 +49,13 @@ class MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
         children: [
           // 지도영역
           Positioned.fill(
-            child: Container(
-              color: Colors.grey[300],
-              child: const Center(child: Text('지도 영역', style: TextStyle(color: Colors.black54))),
+            child: GoogleMap(
+              initialCameraPosition: _initialPosition,
+              onMapCreated: (controller) {
+                // _mapController = controller; 추후 사용 예정
+              },
+              myLocationEnabled: true,
+              zoomControlsEnabled: false,
             ),
           ),
 
@@ -52,29 +64,33 @@ class MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
             bottom: 0,
             left: 0,
             right: 0,
-            height: screenHeight * 0.28, 
+            height: screenHeight * 0.28,
             child: Column(
               children: [
                 DayTabBar(controller: _tabController, days: days),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: days.map((day) {
-                      final places = dayPlaces[day] ?? [];
-                      return PageView.builder(
-                        itemCount: places.length,
-                        controller: PageController(viewportFraction: 0.85),
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
-                            child: PlaceCard(
-                              title: places[index],
-                              description: '장소 설명 텍스트',
-                            ),
+                    children:
+                        days.map((day) {
+                          final places = dayPlaces[day] ?? [];
+                          return PageView.builder(
+                            itemCount: places.length,
+                            controller: PageController(viewportFraction: 0.85),
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 12,
+                                ),
+                                child: PlaceCard(
+                                  title: places[index],
+                                  description: '장소 설명 텍스트',
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    }).toList(),
+                        }).toList(),
                   ),
                 ),
               ],
