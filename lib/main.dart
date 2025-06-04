@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final router = GoRouter(
-      initialLocation: '/',
+      initialLocation: '/preference_test',
       routes: [
         GoRoute(path: '/', builder: (context, state) => const LoginPage()),
         GoRoute(path: '/home', builder: (context, state) => const HomePage()),
