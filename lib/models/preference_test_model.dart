@@ -1,15 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PreferenceAnswer {
-  final String questionId;
-  final String selectedOption;
 
   PreferenceAnswer({required this.questionId, required this.selectedOption});
-
-  Map<String, String> toMap() => {
-    'questionId': questionId,
-    'selectedOption': selectedOption,
-  };
 
   factory PreferenceAnswer.fromMap(Map<String, dynamic> map) {
     return PreferenceAnswer(
@@ -17,16 +10,16 @@ class PreferenceAnswer {
       selectedOption: map['selectedOption'] ?? '',
     );
   }
+  final String questionId;
+  final String selectedOption;
+
+  Map<String, String> toMap() => {
+    'questionId': questionId,
+    'selectedOption': selectedOption,
+  };
 }
 
 class PreferenceTest {
-  final String testId;
-  final String userId;
-  final List<PreferenceAnswer> answers;
-  final Map<String, String>
-  result; // e.g., {'type': 'a', 'details': '계획형 여행가 ...'}
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   PreferenceTest({
     required this.testId,
@@ -36,15 +29,6 @@ class PreferenceTest {
     required this.createdAt,
     required this.updatedAt,
   });
-
-  Map<String, dynamic> toMap() => {
-    'testId': testId,
-    'userId': userId,
-    'answers': answers.map((a) => a.toMap()).toList(),
-    'result': result,
-    'createAt': createdAt,
-    'updateAt': updatedAt,
-  };
 
   ///Firestore에서 가져올 때 사용
   factory PreferenceTest.fromDoc(String id, Map<String, dynamic> map) {
@@ -60,6 +44,22 @@ class PreferenceTest {
       updatedAt: (map['updateAt'] as Timestamp).toDate(),
     );
   }
+  final String testId;
+  final String userId;
+  final List<PreferenceAnswer> answers;
+  final Map<String, String>
+  result; // e.g., {'type': 'a', 'details': '계획형 여행가 ...'}
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  Map<String, dynamic> toMap() => {
+    'testId': testId,
+    'userId': userId,
+    'answers': answers.map((a) => a.toMap()).toList(),
+    'result': result,
+    'createAt': createdAt,
+    'updateAt': updatedAt,
+  };
 
   /// copyWith 메서드
   PreferenceTest copyWith({
