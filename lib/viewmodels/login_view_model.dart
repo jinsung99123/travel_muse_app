@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/repositories/app_user_repository.dart';
 import 'package:travel_muse_app/services/auth_service.dart';
 
 class LoginState {
@@ -16,6 +17,7 @@ class LoginState {
 
 class LoginViewModel extends Notifier<LoginState> {
   final _authService = AuthService();
+  final _appUserRepository = AppUserRepository();
 
   @override
   LoginState build() => LoginState();
@@ -27,6 +29,10 @@ class LoginViewModel extends Notifier<LoginState> {
     if (result.isSuccess) {
       final user = result.data!.user;
       state = state.copyWith(user: user);
+
+      // Firestore Database에 유저 최초 등록
+      await _appUserRepository.createAppUser(user!.uid);
+
       log('로그인 성공: ${result.data.runtimeType}');
     } else {
       log('로그인 실패: ${result.error}');
