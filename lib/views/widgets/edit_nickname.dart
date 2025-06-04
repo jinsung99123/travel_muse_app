@@ -9,11 +9,7 @@ class EditNickname extends StatelessWidget {
       children: [
         Row(
           children: [
-<<<<<<< HEAD
             const Text(
-=======
-            Text(
->>>>>>> 53b23cc (feat: 프로필 수정 위젯 온보딩 탭에 적용)
               '닉네임',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
