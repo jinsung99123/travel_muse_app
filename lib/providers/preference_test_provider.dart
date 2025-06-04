@@ -12,3 +12,7 @@ final preferenceTestStreamProvider =
       final service = PreferenceTestService();
       return service.watchTest(testId);
     });
+final preferenceTestViewModelProvider =
+    NotifierProvider<PreferenceTestViewModel, AsyncValue<PreferenceTest?>>(
+      () => PreferenceTestViewModel(),
+    );
