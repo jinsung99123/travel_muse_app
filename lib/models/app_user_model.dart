@@ -7,6 +7,22 @@ class AppUser {
     required this.planId,
   });
 
+  AppUser copyWith({
+    String? uid,
+    String? nickname,
+    String? profileImage,
+    List<String>? testId,
+    List<String>? planId,
+  }) {
+    return AppUser(
+      uid: uid ?? this.uid,
+      nickname: nickname ?? this.nickname,
+      profileImage: profileImage ?? this.profileImage,
+      testId: testId ?? this.testId,
+      planId: planId ?? this.planId,
+    );
+  }
+
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
       uid: json['uid'] ?? '',
@@ -24,22 +40,6 @@ class AppUser {
     'testId': testId,
     'planId': planId,
   };
-
-  AppUser copyWith({
-    String? uid,
-    String? nickname,
-    String? profileImage,
-    List<String>? testId,
-    List<String>? planId,
-  }) {
-    return AppUser(
-      uid: uid ?? this.uid,
-      nickname: nickname ?? this.nickname,
-      profileImage: profileImage ?? this.profileImage,
-      testId: testId ?? this.testId,
-      planId: planId ?? this.planId,
-    );
-  }
 
   final String uid;
   final String? nickname;
