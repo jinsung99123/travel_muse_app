@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/plan/location_setting/%08widgets/selectable_box_list.dart';
 
 class DistrictSettingPage extends StatefulWidget {
   const DistrictSettingPage({super.key});
@@ -11,10 +12,18 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
   final List<String> items = List.generate(9, (index) => '마포');
   final Set<int> selectedIndices = {};
 
+  void onItemTap(int index) {
+    setState(() {
+      if (selectedIndices.contains(index)) {
+        selectedIndices.remove(index);
+      } else {
+        selectedIndices.add(index);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    double boxWidth = (MediaQuery.of(context).size.width - 48) / 3;
-
     return Scaffold(
       appBar: AppBar(title: Text('여행할 지역을 선택해주세요')),
       body: SafeArea(
@@ -22,46 +31,10 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Expanded(
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 10,
-                  children: List.generate(items.length, (index) {
-                    bool isSelected = selectedIndices.contains(index);
-
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (isSelected) {
-                            selectedIndices.remove(index);
-                          } else {
-                            selectedIndices.add(index);
-                          }
-                        });
-                      },
-                      child: Container(
-                        width: boxWidth,
-                        height: 80,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: isSelected ? Colors.blue : Colors.transparent,
-                          border: Border.all(
-                            color:
-                                isSelected ? Colors.blue : Colors.grey.shade400,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          items[index],
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: isSelected ? Colors.white : Colors.black,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
+              SelectableBoxList(
+                items: items,
+                selectedIndices: selectedIndices,
+                onTap: onItemTap,
               ),
 
               SizedBox(height: 24),
@@ -78,7 +51,7 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    '다음 버튼',
+                    '다음',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
