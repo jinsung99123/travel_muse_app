@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/login_view_model.dart';
 import 'package:travel_muse_app/views/login/widgets/sns_login_bar.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final viewmodel = ref.read(loginViewModelProvider.notifier);
 
     return Scaffold(
       body: Column(
@@ -27,7 +30,8 @@ class LoginPage extends StatelessWidget {
                   sns: 'Google',
                   backgroundColor: Colors.blue,
                   textColor: Colors.white,
-                  loginFunction: () async {}, // SignWithGoogle
+                  loginFunction:
+                      () => viewmodel.loginWithGoogle(), // SignWithGoogle
                 ),
               ],
             ),
