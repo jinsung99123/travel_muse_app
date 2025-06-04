@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/plan/location_setting/%08widgets/selectable_box_list.dart';
+import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box_list.dart';
 import 'package:travel_muse_app/views/plan/location_setting/district_setting_page.dart';
 
 class ProvinceSettingPage extends StatefulWidget {
