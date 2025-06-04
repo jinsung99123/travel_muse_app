@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
-import 'package:travel_muse_app/views/preference/widgets/previousButton.dart';
+import 'package:travel_muse_app/views/preference/widgets/previous_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/question_card.dart';
 import 'package:travel_muse_app/views/preference/widgets/question_list_view.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';

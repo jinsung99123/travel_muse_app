@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/popular_trips_list.dart';
@@ -55,7 +56,9 @@ class _HomePageState extends State<HomePage>
           ),
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              context.go('/place_search');
+            },
           ),
         ],
       ),
@@ -66,7 +69,7 @@ class _HomePageState extends State<HomePage>
           children: [
             TravelRegisterButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/registerSchedule');
+                context.go('/schedule');
               },
               backgroundColor: secondaryColor,
             ),
@@ -92,7 +95,20 @@ class _HomePageState extends State<HomePage>
         primaryColor: primaryColor,
         currentIndex: 0,
         onTap: (index) {
-          // TODO: 페이지 이동 로직
+          switch (index) {
+            case 0:
+              context.go('/home');
+              break;
+            case 1:
+              context.go('/schedule');
+              break;
+            case 2:
+              context.go('/place_search');
+              break;
+            case 3:
+              context.go('/mypage');
+              break;
+          }
         },
       ),
     );
