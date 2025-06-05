@@ -1,14 +1,4 @@
 class AppUser {
-
-  factory AppUser.fromJson(Map<String, dynamic> json) {
-    return AppUser(
-      uid: json['uid'] ?? '',
-      nickname: json['nickname'],
-      profileImage: json['profileImage'],
-      testId: List<String>.from(json['testId'] ?? []),
-      planId: List<String>.from(json['planId'] ?? []),
-    );
-  }
   AppUser({
     required this.uid,
     this.nickname,
@@ -46,4 +36,13 @@ class AppUser {
     'testId': testId,
     'planId': planId,
   };
+  factory AppUser.fromJson(Map<String, dynamic> json) {
+    return AppUser(
+      uid: json['uid'] ?? '',
+      nickname: json['nickname'],
+      profileImage: json['profileImage'],
+      testId: List<String>.from(json['testId'] ?? []),
+      planId: List<String>.from(json['planId'] ?? []),
+    );
+  }
 }
