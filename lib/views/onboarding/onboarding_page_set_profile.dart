@@ -5,12 +5,11 @@ import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
 class OnboardingPageSetProfile extends StatelessWidget {
-  OnboardingPageSetProfile({super.key});
-
-  final profileViewmodel = ProfileViewModel();
+  const OnboardingPageSetProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final profileViewmodel = ProfileViewModel();
     final nicknameController = profileViewmodel.nicknameController;
     final formKey = profileViewmodel.formKey;
     return GestureDetector(

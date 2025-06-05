@@ -13,6 +13,7 @@ class EditProfileImage extends ConsumerStatefulWidget {
 class _EditProfileImageState extends ConsumerState<EditProfileImage> {
   bool _fetched = false;
 
+  // 프로필이미지 최초 1회 가져오기
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -25,11 +26,14 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
   @override
   Widget build(BuildContext context) {
     final profileViewModel = ref.read(profileViewModelProvider.notifier);
-    final imageUrl = ref.watch(profileViewModelProvider).profileImageUrl;
+    final profileState = ref.watch(profileViewModelProvider);
+    final imageUrlToShow =
+        profileState.temporaryImageUrl ??
+        profileState.profileImageUrl; // 임시 저장 이미지가 없으면 기존 프로필 이미지 표시
 
     return GestureDetector(
       onTap: () async {
-        await profileViewModel.updateProfileImage();
+        await profileViewModel.uploadProfileImage();
       },
       child: SizedBox(
         width: widget.size,
@@ -41,7 +45,8 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(500),
                 child: Image.network(
-                  imageUrl ?? 'https://picsum.photos/id/1/300/400',
+                  imageUrlToShow ??
+                      'https://picsum.photos/id/1/300/400', // 기존 프로필이미지 없으면 기본 이미지(추후 적용) 표시
                   fit: BoxFit.cover,
                 ),
               ),

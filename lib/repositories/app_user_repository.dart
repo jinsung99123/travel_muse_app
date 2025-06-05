@@ -33,8 +33,8 @@ class AppUserRepository {
     });
   }
 
-  // 유저 프로필이미지 업데이트
-  Future<void> uploadProfileImage({
+  // 이미지 스토리지에 업로드, url return
+  Future<String> uploadProfileImage({
     required String uid,
     required File file,
   }) async {
@@ -44,6 +44,14 @@ class AppUserRepository {
     await ref.putFile(file);
     final fileUrl = await ref.getDownloadURL();
 
+    return fileUrl;
+  }
+
+  // 유저 프로필이미지 업데이트
+  Future<void> updateProfileImage({
+    required String uid,
+    required String fileUrl,
+  }) async {
     // 이미지 url 데이터베이스 업데이트
     await _firestore.collection('appUser').doc(uid).update({
       'profileImage': fileUrl,

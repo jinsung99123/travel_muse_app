@@ -9,14 +9,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:travel_muse_app/repositories/app_user_repository.dart';
 
 class ProfileState {
-  const ProfileState({this.nickname, this.profileImageUrl});
+  const ProfileState({
+    this.nickname,
+    this.profileImageUrl,
+    this.temporaryImageUrl,
+  });
   final String? nickname;
   final String? profileImageUrl;
+  final String? temporaryImageUrl;
 
-  ProfileState copyWith({String? nickname, String? profileImageUrl}) {
+  ProfileState copyWith({
+    String? nickname,
+    String? profileImageUrl,
+    String? temporaryImageUrl,
+  }) {
     return ProfileState(
       nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      temporaryImageUrl: temporaryImageUrl ?? this.temporaryImageUrl,
     );
   }
 }
@@ -27,6 +37,9 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final formKey = GlobalKey<FormState>();
   final nicknameController = TextEditingController();
   final _picker = ImagePicker();
+
+  // 업로드된 이미지 url 임시 저장
+  String? temporaryImageUrl;
 
   @override
   ProfileState build() {
@@ -57,21 +70,40 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  Future<void> updateProfileImage() async {
+  Future<String?> uploadProfileImage() async {
     try {
       if (currentUser == null) {
         log('currentUser is null');
-        return;
+        return null;
       }
       // 이미지 pick
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-      if (pickedFile == null) return;
+      if (pickedFile == null) return null;
 
       final file = File(pickedFile.path);
-      log('프로필 이미지 업데이트 시도');
-      await appUserRepo.uploadProfileImage(uid: currentUser!.uid, file: file);
-      await fetchProfileImageUrl();
+      log('프로필 이미지 업로드 시도');
+      final url = await appUserRepo.uploadProfileImage(
+        uid: currentUser!.uid,
+        file: file,
+      );
+      state = state.copyWith(temporaryImageUrl: url);
+
+      return url;
+    } catch (e) {
+      log('프로필 이미지 업로드 실패 : $e');
+      return null;
+    }
+  }
+
+  Future<void> updateProfileImage(String imageUrl) async {
+    try {
+      await appUserRepo.updateProfileImage(
+        uid: currentUser!.uid,
+        fileUrl: imageUrl,
+      );
+
+      state = state.copyWith(profileImageUrl: imageUrl);
     } catch (e) {
       log('프로필 이미지 업데이트 실패 : $e');
     }
