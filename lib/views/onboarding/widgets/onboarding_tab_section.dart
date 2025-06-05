@@ -26,7 +26,7 @@ class OnboardingTabSection extends StatelessWidget {
               children: viewModel.pages,
             ),
           ),
-          NextButton(state: state, viewModel: viewModel),
+          NextButton(text: 'text'),
           const SizedBox(height: 30),
         ],
       ),

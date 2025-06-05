@@ -31,23 +31,23 @@ class EditProfileImage extends StatelessWidget {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: iconSize,
-                height: iconSize,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[200],
-                  border: Border.all(width: 1, color: Colors.grey[400]!),
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Colors.grey[600],
-                  size: 28,
-                ),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.bottomRight,
+            //   child: Container(
+            //     width: iconSize,
+            //     height: iconSize,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(50),
+            //       color: Colors.grey[200],
+            //       border: Border.all(width: 1, color: Colors.grey[400]!),
+            //     ),
+            //     child: Icon(
+            //       Icons.camera_alt,
+            //       color: Colors.grey[600],
+            //       size: 28,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
