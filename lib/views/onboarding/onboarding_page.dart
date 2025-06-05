@@ -11,19 +11,24 @@ class OnboardingPage extends ConsumerWidget {
     final viewModel = ref.read(onboardingProvider.notifier);
     final state = ref.watch(onboardingProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: viewModel.previousPage,
-          child: const SizedBox(
-            width: 50,
-            height: 50,
-            child: Icon(Icons.arrow_back_ios),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: viewModel.previousPage,
+            child: const SizedBox(
+              width: 50,
+              height: 50,
+              child: Icon(Icons.arrow_back_ios),
+            ),
           ),
         ),
+        // 온보딩 탭 영역
+        body: OnboardingTabSection(viewModel: viewModel, state: state),
       ),
-      // 온보딩 탭 영역
-      body: OnboardingTabSection(viewModel: viewModel, state: state),
     );
   }
 }

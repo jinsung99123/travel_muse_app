@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AppUserRepository {
   final _firestore = FirebaseFirestore.instance;
+  final _storage = FirebaseStorage.instance;
+  final _picker = ImagePicker();
 
   // 첫 로그인 시 데이터베이스에 유저 정보 생성
   Future<void> createAppUser(String uid) async {
@@ -20,11 +26,32 @@ class AppUserRepository {
   }
 
   // 유저 닉네임 업데이트
-  Future<void> updateNickname(String uid, String nickname) async {
+  Future<void> updateNickname({
+    required String uid,
+    required String nickname,
+  }) async {
     await _firestore.collection('appUser').doc(uid).update({
       'nickname': nickname,
     });
   }
 
   // 유저 프로필이미지 업데이트
+  Future<void> uploadProfileImage({required String uid}) async {
+    // 이미지 pick
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile == null) return;
+    final file = File(pickedFile.path);
+    final fileName = '${uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    // 이미지 업로드 & get url
+    final ref = _storage.ref().child('userProfiles/$uid/$fileName');
+    await ref.putFile(file);
+    final fileUrl = await ref.getDownloadURL();
+
+    // 이미지 url 데이터베이스 업데이트
+    await _firestore.collection('appUser').doc(uid).update({
+      'profileImage': fileUrl,
+    });
+  }
 }
