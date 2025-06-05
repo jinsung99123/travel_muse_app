@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedPlacesList extends StatelessWidget {
   const RecommendedPlacesList({super.key, required this.color});
@@ -88,7 +88,6 @@ class RecommendedPlacesList extends StatelessWidget {
 }
 
 class _PlaceCardData {
-
   _PlaceCardData({
     required this.title,
     required this.image,
