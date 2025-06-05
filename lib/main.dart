@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:travel_muse_app/firebase_options.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/location/map_page.dart';
 import 'package:travel_muse_app/views/login/login_page.dart';
@@ -10,7 +12,9 @@ import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: MyApp()));
 }
 
