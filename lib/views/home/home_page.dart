@@ -7,6 +7,7 @@ import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart'
 import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.dart';
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,11 +70,15 @@ class _HomePageState extends State<HomePage>
           padding: const EdgeInsets.all(16),
           children: [
             TravelRegisterButton(
+              backgroundColor: Colors.grey,
               onPressed: () {
-                context.go('/schedule');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SchedulePage()),
+                );
               },
-              backgroundColor: secondaryColor,
             ),
+
             const SizedBox(height: 16),
             const SectionTitle(title: '추천 명소'),
             RecommendedPlacesList(color: primaryColor),

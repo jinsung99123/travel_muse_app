@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
+import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
 
 class MyPageMenu extends StatelessWidget {
   const MyPageMenu({super.key});
@@ -23,7 +25,29 @@ class MyPageMenu extends StatelessWidget {
               ),
               backgroundColor: Colors.grey[200],
             ),
-            onPressed: () {},
+            onPressed: () {
+              switch (index) {
+                case 0:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlanListPage(),
+                    ),
+                  );
+                  break;
+                case 1:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PreferenceListPage(),
+                    ),
+                  );
+                  break;
+                case 2:
+                  // TODO: 여행 성향 재검사 기능 추가
+                  break;
+              }
+            },
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 20,
