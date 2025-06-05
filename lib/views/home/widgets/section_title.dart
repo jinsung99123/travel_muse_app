@@ -2,14 +2,25 @@ import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
 
-  const SectionTitle({super.key, required this.title});
+  const SectionTitle({super.key, required this.title, this.onMoreTap});
   final String title;
+  final VoidCallback? onMoreTap;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          if (onMoreTap != null)
+            TextButton(onPressed: onMoreTap, child: const Text('더보기 >')),
+        ],
+      ),
     );
   }
 }

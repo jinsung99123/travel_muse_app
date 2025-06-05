@@ -38,7 +38,6 @@ class AppUser {
       planId: List<String>.from(json['planId'] ?? []),
     );
   }
-
   Map<String, dynamic> toJson() => {
     'uid': uid,
     'nackname': nickname,

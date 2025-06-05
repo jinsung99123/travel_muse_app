@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/calendar_provider.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_header.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_widget.dart';
-import 'package:travel_muse_app/views/plan/location_setting/district_setting_page.dart';
 import 'package:travel_muse_app/views/plan/location_setting/province_setting_page.dart';
 
 class CalendarPage extends ConsumerWidget {

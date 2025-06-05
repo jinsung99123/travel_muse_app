@@ -19,7 +19,6 @@ class Place {
   final double longitude;
   final String category;
 
-
   factory Place.fromKakaoJson(Map<String, dynamic> json) {
     final address = json['address_name'] ?? '';
     final addressParts = address.split(' ');
