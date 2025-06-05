@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  int currentIndex = 0;
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
 
@@ -91,26 +92,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(
-        primaryColor: primaryColor,
-        currentIndex: 0,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/home');
-              break;
-            case 1:
-              context.go('/schedule');
-              break;
-            case 2:
-              context.go('/place_search');
-              break;
-            case 3:
-              context.go('/mypage');
-              break;
-          }
-        },
-      ),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }
