@@ -114,13 +114,13 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
 }
 
 class _RestaurantData {
-  final String name;
-  final String image;
-  final String description;
 
   _RestaurantData({
     required this.name,
     required this.image,
     required this.description,
   });
+  final String name;
+  final String image;
+  final String description;
 }

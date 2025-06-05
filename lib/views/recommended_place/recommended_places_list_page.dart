@@ -124,10 +124,6 @@ class RecommendedPlacesListPage extends StatelessWidget {
 }
 
 class _PlaceData {
-  final String title;
-  final String image;
-  final String description;
-  final bool isActive;
 
   _PlaceData({
     required this.title,
@@ -135,4 +131,8 @@ class _PlaceData {
     required this.description,
     required this.isActive,
   });
+  final String title;
+  final String image;
+  final String description;
+  final bool isActive;
 }

@@ -89,13 +89,13 @@ class RecommendedRestaurantsList extends StatelessWidget {
 }
 
 class _RestaurantCardData {
-  final String title;
-  final String image;
-  final bool isActive;
 
   _RestaurantCardData({
     required this.title,
     required this.image,
     required this.isActive,
   });
+  final String title;
+  final String image;
+  final bool isActive;
 }

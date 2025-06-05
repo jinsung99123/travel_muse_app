@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ImageSlider extends StatelessWidget {
-  final List<String> imageUrls;
-  final int currentPage;
-  final PageController pageController;
-  final void Function(int) onPageChanged;
 
   const ImageSlider({
     super.key,
@@ -13,6 +9,10 @@ class ImageSlider extends StatelessWidget {
     required this.pageController,
     required this.onPageChanged,
   });
+  final List<String> imageUrls;
+  final int currentPage;
+  final PageController pageController;
+  final void Function(int) onPageChanged;
 
   @override
   Widget build(BuildContext context) {

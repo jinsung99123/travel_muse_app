@@ -8,7 +8,6 @@ import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
-import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 import 'package:travel_muse_app/views/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/recommended_place/recommended_restaurant_list_page.dart';
 

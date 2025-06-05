@@ -88,13 +88,13 @@ class RecommendedPlacesList extends StatelessWidget {
 }
 
 class _PlaceCardData {
-  final String title;
-  final String image;
-  final bool isActive;
 
   _PlaceCardData({
     required this.title,
     required this.image,
     required this.isActive,
   });
+  final String title;
+  final String image;
+  final bool isActive;
 }

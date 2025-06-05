@@ -18,10 +18,10 @@ class ActionButtonRow extends StatelessWidget {
 }
 
 class _IconTextButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
 
   const _IconTextButton({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
 
   @override
   Widget build(BuildContext context) {

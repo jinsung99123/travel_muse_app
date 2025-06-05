@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
-  final String title;
-  final VoidCallback? onMoreTap;
 
   const SectionTitle({super.key, required this.title, this.onMoreTap});
+  final String title;
+  final VoidCallback? onMoreTap;
 
   @override
   Widget build(BuildContext context) {
