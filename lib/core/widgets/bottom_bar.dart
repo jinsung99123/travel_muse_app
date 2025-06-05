@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
+import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
+import 'package:travel_muse_app/views/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/recommended_place/recommended_places_list_page.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -32,7 +35,7 @@ class _BottomBarState extends State<BottomBar> {
         page = const PlanListPage();
         break;
       case 2:
-        page = const MyPage();
+        page = const RecommendedPlacesListPage();
         break;
       case 3:
         page = const MyPage();

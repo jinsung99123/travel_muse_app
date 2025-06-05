@@ -9,6 +9,8 @@ import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
+import 'package:travel_muse_app/views/recommended_place/recommended_places_list_page.dart';
+import 'package:travel_muse_app/views/recommended_place/recommended_restaurant_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -84,7 +86,17 @@ class _HomePageState extends State<HomePage>
             ),
 
             const SizedBox(height: 16),
-            const SectionTitle(title: '추천 명소'),
+            SectionTitle(
+              title: '추천 명소',
+              onMoreTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const RecommendedPlacesListPage(),
+                  ),
+                );
+              },
+            ),
             RecommendedPlacesList(color: primaryColor),
             const SizedBox(height: 16),
             const SectionTitle(title: '인기 여행기'),
@@ -96,7 +108,17 @@ class _HomePageState extends State<HomePage>
               secondaryColor: secondaryColor,
             ),
             const SizedBox(height: 16),
-            const SectionTitle(title: '추천 맛집'),
+            SectionTitle(
+              title: '추천 맛집',
+              onMoreTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const RecommendedRestaurantsListPage(),
+                  ),
+                );
+              },
+            ),
             RecommendedRestaurantsList(color: primaryColor),
           ],
         ),
