@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/views/calendar/calendar_page.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/popular_trips_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.dart';
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
+import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,7 +60,10 @@ class _HomePageState extends State<HomePage>
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
-              context.go('/place_search');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlaceSearchPage()),
+              );
             },
           ),
         ],
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SchedulePage()),
+                  MaterialPageRoute(builder: (context) => const CalendarPage()),
                 );
               },
             ),
