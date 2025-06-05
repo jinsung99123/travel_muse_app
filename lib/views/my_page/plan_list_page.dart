@@ -5,6 +5,9 @@ class PlanListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text('여행 목록 페이지'));
+    return Scaffold(
+      appBar: AppBar(title: Text('여행 목록 페이지')),
+      body: Text('여행 목록 페이지'),
+    );
   }
 }

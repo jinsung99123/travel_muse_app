@@ -5,6 +5,9 @@ class PreferenceListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text('성향 목록 페이지'));
+    return Scaffold(
+      appBar: AppBar(title: Text('성향 목록 페이지')),
+      body: Text('성향 목록 페이지'),
+    );
   }
 }

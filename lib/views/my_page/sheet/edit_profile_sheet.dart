@@ -7,14 +7,17 @@ class EditProfileSheet extends StatelessWidget {
   const EditProfileSheet({super.key});
 
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         // 취소
-        leading: AppbarButton(
-          widget: const Icon(Icons.close, size: 30),
-          onPressed: () {},
+        leading: IconButton(
+          icon: const Icon(Icons.close, size: 30),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
+
         title: const Text(
           '프로필 수정',
           style: TextStyle(fontWeight: FontWeight.bold),
