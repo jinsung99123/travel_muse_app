@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_restaurant_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_restaurant_detail_page.dart';
 
 class RecommendedRestaurantsList extends StatelessWidget {
   const RecommendedRestaurantsList({super.key, required this.color});
@@ -89,7 +89,6 @@ class RecommendedRestaurantsList extends StatelessWidget {
 }
 
 class _RestaurantCardData {
-
   _RestaurantCardData({
     required this.title,
     required this.image,
