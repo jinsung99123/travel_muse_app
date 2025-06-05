@@ -2,46 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 
-class BottomBar extends StatelessWidget {
-  const BottomBar({
-    super.key,
-    required this.primaryColor,
-    required this.currentIndex,
-    required this.onTap,
-  });
+class BottomBar extends StatefulWidget {
+  const BottomBar({super.key});
 
-  final Color primaryColor;
-  final int currentIndex;
-  final Function(int) onTap;
+  @override
+  State<BottomBar> createState() => _BottomBarState();
+}
 
-  void _onItemTapped(BuildContext context, int index) {
+class _BottomBarState extends State<BottomBar> {
+  int _currentIndex = 0;
+
+  final Color primaryColor = const Color(0xFF03A9F4);
+
+  void _onItemTapped(int index) {
+    if (index == _currentIndex) return;
+
+    setState(() {
+      _currentIndex = index;
+    });
+
     Widget page;
+
     switch (index) {
       case 0:
-        page = HomePage();
+        page = const HomePage();
         break;
       case 1:
-        // TODO: 일정 목록 페이지로 대체
-        page = MyPage();
+        page = const MyPage();
         break;
       case 2:
-        // TODO: 추천명소 페이지로 대체
-        page = MyPage();
+        page = const MyPage();
         break;
       case 3:
-        page = MyPage();
+        page = const MyPage();
         break;
       default:
         return;
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: (index) => _onItemTapped(context, index),
+      currentIndex: _currentIndex,
+      onTap: _onItemTapped,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.grey,
       items: const [
