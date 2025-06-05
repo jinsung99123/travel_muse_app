@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/my_page/widgets/schedule_card.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class PlanListPage extends StatelessWidget {
   const PlanListPage({super.key});
@@ -17,17 +18,25 @@ class PlanListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
-        title: Text('여행 일정 목록'),
+        title: const Text('여행 일정 목록'),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(12.0),
         itemCount: schedules.length,
         itemBuilder: (context, index) {
           final schedule = schedules[index];
-          return ScheduleCard(
-            title: schedule['title'] ?? '',
-            date: schedule['date'] ?? '',
-            imageUrl: 'https://picsum.photos/800/400?random=$index',
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SchedulePage()),
+              );
+            },
+            child: ScheduleCard(
+              title: schedule['title'] ?? '',
+              date: schedule['date'] ?? '',
+              imageUrl: 'https://picsum.photos/800/400?random=$index',
+            ),
           );
         },
       ),
