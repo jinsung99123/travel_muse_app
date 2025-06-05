@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class ResultView extends ConsumerStatefulWidget {
@@ -144,8 +145,15 @@ class _ResultViewState extends ConsumerState<ResultView> {
                     await ref
                         .read(preferenceTestViewModelProvider.notifier)
                         .saveTestToFirestore();
+
                     if (context.mounted) {
-                      context.go('/home');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => const HomePage(), // 여기에 이동할 페이지 지정
+                        ),
+                      );
                     }
                   } catch (e) {
                     showCupertinoDialog(
