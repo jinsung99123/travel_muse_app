@@ -7,6 +7,12 @@ class AppUser {
     required this.planId,
   });
 
+  final String uid;
+  final String? nickname;
+  final String? profileImage;
+  final List<String> testId;
+  final List<String> planId;
+
   AppUser copyWith({
     String? uid,
     String? nickname,
@@ -40,10 +46,4 @@ class AppUser {
     'testId': testId,
     'planId': planId,
   };
-
-  final String uid;
-  final String? nickname;
-  final String? profileImage;
-  final List<String> testId;
-  final List<String> planId;
 }
