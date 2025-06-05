@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/views/calendar/calendar_page.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/popular_trips_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.dart';
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
+import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  int currentIndex = 0;
   late AnimationController _controller;
   late Animation<double> _fadeInAnimation;
 
@@ -57,7 +60,10 @@ class _HomePageState extends State<HomePage>
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
-              context.go('/place_search');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlaceSearchPage()),
+              );
             },
           ),
         ],
@@ -68,11 +74,15 @@ class _HomePageState extends State<HomePage>
           padding: const EdgeInsets.all(16),
           children: [
             TravelRegisterButton(
+              backgroundColor: Colors.grey,
               onPressed: () {
-                context.go('/schedule');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CalendarPage()),
+                );
               },
-              backgroundColor: secondaryColor,
             ),
+
             const SizedBox(height: 16),
             const SectionTitle(title: '추천 명소'),
             RecommendedPlacesList(color: primaryColor),
@@ -91,26 +101,7 @@ class _HomePageState extends State<HomePage>
           ],
         ),
       ),
-      bottomNavigationBar: BottomBar(
-        primaryColor: primaryColor,
-        currentIndex: 0,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go('/home');
-              break;
-            case 1:
-              context.go('/schedule');
-              break;
-            case 2:
-              context.go('/place_search');
-              break;
-            case 3:
-              context.go('/mypage');
-              break;
-          }
-        },
-      ),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }
