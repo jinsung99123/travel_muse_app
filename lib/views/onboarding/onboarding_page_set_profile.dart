@@ -25,9 +25,9 @@ class OnboardingPageSetProfile extends StatelessWidget {
             children: [
               ListView(
                 children: [
-                  const Text('프로필 사진', style: TextStyle(fontSize: 15)),
+                  const Text('프로필 사진', style: TextStyle(fontSize: 18)),
                   SizedBox(height: 20),
-                  EditProfileImage(widgetSize: 100, iconSize: 50),
+                  EditProfileImage(size: 120),
                   SizedBox(height: 20),
                   EditNickname(
                     formKey: formKey,

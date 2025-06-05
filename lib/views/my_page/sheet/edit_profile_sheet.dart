@@ -37,7 +37,7 @@ class EditProfileSheet extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            EditProfileImage(widgetSize: 120, iconSize: 40),
+            //EditProfileImage(widgetSize: 120, iconSize: 40),
             const SizedBox(height: 20),
             // TODO: 텍스트 컨트롤러 관리 - 생성, 할당, dispose
             // EditNickname(),

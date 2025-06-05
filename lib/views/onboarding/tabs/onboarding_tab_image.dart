@@ -10,7 +10,7 @@ class OnboardingTabImage extends StatelessWidget {
       children: [
         const Text('프로필 사진을 설정해 주세요.', style: TextStyle(fontSize: 20)),
         SizedBox(height: 20),
-        EditProfileImage(widgetSize: 200, iconSize: 50),
+        EditProfileImage(size: 40),
       ],
     );
   }
