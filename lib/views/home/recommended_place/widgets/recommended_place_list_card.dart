@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedPlaceListCard extends StatelessWidget {
-  final String title;
-  final String image;
-  final String description;
-  final bool isActive;
-
   const RecommendedPlaceListCard({
     super.key,
     required this.title,
@@ -14,6 +9,10 @@ class RecommendedPlaceListCard extends StatelessWidget {
     required this.description,
     required this.isActive,
   });
+  final String title;
+  final String image;
+  final String description;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {

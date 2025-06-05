@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/widgets/recommended_restaurant_list_card.dart';
+import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_restaurant_list_card.dart';
 
 class RecommendedRestaurantsListPage extends StatelessWidget {
   const RecommendedRestaurantsListPage({super.key});
