@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
-class OnboardingPageSetProfile extends StatelessWidget {
+class OnboardingPageSetProfile extends ConsumerWidget {
   const OnboardingPageSetProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final profileViewmodel = ProfileViewModel();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileViewmodel = ref.read(profileViewModelProvider.notifier);
+    final profileState = ref.watch(profileViewModelProvider);
+
     final nicknameController = profileViewmodel.nicknameController;
     final formKey = profileViewmodel.formKey;
     return GestureDetector(
@@ -42,6 +45,11 @@ class OnboardingPageSetProfile extends StatelessWidget {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       await profileViewmodel.updateNickname();
+                      if (profileState.temporaryImageUrl != null) {
+                        await profileViewmodel.updateProfileImage(
+                          profileState.temporaryImageUrl!,
+                        );
+                      }
                     },
                   ),
                   SizedBox(height: 30),
