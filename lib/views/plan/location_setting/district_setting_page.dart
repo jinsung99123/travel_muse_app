@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box_list.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class DistrictSettingPage extends StatefulWidget {
   const DistrictSettingPage({super.key});
@@ -48,7 +49,10 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                     padding: EdgeInsets.symmetric(vertical: 0),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SchedulePage()),
+                    );
                   },
                   child: Text(
                     '다음',
