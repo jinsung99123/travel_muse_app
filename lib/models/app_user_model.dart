@@ -29,13 +29,6 @@ class AppUser {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'nackname': nickname,
-    'profileImage': profileImage,
-    'testId': testId,
-    'planId': planId,
-  };
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
       uid: json['uid'] ?? '',
@@ -45,4 +38,11 @@ class AppUser {
       planId: List<String>.from(json['planId'] ?? []),
     );
   }
+  Map<String, dynamic> toJson() => {
+    'uid': uid,
+    'nackname': nickname,
+    'profileImage': profileImage,
+    'testId': testId,
+    'planId': planId,
+  };
 }
