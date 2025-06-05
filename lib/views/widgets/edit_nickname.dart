@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/core/validators.dart';
 
-class EditNickname extends StatefulWidget {
-  const EditNickname({super.key});
+class EditNickname extends StatelessWidget {
+  const EditNickname({
+    super.key,
+    required this.formKey,
+    required this.controller,
+  });
 
-  @override
-  State<EditNickname> createState() => _EditNicknameState();
-}
-
-class _EditNicknameState extends State<EditNickname> {
-  final nicknameController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    nicknameController.dispose();
-    super.dispose();
-  }
+  final GlobalKey<FormState> formKey;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +26,10 @@ class _EditNicknameState extends State<EditNickname> {
         ),
         SizedBox(height: 10),
         Form(
-          key: _formKey,
+          key: formKey,
+
           child: TextFormField(
+            controller: controller,
             validator: Validators.validateNickname,
             decoration: InputDecoration(
               hintText: '닉네임', // 추후 유저 기존 닉네임 연결
