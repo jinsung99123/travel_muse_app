@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/my_page/sheet/edit_profile_sheet.dart';
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({super.key});
@@ -28,7 +29,12 @@ class MyProfileScreen extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.edit, color: Colors.teal),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditProfileSheet()),
+            );
+          },
         ),
       ],
     );
