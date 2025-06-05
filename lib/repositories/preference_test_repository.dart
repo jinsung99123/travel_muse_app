@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
-import 'package:travel_muse_app/services/preference_test_service.dart';
 
 class PreferenceTestRepository {
   final _aiService = AiService();
-  final _service = PreferenceTestService();
 
   final Map<String, String> _typeDescriptions = {
     'a': '계획형 여행가: 여행을 철저하게 계획하고 준비하는 성향입니다.',
