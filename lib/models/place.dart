@@ -1,13 +1,4 @@
 class Place {
-  final String id;
-  final String name;
-  final String address;
-  final String city;
-  final String district;
-  final double latitude;
-  final double longitude;
-  final String category;
-
   Place({
     required this.id,
     required this.name,
@@ -18,6 +9,16 @@ class Place {
     required this.longitude,
     required this.category,
   });
+
+  final String id;
+  final String name;
+  final String address;
+  final String city;
+  final String district;
+  final double latitude;
+  final double longitude;
+  final String category;
+
 
   factory Place.fromKakaoJson(Map<String, dynamic> json) {
     final address = json['address_name'] ?? '';
