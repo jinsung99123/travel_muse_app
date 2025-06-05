@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_restaurant_detail_page.dart';
+import 'package:travel_muse_app/views/recommended_place/widgets/recommended_restaurant_list_card.dart';
 
 class RecommendedRestaurantsListPage extends StatelessWidget {
   const RecommendedRestaurantsListPage({super.key});
@@ -13,9 +13,20 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
         name: '핫도그 두물머리점',
         image: 'assets/images/image3.png',
         description: '두물머리 명물 수제 핫도그',
+        isActive: true,
       ),
-      _RestaurantData(name: '준비 중', image: '', description: '곧 추가될 맛집'),
-      _RestaurantData(name: '준비 중', image: '', description: '곧 추가될 맛집'),
+      _RestaurantData(
+        name: '준비 중',
+        image: '',
+        description: '곧 추가될 맛집',
+        isActive: false,
+      ),
+      _RestaurantData(
+        name: '준비 중',
+        image: '',
+        description: '곧 추가될 맛집',
+        isActive: false,
+      ),
     ];
 
     return Scaffold(
@@ -28,84 +39,11 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         itemBuilder: (context, index) {
           final restaurant = restaurants[index];
-
-          return GestureDetector(
-            onTap:
-                restaurant.name != '준비 중'
-                    ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (_) => const RecommendedRestaurantDetailPage(),
-                        ),
-                      );
-                    }
-                    : null,
-            child: Card(
-              elevation: 2,
-              margin: const EdgeInsets.only(bottom: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(12),
-                    ),
-                    child:
-                        restaurant.image.isNotEmpty
-                            ? Image.asset(
-                              restaurant.image,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                            : Container(
-                              width: 100,
-                              height: 100,
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.image_not_supported),
-                            ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 8,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            restaurant.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            restaurant.description,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-            ),
+          return RecommendedRestaurantListCard(
+            name: restaurant.name,
+            image: restaurant.image,
+            description: restaurant.description,
+            isActive: restaurant.isActive,
           );
         },
       ),
@@ -114,13 +52,15 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
 }
 
 class _RestaurantData {
-
   _RestaurantData({
     required this.name,
     required this.image,
     required this.description,
+    required this.isActive,
   });
+
   final String name;
   final String image;
   final String description;
+  final bool isActive;
 }

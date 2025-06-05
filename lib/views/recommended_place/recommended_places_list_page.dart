@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/recommended_place/widgets/recommended_place_list_card.dart';
 
 class RecommendedPlacesListPage extends StatelessWidget {
   const RecommendedPlacesListPage({super.key});
@@ -39,83 +39,11 @@ class RecommendedPlacesListPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         itemBuilder: (context, index) {
           final place = places[index];
-
-          return GestureDetector(
-            onTap:
-                place.isActive
-                    ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RecommendedPlaceDetailPage(),
-                        ),
-                      );
-                    }
-                    : null,
-            child: Card(
-              elevation: 2,
-              margin: const EdgeInsets.only(bottom: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(12),
-                    ),
-                    child:
-                        place.image.isNotEmpty
-                            ? Image.asset(
-                              place.image,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                            : Container(
-                              width: 100,
-                              height: 100,
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.image_not_supported),
-                            ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 8,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            place.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            place.description,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-            ),
+          return RecommendedPlaceListCard(
+            title: place.title,
+            image: place.image,
+            description: place.description,
+            isActive: place.isActive,
           );
         },
       ),
@@ -124,13 +52,13 @@ class RecommendedPlacesListPage extends StatelessWidget {
 }
 
 class _PlaceData {
-
   _PlaceData({
     required this.title,
     required this.image,
     required this.description,
     required this.isActive,
   });
+
   final String title;
   final String image;
   final String description;
