@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/views/preference/preference_loading_page.dart';
 import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
 import 'package:travel_muse_app/views/preference/widgets/previous_button.dart';
@@ -10,14 +13,14 @@ const Color kPrimaryColor = Color(0xFF03A9F4);
 const Color kSecondaryColor = Color(0xFF2979FF);
 const Color kTertiaryColor = Color(0xFFBDBDBD);
 
-class PreferenceTestPage extends StatefulWidget {
+class PreferenceTestPage extends ConsumerStatefulWidget {
   const PreferenceTestPage({super.key});
 
   @override
-  State<PreferenceTestPage> createState() => _PreferenceTestPageState();
+  ConsumerState<PreferenceTestPage> createState() => _PreferenceTestPageState();
 }
 
-class _PreferenceTestPageState extends State<PreferenceTestPage> {
+class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
   int _currentIndex = 0;
   final List<Map<String, String>> _answers = [];
 
@@ -65,20 +68,30 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
   }
 
   void _nextQuestion() {
-    setState(() {
-      if (_currentIndex < preferenceQuestions.length - 1) {
+    if (_currentIndex < preferenceQuestions.length - 1) {
+      setState(() {
         _currentIndex++;
-      } else {
-        _currentIndex = preferenceQuestions.length;
-      }
-    });
+      });
+    } else {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder:
+              (_) => PreferenceLoadingPage(
+                answers: _answers,
+                onRestart: _restartTest,
+              ),
+        ),
+      );
+    }
   }
 
   void _restartTest() {
-    setState(() {
-      _currentIndex = 0;
-      _answers.clear();
-    });
+    ref.invalidate(preferenceTestViewModelProvider);
+    Navigator.pushReplacement(
+      context,
+      CupertinoPageRoute(builder: (_) => const PreferenceTestPage()),
+    );
   }
 
   @override
@@ -93,7 +106,7 @@ class _PreferenceTestPageState extends State<PreferenceTestPage> {
       child: SafeArea(
         child:
             isFinished
-                ? ResultView(answers: _answers, onRestart: _restartTest)
+                ? ResultView(onRestart: _restartTest)
                 : Column(
                   children: [
                     const SizedBox(height: 20),

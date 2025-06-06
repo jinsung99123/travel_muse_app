@@ -1,41 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
-import 'package:travel_muse_app/services/preference_test_service.dart';
 
 class PreferenceTestRepository {
   final _aiService = AiService();
-  final _service = PreferenceTestService();
 
   final Map<String, String> _typeDescriptions = {
-    'a': '계획형 여행가: 여행을 철저하게 계획하고 준비하는 성향입니다.',
-    'b': '즉흥형 여행가: 계획보다는 즉흥적으로 여행을 즐깁니다.',
-    'c': '자연친화형 여행가: 자연을 가까이에서 즐기길 원합니다.',
-    'd': '도시탐험형 여행가: 도시의 문화와 랜드마크를 탐험합니다.',
-    'e': '혼합형 여행가: 계획과 즉흥을 조화롭게 섞어 여행을 즐깁니다.',
-    'f': '새로운 것 탐험형 여행가: 새로운 것에 대한 호기심으로 여행합니다.',
+    'planner': '철두철미 계획러: 여행은 미리미리! 엑셀표까지 만들어야 마음이 놓이죠.',
+    'free_spirit': '자유로운 방랑자: 즉흥 여행이 진짜 여행! 발 닿는 대로 떠나요.',
+    'nature_lover': '숲속 힐러: 사람보다 나무가 좋을 때, 자연 속 쉼이 최고의 여정입니다.',
+    'city_explorer': '도시 정복자: 랜드마크와 핫플 투어는 빠짐없이, 감각적인 여행을 즐깁니다.',
+    'balanced_traveler': '밸런스 마스터: 일정은 짜되, 여유도 챙기는 여행 스타일의 고수입니다.',
+    'experience_seeker': '체험형 모험가: 먹어보고, 타보고, 느껴보며 오감으로 기억하는 여행러!',
   };
 
   Future<PreferenceTest> classifyTestOnly(
     List<Map<String, String>> answersRaw,
   ) async {
+    /*TODO:개발단계 끝나면 주석 제거
+    final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) {
+    throw Exception('로그인되지 않은 상태에서는 테스트를 저장할 수 없습니다.');
+  }*/
+
     final resultSummary = answersRaw
         .map((a) => '${a['question']} => ${a['selectedOption']}')
         .join(', ');
-
     final prompt = '''
 사용자의 여행 성향 테스트 결과:
 $resultSummary
 
-아래 중에서 가장 적합한 하나의 여행가 타입 코드만 골라서 반환해줘.
+아래 중에서 가장 적합한 하나의 여행가 타입 코드 하나만 골라서 반환해줘.
 반드시 아래 중 하나로만 대답해. 추가 설명은 하지 말고, 코드만 반환해.
 
-a: 계획형 여행가
-b: 즉흥형 여행가
-c: 자연친화형 여행가
-d: 도시탐험형 여행가
-e: 혼합형 여행가
-f: 새로운 것 탐험형 여행가
+planner: 철두철미 계획러
+free_spirit: 자유로운 방랑자
+nature_lover: 숲속 힐러
+city_explorer: 도시 정복자
+balanced_traveler: 밸런스 마스터
+experience_seeker: 체험형 모험가
 ''';
 
     final typeCode = await _aiService.getTypeCodeFromAI(prompt);
@@ -54,7 +58,7 @@ f: 새로운 것 탐험형 여행가
 
     return PreferenceTest(
       testId: '',
-      userId: '',
+      userId: FirebaseAuth.instance.currentUser?.uid ?? 'anonymous',
       answers: answers,
       result: {'type': typeCode, 'details': description},
       createdAt: now,
