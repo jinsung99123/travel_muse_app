@@ -16,6 +16,15 @@ class ResultView extends ConsumerStatefulWidget {
 }
 
 class _ResultViewState extends ConsumerState<ResultView> {
+  final Map<String, String> resultImageMap = {
+    'planner': 'assets/images/result_planner.jpg',
+    'free_spirit': 'assets/images/result_free_spirit.jpg',
+    'nature_lover': 'assets/images/result_nature_lover.jpg',
+    'city_explorer': 'assets/images/result_city_explorer.jpg',
+    'balanced_traveler': 'assets/images/result_balanced_traveler.jpg',
+    'experience_seeker': 'assets/images/result_experience_seeker.jpg',
+  };
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(preferenceTestViewModelProvider);
@@ -23,6 +32,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
     final result = state.value?.result;
     final typeCode = result?['type'];
     final description = result?['details'];
+    final imagePath = resultImageMap[typeCode] ?? '';
 
     final Map<String, String> referenceQuestionTexts = {
       for (final q in preferenceQuestions) q['questionId']!: q['question']!,
@@ -63,6 +73,23 @@ class _ResultViewState extends ConsumerState<ResultView> {
               ),
               child: Column(
                 children: [
+                  if (imagePath.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Image.asset(
+                        imagePath,
+                        width: 160,
+                        height: 160,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            CupertinoIcons.exclamationmark_triangle,
+                            size: 48,
+                            color: Colors.red,
+                          );
+                        },
+                      ),
+                    ),
                   Text(
                     '당신의 타입: $typeCode',
                     style: const TextStyle(
@@ -81,42 +108,43 @@ class _ResultViewState extends ConsumerState<ResultView> {
               ),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: answers.length,
-                itemBuilder: (context, index) {
-                  final answer = answers[index];
-                  final question =
-                      referenceQuestionTexts[answer.questionId] ?? '알 수 없는 질문';
-                  final selectedOption = answer.selectedOption;
+            // Expanded(
+            //   child: ListView.builder(
+            //     padding: const EdgeInsets.symmetric(horizontal: 16),
+            //     itemCount: answers.length,
+            //     itemBuilder: (context, index) {
+            //       final answer = answers[index];
+            //       final question =
+            //           referenceQuestionTexts[answer.questionId] ?? '알 수 없는 질문';
+            //       final selectedOption = answer.selectedOption;
 
-                  return Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    child: ListTile(
-                      title: Text(
-                        question,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                      subtitle: Text(
-                        '선택: $selectedOption',
-                        style: const TextStyle(color: Colors.black87),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            //       return Card(
+            //         elevation: 1,
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //         margin: const EdgeInsets.symmetric(vertical: 6),
+            //         child: ListTile(
+            //           title: Text(
+            //             question,
+            //             style: const TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               color: kPrimaryColor,
+            //             ),
+            //           ),
+            //           subtitle: Text(
+            //             '선택: $selectedOption',
+            //             style: const TextStyle(color: Colors.black87),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CupertinoButton(
                     color: kPrimaryColor,
@@ -127,7 +155,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(width: 30),
                   CupertinoButton(
                     color: CupertinoColors.activeGreen,
                     borderRadius: BorderRadius.circular(12),
