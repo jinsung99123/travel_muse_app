@@ -51,7 +51,7 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SchedulePage()),
+                      MaterialPageRoute(builder: (context) => SchedulePage(userId: 'test-user', planId: 'test',)),//임시 데이터 넘김
                     );
                   },
                   child: Text(
