@@ -65,6 +65,18 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     }
   }
 
+//일정 삭제
+  void _removePlace(int dayIndex, int placeIndex) {
+  setState(() {
+    daySchedules[dayIndex]?.removeAt(placeIndex);
+  });
+
+  ref.read(scheduleViewModelProvider.notifier).saveDaySchedules(
+    planId: widget.planId,
+    daySchedules: daySchedules,
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     final planState = ref.watch(scheduleViewModelProvider);
@@ -116,6 +128,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 isEditing: _isEditing,
                 onReorder: _onReorder,
                 onAddPlace: _addPlace,
+                onRemovePlace: _removePlace,
               );
             },
           );

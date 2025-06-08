@@ -10,14 +10,16 @@ class DayScheduleSection extends StatelessWidget {
     required this.isEditing,
     required this.onReorder,
     required this.onAddPlace,
+    required this.onRemovePlace, 
   });
+
   final int dayIndex;
   final String dayLabel;
   final List<Map<String, String>> schedules;
   final bool isEditing;
   final void Function(int dayIndex, int oldIndex, int newIndex) onReorder;
   final void Function(int dayIndex) onAddPlace;
-
+  final void Function(int dayIndex, int placeIndex) onRemovePlace; 
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +49,21 @@ class DayScheduleSection extends StatelessWidget {
                 child: ReorderableDragStartListener(
                   index: i,
                   enabled: isEditing,
-                  child: SchedulePlaceCard(
-                    index: i + 1,
-                    place: place,
-                    showHandle: isEditing,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SchedulePlaceCard(
+                          index: i + 1,
+                          place: place,
+                          showHandle: isEditing,
+                        ),
+                      ),
+                      if (isEditing)
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => onRemovePlace(dayIndex, i),
+                        ),
+                    ],
                   ),
                 ),
               );
