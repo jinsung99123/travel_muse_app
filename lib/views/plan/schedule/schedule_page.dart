@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plans.dart';
@@ -18,28 +17,25 @@ class SchedulePage extends ConsumerStatefulWidget {
 
 class _SchedulePageState extends ConsumerState<SchedulePage> {
   bool _isEditing = false;
-
-  /// dayIndex -> 장소 리스트
-  final Map<int, List<Map<String, String>>> daySchedules = {};
+  Map<int, List<Map<String, String>>> daySchedules = {};
+  Plans? selectedPlan;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async {
-      //사용자 plan불러오기
-      await ref
-          .read(scheduleViewModelProvider.notifier)
-          .fetchPlans(widget.userId);
+    _initData();
+  }
 
-      //planId 꺼내서 route 불러오기
-      final routes = await ref
-          .read(scheduleViewModelProvider.notifier)
-          .fetchRoute(widget.planId); // planId 사용
+  Future<void> _initData() async {
+    final viewModel = ref.read(scheduleViewModelProvider.notifier);
 
-      setState(() {
-        daySchedules.clear();
-        daySchedules.addAll(routes);
-      });
+    await viewModel.fetchPlans(widget.userId);
+    final plans = ref.read(scheduleViewModelProvider).valueOrNull;
+    selectedPlan = plans?.firstWhere((p) => p.planId == widget.planId);
+
+    final routes = await viewModel.fetchRoute(widget.planId);
+    setState(() {
+      daySchedules = routes;
     });
   }
 
@@ -51,10 +47,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     });
   }
 
-  Future<void> _addPlace(int dayIndex, String planId) async {
+  Future<void> _addPlace(int dayIndex) async {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
-      MaterialPageRoute(builder: (context) => const PlaceSearchPage()),
+      MaterialPageRoute(builder: (_) => const PlaceSearchPage()),
     );
 
     if (selectedPlaces != null && selectedPlaces.isNotEmpty) {
@@ -63,10 +59,9 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         daySchedules[dayIndex]!.addAll(selectedPlaces);
       });
 
-      // 저장
       await ref
           .read(scheduleViewModelProvider.notifier)
-          .saveDaySchedules(planId: planId, daySchedules: daySchedules);
+          .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
     }
   }
 
@@ -82,7 +77,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
             _isEditing = !_isEditing;
           });
 
-          // 완료 버튼 눌렀을 때만 저장
           if (!_isEditing) {
             await ref
                 .read(scheduleViewModelProvider.notifier)
@@ -95,17 +89,20 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       ),
       body: planState.when(
         data: (plans) {
-          if (plans.isEmpty) {
-            return const Center(child: Text('일정이 없습니다.'));
+          if (selectedPlan == null) {
+            return const Center(child: Text('선택된 일정이 없습니다.'));
           }
 
-          final plan = plans.first; // 첫 번째 계획만 사용
-          final dayCount = plan.endDate.difference(plan.startDate).inDays + 1;
+          final dayCount =
+              selectedPlan!.endDate.difference(selectedPlan!.startDate).inDays +
+              1;
 
           return ListView.builder(
             itemCount: dayCount,
             itemBuilder: (context, dayIndex) {
-              final currentDate = plan.startDate.add(Duration(days: dayIndex));
+              final currentDate = selectedPlan!.startDate.add(
+                Duration(days: dayIndex),
+              );
               final dayLabel =
                   '${currentDate.month}.${currentDate.day} (${_getWeekday(currentDate.weekday)})';
 
@@ -118,7 +115,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 schedules: daySchedules[dayIndex]!,
                 isEditing: _isEditing,
                 onReorder: _onReorder,
-                onAddPlace: (dayIndex) => _addPlace(dayIndex, plan.planId),
+                onAddPlace: _addPlace,
               );
             },
           );
