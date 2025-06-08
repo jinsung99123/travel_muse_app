@@ -7,6 +7,7 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<List<Plans>>> {
     fetchPlans();
   }
 
+//plans 데이터 불러오기
   Future<void> fetchPlans() async {
     try {
       final snapshot = await FirebaseFirestore.instance.collection('plans').get();
