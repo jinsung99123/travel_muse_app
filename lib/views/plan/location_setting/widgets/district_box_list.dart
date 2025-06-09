@@ -22,7 +22,7 @@ class DistrictBoxList extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 18,
         mainAxisSpacing: 18,
-        childAspectRatio: 1,
+        childAspectRatio: 2,
       ),
       itemBuilder: (context, index) {
         return DistrictBoxItem(

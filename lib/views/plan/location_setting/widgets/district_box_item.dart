@@ -33,7 +33,8 @@ class DistrictBoxItem extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
             color: isSelected ? Colors.white : Colors.black,
           ),
         ),
