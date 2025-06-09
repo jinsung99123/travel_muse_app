@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/calendar_provider.dart';
-import 'package:travel_muse_app/views/calendar/widgets/calendar_header.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_widget.dart';
 import 'package:travel_muse_app/views/plan/location_setting/province_setting_page.dart';
 
@@ -14,15 +13,45 @@ class CalendarPage extends ConsumerWidget {
     final state = ref.watch(calendarViewModelProvider);
 
     return Scaffold(
-      appBar: CalendarHeader(focusedDay: state.focusedDay),
+      appBar: AppBar(
+        title: Text(
+          '여행 일정 등록',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '여행할 날짜를 선택해주세요',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '첫번째 날과 마지막 날짜를 선택하면 \n자동으로 선택돼요',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Pretendard',
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15),
                   CalendarWidget(
                     state: state,
                     isSelected: viewModel.isSelected,
