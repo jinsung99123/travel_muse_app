@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/plan/location_setting/district_setting_page.dart';
-import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box_list.dart';
+import 'package:travel_muse_app/views/plan/location_setting/widgets/province_box_list.dart';
 
 class ProvinceSettingPage extends StatefulWidget {
   const ProvinceSettingPage({super.key});
@@ -10,7 +10,25 @@ class ProvinceSettingPage extends StatefulWidget {
 }
 
 class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
-  final List<String> items = List.generate(9, (index) => '서울');
+  final List<String> items = [
+    '서울',
+    '부산',
+    '대구',
+    '인천',
+    '광주',
+    '대전',
+    '울산',
+    '세종',
+    '경기',
+    '강원',
+    '충북',
+    '충남',
+    '전북',
+    '전남',
+    '경북',
+    '경남',
+    '제주',
+  ];
   final Set<int> selectedIndices = {};
 
   void onItemTap(int index) {
@@ -32,22 +50,19 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              SelectableBoxList(
-                items: items,
-                selectedIndices: selectedIndices,
-                onTap: onItemTap,
+              Expanded(
+                child: ProvinceBoxList(
+                  items: items,
+                  selectedIndices: selectedIndices,
+                  onTap: onItemTap,
+                ),
               ),
-
               SizedBox(height: 24),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: EdgeInsets.symmetric(vertical: 0),
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -60,7 +75,6 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
                   ),
                 ),
               ),
-
               SizedBox(height: 16),
             ],
           ),
