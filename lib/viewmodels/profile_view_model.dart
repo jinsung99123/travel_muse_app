@@ -6,19 +6,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:travel_muse_app/repositories/app_user_repository.dart';
 
 class ProfileState {
   const ProfileState({
     this.nickname,
     this.profileImageUrl,
-    this.temporaryImageUrl,
+    this.temporaryImagePath,
     this.birthDate,
     this.gender,
   });
   final String? nickname;
   final String? profileImageUrl;
-  final String? temporaryImageUrl;
+  final String? temporaryImagePath;
   final DateTime? birthDate;
   final String? gender;
 
@@ -32,7 +33,7 @@ class ProfileState {
     return ProfileState(
       nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
-      temporaryImageUrl: temporaryImageUrl ?? this.temporaryImageUrl,
+      temporaryImagePath: temporaryImageUrl ?? this.temporaryImagePath,
       birthDate: birthDate ?? this.birthDate,
       gender: gender ?? this.gender,
     );
@@ -47,6 +48,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final nicknameController = TextEditingController();
   final birthDateController = TextEditingController();
   final _picker = ImagePicker();
+  late File? pickedImage;
 
   // 업로드된 이미지 url 임시 저장
   String? temporaryImageUrl;
@@ -80,34 +82,38 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  Future<String?> uploadProfileImage() async {
-    try {
-      if (currentUser == null) {
-        log('currentUser is null');
-        return null;
-      }
-      // 이미지 pick
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  // 사용자가 고른 이미지 로컬에 저장
+  Future<void> savePickedImageToLocal() async {
+    final xfile = await _picker.pickImage(source: ImageSource.gallery);
+    if (xfile == null) return;
+    pickedImage = File(xfile.path);
 
-      if (pickedFile == null) return null;
+    final directory = await getApplicationDocumentsDirectory();
+    final customFolder = Directory('${directory.path}/profile_images');
 
-      final file = File(pickedFile.path);
-      log('프로필 이미지 업로드 시도');
-      final url = await appUserRepo.uploadProfileImage(
-        uid: currentUser!.uid,
-        file: file,
-      );
-      state = state.copyWith(temporaryImageUrl: url);
-
-      return url;
-    } catch (e) {
-      log('프로필 이미지 업로드 실패 : $e');
-      return null;
+    if (!await customFolder.exists()) {
+      await customFolder.create(recursive: true); // 폴더가 없으면 생성
     }
+    final fileName =
+        'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final localImagePath = '${customFolder.path}/$fileName';
+
+    await File(pickedImage!.path).copy(localImagePath);
+
+    log('이미지 저장 성공 : $localImagePath ');
+    state = state.copyWith(temporaryImageUrl: localImagePath);
   }
 
-  Future<void> updateProfileImage(String imageUrl) async {
+  // 프로필 이미지 업데이트
+  Future<void> updateProfileImage() async {
     try {
+      // 이미지 스토리지 업로드
+      final imageUrl = await appUserRepo.uploadProfileImage(
+        uid: currentUser!.uid,
+        file: pickedImage!,
+      );
+
+      // 스토리지의 이미지 사용자 컬렉션에 업데이트
       await appUserRepo.updateProfileImage(
         uid: currentUser!.uid,
         fileUrl: imageUrl,

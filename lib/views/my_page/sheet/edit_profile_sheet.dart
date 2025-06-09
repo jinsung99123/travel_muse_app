@@ -38,10 +38,8 @@ class EditProfileSheet extends ConsumerWidget {
 
               await profileViewmodel.updateNickname();
 
-              if (profileState.temporaryImageUrl != null) {
-                await profileViewmodel.updateProfileImage(
-                  profileState.temporaryImageUrl!,
-                );
+              if (profileState.temporaryImagePath != null) {
+                await profileViewmodel.updateProfileImage();
               }
             },
           ),

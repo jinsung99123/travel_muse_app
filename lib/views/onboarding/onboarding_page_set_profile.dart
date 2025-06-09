@@ -60,10 +60,8 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       await profileViewmodel.updateNickname();
-                      if (profileState.temporaryImageUrl != null) {
-                        await profileViewmodel.updateProfileImage(
-                          profileState.temporaryImageUrl!,
-                        );
+                      if (profileState.temporaryImagePath != null) {
+                        await profileViewmodel.updateProfileImage();
                       }
                     },
                   ),

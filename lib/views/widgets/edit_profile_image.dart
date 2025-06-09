@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,10 +28,9 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    final profileViewModel = ref.read(profileViewModelProvider.notifier);
     final profileState = ref.watch(profileViewModelProvider);
     final imageUrlToShow =
-        profileState.temporaryImageUrl ??
+        profileState.temporaryImagePath ??
         profileState.profileImageUrl; // 임시 저장 이미지가 없으면 기존 프로필 이미지 표시
 
     return Padding(
@@ -44,28 +45,35 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () async {
-              await profileViewModel.uploadProfileImage();
+              await ref
+                  .read(profileViewModelProvider.notifier)
+                  .savePickedImageToLocal();
             },
             child: SizedBox(
               width: widget.size,
               height: widget.size,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFB3B9BC),
                   borderRadius: BorderRadius.circular(500),
+                  color: const Color(0xFFB3B9BC),
+                  image:
+                      imageUrlToShow != null
+                          ? DecorationImage(
+                            image:
+                                profileState.temporaryImagePath == null
+                                    ? NetworkImage(imageUrlToShow)
+                                    : FileImage(File(imageUrlToShow))
+                                        as ImageProvider,
+                            fit: BoxFit.cover,
+                          )
+                          : null,
                 ),
                 child:
-                    imageUrlToShow != null
-                        ? Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(500),
-                            // image: DecorationImage(image: )
-                          ),
-                          child: Center(child: Text('이미지')),
-                        )
-                        : Center(
+                    imageUrlToShow == null
+                        ? Center(
                           child: SvgPicture.asset('assets/icons/camera.svg'),
-                        ),
+                        )
+                        : null,
               ),
             ),
           ),
