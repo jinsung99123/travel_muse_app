@@ -13,7 +13,7 @@ class AppbarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onPressed;
+        onPressed();
       },
       child: Container(
         width: 60,

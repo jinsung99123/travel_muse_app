@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/calendar/calendar_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_restaurant_list_page.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/popular_trips_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
@@ -8,8 +10,6 @@ import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_places_list_page.dart';
-import 'package:travel_muse_app/views/recommended_place/recommended_restaurant_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

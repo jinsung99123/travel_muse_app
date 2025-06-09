@@ -1,13 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/my_page/sheet/widgets/appbar_button.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
-class EditProfileSheet extends StatelessWidget {
+class EditProfileSheet extends ConsumerWidget {
   const EditProfileSheet({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileViewmodel = ref.read(profileViewModelProvider.notifier);
+    final profileState = ref.watch(profileViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         // 취소
@@ -26,8 +32,17 @@ class EditProfileSheet extends StatelessWidget {
           // 완료, 제출
           AppbarButton(
             widget: const Text('완료', style: TextStyle(fontSize: 18)),
-            onPressed: () {
-              //
+            onPressed: () async {
+              log('onpress');
+              FocusScope.of(context).unfocus();
+
+              await profileViewmodel.updateNickname();
+
+              if (profileState.temporaryImageUrl != null) {
+                await profileViewmodel.updateProfileImage(
+                  profileState.temporaryImageUrl!,
+                );
+              }
             },
           ),
         ],
@@ -37,10 +52,12 @@ class EditProfileSheet extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            EditProfileImage(widgetSize: 120, iconSize: 40),
+            EditProfileImage(size: 120),
             const SizedBox(height: 20),
-            // TODO: 텍스트 컨트롤러 관리 - 생성, 할당, dispose
-            EditNickname(),
+            EditNickname(
+              formKey: profileViewmodel.formKey,
+              controller: profileViewmodel.nicknameController,
+            ),
           ],
         ),
       ),
