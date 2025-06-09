@@ -26,67 +26,60 @@ class CalendarPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '여행할 날짜를 선택해주세요',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        fontFamily: 'Pretendard',
-                      ),
-                    ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '여행할 날짜를 선택해주세요',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Pretendard',
                   ),
-                  SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '첫번째 날과 마지막 날짜를 선택하면 \n자동으로 선택돼요',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Pretendard',
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  CalendarWidget(
-                    state: state,
-                    isSelected: viewModel.isSelected,
-                    isBetween: viewModel.isBetween,
-                    onDaySelected: viewModel.selectDay,
-                  ),
-                ],
+                ),
               ),
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(vertical: 0),
+              const SizedBox(height: 15),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 12,
+                  itemBuilder: (context, index) {
+                    final focusedMonth = DateTime(
+                      state.focusedDay.year,
+                      state.focusedDay.month + index,
+                    );
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CalendarWidget(
+                        month: focusedMonth,
+                        isSelected: viewModel.isSelected,
+                        isBetween: viewModel.isBetween,
+                        onDaySelected: viewModel.selectDay,
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProvinceSettingPage(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        '다음',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                    );
+                  },
+                ),
               ),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProvinceSettingPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    '다음',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
