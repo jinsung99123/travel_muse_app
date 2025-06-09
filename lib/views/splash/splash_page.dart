@@ -26,24 +26,31 @@ class _SplashScreenState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 120),
-            Image.asset(
+      body: Column(
+        children: [
+          const SizedBox(height: 320),
+          Center(
+            child: Image.asset(
               'assets/images/Logo.png',
               width: 216,
               height: 216,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 20),
-            Text(
+          ),
+          const SizedBox(height: 20),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 80),
+            child: Text(
               'TravelMuse',
-              style: TextStyle(fontSize: 24, fontFamily: 'Ssangmun'),
+              style: TextStyle(
+                fontSize: 24,
+                fontFamily: 'Ssangmun',
+                color: Colors.black,
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
