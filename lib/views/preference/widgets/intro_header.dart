@@ -1,38 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class QuestionCard extends StatelessWidget {
-  const QuestionCard({super.key, required this.question});
-  final String question;
+class IntroHeader extends StatelessWidget {
+  const IntroHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: 375,
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: const [
           Text(
-            question,
-            style: const TextStyle(
+            '사용자님의 여행 성향을 \n알려주세요',
+            style: TextStyle(
               color: Color(0xFF26272A),
               fontSize: 24,
               fontWeight: FontWeight.w700,
               height: 1.5,
-              fontFamily: 'Pretendard',
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            '이 질문을 바탕으로 여행 성향을 분석해드릴게요!',
+          SizedBox(height: 8),
+          Text(
+            '맞춤 여행 코스 추천을 위해 \n사용자님의 여행 성향 정보를 알려주세요',
             style: TextStyle(
               color: Color(0xFF7C878C),
               fontSize: 16,
               fontWeight: FontWeight.w400,
               height: 1.5,
-              fontFamily: 'Pretendard',
             ),
           ),
         ],
