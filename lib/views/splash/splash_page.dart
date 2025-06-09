@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
@@ -24,15 +24,24 @@ class _SplashScreenState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FlutterLogo(size: 100),
+            SizedBox(height: 120),
+            Image.asset(
+              'assets/images/Logo.png',
+              width: 216,
+              height: 216,
+              fit: BoxFit.cover,
+            ),
             SizedBox(height: 20),
-            Text('로딩 중', style: TextStyle(fontSize: 18)),
+            Text(
+              'TravelMuse',
+              style: TextStyle(fontSize: 24, fontFamily: 'Ssangmun'),
+            ),
           ],
         ),
       ),
