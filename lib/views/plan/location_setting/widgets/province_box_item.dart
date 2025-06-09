@@ -18,7 +18,7 @@ class ProvinceBoxItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.shade100 : Colors.grey.shade100,
+          color: isSelected ? Colors.blue.shade100 : Colors.white,
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey.shade400,
             width: 2,
@@ -38,7 +38,8 @@ class ProvinceBoxItem extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 16,
-                color: isSelected ? Colors.blue.shade700 : Colors.black87,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.blue.shade700 : Colors.black,
               ),
             ),
           ],

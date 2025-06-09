@@ -20,8 +20,8 @@ class ProvinceBoxList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        crossAxisSpacing: 18,
+        mainAxisSpacing: 18,
         childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {

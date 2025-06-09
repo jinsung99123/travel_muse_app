@@ -44,10 +44,14 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('여행할 지역을 선택해주세요')),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('여행할 지역을 선택해주세요'),
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(25),
           child: Column(
             children: [
               Expanded(
