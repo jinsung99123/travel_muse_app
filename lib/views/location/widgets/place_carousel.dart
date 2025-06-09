@@ -10,6 +10,7 @@ class PlaceCarousel extends StatelessWidget {
     required this.dayKeys,
     required this.mapState,
     required this.viewModel,
+    required this.tabController,
     required this.selectedPlace,
     required this.mapController,
   });
@@ -17,13 +18,14 @@ class PlaceCarousel extends StatelessWidget {
   final List<String> dayKeys;
   final MapState mapState;
   final MapViewModel viewModel;
+  final TabController tabController;
   final Map<String, dynamic>? selectedPlace;
   final GoogleMapController? mapController;
 
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      controller: viewModel.tabController,
+      controller: tabController,
       children: dayKeys.map((day) {
         final places = mapState.dayPlaces[day] ?? [];
         final pageController = viewModel.getPageController(day);

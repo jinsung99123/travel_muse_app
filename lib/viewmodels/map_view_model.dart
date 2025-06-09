@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/map_state.dart';
+import 'package:travel_muse_app/models/plans.dart';
 import 'package:travel_muse_app/repositories/map_repository.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
@@ -9,16 +10,18 @@ class MapViewModel extends StateNotifier<MapState> {
 
   final MapRepository _repository;
 
-  TabController? tabController;
   final Map<String, PageController> pageControllers = {};
+  Plans? planInfo;
 
   Future<void> loadPlanAndRoute(String planId, TickerProvider vsync) async {
     try {
       final planData = await _repository.getPlan(planId);
       if (planData == null) return;
 
-      final title = planData['title'] as String? ?? '';
-      final date = planData['date'] as String? ?? '';
+      planInfo = Plans.fromJson(planId, planData);
+
+      final title = planInfo?.title ?? '';
+      final date = _formatDateRange(planInfo!.startDate, planInfo!.endDate);
 
       final loadedDayPlaces = await _repository.getRouteByDay(planId);
 
@@ -35,10 +38,15 @@ class MapViewModel extends StateNotifier<MapState> {
         }
       }
 
-      _initTabController(loadedDayPlaces.keys.toList(), vsync);
     } catch (e) {
       print('❌ loadPlanAndRoute 실패: $e');
     }
+  }
+
+  String _formatDateRange(DateTime start, DateTime end) {
+    String format(DateTime date) =>
+        '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
+    return '${format(start)} ~ ${format(end)}';
   }
 
   void selectPlace(Map<String, String> place) {
@@ -47,11 +55,6 @@ class MapViewModel extends StateNotifier<MapState> {
 
   void clearSelectedPlace() {
     state = state.copyWith(selectedPlace: null);
-  }
-
-  void _initTabController(List<String> dayKeys, TickerProvider vsync) {
-    tabController?.dispose();
-    tabController = TabController(length: dayKeys.length, vsync: vsync);
   }
 
   PageController getPageController(String dayKey) {
@@ -93,7 +96,6 @@ class MapViewModel extends StateNotifier<MapState> {
   }
 
   void disposeControllers() {
-    tabController?.dispose();
     for (final controller in pageControllers.values) {
       controller.dispose();
     }

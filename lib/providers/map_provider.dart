@@ -7,8 +7,7 @@ final mapRepositoryProvider = Provider<MapRepository>((ref) {
   return MapRepository();
 });
 
-final mapViewModelProvider =
-    StateNotifierProvider<MapViewModel, MapState>((ref) {
-  final repo = ref.watch(mapRepositoryProvider);
-  return MapViewModel(repo);
-});
+final mapViewModelProvider = StateNotifierProvider.autoDispose<MapViewModel, MapState>(
+  (ref) => MapViewModel(MapRepository()),
+);
+
