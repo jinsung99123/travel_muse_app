@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/providers/map_provider.dart';
+import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/viewmodels/map_view_model.dart';
 import 'package:travel_muse_app/views/location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/location/widgets/map_display.dart';
@@ -15,7 +16,8 @@ class MapPage extends ConsumerStatefulWidget {
   ConsumerState<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin {
+class _MapPageState extends ConsumerState<MapPage>
+    with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
   LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
@@ -32,7 +34,8 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
 
     if (!_tabController!.indexIsChanging) {
       setState(() {});
-      final newPlaces = mapState.dayPlaces[dayKeys[_tabController!.index]] ?? [];
+      final newPlaces =
+          mapState.dayPlaces[dayKeys[_tabController!.index]] ?? [];
       _moveCameraToFitAll(newPlaces);
     }
   }
@@ -52,7 +55,7 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
       _tabController = TabController(length: dayKeys.length, vsync: this);
       _tabController!.addListener(_onTabChanged);
 
-      setState(() {}); 
+      setState(() {});
     });
   }
 
@@ -108,39 +111,55 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
 
     final points = _viewModel.extractLatLngs(selectedPlaces);
 
-    final markers = selectedPlaces.asMap().entries.map((entry) {
-      final index = entry.key;
-      final place = entry.value;
-      final lat = double.tryParse(place['lat'] ?? '') ?? double.tryParse(place['latitude'] ?? '');
-      final lng = double.tryParse(place['lng'] ?? '') ?? double.tryParse(place['longitude'] ?? '');
-      if (lat == null || lng == null) return null;
+    final markers =
+        selectedPlaces
+            .asMap()
+            .entries
+            .map((entry) {
+              final index = entry.key;
+              final place = entry.value;
+              final LatLng? latLng = parseLatLng(place);
+              if (latLng == null) return null;
+              final lat = latLng.latitude;
+              final lng = latLng.longitude;
 
-      return Marker(
-        markerId: MarkerId(place['id'] ?? '${lat}_${lng}_${place['title']}'),
-        position: LatLng(lat, lng),
-        infoWindow: InfoWindow(title: '${index + 1}. ${place['title'] ?? ''}'),
-        onTap: () {
-          _viewModel.selectPlace(place);
-          final idx = selectedPlaces.indexWhere((p) =>
-              (p['id'] != null && p['id'] == place['id']) ||
-              (p['title'] == place['title'] &&
-                  p['lat'] == place['lat'] &&
-                  p['lng'] == place['lng']));
-          if (idx != -1) {
-            _viewModel.getPageController(selectedDayKey).animateToPage(
-                  idx,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-          }
-        },
-      );
-    }).whereType<Marker>().toSet();
+              return Marker(
+                markerId: MarkerId(
+                  place['id'] ?? '${lat}_${lng}_${place['title']}',
+                ),
+                position: LatLng(lat, lng),
+                infoWindow: InfoWindow(
+                  title: '${index + 1}. ${place['title'] ?? ''}',
+                ),
+                onTap: () {
+                  _viewModel.selectPlace(place);
+                  final idx = selectedPlaces.indexWhere(
+                    (p) =>
+                        (p['id'] != null && p['id'] == place['id']) ||
+                        (p['title'] == place['title'] &&
+                            p['lat'] == place['lat'] &&
+                            p['lng'] == place['lng']),
+                  );
+                  if (idx != -1) {
+                    _viewModel
+                        .getPageController(selectedDayKey)
+                        .animateToPage(
+                          idx,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                  }
+                },
+              );
+            })
+            .whereType<Marker>()
+            .toSet();
 
-    final displayDayTabs = dayKeys.map((key) {
-      final num = int.tryParse(key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
-      return 'Day ${num + 1}';
-    }).toList();
+    final displayDayTabs =
+        dayKeys.map((key) {
+          final num = int.tryParse(key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+          return 'Day ${num + 1}';
+        }).toList();
 
     return Scaffold(
       appBar: AppBar(

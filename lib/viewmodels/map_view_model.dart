@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/map_state.dart';
 import 'package:travel_muse_app/models/plans.dart';
 import 'package:travel_muse_app/repositories/map_repository.dart';
+import 'package:travel_muse_app/utills/latlng_helper.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
   MapViewModel(this._repository) : super(MapState(dayPlaces: {}));
@@ -65,14 +66,8 @@ class MapViewModel extends StateNotifier<MapState> {
   }
 
   List<LatLng> extractLatLngs(List<Map<String, dynamic>> places) {
-    return places.map((p) {
-      final lat = double.tryParse(p['lat'] ?? '') ?? double.tryParse(p['latitude'] ?? '');
-      final lng = double.tryParse(p['lng'] ?? '') ?? double.tryParse(p['longitude'] ?? '');
-      if (lat == null || lng == null) return null;
-      return LatLng(lat, lng);
-    }).whereType<LatLng>().toList();
-  }
-
+  return places.map((p) => parseLatLng(p)).whereType<LatLng>().toList();
+}
   LatLngBounds createLatLngBounds(List<LatLng> latLngs) {
     final southwestLat = latLngs.map((l) => l.latitude).reduce((a, b) => a < b ? a : b);
     final southwestLng = latLngs.map((l) => l.longitude).reduce((a, b) => a < b ? a : b);
@@ -85,15 +80,9 @@ class MapViewModel extends StateNotifier<MapState> {
   }
 
   LatLng? getInitialLatLng(List<Map<String, dynamic>> places) {
-    if (places.isEmpty) return null;
-    final first = places.first;
-    final lat = double.tryParse(first['lat'] ?? '') ?? double.tryParse(first['latitude'] ?? '');
-    final lng = double.tryParse(first['lng'] ?? '') ?? double.tryParse(first['longitude'] ?? '');
-    if (lat != null && lng != null) {
-      return LatLng(lat, lng);
-    }
-    return null;
-  }
+  if (places.isEmpty) return null;
+  return parseLatLng(places.first);
+}
 
   void disposeControllers() {
     for (final controller in pageControllers.values) {

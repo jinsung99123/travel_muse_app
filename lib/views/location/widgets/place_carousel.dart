@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/map_state.dart';
+import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/viewmodels/map_view_model.dart';
 import 'package:travel_muse_app/views/location/widgets/place_card.dart';
 
@@ -35,14 +36,11 @@ class PlaceCarousel extends StatelessWidget {
           controller: pageController,
           onPageChanged: (index) {
             final place = places[index];
-            final lat = double.tryParse(place['lat'] ?? '') ??
-                double.tryParse(place['latitude'] ?? '');
-            final lng = double.tryParse(place['lng'] ?? '') ??
-                double.tryParse(place['longitude'] ?? '');
-            if (lat != null && lng != null) {
+            final latLng = parseLatLng(place);  // 헬퍼 함수 사용!
+            if (latLng != null) {
               mapController?.animateCamera(
                 CameraUpdate.newLatLngZoom(
-                  LatLng(lat, lng),
+                  latLng,
                   14,
                 ),
               );
