@@ -54,7 +54,7 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               Align(
@@ -63,7 +63,7 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
                   '여행할 지역을 선택해주세요',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    fontSize: 20,
                     fontFamily: 'Pretendard',
                   ),
                 ),
@@ -81,7 +81,13 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
                   onPressed: () {
                     Navigator.push(
                       context,
