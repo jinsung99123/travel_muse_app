@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
+import 'package:travel_muse_app/views/preference/widgets/survey_preview_item.dart';
 
 class PreferenceIntroPage extends StatelessWidget {
   const PreferenceIntroPage({super.key});
@@ -36,12 +37,12 @@ class PreferenceIntroPage extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: const [
-                    _SurveyPreviewItem(number: '1', title: '여행 계획 수립 성향 파악'),
-                    _SurveyPreviewItem(number: '2', title: '교통수단 선호도 파악'),
-                    _SurveyPreviewItem(number: '3', title: '동반자 및 독립성 선호도 파악'),
-                    _SurveyPreviewItem(number: '4', title: '활동 유형 및 테마 선호도 파악'),
-                    _SurveyPreviewItem(number: '5', title: '선호 여행 스타일 파악'),
-                    _SurveyPreviewItem(number: '6', title: '선호 여행 속도 파악'),
+                    SurveyPreviewItem(number: '1', title: '여행 계획 수립 성향 파악'),
+                    SurveyPreviewItem(number: '2', title: '교통수단 선호도 파악'),
+                    SurveyPreviewItem(number: '3', title: '동반자 및 독립성 선호도 파악'),
+                    SurveyPreviewItem(number: '4', title: '활동 유형 및 테마 선호도 파악'),
+                    SurveyPreviewItem(number: '5', title: '선호 여행 스타일 파악'),
+                    SurveyPreviewItem(number: '6', title: '선호 여행 속도 파악'),
                   ],
                 ),
               ),
@@ -67,67 +68,6 @@ class PreferenceIntroPage extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SurveyPreviewItem extends StatelessWidget {
-  final String number;
-  final String title;
-
-  const _SurveyPreviewItem({required this.number, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: CupertinoColors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: CupertinoColors.systemGrey4),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kPrimaryColor,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                number,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: CupertinoColors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
