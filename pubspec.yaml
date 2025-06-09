@@ -36,6 +36,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Ssangmun
+      fonts:
+        - asset: assets/fonts/Typo_SsangmunDongB.ttf
   assets:
     - assets/images/
     - .env
