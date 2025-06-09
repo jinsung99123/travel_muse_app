@@ -16,6 +16,8 @@ Widget buildDayCell(DateTime day, bool isInRange, bool selected) {
       child: Text(
         '${day.day}',
         style: TextStyle(
+          fontFamily: '',
+          fontSize: 20,
           color: selected ? Colors.white : null,
           fontWeight: selected ? FontWeight.bold : FontWeight.normal,
         ),

@@ -38,6 +38,19 @@ class CalendarPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 15),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '첫 번째 날과 마지막 날짜를 선택하면 \n자동으로 선택돼요',
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(
                   itemCount: 12,

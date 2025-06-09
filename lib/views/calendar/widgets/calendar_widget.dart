@@ -21,8 +21,12 @@ class CalendarWidget extends StatelessWidget {
     final monthText = '${month.year}년 ${month.month}월';
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 2,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey[200]!, width: 1.5),
+      ),
+      elevation: 5,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -32,8 +36,9 @@ class CalendarWidget extends StatelessWidget {
               child: Text(
                 monthText,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Pretendard',
                 ),
               ),
             ),
@@ -48,6 +53,25 @@ class CalendarWidget extends StatelessWidget {
               onDaySelected: onDaySelected,
               calendarStyle: const CalendarStyle(outsideDaysVisible: false),
               availableGestures: AvailableGestures.none,
+              daysOfWeekHeight: 30, // 이 부분 추가 (기본은 16~20 정도임)
+              daysOfWeekStyle: DaysOfWeekStyle(
+                dowTextFormatter: (date, locale) {
+                  const koreanWeekdays = ['월', '화', '수', '목', '금', '토', '일'];
+                  return koreanWeekdays[date.weekday - 1];
+                },
+                weekdayStyle: TextStyle(
+                  color: Colors.grey[400],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+                weekendStyle: TextStyle(
+                  color: Colors.grey[400],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
+              ),
               calendarBuilders: CalendarBuilders(
                 defaultBuilder:
                     (context, day, _) =>
