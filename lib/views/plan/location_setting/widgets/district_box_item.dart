@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SelectableBox extends StatelessWidget {
-  const SelectableBox({
+class DistrictBoxItem extends StatelessWidget {
+  const DistrictBoxItem({
     required this.text,
     required this.isSelected,
     required this.onTap,
@@ -28,7 +28,7 @@ class SelectableBox extends StatelessWidget {
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey.shade400,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           text,

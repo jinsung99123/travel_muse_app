@@ -15,22 +15,25 @@ class ProvinceBoxList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: items.length,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 18,
-        mainAxisSpacing: 18,
-        childAspectRatio: 1,
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: GridView.builder(
+        itemCount: items.length,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 18,
+          mainAxisSpacing: 18,
+          childAspectRatio: 1,
+        ),
+        itemBuilder: (context, index) {
+          return ProvinceBoxItem(
+            label: items[index],
+            isSelected: selectedIndices.contains(index),
+            onTap: () => onTap(index),
+          );
+        },
       ),
-      itemBuilder: (context, index) {
-        return ProvinceBoxItem(
-          label: items[index],
-          isSelected: selectedIndices.contains(index),
-          onTap: () => onTap(index),
-        );
-      },
     );
   }
 }
