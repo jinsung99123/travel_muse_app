@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box.dart';
+import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_item.dart';
 
 class SelectableBoxList extends StatelessWidget {
   const SelectableBoxList({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box_list.dart';
+import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class DistrictSettingPage extends StatefulWidget {
@@ -51,7 +51,13 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SchedulePage(userId: 'test-user', planId: 'test',)),//임시 데이터 넘김
+                      MaterialPageRoute(
+                        builder:
+                            (context) => SchedulePage(
+                              userId: 'test-user',
+                              planId: 'test',
+                            ),
+                      ), //임시 데이터 넘김
                     );
                   },
                   child: Text(
