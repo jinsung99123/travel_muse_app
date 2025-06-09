@@ -40,6 +40,10 @@ flutter:
     - family: Ssangmun
       fonts:
         - asset: assets/fonts/Typo_SsangmunDongB.ttf
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/PretendardVariable.ttf
+
   assets:
     - assets/images/
     - .env

@@ -46,7 +46,10 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('여행할 지역을 선택해주세요'),
+        title: Text(
+          '여행 일정 등록',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
@@ -54,6 +57,18 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
           padding: const EdgeInsets.all(25),
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '여행할 지역을 선택해주세요',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
               Expanded(
                 child: ProvinceBoxList(
                   items: items,
