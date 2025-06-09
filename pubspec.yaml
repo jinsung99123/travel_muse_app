@@ -48,10 +48,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/icons/
     - .env
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
 
   # fonts:
   #   - family: Schyler
