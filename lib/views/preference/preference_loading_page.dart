@@ -56,20 +56,20 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
               const Text(
                 '사용자님의 성향을 파악 중이에요',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: CupertinoColors.black,
                 ),
               ),
               const SizedBox(height: 32),
               Container(
-                width: 300,
-                height: 300,
+                width: 292,
+                height: 290,
                 alignment: Alignment.center,
                 child: Image.asset(
-                  'assets/images/airplane.png',
-                  width: 300,
-                  height: 300,
+                  'assets/images/loading.png',
+                  width: 292,
+                  height: 290,
                   fit: BoxFit.contain,
                 ),
               ),
