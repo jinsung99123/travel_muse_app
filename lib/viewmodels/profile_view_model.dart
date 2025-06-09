@@ -58,6 +58,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     return const ProfileState();
   }
 
+  // TODO: validator 일괄 실행 메서드 추가
+
   Future<void> updateNickname() async {
     try {
       if (currentUser == null) {
