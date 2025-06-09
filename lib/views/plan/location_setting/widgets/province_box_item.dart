@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class ProvinceBoxItem extends StatelessWidget {
   const ProvinceBoxItem({
     required this.label,
+    required this.emoji,
     required this.isSelected,
     required this.onTap,
     super.key,
   });
 
   final String label;
+  final String emoji;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -20,7 +22,10 @@ class ProvinceBoxItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? Colors.blue.shade100 : Colors.white,
           border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade400,
+            color:
+                isSelected
+                    ? Colors.blue
+                    : const Color.fromARGB(255, 238, 238, 238),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -28,10 +33,12 @@ class ProvinceBoxItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.location_city,
-              size: 32,
-              color: isSelected ? Colors.blue : Colors.grey,
+            Text(
+              emoji,
+              style: TextStyle(
+                fontSize: 16,
+                color: isSelected ? Colors.blue : Colors.grey,
+              ),
             ),
             SizedBox(height: 8),
             Text(

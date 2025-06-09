@@ -29,6 +29,27 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
     '경남',
     '제주',
   ];
+
+  final List<String> emojis = [
+    '🏙️', // 서울
+    '🌊', // 부산
+    '🍂', // 대구
+    '✈️', // 인천
+    '🌳', // 광주
+    '🏛️', // 대전
+    '⚓', // 울산
+    '🏰', // 세종
+    '🏞️', // 경기
+    '⛰️', // 강원
+    '🏔️', // 충북
+    '🌾', // 충남
+    '🍚', // 전북
+    '🌸', // 전남
+    '🏯', // 경북
+    '🚢', // 경남
+    '🌴', // 제주
+  ];
+
   final Set<int> selectedIndices = {};
 
   void onItemTap(int index) {
@@ -68,10 +89,11 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
               Expanded(
                 child: ProvinceBoxList(
                   items: items,
+                  emojis: emojis,
                   selectedIndices: selectedIndices,
                   onTap: onItemTap,
                 ),
@@ -87,7 +109,6 @@ class _ProvinceSettingPageState extends State<ProvinceSettingPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-
                   onPressed: () {
                     Navigator.push(
                       context,
