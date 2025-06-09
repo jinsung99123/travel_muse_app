@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/select_gender.dart';
+import 'package:travel_muse_app/views/widgets/edit_birth_date.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
@@ -14,27 +16,40 @@ class OnboardingPageSetProfile extends ConsumerWidget {
     final profileState = ref.watch(profileViewModelProvider);
 
     final nicknameController = profileViewmodel.nicknameController;
-    final formKey = profileViewmodel.formKey;
+    final birthDateController = profileViewmodel.birthDateController;
+    final formKeyNickname = profileViewmodel.formKeyNickname;
+    final formKeyBirthDate = profileViewmodel.formKeyBirthDate;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(title: Text('회원 정보를 입력해 주세요')),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Stack(
             children: [
               ListView(
                 children: [
-                  const Text('프로필 사진', style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 20),
-                  EditProfileImage(size: 120),
-                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: const Text(
+                      '회원 정보를 입력해 주세요',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  EditProfileImage(size: 88),
                   EditNickname(
-                    formKey: formKey,
+                    formKey: formKeyNickname,
                     controller: nicknameController,
                   ),
+                  EditBirthDate(
+                    formKey: formKeyBirthDate,
+                    controller: birthDateController,
+                  ),
+                  SelectGender(),
                 ],
               ),
               Column(
@@ -52,7 +67,7 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                       }
                     },
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 34),
                 ],
               ),
             ],

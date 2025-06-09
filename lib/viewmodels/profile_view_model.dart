@@ -13,20 +13,28 @@ class ProfileState {
     this.nickname,
     this.profileImageUrl,
     this.temporaryImageUrl,
+    this.birthDate,
+    this.gender,
   });
   final String? nickname;
   final String? profileImageUrl;
   final String? temporaryImageUrl;
+  final DateTime? birthDate;
+  final String? gender;
 
   ProfileState copyWith({
     String? nickname,
     String? profileImageUrl,
     String? temporaryImageUrl,
+    DateTime? birthDate,
+    String? gender,
   }) {
     return ProfileState(
       nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       temporaryImageUrl: temporaryImageUrl ?? this.temporaryImageUrl,
+      birthDate: birthDate ?? this.birthDate,
+      gender: gender ?? this.gender,
     );
   }
 }
@@ -34,8 +42,10 @@ class ProfileState {
 class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final appUserRepo = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
-  final formKey = GlobalKey<FormState>();
+  final formKeyNickname = GlobalKey<FormState>();
+  final formKeyBirthDate = GlobalKey<FormState>();
   final nicknameController = TextEditingController();
+  final birthDateController = TextEditingController();
   final _picker = ImagePicker();
 
   // 업로드된 이미지 url 임시 저장
@@ -54,7 +64,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       }
 
       // 닉네임 validator 확인
-      final isValid = formKey.currentState?.validate() ?? false;
+      final isValid = formKeyNickname.currentState?.validate() ?? false;
       if (!isValid) return;
 
       // 닉네임 업데이트

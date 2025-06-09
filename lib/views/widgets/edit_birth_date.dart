@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/core/validators.dart';
 
-class EditNickname extends StatelessWidget {
-  const EditNickname({
+class EditBirthDate extends StatelessWidget {
+  const EditBirthDate({
     super.key,
     required this.formKey,
     required this.controller,
@@ -19,24 +18,24 @@ class EditNickname extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '닉네임',
+            '생년월일',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Form(
               key: formKey,
+
               child: TextFormField(
                 controller: controller,
-                validator: Validators.validateNickname,
+                // validator: // 생년월일 validator
                 decoration: InputDecoration(
-                  hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   helper: Text(
-                    '최대 8자까지 작성 가능합니다', // TODO : 유저 닉네임 validator 통과 시 표시 X
+                    '주민등록상 생년월일 8자리를 입력해주세요',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,

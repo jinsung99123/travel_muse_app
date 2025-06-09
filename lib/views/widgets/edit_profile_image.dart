@@ -31,28 +31,50 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
         profileState.temporaryImageUrl ??
         profileState.profileImageUrl; // 임시 저장 이미지가 없으면 기존 프로필 이미지 표시
 
-    return GestureDetector(
-      onTap: () async {
-        await profileViewModel.uploadProfileImage();
-      },
-      child: SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: Stack(
-          children: [
-            AspectRatio(
-              aspectRatio: 1 / 1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(500),
-                child: Image.network(
-                  imageUrlToShow ??
-                      'https://picsum.photos/id/1/300/400', // 기존 프로필이미지 없으면 기본 이미지(추후 적용) 표시
-                  fit: BoxFit.cover,
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '프로필 사진',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () async {
+              await profileViewModel.uploadProfileImage();
+            },
+            child: SizedBox(
+              width: widget.size,
+              height: widget.size,
+              child: Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1 / 1,
+                    child:
+                        imageUrlToShow != null
+                            ? ClipRRect(
+                              borderRadius: BorderRadius.circular(500),
+                              child: Image.network(
+                                imageUrlToShow,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                            // 기존 프로필이미지 없으면 기본 컬러+아이콘 표시
+                            : Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFFB3B9BC),
+                                borderRadius: BorderRadius.circular(500),
+                              ),
+                              // child: Center() // 중앙 아이콘
+                            ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

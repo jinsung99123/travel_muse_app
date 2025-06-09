@@ -55,7 +55,7 @@ class EditProfileSheet extends ConsumerWidget {
             EditProfileImage(size: 120),
             const SizedBox(height: 20),
             EditNickname(
-              formKey: profileViewmodel.formKey,
+              formKey: profileViewmodel.formKeyNickname,
               controller: profileViewmodel.nicknameController,
             ),
           ],

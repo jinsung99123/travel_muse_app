@@ -9,18 +9,21 @@ class NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 56,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xff025ADF),
+          backgroundColor: Color(0xFFE9EBEB), // 선택 가능시 색변경
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
         child: Text(
           text,
           style: const TextStyle(
+            color: Color(0xFFB3B9BC),
             fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+            height: 0.08,
           ),
         ),
       ),
