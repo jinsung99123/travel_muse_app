@@ -1,96 +1,176 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/providers/map_provider.dart';
 import 'package:travel_muse_app/views/Location/widgets/day_tab_bar.dart';
-import 'package:travel_muse_app/views/Location/widgets/place_card.dart';
+import 'package:travel_muse_app/views/location/widgets/map_display.dart';
+import 'package:travel_muse_app/views/location/widgets/place_carousel.dart';
 
-class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+class MapPage extends ConsumerStatefulWidget {
+  const MapPage({super.key, required this.planId});
+  final String planId;
 
   @override
-  MapPageState createState() => MapPageState();
+  ConsumerState<MapPage> createState() => MapPageState();
 }
 
-class MapPageState extends State<MapPage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final List<String> days = ['day1', 'day2', 'day3', 'day4'];
-
-  final Map<String, List<String>> dayPlaces = {
-    'day1': ['우동야 고야쵸', '히로시마 신사'],
-    'day2': ['카페모카', '리버사이드 거리'],
-    'day3': ['전망대', '오코노미야끼 맛집'],
-    'day4': ['공원', '도보 산책길'],
-  };
-
-  // late GoogleMapController _mapController; 추후 사용 예정
-
-  final CameraPosition _initialPosition = const CameraPosition(
-    target: LatLng(33.4996, 126.5312), // 제주 시내 예시
-    zoom: 12,
-  );
+class MapPageState extends ConsumerState<MapPage>
+    with TickerProviderStateMixin {
+  GoogleMapController? _mapController;
+  bool _cameraMoved = false;
+  LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: days.length, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(mapViewModelProvider.notifier)
+          .loadPlanAndRoute(widget.planId, this);
+    });
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    ref.read(mapViewModelProvider.notifier).disposeControllers();
     super.dispose();
+  }
+
+  void _moveCameraToFitAll(List<Map<String, dynamic>> places) {
+    final viewModel = ref.read(mapViewModelProvider.notifier);
+    final latLngs = viewModel.extractLatLngs(places);
+
+    if (latLngs.length >= 2) {
+      final bounds = viewModel.createLatLngBounds(latLngs);
+      _mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
+    } else if (latLngs.isNotEmpty) {
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(latLngs.first, 14),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final mapState = ref.watch(mapViewModelProvider);
+    final viewModel = ref.read(mapViewModelProvider.notifier);
     final screenHeight = MediaQuery.of(context).size.height;
+    final dayKeys = mapState.dayPlaces.keys.toList();
+    final selectedPlace = mapState.selectedPlace;
+
+    if (dayKeys.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final tabController = viewModel.tabController;
+    if (tabController == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    tabController.addListener(() {
+      if (!tabController.indexIsChanging) {
+        setState(() {});
+        final newPlaces =
+            mapState.dayPlaces[dayKeys[tabController.index]] ?? [];
+        _moveCameraToFitAll(newPlaces);
+      }
+    });
+
+    final selectedDayKey = dayKeys[tabController.index];
+    final selectedPlaces = mapState.dayPlaces[selectedDayKey] ?? [];
+
+    if (!_cameraMoved && selectedPlaces.isNotEmpty) {
+      final initial = viewModel.getInitialLatLng(selectedPlaces);
+      if (initial != null) {
+        _initialLatLng = initial;
+      }
+    }
+
+    final points = viewModel.extractLatLngs(selectedPlaces);
+
+    final markers =
+        selectedPlaces
+            .asMap()
+            .entries
+            .map((entry) {
+              final index = entry.key;
+              final place = entry.value;
+              final lat =
+                  double.tryParse(place['lat'] ?? '') ??
+                  double.tryParse(place['latitude'] ?? '');
+              final lng =
+                  double.tryParse(place['lng'] ?? '') ??
+                  double.tryParse(place['longitude'] ?? '');
+              if (lat == null || lng == null) return null;
+
+              return Marker(
+                markerId: MarkerId(
+                  place['id'] ?? '${lat}_${lng}_${place['title']}',
+                ),
+                position: LatLng(lat, lng),
+                infoWindow: InfoWindow(
+                  title: '${index + 1}. ${place['title'] ?? ''}',
+                ),
+                onTap: () {
+                  viewModel.selectPlace(place);
+                  final idx = selectedPlaces.indexWhere(
+                    (p) =>
+                        (p['id'] != null && p['id'] == place['id']) ||
+                        (p['title'] == place['title'] &&
+                            p['lat'] == place['lat'] &&
+                            p['lng'] == place['lng']),
+                  );
+                  if (idx != -1) {
+                    viewModel
+                        .getPageController(selectedDayKey)
+                        .animateToPage(
+                          idx,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                  }
+                },
+              );
+            })
+            .whereType<Marker>()
+            .toSet();
+
+    final displayDayTabs =
+        dayKeys.map((key) {
+          final num = int.tryParse(key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+          return 'Day ${num + 1}';
+        }).toList();
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          // 지도영역
-          Positioned.fill(
-            child: GoogleMap(
-              initialCameraPosition: _initialPosition,
+          Expanded(
+            child: MapDisplay(
+              initialLatLng: _initialLatLng,
+              points: points,
+              markers: markers,
               onMapCreated: (controller) {
-                // _mapController = controller; 추후 사용 예정
+                _mapController = controller;
+                if (!_cameraMoved && selectedPlaces.isNotEmpty) {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    _moveCameraToFitAll(selectedPlaces);
+                    _cameraMoved = true;
+                  });
+                }
               },
-              myLocationEnabled: true,
-              zoomControlsEnabled: false,
             ),
           ),
-
-          // 하단 카드 + 탭 영역
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
+          SizedBox(
             height: screenHeight * 0.28,
             child: Column(
               children: [
-                DayTabBar(controller: _tabController, days: days),
+                DayTabBar(controller: tabController, days: displayDayTabs),
                 Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children:
-                        days.map((day) {
-                          final places = dayPlaces[day] ?? [];
-                          return PageView.builder(
-                            itemCount: places.length,
-                            controller: PageController(viewportFraction: 0.85),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 12,
-                                ),
-                                child: PlaceCard(
-                                  title: places[index],
-                                  description: '장소 설명 텍스트',
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
+                  child: PlaceCarousel(
+                    dayKeys: dayKeys,
+                    mapState: mapState,
+                    viewModel: viewModel,
+                    selectedPlace: selectedPlace,
+                    mapController: _mapController,
                   ),
                 ),
               ],
