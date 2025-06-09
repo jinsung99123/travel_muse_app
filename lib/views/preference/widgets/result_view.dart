@@ -5,6 +5,8 @@ import 'package:travel_muse_app/providers/preference_test_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
+import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
+import 'package:travel_muse_app/views/preference/widgets/result_view_detail.dart';
 
 class ResultView extends ConsumerStatefulWidget {
   const ResultView({super.key, required this.onRestart});
@@ -45,161 +47,111 @@ class _ResultViewState extends ConsumerState<ResultView> {
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.white,
       child: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            const Text(
-              '테스트 결과',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: kPrimaryColor,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '사용자님의 여행 성향은 \n$typeCode예요!',
+                      style: const TextStyle(
+                        color: Color(0xFF26272A),
+                        fontSize: 24,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      '사용자님의 여행 성향은 마이페이지에서 \n언제든지 변경할 수 있어요',
+                      style: TextStyle(
+                        color: Color(0xFF7C878C),
+                        fontSize: 16,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: CupertinoColors.systemGrey6,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    offset: Offset(0, 4),
-                    blurRadius: 8,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  if (imagePath.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Image.asset(
-                        imagePath,
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
+              const SizedBox(height: 24),
+
+              ClipOval(
+                child: Container(
+                  width: 198,
+                  height: 198,
+                  color: const Color(0xFFE0F6FE),
+                  child:
+                      imagePath.isNotEmpty
+                          ? Image.asset(imagePath, fit: BoxFit.cover)
+                          : const Icon(
                             CupertinoIcons.exclamationmark_triangle,
                             size: 48,
                             color: Colors.red,
-                          );
-                        },
+                          ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Color(0xFF4C5356),
+                    fontSize: 18,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (_) => const ResultViewDetail(),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      '선택지 보기',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFCED2D3),
                       ),
                     ),
-                  Text(
-                    '당신의 타입: $typeCode',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryColor,
+                    SizedBox(width: 4),
+                    Icon(
+                      CupertinoIcons.chevron_right,
+                      size: 16,
+                      color: Color(0xFFCED2D3),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 16, color: Colors.black87),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            // Expanded(
-            //   child: ListView.builder(
-            //     padding: const EdgeInsets.symmetric(horizontal: 16),
-            //     itemCount: answers.length,
-            //     itemBuilder: (context, index) {
-            //       final answer = answers[index];
-            //       final question =
-            //           referenceQuestionTexts[answer.questionId] ?? '알 수 없는 질문';
-            //       final selectedOption = answer.selectedOption;
-
-            //       return Card(
-            //         elevation: 1,
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //         margin: const EdgeInsets.symmetric(vertical: 6),
-            //         child: ListTile(
-            //           title: Text(
-            //             question,
-            //             style: const TextStyle(
-            //               fontWeight: FontWeight.bold,
-            //               color: kPrimaryColor,
-            //             ),
-            //           ),
-            //           subtitle: Text(
-            //             '선택: $selectedOption',
-            //             style: const TextStyle(color: Colors.black87),
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CupertinoButton(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                    onPressed: widget.onRestart,
-                    child: const Text(
-                      '처음으로',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  CupertinoButton(
-                    color: CupertinoColors.activeGreen,
-                    borderRadius: BorderRadius.circular(12),
-                    onPressed: () async {
-                      try {
-                        await ref
-                            .read(preferenceTestViewModelProvider.notifier)
-                            .saveTestToFirestore();
-
-                        if (context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        showCupertinoDialog(
-                          context: context,
-                          builder:
-                              (context) => CupertinoAlertDialog(
-                                title: const Text('저장 오류'),
-                                content: Text('저장 중 문제가 발생했습니다.\n$e'),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child: const Text('확인'),
-                                    onPressed:
-                                        () => Navigator.of(context).pop(),
-                                  ),
-                                ],
-                              ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      '완료',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ResultActionButtons(onRestart: widget.onRestart),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
