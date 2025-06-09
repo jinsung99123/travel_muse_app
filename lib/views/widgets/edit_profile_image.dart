@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
 class EditProfileImage extends ConsumerStatefulWidget {
@@ -48,29 +49,23 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
             child: SizedBox(
               width: widget.size,
               height: widget.size,
-              child: Stack(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1 / 1,
-                    child:
-                        imageUrlToShow != null
-                            ? ClipRRect(
-                              borderRadius: BorderRadius.circular(500),
-                              child: Image.network(
-                                imageUrlToShow,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                            // 기존 프로필이미지 없으면 기본 컬러+아이콘 표시
-                            : Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFFB3B9BC),
-                                borderRadius: BorderRadius.circular(500),
-                              ),
-                              // child: Center() // 중앙 아이콘
-                            ),
-                  ),
-                ],
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFB3B9BC),
+                  borderRadius: BorderRadius.circular(500),
+                ),
+                child:
+                    imageUrlToShow != null
+                        ? Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(500),
+                            // image: DecorationImage(image: )
+                          ),
+                          child: Center(child: Text('이미지')),
+                        )
+                        : Center(
+                          child: SvgPicture.asset('assets/icons/camera.svg'),
+                        ),
               ),
             ),
           ),
