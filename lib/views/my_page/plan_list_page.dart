@@ -29,7 +29,7 @@ class PlanListPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const SchedulePage()),
+                MaterialPageRoute(builder: (_) => const SchedulePage(userId: 'test-user', planId: 'test',)),//임시 데이터 넘김
               );
             },
             child: ScheduleCard(

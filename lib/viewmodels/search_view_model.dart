@@ -19,6 +19,8 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
         'title': place.name,
         'subtitle': '${place.city} ${place.district} • ${place.category}',
         'image': imageUrl ?? 'https://cdn.pixabay.com/photo/2017/06/24/04/37/cloud-2436676_1280.jpg', // 기본 이미지 대체
+        'lat' : place.latitude.toString(), //위도
+        'lng' : place.longitude.toString() //경도
       });
     }
 
