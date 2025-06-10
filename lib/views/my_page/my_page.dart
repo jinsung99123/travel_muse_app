@@ -10,9 +10,10 @@ class MyPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('마이페이지'),
-        centerTitle: true,
-        backgroundColor: Colors.teal,
+        title: Text(
+          '마이페이지',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
