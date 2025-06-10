@@ -5,13 +5,8 @@ import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/views/widgets/check_duplicate_button.dart';
 
 class EditNickname extends ConsumerWidget {
-  const EditNickname({
-    super.key,
-    required this.formKey,
-    required this.controller,
-  });
+  const EditNickname({super.key, required this.controller});
 
-  final GlobalKey<FormState> formKey;
   final TextEditingController controller;
 
   @override
@@ -35,34 +30,28 @@ class EditNickname extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Form(
-                      key: formKey,
-                      child: TextFormField(
-                        controller: controller,
-                        validator: Validators.validateNickname,
-                        onChanged: (value) {
-                          ref
-                              .read(editNicknameViewModelProvider.notifier)
-                              .checkInputChanged(value);
-                        },
-                        textAlignVertical: TextAlignVertical.center,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 16,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          isDense: true,
-                          hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
-                          errorText: null,
-                          helperText: null,
+                    child: TextFormField(
+                      controller: controller,
+                      validator: Validators.validateNickname,
+                      onChanged: (value) {
+                        ref
+                            .read(editNicknameViewModelProvider.notifier)
+                            .checkInputChanged(value);
+                      },
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
                         ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
+                        errorText: null,
+                        helperText: null,
                       ),
                     ),
                   ),

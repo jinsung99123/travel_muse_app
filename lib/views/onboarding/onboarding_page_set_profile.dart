@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
 import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
@@ -19,9 +20,11 @@ class OnboardingPageSetProfile extends ConsumerWidget {
     final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
     final nicknameController = nicknameViewmodel.nicknameController;
 
-    final birthDateController = profileViewmodel.birthDateController;
-    final nicknameFormkey = nicknameViewmodel.nicknameFormkey;
-    final birthDateFormkey = profileViewmodel.birthDateFormkey;
+    final birthDateViewmodel = ref.read(
+      editBirthDateViewModelProvider.notifier,
+    );
+    final birthDateController = birthDateViewmodel.birthDateController;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -44,14 +47,8 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     ),
                   ),
                   EditProfileImage(size: 88),
-                  EditNickname(
-                    formKey: nicknameFormkey,
-                    controller: nicknameController,
-                  ),
-                  EditBirthDate(
-                    formKey: birthDateFormkey,
-                    controller: birthDateController,
-                  ),
+                  EditNickname(controller: nicknameController),
+                  EditBirthDate(controller: birthDateController),
                   SelectGender(),
                 ],
               ),

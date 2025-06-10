@@ -37,7 +37,6 @@ class EditNicknameViewModel extends AutoDisposeNotifier<EditNicknameState> {
   static const String _defaultMessage = '2~8자 닉네임을 입력하세요.';
 
   final nicknameController = TextEditingController();
-  final nicknameFormkey = GlobalKey<FormState>();
 
   final appUserRepo = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
@@ -59,8 +58,8 @@ class EditNicknameViewModel extends AutoDisposeNotifier<EditNicknameState> {
   }
 
   // validator 실행
-  void validate(String nickname) {
-    final errorMessage = Validators.validateNickname(nickname);
+  void validate(String value) {
+    final errorMessage = Validators.validateNickname(value);
     if (errorMessage != null) {
       state = state.copyWith(isValid: false, message: errorMessage);
     } else {

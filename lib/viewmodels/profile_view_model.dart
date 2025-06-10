@@ -44,9 +44,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final appUserRepo = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
 
-  final birthDateFormkey = GlobalKey<FormState>();
-
-  final birthDateController = TextEditingController();
   final _picker = ImagePicker();
   late File? pickedImage;
 

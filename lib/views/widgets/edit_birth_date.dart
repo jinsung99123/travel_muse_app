@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:travel_muse_app/core/validators.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
 
-class EditBirthDate extends StatefulWidget {
-  const EditBirthDate({
-    super.key,
-    required this.formKey,
-    required this.controller,
-  });
+class EditBirthDate extends ConsumerWidget {
+  const EditBirthDate({super.key, required this.controller});
 
-  final GlobalKey<FormState> formKey;
   final TextEditingController controller;
 
   @override
-  State<EditBirthDate> createState() => _EditBirthDateState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(editBirthDateViewModelProvider);
 
-class _EditBirthDateState extends State<EditBirthDate> {
-  final _textFieldKey = GlobalKey<FormFieldState>();
-  bool _showHelper = true;
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -33,44 +23,44 @@ class _EditBirthDateState extends State<EditBirthDate> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Form(
-              key: widget.formKey,
-
+            child: SizedBox(
+              height: 56,
               child: TextFormField(
-                key: _textFieldKey,
+                controller: controller,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: widget.controller,
-                //validator: Validators.validateBirthDate,
-                onChanged: (_) {
-                  final currentState = _textFieldKey.currentState;
-                  final isValid = currentState?.validate() ?? false;
-                  setState(() {
-                    _showHelper = !isValid;
-                  });
+
+                onChanged: (value) {
+                  ref
+                      .read(editBirthDateViewModelProvider.notifier)
+                      .checkInputChanged(value);
                 },
+                textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey, width: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
 
-                  helper:
-                      _showHelper
-                          ? const Text(
-                            '주민등록상 생년월일 8자리를 입력해주세요',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF7C878C),
-                            ),
-                          )
-                          : null,
+                  isDense: true,
+                  errorText: null,
+                  helperText: null,
                 ),
               ),
             ),
           ),
+          state.message != null
+              ? SizedBox(
+                child: Text(
+                  state.message ?? '',
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+              : SizedBox.shrink(),
         ],
       ),
     );
