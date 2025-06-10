@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/calendar_provider.dart';
-import 'package:travel_muse_app/views/calendar/widgets/calendar_header.dart';
 import 'package:travel_muse_app/views/calendar/widgets/calendar_widget.dart';
 import 'package:travel_muse_app/views/plan/location_setting/province_setting_page.dart';
 
@@ -14,50 +13,91 @@ class CalendarPage extends ConsumerWidget {
     final state = ref.watch(calendarViewModelProvider);
 
     return Scaffold(
-      appBar: CalendarHeader(focusedDay: state.focusedDay),
+      appBar: AppBar(
+        title: Text(
+          '여행 일정 등록',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  CalendarWidget(
-                    state: state,
-                    isSelected: viewModel.isSelected,
-                    isBetween: viewModel.isBetween,
-                    onDaySelected: viewModel.selectDay,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '여행할 날짜를 선택해주세요',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Pretendard',
                   ),
-                ],
+                ),
               ),
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(vertical: 0),
+              const SizedBox(height: 15),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '첫 번째 날과 마지막 날짜를 선택하면 \n자동으로 선택돼요',
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 12,
+                  itemBuilder: (context, index) {
+                    final focusedMonth = DateTime(
+                      state.focusedDay.year,
+                      state.focusedDay.month + index,
+                    );
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: CalendarWidget(
+                        month: focusedMonth,
+                        isSelected: viewModel.isSelected,
+                        isBetween: viewModel.isBetween,
+                        onDaySelected: viewModel.selectDay,
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProvinceSettingPage(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        '다음',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
+                    );
+                  },
+                ),
+              ),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                ],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProvinceSettingPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    '다음',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
               ),
+              const SizedBox(height: 16),
             ],
           ),
         ),

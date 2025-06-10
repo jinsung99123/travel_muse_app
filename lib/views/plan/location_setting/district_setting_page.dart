@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/plan/location_setting/widgets/selectable_box_list.dart';
+import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class DistrictSettingPage extends StatefulWidget {
@@ -10,7 +10,7 @@ class DistrictSettingPage extends StatefulWidget {
 }
 
 class _DistrictSettingPageState extends State<DistrictSettingPage> {
-  final List<String> items = List.generate(9, (index) => '마포');
+  final List<String> items = List.generate(30, (index) => '마포');
   final Set<int> selectedIndices = {};
 
   void onItemTap(int index) {
@@ -26,16 +26,37 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('여행할 지역을 선택해주세요')),
+      appBar: AppBar(
+        title: Text(
+          '여행 일정 등록',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              SelectableBoxList(
-                items: items,
-                selectedIndices: selectedIndices,
-                onTap: onItemTap,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '여행할 지역을 선택해주세요',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+
+              Expanded(
+                child: DistrictBoxList(
+                  items: items,
+                  selectedIndices: selectedIndices,
+                  onTap: onItemTap,
+                ),
               ),
 
               SizedBox(height: 24),
@@ -45,13 +66,21 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: EdgeInsets.symmetric(vertical: 0),
+                    backgroundColor: Colors.blue[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SchedulePage(userId: 'test-user', planId: 'test',)),//임시 데이터 넘김
+                      MaterialPageRoute(
+                        builder:
+                            (context) => SchedulePage(
+                              userId: 'test-user',
+                              planId: 'test',
+                            ),
+                      ),
                     );
                   },
                   child: Text(
@@ -60,7 +89,6 @@ class _DistrictSettingPageState extends State<DistrictSettingPage> {
                   ),
                 ),
               ),
-
               SizedBox(height: 16),
             ],
           ),
