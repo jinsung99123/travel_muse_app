@@ -53,7 +53,7 @@ class CalendarWidget extends StatelessWidget {
               onDaySelected: onDaySelected,
               calendarStyle: const CalendarStyle(outsideDaysVisible: false),
               availableGestures: AvailableGestures.none,
-              daysOfWeekHeight: 30, // 이 부분 추가 (기본은 16~20 정도임)
+              daysOfWeekHeight: 30,
               daysOfWeekStyle: DaysOfWeekStyle(
                 dowTextFormatter: (date, locale) {
                   const koreanWeekdays = ['월', '화', '수', '목', '금', '토', '일'];
