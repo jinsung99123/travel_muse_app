@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
