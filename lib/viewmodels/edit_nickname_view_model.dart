@@ -34,7 +34,7 @@ class EditNicknameState {
 }
 
 class EditNicknameViewModel extends AutoDisposeNotifier<EditNicknameState> {
-  static const String _defaultMessage = '2~8자 닉네임을 입력하세요.';
+  static const String _defaultMessage = '최대 8자까지 입력 가능합니다';
 
   final nicknameController = TextEditingController();
 
@@ -89,15 +89,12 @@ class EditNicknameViewModel extends AutoDisposeNotifier<EditNicknameState> {
 
   // 닉네임 사용 가능 여부 확인
   Future<bool> checkCanUseNickname(String nickname) async {
-    log('닉네임 사용가능여부 확인 시작');
     validate(nickname);
     if (state.isValid == null) return false;
     if (!state.isValid!) return false;
-    log('닉네임 validate 통과');
     await isNicknameDuplicate(nickname);
     if (state.isDuplicate == null) return false;
     if (state.isDuplicate!) return false;
-    log('닉네임 중복 검사 통과, 닉네임 사용 가능');
 
     return true;
   }

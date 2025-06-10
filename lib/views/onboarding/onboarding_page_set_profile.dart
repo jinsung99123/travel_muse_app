@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
 import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
@@ -19,11 +20,13 @@ class OnboardingPageSetProfile extends ConsumerWidget {
 
     final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
     final nicknameController = nicknameViewmodel.nicknameController;
+    final nicknameState = ref.watch(editNicknameViewModelProvider);
 
     final birthDateViewmodel = ref.read(
       editBirthDateViewModelProvider.notifier,
     );
     final birthDateController = birthDateViewmodel.birthDateController;
+    final birthDateState = ref.watch(editBirthDateViewModelProvider);
 
     return GestureDetector(
       onTap: () {
@@ -40,10 +43,7 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: const Text(
                       '회원 정보를 입력해 주세요',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: AppTextStyles.onboardingTitle,
                     ),
                   ),
                   EditProfileImage(size: 88),
@@ -58,11 +58,18 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                   NextButton(
                     text: '다음',
                     onPressed: () async {
-                      // TODO: 뷰모델에 메서드 만들어 대체
                       FocusScope.of(context).unfocus();
-                      if (profileState.temporaryImagePath != null) {
-                        await profileViewmodel.updateProfileImage();
-                      }
+                      // 닉네임뷰모델 조건
+                      if (nicknameState.isValid != true) return;
+                      if (nicknameState.isDuplicate == true) return;
+                      // 생년월일 뷰모델 조건
+                      if (birthDateState.isValid != true) return;
+
+                      // 조건 통과 시에만 메서드 실행
+                      profileViewmodel.updateProfile(
+                        nicknameController.text,
+                        birthDateController.text,
+                      );
                     },
                   ),
                   SizedBox(height: 34),

@@ -10,31 +10,27 @@ import 'package:travel_muse_app/repositories/app_user_repository.dart';
 
 class ProfileState {
   const ProfileState({
-    this.nickname,
     this.profileImageUrl,
     this.temporaryImagePath,
-    this.birthDate,
     this.gender,
+    this.isGenderValid,
   });
-  final String? nickname;
   final String? profileImageUrl;
   final String? temporaryImagePath;
-  final String? birthDate;
   final String? gender;
+  final bool? isGenderValid;
 
   ProfileState copyWith({
-    String? nickname,
     String? profileImageUrl,
     String? temporaryImagePath,
-    String? birthDate,
     String? gender,
+    bool? isGenderValid,
   }) {
     return ProfileState(
-      nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       temporaryImagePath: temporaryImagePath ?? this.temporaryImagePath,
-      birthDate: birthDate ?? this.birthDate,
       gender: gender ?? this.gender,
+      isGenderValid: isGenderValid ?? this.isGenderValid,
     );
   }
 }
@@ -53,8 +49,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   ProfileState build() {
     return const ProfileState();
   }
-
-  // TODO: validator 일괄 실행 메서드 추가
 
   // 사용자가 고른 이미지 로컬에 저장
   Future<void> savePickedImageToLocal() async {
@@ -99,6 +93,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
+  // db에서 프로필 이미지 가져오기
   Future<void> fetchProfileImageUrl() async {
     try {
       if (currentUser == null) return;
@@ -120,8 +115,42 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
+  // 성별 선택
   void selectGender(String gender) {
     state = state.copyWith(gender: gender);
+  }
+
+  // 성별 선택 확인
+  void isGenderValid() {
+    if (state.gender == null) {
+      state = state.copyWith(isGenderValid: null);
+    } else {
+      state = state.copyWith(isGenderValid: true);
+    }
+  }
+
+  // 프로필 업데이트
+  Future<void> updateProfile(String nickname, String birthDate) async {
+    if (currentUser == null) return;
+    if (state.gender == null) return;
+    if (state.isGenderValid == null) return;
+    final uid = currentUser!.uid;
+
+    try {
+      // 프로필이미지 업데이트
+      await updateProfileImage();
+
+      // 닉네임 업데이트
+      await appUserRepo.updateNickname(uid: uid, nickname: nickname);
+
+      // 생년월일 업데이트
+      await appUserRepo.updateBirthDate(uid: uid, birthDate: birthDate);
+
+      // 성별 업데이트
+      await appUserRepo.updateGender(uid: uid, gender: state.gender!);
+    } catch (e) {
+      log('프로필 업데이트 실패: $e');
+    }
   }
 }
 

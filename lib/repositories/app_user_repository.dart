@@ -69,4 +69,22 @@ class AppUserRepository {
       'profileImage': fileUrl,
     });
   }
+
+  // 유저 생년월일 업데이트
+  Future<void> updateBirthDate({
+    required String uid,
+    required String birthDate,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({
+      'birthDate': birthDate,
+    });
+  }
+
+  // 유저 성별 업데이트
+  Future<void> updateGender({
+    required String uid,
+    required String gender,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({'gender': gender});
+  }
 }

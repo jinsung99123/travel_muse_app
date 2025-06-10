@@ -23,10 +23,11 @@ class EditBirthDateState {
 
 class EditBirthDateViewModel extends AutoDisposeNotifier<EditBirthDateState> {
   final birthDateController = TextEditingController();
+  final _defaultMessage = '주민등록상 생년월일 8자리를 입력해주세요';
 
   @override
   EditBirthDateState build() {
-    return const EditBirthDateState(isValid: null, message: null);
+    return EditBirthDateState(isValid: null, message: _defaultMessage);
   }
 
   // 사용자 입력 변경 감지

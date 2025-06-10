@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
 
@@ -18,7 +19,7 @@ class EditBirthDate extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('생년월일', style: AppTextStyles.sectionTitle),
+          const Text('생년월일', style: AppTextStyles.onboardingSectionTitle),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: SizedBox(
@@ -39,10 +40,8 @@ class EditBirthDate extends ConsumerWidget {
                     vertical: 16,
                     horizontal: 16,
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  enabledBorder: AppOtherStyles.unfocusedBorder,
+                  focusedBorder: AppOtherStyles.focusedBorder,
 
                   isDense: true,
                   errorText: null,
@@ -55,7 +54,10 @@ class EditBirthDate extends ConsumerWidget {
               ? SizedBox(
                 child: Text(
                   state.message ?? '',
-                  style: TextStyle(color: Colors.red),
+                  style:
+                      state.isValid == false
+                          ? AppTextStyles.errorText
+                          : AppTextStyles.helperText,
                 ),
               )
               : SizedBox.shrink(),

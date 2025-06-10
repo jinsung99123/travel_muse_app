@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/core/validators.dart';
 import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/views/widgets/check_duplicate_button.dart';
 
@@ -20,7 +20,7 @@ class EditNickname extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('닉네임', style: AppTextStyles.sectionTitle),
+          const Text('닉네임', style: AppTextStyles.onboardingSectionTitle),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: SizedBox(
@@ -43,13 +43,8 @@ class EditNickname extends ConsumerWidget {
                           vertical: 16,
                           horizontal: 16,
                         ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF98A0A4),
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        enabledBorder: AppOtherStyles.unfocusedBorder,
+                        focusedBorder: AppOtherStyles.focusedBorder,
                         isDense: true,
                         hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
                         errorText: null,

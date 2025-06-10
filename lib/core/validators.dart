@@ -2,14 +2,14 @@ class Validators {
   // 닉네임
   static String? validateNickname(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return '한글, 영문, 숫자만 사용 가능 (2~8자)';
+      return '한글, 영문, 숫자만 사용 가능합니다 (2~8자)';
     }
 
     final nickname = value.trim();
 
     final validPattern = RegExp(r'^[가-힣a-zA-Z0-9]+$');
     if (!validPattern.hasMatch(nickname) || nickname.length < 2) {
-      return '한글, 영문, 숫자만 사용 가능 (2~8자)';
+      return '한글, 영문, 숫자만 사용 가능합니다 (2~8자)';
     }
 
     return null;
@@ -17,7 +17,7 @@ class Validators {
 
   static String? validateBirthDate(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return '생년월일을 입력해주세요.';
+      return '주민등록상 생년월일 8자리를 입력해주세요';
     }
 
     final birth = value.trim();

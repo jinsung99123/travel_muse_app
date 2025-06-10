@@ -39,7 +39,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('프로필 사진', style: AppTextStyles.sectionTitle),
+          const Text('프로필 사진', style: AppTextStyles.onboardingSectionTitle),
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () async {
