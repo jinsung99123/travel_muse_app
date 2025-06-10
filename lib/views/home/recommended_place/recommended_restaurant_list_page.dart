@@ -6,8 +6,6 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = const Color(0xFF03A9F4);
-
     final List<_RestaurantData> restaurants = [
       _RestaurantData(
         name: '핫도그 두물머리점',
@@ -30,13 +28,17 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('추천 맛집 전체 보기'),
-        backgroundColor: primaryColor,
+        title: const Text('추천 맛집 전체 보기', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: restaurants.length,
         padding: const EdgeInsets.all(16),
+        separatorBuilder: (context, index) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
           final restaurant = restaurants[index];
           return RecommendedRestaurantListCard(
