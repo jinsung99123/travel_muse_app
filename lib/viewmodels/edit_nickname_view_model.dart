@@ -77,14 +77,23 @@ class EditNicknameViewModel extends AutoDisposeNotifier<EditNicknameState> {
     if (checkIsDuplicate) {
       state = state.copyWith(
         isDuplicate: checkIsDuplicate,
-        message: '이미 사용중인 닉네임입니다.',
+        message: '이미 사용중인 닉네임입니다',
       );
     } else {
       state = state.copyWith(
         isDuplicate: checkIsDuplicate,
-        message: '사용 가능한 닉네임입니다.',
+        message: '사용 가능한 닉네임입니다',
       );
     }
+  }
+
+  // 중복 확인 실행 여부 확인
+  bool isCheckedDuplication() {
+    if (state.isDuplicate == null) {
+      state = state.copyWith(isDuplicate: true, message: '닉네임 중복체크를 해주세요');
+      return true;
+    }
+    return false;
   }
 
   // 닉네임 사용 가능 여부 확인

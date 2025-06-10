@@ -25,6 +25,12 @@ class SelectGender extends ConsumerWidget {
               optionBox(value: '여성', state: state, viewmodel: viewmodel),
             ],
           ),
+          SizedBox(height: 8),
+          state.isGenderValid == false
+              ? SizedBox(
+                child: Text('성별을 선택해 주세요', style: AppTextStyles.errorText),
+              )
+              : SizedBox.shrink(),
         ],
       ),
     );

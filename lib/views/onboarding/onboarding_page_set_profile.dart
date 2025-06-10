@@ -16,10 +16,10 @@ class OnboardingPageSetProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
+    final profileState = ref.watch(profileViewModelProvider);
 
     final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
     final nicknameController = nicknameViewmodel.nicknameController;
-    final nicknameState = ref.watch(editNicknameViewModelProvider);
 
     final birthDateViewmodel = ref.read(
       editBirthDateViewModelProvider.notifier,
@@ -57,12 +57,22 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                   NextButton(
                     text: '다음',
                     onPressed: () async {
+                      // TODO: 조건 만족하지 않는 경우 아예 비활성화되게 변경
+
                       FocusScope.of(context).unfocus();
                       // 닉네임뷰모델 조건
-                      if (nicknameState.isValid != true) return;
-                      if (nicknameState.isDuplicate == true) return;
+                      final isNicknameChecked =
+                          nicknameViewmodel.isCheckedDuplication();
+
                       // 생년월일 뷰모델 조건
+                      birthDateViewmodel.validate(birthDateController.text);
+
+                      // 성별선택박스 조건
+                      profileViewmodel.isGenderValid();
+
+                      if (!isNicknameChecked) return;
                       if (birthDateState.isValid != true) return;
+                      if (profileState.isGenderValid != true) return;
 
                       // 조건 통과 시에만 메서드 실행
                       await profileViewmodel.updateProfile(

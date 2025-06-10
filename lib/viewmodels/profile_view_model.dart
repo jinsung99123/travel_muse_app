@@ -123,7 +123,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   // 성별 선택 확인
   void isGenderValid() {
     if (state.gender == null) {
-      state = state.copyWith(isGenderValid: null);
+      state = state.copyWith(isGenderValid: false);
     } else {
       state = state.copyWith(isGenderValid: true);
     }
@@ -132,13 +132,14 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   // 프로필 업데이트
   Future<void> updateProfile(String nickname, String birthDate) async {
     if (currentUser == null) return;
-    if (state.gender == null) return;
-    if (state.isGenderValid == null) return;
+
     final uid = currentUser!.uid;
 
     try {
       // 프로필이미지 업데이트
-      await updateProfileImage();
+      if (temporaryImageUrl != null) {
+        await updateProfileImage();
+      }
 
       // 닉네임 업데이트
       await appUserRepo.updateNickname(uid: uid, nickname: nickname);

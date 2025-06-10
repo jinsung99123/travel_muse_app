@@ -2,7 +2,7 @@ class Validators {
   // 닉네임
   static String? validateNickname(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return '한글, 영문, 숫자만 사용 가능합니다 (2~8자)';
+      return '닉네임을 입력해주세요';
     }
 
     final nickname = value.trim();
