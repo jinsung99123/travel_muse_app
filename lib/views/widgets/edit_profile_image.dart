@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
 class EditProfileImage extends ConsumerStatefulWidget {
@@ -38,10 +39,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '프로필 사진',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-          ),
+          const Text('프로필 사진', style: AppTextStyles.sectionTitle),
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () async {

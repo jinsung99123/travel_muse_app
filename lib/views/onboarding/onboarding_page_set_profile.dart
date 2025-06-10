@@ -58,8 +58,8 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                   NextButton(
                     text: '다음',
                     onPressed: () async {
+                      // TODO: 뷰모델에 메서드 만들어 대체
                       FocusScope.of(context).unfocus();
-                      // await profileViewmodel.updateNickname();
                       if (profileState.temporaryImagePath != null) {
                         await profileViewmodel.updateProfileImage();
                       }
