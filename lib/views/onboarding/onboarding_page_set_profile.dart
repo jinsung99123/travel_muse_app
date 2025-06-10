@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/select_gender.dart';
@@ -15,10 +16,12 @@ class OnboardingPageSetProfile extends ConsumerWidget {
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
     final profileState = ref.watch(profileViewModelProvider);
 
-    final nicknameController = profileViewmodel.nicknameController;
+    final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
+    final nicknameController = nicknameViewmodel.nicknameController;
+
     final birthDateController = profileViewmodel.birthDateController;
-    final formKeyNickname = profileViewmodel.formKeyNickname;
-    final formKeyBirthDate = profileViewmodel.formKeyBirthDate;
+    final nicknameFormkey = nicknameViewmodel.nicknameFormkey;
+    final birthDateFormkey = profileViewmodel.birthDateFormkey;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -42,11 +45,11 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                   ),
                   EditProfileImage(size: 88),
                   EditNickname(
-                    formKey: formKeyNickname,
+                    formKey: nicknameFormkey,
                     controller: nicknameController,
                   ),
                   EditBirthDate(
-                    formKey: formKeyBirthDate,
+                    formKey: birthDateFormkey,
                     controller: birthDateController,
                   ),
                   SelectGender(),
@@ -59,7 +62,7 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     text: '다음',
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      await profileViewmodel.updateNickname();
+                      // await profileViewmodel.updateNickname();
                       if (profileState.temporaryImagePath != null) {
                         await profileViewmodel.updateProfileImage();
                       }

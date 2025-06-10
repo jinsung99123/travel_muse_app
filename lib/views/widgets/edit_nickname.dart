@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/validators.dart';
+import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
+import 'package:travel_muse_app/views/widgets/check_duplicate_button.dart';
 
-class EditNickname extends StatelessWidget {
+class EditNickname extends ConsumerWidget {
   const EditNickname({
     super.key,
     required this.formKey,
@@ -12,7 +15,10 @@ class EditNickname extends StatelessWidget {
   final TextEditingController controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(editNicknameViewModelProvider);
+    final showAsError = state.isValid == false || state.isDuplicate == true;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -24,43 +30,52 @@ class EditNickname extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Form(
-              key: formKey,
-              child: SizedBox(
-                height: 80,
-                child: TextFormField(
-                  controller: controller,
-                  validator: Validators.validateNickname,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 28,
-                      horizontal: 16,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    isDense: true,
-                    hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
-                    // helper: Text(
-                    //   '최대 8자까지 작성 가능합니다', // TODO : 유저 닉네임 validator 통과 시 표시 X
-                    //   style: TextStyle(
-
-                    //     fontSize: 14,
-                    //     fontWeight: FontWeight.w400,
-                    //     color: Color(0xFF7C878C),
-                    //   ),
-                    // ),
-                    // validator 반환 텍스트 스타일
-                    errorStyle: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.redAccent,
+            child: SizedBox(
+              height: 56,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Form(
+                      key: formKey,
+                      child: TextFormField(
+                        controller: controller,
+                        validator: Validators.validateNickname,
+                        onChanged: (value) {
+                          ref
+                              .read(editNicknameViewModelProvider.notifier)
+                              .checkInputChanged(value);
+                        },
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 20,
+                            horizontal: 16,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          isDense: true,
+                          hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
+                          errorText: null,
+                          helperText: null,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(width: 8),
+                  DuplicateCheckButton(state: state),
+                ],
               ),
+            ),
+          ),
+          SizedBox(
+            child: Text(
+              state.message ?? '',
+              style: TextStyle(color: showAsError ? Colors.red : Colors.black),
             ),
           ),
         ],

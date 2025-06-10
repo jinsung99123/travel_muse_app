@@ -42,7 +42,7 @@ class _EditBirthDateState extends State<EditBirthDate> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: widget.controller,
-                validator: Validators.validateBirthDate,
+                //validator: Validators.validateBirthDate,
                 onChanged: (_) {
                   final currentState = _textFieldKey.currentState;
                   final isValid = currentState?.validate() ?? false;

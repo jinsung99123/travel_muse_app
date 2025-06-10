@@ -23,6 +23,18 @@ class AppUserRepository {
     }
   }
 
+  // 유저 닉네임 중복확인
+  Future<bool> isNicknameDuplicate(String nickname) async {
+    final query =
+        await _firestore
+            .collection('appUser')
+            .where('nickname', isEqualTo: nickname)
+            .limit(1)
+            .get();
+
+    return query.docs.isNotEmpty;
+  }
+
   // 유저 닉네임 업데이트
   Future<void> updateNickname({
     required String uid,

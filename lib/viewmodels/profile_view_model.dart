@@ -43,9 +43,9 @@ class ProfileState {
 class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final appUserRepo = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
-  final formKeyNickname = GlobalKey<FormState>();
-  final formKeyBirthDate = GlobalKey<FormState>();
-  final nicknameController = TextEditingController();
+
+  final birthDateFormkey = GlobalKey<FormState>();
+
   final birthDateController = TextEditingController();
   final _picker = ImagePicker();
   late File? pickedImage;
@@ -59,30 +59,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   // TODO: validator 일괄 실행 메서드 추가
-
-  Future<void> updateNickname() async {
-    try {
-      if (currentUser == null) {
-        log('currentUser is null');
-        return;
-      }
-
-      // 닉네임 validator 확인
-      final isValid = formKeyNickname.currentState?.validate() ?? false;
-      if (!isValid) return;
-
-      // 닉네임 업데이트
-      log(
-        '닉네임 업데이트 시도 - user ${currentUser!.uid}, 새 닉네임 : ${nicknameController.text}',
-      );
-      await appUserRepo.updateNickname(
-        uid: currentUser!.uid,
-        nickname: nicknameController.text,
-      );
-    } catch (e) {
-      log('닉네임 업데이트 실패 : $e');
-    }
-  }
 
   // 사용자가 고른 이미지 로컬에 저장
   Future<void> savePickedImageToLocal() async {
