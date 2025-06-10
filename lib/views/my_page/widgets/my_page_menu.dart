@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
+import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class MyPageMenu extends StatelessWidget {
   const MyPageMenu({super.key});
@@ -60,7 +62,15 @@ class MyPageMenu extends StatelessWidget {
             },
           ),
 
-          _buildMenuItem(title: '여행 성향 재검사', onTap: () {}),
+          _buildMenuItem(
+            title: '여행 성향 재검사',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PreferenceTestPage()),
+              );
+            },
+          ),
         ],
       ),
     );
