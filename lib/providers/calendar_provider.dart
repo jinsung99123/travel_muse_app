@@ -4,5 +4,5 @@ import 'package:travel_muse_app/viewmodels/calendar_view_model.dart';
 
 final calendarViewModelProvider =
     StateNotifierProvider<CalendarViewModel, CalendarState>(
-      (ref) => CalendarViewModel(),
+      (ref) => CalendarViewModel(ref),
     );

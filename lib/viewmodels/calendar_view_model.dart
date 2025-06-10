@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/calendar_model.dart';
+import 'package:travel_muse_app/providers/calendar_repository_provider.dart';
 
 class CalendarViewModel extends StateNotifier<CalendarState> {
-  CalendarViewModel() : super(CalendarState(focusedDay: DateTime.now()));
+  CalendarViewModel(this.ref)
+    : super(CalendarState(focusedDay: DateTime.now()));
+  final Ref ref;
 
-  // 날짜를 선택하고 시작일과 종료일 상태를 갱신합니다
   void selectDay(DateTime selectedDay, DateTime newFocusedDay) {
     if (state.startDay == null ||
         (state.startDay != null && state.endDay != null)) {
@@ -36,16 +38,30 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
     }
   }
 
-  // 선택된 날짜인지 여부를 반환
   bool isSelected(DateTime day) {
     return day == state.startDay || day == state.endDay;
   }
 
-  // 선택된 날짜 범위 사이에 있는지 여부를 반환
   bool isBetween(DateTime day) {
     return state.startDay != null &&
         state.endDay != null &&
         day.isAfter(state.startDay!) &&
         day.isBefore(state.endDay!);
+  }
+
+  Future<void> saveTravelPlan(String planId) async {
+    final start = state.startDay;
+    final end = state.endDay;
+
+    if (start != null && end != null) {
+      final repo = ref.read(calendarRepositoryProvider);
+      await repo.updatePlanDates(
+        planId: planId,
+        startDate: start,
+        endDate: end,
+      );
+    } else {
+      throw Exception("날짜가 선택되지 않았습니다.");
+    }
   }
 }
