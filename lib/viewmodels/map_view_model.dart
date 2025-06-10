@@ -5,6 +5,7 @@ import 'package:travel_muse_app/models/map_state.dart';
 import 'package:travel_muse_app/models/plans.dart';
 import 'package:travel_muse_app/repositories/map_repository.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
+import 'package:travel_muse_app/utills/map_utils.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
   MapViewModel(this._repository) : super(MapState(dayPlaces: {}));
@@ -38,7 +39,6 @@ class MapViewModel extends StateNotifier<MapState> {
           state = state.copyWith(selectedPlace: firstDay.value.first);
         }
       }
-
     } catch (e) {
       print('❌ loadPlanAndRoute 실패: $e');
     }
@@ -50,7 +50,7 @@ class MapViewModel extends StateNotifier<MapState> {
     return '${format(start)} ~ ${format(end)}';
   }
 
-  void selectPlace(Map<String, String> place) {
+  void selectPlace(Map<String,dynamic> place) {
     state = state.copyWith(selectedPlace: place);
   }
 
@@ -66,13 +66,22 @@ class MapViewModel extends StateNotifier<MapState> {
   }
 
   List<LatLng> extractLatLngs(List<Map<String, dynamic>> places) {
-  return places.map((p) => parseLatLng(p)).whereType<LatLng>().toList();
-}
+    return places.map((p) => parseLatLng(p)).whereType<LatLng>().toList();
+  }
+
   LatLngBounds createLatLngBounds(List<LatLng> latLngs) {
-    final southwestLat = latLngs.map((l) => l.latitude).reduce((a, b) => a < b ? a : b);
-    final southwestLng = latLngs.map((l) => l.longitude).reduce((a, b) => a < b ? a : b);
-    final northeastLat = latLngs.map((l) => l.latitude).reduce((a, b) => a > b ? a : b);
-    final northeastLng = latLngs.map((l) => l.longitude).reduce((a, b) => a > b ? a : b);
+    final southwestLat = latLngs
+        .map((l) => l.latitude)
+        .reduce((a, b) => a < b ? a : b);
+    final southwestLng = latLngs
+        .map((l) => l.longitude)
+        .reduce((a, b) => a < b ? a : b);
+    final northeastLat = latLngs
+        .map((l) => l.latitude)
+        .reduce((a, b) => a > b ? a : b);
+    final northeastLng = latLngs
+        .map((l) => l.longitude)
+        .reduce((a, b) => a > b ? a : b);
     return LatLngBounds(
       southwest: LatLng(southwestLat, southwestLng),
       northeast: LatLng(northeastLat, northeastLng),
@@ -80,13 +89,49 @@ class MapViewModel extends StateNotifier<MapState> {
   }
 
   LatLng? getInitialLatLng(List<Map<String, dynamic>> places) {
-  if (places.isEmpty) return null;
-  return parseLatLng(places.first);
-}
+    if (places.isEmpty) return null;
+    return parseLatLng(places.first);
+  }
 
   void disposeControllers() {
     for (final controller in pageControllers.values) {
       controller.dispose();
     }
+  }
+
+  void moveCameraToFitAll(
+    GoogleMapController? mapController,
+    List<Map<String, dynamic>> places,
+  ) {
+    final latLngs = extractLatLngs(places);
+
+    if (latLngs.length >= 2) {
+      final bounds = createLatLngBounds(latLngs);
+      mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
+    } else if (latLngs.isNotEmpty) {
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(latLngs.first, 14),
+      );
+    }
+  }
+
+  Set<Marker> getMarkers({
+    required List<Map<String, dynamic>> places,
+    required String selectedDayKey,
+    required Function(Map<String, dynamic>) onTap,
+    required Function(int) onPageChanged,
+  }) {
+    return createMarkers(
+      places: places,
+      onTap: onTap,
+      onPageChanged: onPageChanged,
+      animateToPage: (idx) {
+        getPageController(selectedDayKey).animateToPage(
+          idx,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      },
+    );
   }
 }

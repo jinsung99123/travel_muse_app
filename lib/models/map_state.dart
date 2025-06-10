@@ -7,13 +7,13 @@ class MapState {
   });
 
   final Map<String, List<Map<String, String>>> dayPlaces;
-  final Map<String, String>? selectedPlace;
+  final Map<String, dynamic>? selectedPlace;
   final String? title;
   final String? date;
 
   MapState copyWith({
     Map<String, List<Map<String, String>>>? dayPlaces,
-    Map<String, String>? selectedPlace,
+    Map<String, dynamic>? selectedPlace,
     String? title,
     String? date,
   }) {

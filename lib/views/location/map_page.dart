@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/providers/map_provider.dart';
-import 'package:travel_muse_app/utills/latlng_helper.dart';
+import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/viewmodels/map_view_model.dart';
 import 'package:travel_muse_app/views/location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/location/widgets/map_display.dart';
@@ -36,27 +36,37 @@ class _MapPageState extends ConsumerState<MapPage>
       setState(() {});
       final newPlaces =
           mapState.dayPlaces[dayKeys[_tabController!.index]] ?? [];
-      _moveCameraToFitAll(newPlaces);
+      _viewModel.moveCameraToFitAll(_mapController, newPlaces);
     }
   }
+
+  bool _isLoading(TabController? tabController, List<String> dayKeys) {
+    if (tabController == null || dayKeys.isEmpty) return true;
+    if (tabController.index >= dayKeys.length) return true;
+    return false;
+  }
+  
+  Future<void> initializeControllers() async {
+  if (!mounted) return;
+  await _viewModel.loadPlanAndRoute(widget.planId, this);
+
+  final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
+  if (dayKeys.isEmpty) return;
+
+  _tabController = TabController(length: dayKeys.length, vsync: this);
+  _tabController!.addListener(_onTabChanged);
+
+  setState(() {});
+}
 
   @override
   void initState() {
     super.initState();
     _viewModel = ref.read(mapViewModelProvider.notifier);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      await _viewModel.loadPlanAndRoute(widget.planId, this);
-
-      final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
-      if (dayKeys.isEmpty) return;
-
-      _tabController = TabController(length: dayKeys.length, vsync: this);
-      _tabController!.addListener(_onTabChanged);
-
-      setState(() {});
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    initializeControllers();
+  });
   }
 
   @override
@@ -71,96 +81,42 @@ class _MapPageState extends ConsumerState<MapPage>
     super.dispose();
   }
 
-  void _moveCameraToFitAll(List<Map<String, dynamic>> places) {
-    final latLngs = _viewModel.extractLatLngs(places);
-
-    if (latLngs.length >= 2) {
-      final bounds = _viewModel.createLatLngBounds(latLngs);
-      _mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
-    } else if (latLngs.isNotEmpty) {
-      _mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(latLngs.first, 14),
-      );
+  void _initCameraPosition(List<Map<String, dynamic>> selectedPlaces) {
+  if (!_cameraMoved && selectedPlaces.isNotEmpty) {
+    final initial = _viewModel.getInitialLatLng(selectedPlaces);
+    if (initial != null) {
+      _initialLatLng = initial;
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
     final mapState = ref.watch(mapViewModelProvider);
     final screenHeight = MediaQuery.of(context).size.height;
-
     final dayKeys = mapState.dayPlaces.keys.toList();
-    if (_tabController == null || dayKeys.isEmpty) {
+    if (_isLoading(_tabController, dayKeys)) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final index = _tabController!.index;
-    if (index >= dayKeys.length) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     final selectedDayKey = dayKeys[index];
     final selectedPlaces = mapState.dayPlaces[selectedDayKey] ?? [];
 
-    if (!_cameraMoved && selectedPlaces.isNotEmpty) {
-      final initial = _viewModel.getInitialLatLng(selectedPlaces);
-      if (initial != null) {
-        _initialLatLng = initial;
-      }
-    }
+     _initCameraPosition(selectedPlaces);
 
     final points = _viewModel.extractLatLngs(selectedPlaces);
-
-    final markers =
-        selectedPlaces
-            .asMap()
-            .entries
-            .map((entry) {
-              final index = entry.key;
-              final place = entry.value;
-              final LatLng? latLng = parseLatLng(place);
-              if (latLng == null) return null;
-              final lat = latLng.latitude;
-              final lng = latLng.longitude;
-
-              return Marker(
-                markerId: MarkerId(
-                  place['id'] ?? '${lat}_${lng}_${place['title']}',
-                ),
-                position: LatLng(lat, lng),
-                infoWindow: InfoWindow(
-                  title: '${index + 1}. ${place['title'] ?? ''}',
-                ),
-                onTap: () {
-                  _viewModel.selectPlace(place);
-                  final idx = selectedPlaces.indexWhere(
-                    (p) =>
-                        (p['id'] != null && p['id'] == place['id']) ||
-                        (p['title'] == place['title'] &&
-                            p['lat'] == place['lat'] &&
-                            p['lng'] == place['lng']),
-                  );
-                  if (idx != -1) {
-                    _viewModel
-                        .getPageController(selectedDayKey)
-                        .animateToPage(
-                          idx,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                  }
-                },
-              );
-            })
-            .whereType<Marker>()
-            .toSet();
-
-    final displayDayTabs =
-        dayKeys.map((key) {
-          final num = int.tryParse(key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
-          return 'Day ${num + 1}';
-        }).toList();
-
+    final markers = _viewModel.getMarkers(
+      places: selectedPlaces,
+      selectedDayKey: selectedDayKey,
+      onTap: (place) => _viewModel.selectPlace(place),
+      onPageChanged: (index) {
+        if (!_tabController!.indexIsChanging) {
+          setState(() {});
+        }
+      },
+    );
+    final displayDayTabs = dayKeys.map(getDisplayDayTab).toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -191,7 +147,7 @@ class _MapPageState extends ConsumerState<MapPage>
                 _mapController = controller;
                 if (!_cameraMoved && selectedPlaces.isNotEmpty) {
                   Future.delayed(const Duration(milliseconds: 300), () {
-                    _moveCameraToFitAll(selectedPlaces);
+                    _viewModel.moveCameraToFitAll(_mapController, selectedPlaces);
                     _cameraMoved = true;
                   });
                 }
