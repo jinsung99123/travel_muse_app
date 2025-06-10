@@ -29,8 +29,7 @@ class _RecommendedRestaurantDetailPageState
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -39,11 +38,16 @@ class _RecommendedRestaurantDetailPageState
         title: const Text('핫도그 두물머리점'),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: secondaryColor,
+        backgroundColor: const Color(0xFFE0F7FA),
+        foregroundColor: const Color(0xFF03A9F4),
         icon: const Icon(Icons.restaurant),
         label: const Text('길찾기'),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Color(0xFF03A9F4), width: 1.5),
+          borderRadius: BorderRadius.circular(16),
+        ),
         onPressed: () {
-          // 위치 서비스 연동 예정
+          //TODO 위치 서비스 연동 예정
         },
       ),
       body: SingleChildScrollView(

@@ -1,43 +1,51 @@
 import 'package:flutter/material.dart';
 
 class InfoBanner extends StatelessWidget {
-
-  const InfoBanner({
-    super.key,
-    required this.primaryColor,
-    required this.secondaryColor,
-  });
-  final Color primaryColor;
-  final Color secondaryColor;
+  const InfoBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            height: 100,
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '사용자님,\n도쿄 여행까지 3일 남았어요!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF26272A),
+                height: 1.5,
+              ),
             ),
-            child: const Center(child: Text('경기도 정보')),
           ),
-        ),
-        Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            height: 100,
-            decoration: BoxDecoration(
-              color: secondaryColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
+          const SizedBox(height: 4),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '6박 7일 | 6.4 (수) - 6.11 (수)',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF7C878C),
+                fontWeight: FontWeight.w400,
+              ),
             ),
-            child: const Center(child: Text('강원도 정보')),
           ),
-        ),
-      ],
+          TextButton(
+            onPressed: () {
+              // TODO: 상세보기 이동 로직 연결
+            },
+            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            child: const Text(
+              '자세히 보기',
+              style: TextStyle(fontSize: 14, color: Color(0xFF98A0A4)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

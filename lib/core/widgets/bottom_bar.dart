@@ -47,17 +47,53 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: _onItemTapped,
-      selectedItemColor: primaryColor,
-      unselectedItemColor: Colors.grey,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: '일정'),
-        BottomNavigationBarItem(icon: Icon(Icons.place), label: '추천명소'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: '마이페이지'),
-      ],
+    final items = [
+      {'icon': Icons.home, 'label': '홈'},
+      {'icon': Icons.calendar_today, 'label': '일정 목록'},
+      {'icon': Icons.place, 'label': '추천명소'},
+      {'icon': Icons.person, 'label': '마이페이지'},
+    ];
+
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: const Color(0xFFE9EBEB), width: 1),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(items.length, (index) {
+          final isSelected = index == _currentIndex;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => _onItemTapped(index),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    items[index]['icon'] as IconData,
+                    size: 24,
+                    color: isSelected ? primaryColor : Colors.grey,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    items[index]['label'] as String,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isSelected ? primaryColor : Colors.grey,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Pretendard',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }
