@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
-class SelectGender extends StatelessWidget {
+class SelectGender extends ConsumerWidget {
   const SelectGender({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(profileViewModelProvider);
+    final viewmodel = ref.read(profileViewModelProvider.notifier);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -12,16 +16,26 @@ class SelectGender extends StatelessWidget {
           '성별',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
         ),
-        Row(children: [optionBox('남성'), SizedBox(width: 16), optionBox('여성')]),
+        Row(
+          children: [
+            optionBox(value: '남성', state: state, viewmodel: viewmodel),
+            SizedBox(width: 16),
+            optionBox(value: '여성', state: state, viewmodel: viewmodel),
+          ],
+        ),
       ],
     );
   }
 
-  Expanded optionBox(String text) {
+  Widget optionBox({
+    required String value,
+    required ProfileState state,
+    required ProfileViewModel viewmodel,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          // 뷰모델메서드 - 선택 시 박스데코 변경, state 변경
+          viewmodel.selectGender(value);
         },
         child: Container(
           height: 56,
@@ -35,13 +49,19 @@ class SelectGender extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              text,
-              style: TextStyle(
-                color: Color(0xFF7C878C),
-                fontSize: 18,
-                fontFamily: 'Pretendard',
-                height: 0.08,
-              ),
+              value,
+              style:
+                  state.gender == value
+                      ? TextStyle(
+                        // 선택 시
+                        color: Color(0xFF7C878C),
+                        fontSize: 18,
+                        fontFamily: 'Pretendard',
+                        height: 0.08,
+                      )
+                      : TextStyle(
+                        // 미선택 시
+                      ),
             ),
           ),
         ),

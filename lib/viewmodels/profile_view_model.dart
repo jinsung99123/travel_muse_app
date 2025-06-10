@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,20 +19,20 @@ class ProfileState {
   final String? nickname;
   final String? profileImageUrl;
   final String? temporaryImagePath;
-  final DateTime? birthDate;
+  final String? birthDate;
   final String? gender;
 
   ProfileState copyWith({
     String? nickname,
     String? profileImageUrl,
-    String? temporaryImageUrl,
-    DateTime? birthDate,
+    String? temporaryImagePath,
+    String? birthDate,
     String? gender,
   }) {
     return ProfileState(
       nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
-      temporaryImagePath: temporaryImageUrl ?? this.temporaryImagePath,
+      temporaryImagePath: temporaryImagePath ?? this.temporaryImagePath,
       birthDate: birthDate ?? this.birthDate,
       gender: gender ?? this.gender,
     );
@@ -76,7 +75,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     await File(pickedImage!.path).copy(localImagePath);
 
     log('이미지 저장 성공 : $localImagePath ');
-    state = state.copyWith(temporaryImageUrl: localImagePath);
+    state = state.copyWith(temporaryImagePath: localImagePath);
   }
 
   // 프로필 이미지 업데이트
@@ -119,6 +118,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     } catch (e) {
       log('프로필 이미지 로드 실패: $e');
     }
+  }
+
+  void selectGender(String gender) {
+    state = state.copyWith(gender: gender);
   }
 }
 
