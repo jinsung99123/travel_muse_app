@@ -27,7 +27,7 @@ class ScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const MapPage()),
+              MaterialPageRoute(builder: (context) => const MapPage(planId: 'test',)),
             );
           },
         ),
