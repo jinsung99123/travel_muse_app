@@ -1,45 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/my_page/widgets/schedule_card.dart';
-import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 
 class PlanListPage extends StatelessWidget {
   const PlanListPage({super.key});
 
-  static const List<Map<String, String>> schedules = [
-    {'title': '제주도 여행', 'date': '2025-07-01'},
-    {'title': '강원도 캠핑', 'date': '2025-08-15'},
-    {'title': '서울 투어', 'date': '2025-06-20'},
-    {'title': '부산 바다여행', 'date': '2025-09-05'},
-    {'title': '전주 한옥마을', 'date': '2025-10-12'},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final int itemCount = 10;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
-        title: const Text('여행 일정 목록'),
+        title: const Text(
+          '나의 여행',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(12.0),
-        itemCount: schedules.length,
-        itemBuilder: (context, index) {
-          final schedule = schedules[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SchedulePage(userId: 'test-user', planId: 'test',)),//임시 데이터 넘김
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView.builder(
+            itemCount: itemCount,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 18,
+                  ),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFE0E0E0)),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '나의 여행 $index',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 16,
+                        color: Colors.black54,
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
-            child: ScheduleCard(
-              title: schedule['title'] ?? '',
-              date: schedule['date'] ?? '',
-              imageUrl: 'https://picsum.photos/800/400?random=$index',
-            ),
-          );
-        },
+          ),
+        ),
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
