@@ -5,6 +5,8 @@ class AppUser {
     this.profileImage,
     required this.testId,
     required this.planId,
+    this.birthDate,
+    this.gender,
   });
 
   final String uid;
@@ -12,6 +14,8 @@ class AppUser {
   final String? profileImage;
   final List<String> testId;
   final List<String> planId;
+  final String? birthDate;
+  final String? gender;
 
   AppUser copyWith({
     String? uid,
@@ -19,6 +23,8 @@ class AppUser {
     String? profileImage,
     List<String>? testId,
     List<String>? planId,
+    String? birthDate,
+    String? gender,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
@@ -26,6 +32,8 @@ class AppUser {
       profileImage: profileImage ?? this.profileImage,
       testId: testId ?? this.testId,
       planId: planId ?? this.planId,
+      birthDate: birthDate ?? this.birthDate,
+      gender: gender ?? this.gender,
     );
   }
 
@@ -36,6 +44,8 @@ class AppUser {
       profileImage: json['profileImage'],
       testId: List<String>.from(json['testId'] ?? []),
       planId: List<String>.from(json['planId'] ?? []),
+      birthDate: json['birthDate'] ?? '',
+      gender: json['gender'] ?? '',
     );
   }
   Map<String, dynamic> toJson() => {
@@ -44,5 +54,7 @@ class AppUser {
     'profileImage': profileImage,
     'testId': testId,
     'planId': planId,
+    'birthDate': birthDate,
+    'gender': gender,
   };
 }

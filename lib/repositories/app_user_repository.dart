@@ -19,6 +19,8 @@ class AppUserRepository {
         'profileImage': null,
         'testId': [],
         'planId': [],
+        'birthDate': null,
+        'gender': null,
       });
     }
   }

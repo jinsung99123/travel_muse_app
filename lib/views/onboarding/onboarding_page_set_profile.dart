@@ -16,7 +16,6 @@ class OnboardingPageSetProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
-    final profileState = ref.watch(profileViewModelProvider);
 
     final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
     final nicknameController = nicknameViewmodel.nicknameController;
@@ -66,7 +65,7 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                       if (birthDateState.isValid != true) return;
 
                       // 조건 통과 시에만 메서드 실행
-                      profileViewmodel.updateProfile(
+                      await profileViewmodel.updateProfile(
                         nicknameController.text,
                         birthDateController.text,
                       );
