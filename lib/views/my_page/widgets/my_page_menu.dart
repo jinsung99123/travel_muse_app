@@ -7,65 +7,88 @@ class MyPageMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titles = ['내 여행 계획 보기', '내 여행 성향', '여행 성향 재검사'];
-    final icons = [Icons.flight_takeoff, Icons.explore, Icons.refresh];
-
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: titles.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 15),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 3,
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+            child: Text(
+              '여행 일정',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
               ),
-              backgroundColor: Colors.grey[200],
-            ),
-            onPressed: () {
-              switch (index) {
-                case 0:
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PlanListPage(),
-                    ),
-                  );
-                  break;
-                case 1:
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PreferenceListPage(),
-                    ),
-                  );
-                  break;
-                case 2:
-                  // TODO: 여행 성향 재검사 기능 추가
-                  break;
-              }
-            },
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 12,
-              ),
-              leading: Icon(icons[index], size: 28, color: Colors.teal),
-              title: Text(
-                titles[index],
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             ),
           ),
-        );
-      },
+
+          _buildMenuItem(
+            title: '나의 여행',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PlanListPage()),
+              );
+            },
+          ),
+
+          const SizedBox(height: 20),
+
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Text(
+              '여행 성향 테스트',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+
+          _buildMenuItem(
+            title: '나의 여행 성향',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PreferenceListPage(),
+                ),
+              );
+            },
+          ),
+
+          _buildMenuItem(title: '여행 성향 재검사', onTap: () {}),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem({required String title, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Color(0xFFE0E0E0))),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.black54,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
