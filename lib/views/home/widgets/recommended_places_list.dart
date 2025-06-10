@@ -1,99 +1,147 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 
 class RecommendedPlacesList extends StatelessWidget {
-  const RecommendedPlacesList({super.key, required this.color});
-  final Color color;
+  const RecommendedPlacesList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final List<String> hashtags = ['#힐링', '#유적지', '#쇼핑', '#가족과 함께'];
+
     final List<_PlaceCardData> places = [
       _PlaceCardData(
-        title: '두물머리',
-        image: 'assets/images/image1.png',
-        isActive: true,
+        title: '부산, 광안리',
+        imageAssetPath: 'assets/images/image14.png',
       ),
-      _PlaceCardData(title: '준비 중', image: '', isActive: false),
-      _PlaceCardData(title: '준비 중', image: '', isActive: false),
+      _PlaceCardData(
+        title: '제주, 사려니숲길',
+        imageAssetPath: 'assets/images/image15.png',
+      ),
+      _PlaceCardData(
+        title: '하동, 섬진강변',
+        imageAssetPath: 'assets/images/image17.png',
+      ),
     ];
 
-    return SizedBox(
-      height: 120,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: places.length,
-        itemBuilder: (context, index) {
-          final place = places[index];
-
-          return GestureDetector(
-            onTap:
-                place.isActive
-                    ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RecommendedPlaceDetailPage(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children:
+                  hashtags.map((tag) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xFF48CDFD)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Text(
+                        tag,
+                        style: const TextStyle(
+                          color: Color(0xFF15BFFD),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
                         ),
-                      );
-                    }
-                    : null,
-            child: Container(
-              width: 100,
-              margin: const EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
+                      ),
+                    );
+                  }).toList(),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 190,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: places.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final place = places[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const RecommendedPlaceDetailPage(),
                     ),
-                    child:
-                        place.image.isNotEmpty
-                            ? Image.asset(
-                              place.image,
-                              width: 100,
-                              height: 70,
+                  );
+                },
+                child: SizedBox(
+                  width: 118,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: SizedBox(
+                          width: 118,
+                          height: 139,
+                          child: AspectRatio(
+                            aspectRatio: 118 / 139,
+                            child: Image.asset(
+                              place.imageAssetPath,
                               fit: BoxFit.cover,
-                            )
-                            : Container(
-                              width: 100,
-                              height: 70,
-                              color: Colors.grey[300],
-                              child: const Icon(
-                                Icons.image_not_supported,
-                                color: Colors.grey,
-                              ),
                             ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        place.title,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    place.title,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8, right: 16),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const RecommendedPlacesListPage(),
                   ),
-                ],
+                );
+              },
+              child: const Text(
+                '더보기 >',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF48CDFD),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _PlaceCardData {
-  _PlaceCardData({
-    required this.title,
-    required this.image,
-    required this.isActive,
-  });
+  _PlaceCardData({required this.title, required this.imageAssetPath});
   final String title;
-  final String image;
-  final bool isActive;
+  final String imageAssetPath;
 }
