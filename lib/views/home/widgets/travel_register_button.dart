@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/core/widgets/svg_icon.dart';
-import 'package:travel_muse_app/views/location/map_page.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class TravelRegisterButton extends StatelessWidget {
   const TravelRegisterButton({super.key});
@@ -50,7 +50,7 @@ class TravelRegisterButton extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const MapPage(planId: '')),
+                MaterialPageRoute(builder: (_) => const SchedulePage( userId: 'test-user', planId: 'test')),
               );
             },
             child: Container(
