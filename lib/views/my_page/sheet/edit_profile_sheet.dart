@@ -38,10 +38,8 @@ class EditProfileSheet extends ConsumerWidget {
 
               await profileViewmodel.updateNickname();
 
-              if (profileState.temporaryImageUrl != null) {
-                await profileViewmodel.updateProfileImage(
-                  profileState.temporaryImageUrl!,
-                );
+              if (profileState.temporaryImagePath != null) {
+                await profileViewmodel.updateProfileImage();
               }
             },
           ),
@@ -54,10 +52,7 @@ class EditProfileSheet extends ConsumerWidget {
             const SizedBox(height: 20),
             EditProfileImage(size: 120),
             const SizedBox(height: 20),
-            EditNickname(
-              formKey: profileViewmodel.formKey,
-              controller: profileViewmodel.nicknameController,
-            ),
+            EditNickname(controller: profileViewmodel.nicknameController),
           ],
         ),
       ),

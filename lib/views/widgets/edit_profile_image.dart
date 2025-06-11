@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
 class EditProfileImage extends ConsumerStatefulWidget {
@@ -25,34 +29,53 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
 
   @override
   Widget build(BuildContext context) {
-    final profileViewModel = ref.read(profileViewModelProvider.notifier);
     final profileState = ref.watch(profileViewModelProvider);
     final imageUrlToShow =
-        profileState.temporaryImageUrl ??
+        profileState.temporaryImagePath ??
         profileState.profileImageUrl; // 임시 저장 이미지가 없으면 기존 프로필 이미지 표시
 
-    return GestureDetector(
-      onTap: () async {
-        await profileViewModel.uploadProfileImage();
-      },
-      child: SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: Stack(
-          children: [
-            AspectRatio(
-              aspectRatio: 1 / 1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(500),
-                child: Image.network(
-                  imageUrlToShow ??
-                      'https://picsum.photos/id/1/300/400', // 기존 프로필이미지 없으면 기본 이미지(추후 적용) 표시
-                  fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('프로필 사진', style: AppTextStyles.onboardingSectionTitle),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () async {
+              await ref
+                  .read(profileViewModelProvider.notifier)
+                  .savePickedImageToLocal();
+            },
+            child: SizedBox(
+              width: widget.size,
+              height: widget.size,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(500),
+                  color: const Color(0xFFB3B9BC),
+                  image:
+                      imageUrlToShow != null
+                          ? DecorationImage(
+                            image:
+                                profileState.temporaryImagePath == null
+                                    ? NetworkImage(imageUrlToShow)
+                                    : FileImage(File(imageUrlToShow))
+                                        as ImageProvider,
+                            fit: BoxFit.cover,
+                          )
+                          : null,
                 ),
+                child:
+                    imageUrlToShow == null
+                        ? Center(
+                          child: SvgPicture.asset('assets/icons/camera.svg'),
+                        )
+                        : null,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
