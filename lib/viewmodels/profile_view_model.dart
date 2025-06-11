@@ -338,6 +338,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   // 프로필 업데이트
+  // 회원가입 시
   Future<void> updateProfile(String nickname, String birthDate) async {
     if (currentUser == null) return;
 
@@ -357,11 +358,12 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
       // 성별 업데이트
       await appUserRepo.updateGender(uid: uid, gender: state.gender!);
-      log('프로필 업데이트 완료');
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }
   }
+
+  // TODO: 프로필 수정 (마이페이지 - 프로필 수정)
 }
 
 final profileViewModelProvider =

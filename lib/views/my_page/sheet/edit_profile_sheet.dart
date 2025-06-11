@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
@@ -13,7 +11,7 @@ class EditProfileSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
-    final profileState = ref.watch(profileViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         // 취소
@@ -33,25 +31,16 @@ class EditProfileSheet extends ConsumerWidget {
           AppbarButton(
             widget: const Text('완료', style: TextStyle(fontSize: 18)),
             onPressed: () async {
-              log('onpress');
-              FocusScope.of(context).unfocus();
-
-              await profileViewmodel.updateNickname();
-
-              if (profileState.temporaryImagePath != null) {
-                await profileViewmodel.updateProfileImage();
-              }
+              //
             },
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
+        child: ListView(
           children: [
-            const SizedBox(height: 20),
-            EditProfileImage(size: 120),
-            const SizedBox(height: 20),
+            EditProfileImage(size: 88),
             EditNickname(controller: profileViewmodel.nicknameController),
           ],
         ),
