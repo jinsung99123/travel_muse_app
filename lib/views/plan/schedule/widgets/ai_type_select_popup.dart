@@ -29,7 +29,6 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
         await FirebaseFirestore.instance
             .collection('preference_test')
             .where('userId', isEqualTo: uid)
-            .orderBy('createdAt', descending: true)
             .get();
 
     final tests =
