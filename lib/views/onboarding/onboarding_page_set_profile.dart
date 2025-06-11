@@ -7,10 +7,11 @@ import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
 import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
+import 'package:travel_muse_app/views/onboarding/terms_agreement_bottom_sheet.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/select_gender.dart';
 import 'package:travel_muse_app/views/preference/preference_intro_page_2.dart';
-import 'package:travel_muse_app/views/widgets/edit_birth_date.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/edit_birth_date.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
@@ -85,11 +86,11 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                       //   birthDateController.text,
                       // );
 
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PreferenceIntroPage2(),
-                        ),
+                      await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return const TermsAgreementBottomSheet();
+                        },
                       );
                     },
                   ),

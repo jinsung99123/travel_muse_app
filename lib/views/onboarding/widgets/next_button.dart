@@ -9,18 +9,23 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary[300],
+    return GestureDetector(
+      onTap: () {
+        //
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          color: AppColors.primary[300],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: Text(text, style: AppTextStyles.avaliableButtonText),
+        child: Center(
+          child: Text(text, style: AppTextStyles.avaliableButtonText),
+        ),
       ),
     );
   }

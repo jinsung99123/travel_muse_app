@@ -34,6 +34,7 @@ class AppTextStyles {
     fontSize: 14,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w400,
+    height: 1.5,
   );
 
   // 텍스트폼필드 에러텍스트
@@ -50,6 +51,7 @@ class AppTextStyles {
     fontSize: 18,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
+    height: 1.5,
   );
 
   // 버튼 비활성화 텍스트
@@ -74,5 +76,14 @@ class AppTextStyles {
     fontSize: 18,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
+  );
+
+  // 약관 텍스트
+  static TextStyle termsText = TextStyle(
+    color: AppColors.black,
+    fontSize: 14,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
   );
 }

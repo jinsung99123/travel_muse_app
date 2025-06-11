@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
-import 'package:travel_muse_app/views/widgets/check_duplicate_button.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/check_duplicate_button.dart';
 
 class EditNickname extends ConsumerWidget {
   const EditNickname({super.key, required this.controller});
