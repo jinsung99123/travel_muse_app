@@ -203,18 +203,22 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     if (state.isNicknameDuplicate == null) {
       state = state.copyWith(nicknameMessage: null);
     }
-    final checkIsDuplicate = await appUserRepo.isNicknameDuplicate(nickname);
-    state = state.copyWith(isNicknameDuplicate: checkIsDuplicate);
-    if (checkIsDuplicate) {
-      state = state.copyWith(
-        isNicknameDuplicate: checkIsDuplicate,
-        nicknameMessage: '이미 사용중인 닉네임입니다',
-      );
-    } else {
-      state = state.copyWith(
-        isNicknameDuplicate: checkIsDuplicate,
-        nicknameMessage: '사용 가능한 닉네임입니다',
-      );
+    try {
+      final checkIsDuplicate = await appUserRepo.isNicknameDuplicate(nickname);
+      state = state.copyWith(isNicknameDuplicate: checkIsDuplicate);
+      if (checkIsDuplicate) {
+        state = state.copyWith(
+          isNicknameDuplicate: checkIsDuplicate,
+          nicknameMessage: '이미 사용중인 닉네임입니다',
+        );
+      } else {
+        state = state.copyWith(
+          isNicknameDuplicate: checkIsDuplicate,
+          nicknameMessage: '사용 가능한 닉네임입니다',
+        );
+      }
+    } catch (e) {
+      log('닉네임 중복 확인 실패 : $e');
     }
     checkUpdateAvailable();
   }
@@ -266,7 +270,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       state = state.copyWith(
         isBirthDateValid: null,
         birthDateMessage: null,
-        canCheckBirthDate: false,
+        canCheckBirthDate: true,
       );
     }
     final isBlank = value.trim().isEmpty;
@@ -288,6 +292,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     } else {
       state = state.copyWith(isBirthDateValid: true, birthDateMessage: null);
     }
+
     checkUpdateAvailable();
   }
 
@@ -314,7 +319,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
   // 업데이트 가능 여부 확인(validator, 중복)
   void checkUpdateAvailable() {
-    log('업데이트 가능 여부 확인');
     // 닉네임 확인
     if (state.isNicknameValid != true || state.isNicknameDuplicate == true) {
       return;
@@ -324,7 +328,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     // 성별 확인
     if (state.isGenderValid != true) return;
     state = state.copyWith(canUpdateProfile: true);
-    log('다음 버튼 활성화 가능');
   }
 
   // 프로필 업데이트

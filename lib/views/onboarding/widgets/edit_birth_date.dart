@@ -50,7 +50,7 @@ class EditBirthDate extends ConsumerWidget {
               ),
             ),
           ),
-          state.birthDateMessage != null
+          state.isBirthDateValid != true
               ? SizedBox(
                 child: Text(
                   state.birthDateMessage ?? '',
