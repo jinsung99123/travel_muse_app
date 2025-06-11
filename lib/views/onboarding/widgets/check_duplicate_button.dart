@@ -19,28 +19,31 @@ class DuplicateCheckButton extends ConsumerWidget {
     return SizedBox(
       width: 113,
       height: 56,
-      child: TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor:
-              !state.canCheckNickname
-                  ? AppColors.grey[50]
-                  : AppColors.primary[300],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        onPressed: () async {
-          log('중복확인 버튼 누름');
+      child: GestureDetector(
+        onTap: () async {
           if (!state.canCheckNickname) return;
 
           await viewmodel.checkCanUseNickname(input);
         },
-        child: Text(
-          '중복 확인',
-          style:
-              !state.canCheckNickname
-                  ? AppTextStyles.unavaliableButtonText
-                  : AppTextStyles.avaliableButtonText,
+        child: Container(
+          decoration: ShapeDecoration(
+            color:
+                !state.canCheckNickname
+                    ? AppColors.grey[50]
+                    : AppColors.primary[300],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          child: Center(
+            child: Text(
+              '중복 확인',
+              style:
+                  !state.canCheckNickname
+                      ? AppTextStyles.unavaliableButtonText
+                      : AppTextStyles.avaliableButtonText,
+            ),
+          ),
         ),
       ),
     );
