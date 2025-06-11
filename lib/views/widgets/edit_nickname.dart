@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
+import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/check_duplicate_button.dart';
 
 class EditNickname extends ConsumerWidget {
@@ -12,8 +12,9 @@ class EditNickname extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(editNicknameViewModelProvider);
-    final showAsError = state.isValid == false || state.isDuplicate == true;
+    final state = ref.watch(profileViewModelProvider);
+    final showAsError =
+        state.isNicknameValid == false || state.isNicknameDuplicate == true;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -33,8 +34,8 @@ class EditNickname extends ConsumerWidget {
                       controller: controller,
                       onChanged: (value) {
                         ref
-                            .read(editNicknameViewModelProvider.notifier)
-                            .checkInputChanged(value);
+                            .read(profileViewModelProvider.notifier)
+                            .checkNicknameChanged(value);
                       },
                       textAlignVertical: TextAlignVertical.center,
                       // 높이, 내부 텍스트 정렬
@@ -53,14 +54,14 @@ class EditNickname extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(width: 8),
-                  DuplicateCheckButton(state: state),
+                  DuplicateCheckButton(),
                 ],
               ),
             ),
           ),
           SizedBox(
             child: Text(
-              state.message ?? '',
+              state.nicknameMessage ?? '',
               style:
                   showAsError
                       ? AppTextStyles.errorText

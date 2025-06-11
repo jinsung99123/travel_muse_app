@@ -8,7 +8,9 @@ class Validators {
     final nickname = value.trim();
 
     final validPattern = RegExp(r'^[가-힣a-zA-Z0-9]+$');
-    if (!validPattern.hasMatch(nickname) || nickname.length < 2) {
+    if (!validPattern.hasMatch(nickname) ||
+        nickname.length < 2 ||
+        nickname.length > 8) {
       return '한글, 영문, 숫자만 사용 가능합니다 (2~8자)';
     }
 

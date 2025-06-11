@@ -3,8 +3,8 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/custom_check_toggle.dart';
 
-class AgreeAll extends StatelessWidget {
-  const AgreeAll({super.key});
+class TermsAgreeAll extends StatelessWidget {
+  const TermsAgreeAll({super.key});
 
   @override
   Widget build(BuildContext context) {
