@@ -18,11 +18,10 @@ class PreferenceTestRepository {
   Future<PreferenceTest> classifyTestOnly(
     List<Map<String, String>> answersRaw,
   ) async {
-    /*TODO:개발단계 끝나면 주석 제거
-    final currentUser = FirebaseAuth.instance.currentUser;
-  if (currentUser == null) {
-    throw Exception('로그인되지 않은 상태에서는 테스트를 저장할 수 없습니다.');
-  }*/
+    // final currentUser = FirebaseAuth.instance.currentUser;
+    // if (currentUser == null) {
+    //   throw Exception('로그인되지 않은 상태에서는 테스트를 저장할 수 없습니다.');
+    // }
 
     final resultSummary = answersRaw
         .map((a) => '${a['question']} => ${a['selectedOption']}')

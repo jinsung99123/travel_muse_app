@@ -192,7 +192,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   });
                   ref
                       .read(scheduleViewModelProvider.notifier)
-                      .saveDaySchedules(
+                      .saveAiSchedules(
                         planId: widget.planId,
                         daySchedules: parsed,
                       );

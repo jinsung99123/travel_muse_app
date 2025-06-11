@@ -40,6 +40,25 @@ class ScheduleRepository {
     await batch.commit();
   }
 
+  Future<void> saveAiRoute({
+    required String planId,
+    required Map<int, List<Map<String, String>>> aiSchedules,
+  }) async {
+    final batch = FirebaseFirestore.instance.batch();
+
+    aiSchedules.forEach((dayIndex, places) {
+      final dayRef = FirebaseFirestore.instance
+          .collection('plans')
+          .doc(planId)
+          .collection('ai_route')
+          .doc('day_$dayIndex');
+
+      batch.set(dayRef, {'places': places});
+    });
+
+    await batch.commit();
+  }
+
   Future<Map<int, List<Map<String, String>>>> fetchRoute(String planId) async {
     final snapshot =
         await _firestore
