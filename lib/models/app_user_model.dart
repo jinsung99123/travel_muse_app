@@ -50,7 +50,7 @@ class AppUser {
   }
   Map<String, dynamic> toJson() => {
     'uid': uid,
-    'nackname': nickname,
+    'nickname': nickname,
     'profileImage': profileImage,
     'testId': testId,
     'planId': planId,

@@ -8,6 +8,16 @@ class AppTextStyles {
     fontSize: 24,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w700,
+    height: 1.5,
+  );
+
+  // 온보딩 부제
+  static TextStyle onboardingSubTitle = TextStyle(
+    color: AppColors.grey[400],
+    fontSize: 16,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.5,
   );
 
   // 온보딩 각 세션 타이틀

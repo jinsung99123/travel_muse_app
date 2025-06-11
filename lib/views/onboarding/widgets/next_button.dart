@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 
 class NextButton extends StatelessWidget {
   const NextButton({super.key, required this.text, required this.onPressed});
@@ -13,19 +15,12 @@ class NextButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFE9EBEB), // 선택 가능시 색변경
+          backgroundColor: AppColors.primary[300],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFFB3B9BC),
-            fontSize: 18,
-            height: 0.08,
-          ),
-        ),
+        child: Text(text, style: AppTextStyles.avaliableButtonText),
       ),
     );
   }

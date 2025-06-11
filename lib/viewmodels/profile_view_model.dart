@@ -149,6 +149,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
       // 성별 업데이트
       await appUserRepo.updateGender(uid: uid, gender: state.gender!);
+      log('프로필 업데이트 완료');
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }
