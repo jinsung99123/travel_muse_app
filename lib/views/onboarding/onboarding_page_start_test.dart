@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
 
 class OnboardingPageStartTest extends ConsumerWidget {
   const OnboardingPageStartTest({super.key});
@@ -42,12 +41,12 @@ class OnboardingPageStartTest extends ConsumerWidget {
                 ),
 
                 SizedBox(height: 100),
-                NextButton(
-                  text: '시작하기',
-                  onPressed: () {
-                    // 다음 페이지로
-                  },
-                ),
+                // NextButton(
+                //   text: '시작하기',
+                //   onPressed: () {
+                //     // 다음 페이지로
+                //   },
+                // ),
                 SizedBox(height: 34),
               ],
             ),

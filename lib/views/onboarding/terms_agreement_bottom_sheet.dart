@@ -19,27 +19,29 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
       onTap: () {},
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.8,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Wrap(
           children: [
             TermsAgreementTitle(),
             AgreeAll(),
             TermsList(termsKeys: termsKeys),
-            NextButton(
-              text: '가입 완료',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 34),
+              child: NextButton(
+                text: '가입 완료',
+                isActivated: true,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),
+                  );
+                },
+              ),
             ),
           ],
         ),

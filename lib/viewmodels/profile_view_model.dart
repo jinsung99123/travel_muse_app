@@ -14,23 +14,27 @@ class ProfileState {
     this.temporaryImagePath,
     this.gender,
     this.isGenderValid,
+    this.canUpdateProfile = false,
   });
   final String? profileImageUrl;
   final String? temporaryImagePath;
   final String? gender;
   final bool? isGenderValid;
+  final bool canUpdateProfile;
 
   ProfileState copyWith({
     String? profileImageUrl,
     String? temporaryImagePath,
     String? gender,
     bool? isGenderValid,
+    bool? canUpdateProfile,
   }) {
     return ProfileState(
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       temporaryImagePath: temporaryImagePath ?? this.temporaryImagePath,
       gender: gender ?? this.gender,
       isGenderValid: isGenderValid ?? this.isGenderValid,
+      canUpdateProfile: canUpdateProfile ?? this.canUpdateProfile,
     );
   }
 }
