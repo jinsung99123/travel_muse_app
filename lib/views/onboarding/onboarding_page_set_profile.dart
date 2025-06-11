@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
+import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
+import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
+import 'package:travel_muse_app/views/onboarding/terms_agreement_bottom_sheet.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/edit_birth_date.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
+import 'package:travel_muse_app/views/onboarding/widgets/select_gender.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 
@@ -10,31 +16,40 @@ class OnboardingPageSetProfile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileViewmodel = ref.read(profileViewModelProvider.notifier);
     final profileState = ref.watch(profileViewModelProvider);
 
-    final nicknameController = profileViewmodel.nicknameController;
-    final formKey = profileViewmodel.formKey;
+    final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
+    final nicknameController = nicknameViewmodel.nicknameController;
+
+    final birthDateViewmodel = ref.read(
+      editBirthDateViewModelProvider.notifier,
+    );
+    final birthDateController = birthDateViewmodel.birthDateController;
+
+    bool canUpdate = profileState.canUpdateProfile;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(title: Text('회원 정보를 입력해 주세요')),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Stack(
             children: [
               ListView(
                 children: [
-                  const Text('프로필 사진', style: TextStyle(fontSize: 18)),
-                  SizedBox(height: 20),
-                  EditProfileImage(size: 120),
-                  SizedBox(height: 20),
-                  EditNickname(
-                    formKey: formKey,
-                    controller: nicknameController,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: const Text(
+                      '회원 정보를 입력해 주세요',
+                      style: AppTextStyles.onboardingTitle,
+                    ),
                   ),
+                  EditProfileImage(size: 88),
+                  EditNickname(controller: nicknameController),
+                  EditBirthDate(controller: birthDateController),
+                  SelectGender(),
                 ],
               ),
               Column(
@@ -42,17 +57,20 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                   Spacer(),
                   NextButton(
                     text: '다음',
-                    onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      await profileViewmodel.updateNickname();
-                      if (profileState.temporaryImageUrl != null) {
-                        await profileViewmodel.updateProfileImage(
-                          profileState.temporaryImageUrl!,
-                        );
-                      }
+                    isActivated: canUpdate,
+                    onPressed: () {
+                      // TODO: 조건 만족하지 않는 경우 아예 비활성화되게 변경
+
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return const TermsAgreementBottomSheet();
+                        },
+                      );
                     },
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 34),
                 ],
               ),
             ],

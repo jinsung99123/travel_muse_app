@@ -19,8 +19,22 @@ class AppUserRepository {
         'profileImage': null,
         'testId': [],
         'planId': [],
+        'birthDate': null,
+        'gender': null,
       });
     }
+  }
+
+  // 유저 닉네임 중복확인
+  Future<bool> isNicknameDuplicate(String nickname) async {
+    final query =
+        await _firestore
+            .collection('appUser')
+            .where('nickname', isEqualTo: nickname)
+            .limit(1)
+            .get();
+
+    return query.docs.isNotEmpty;
   }
 
   // 유저 닉네임 업데이트
@@ -56,5 +70,23 @@ class AppUserRepository {
     await _firestore.collection('appUser').doc(uid).update({
       'profileImage': fileUrl,
     });
+  }
+
+  // 유저 생년월일 업데이트
+  Future<void> updateBirthDate({
+    required String uid,
+    required String birthDate,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({
+      'birthDate': birthDate,
+    });
+  }
+
+  // 유저 성별 업데이트
+  Future<void> updateGender({
+    required String uid,
+    required String gender,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({'gender': gender});
   }
 }

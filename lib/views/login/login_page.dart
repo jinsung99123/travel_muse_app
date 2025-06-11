@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/viewmodels/login_view_model.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/views/login/widgets/sns_login_bar.dart';
 
 class LoginPage extends ConsumerWidget {
@@ -9,7 +9,7 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final viewmodel = ref.read(loginViewModelProvider.notifier);
+    final viewmodel = ref.read(authViewModelProvider.notifier);
 
     return Scaffold(
       body: Column(

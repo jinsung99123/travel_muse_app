@@ -3,30 +3,38 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:travel_muse_app/repositories/app_user_repository.dart';
 
 class ProfileState {
   const ProfileState({
-    this.nickname,
     this.profileImageUrl,
-    this.temporaryImageUrl,
+    this.temporaryImagePath,
+    this.gender,
+    this.isGenderValid,
+    this.canUpdateProfile = false,
   });
-  final String? nickname;
   final String? profileImageUrl;
-  final String? temporaryImageUrl;
+  final String? temporaryImagePath;
+  final String? gender;
+  final bool? isGenderValid;
+  final bool canUpdateProfile;
 
   ProfileState copyWith({
-    String? nickname,
     String? profileImageUrl,
-    String? temporaryImageUrl,
+    String? temporaryImagePath,
+    String? gender,
+    bool? isGenderValid,
+    bool? canUpdateProfile,
   }) {
     return ProfileState(
-      nickname: nickname ?? this.nickname,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
-      temporaryImageUrl: temporaryImageUrl ?? this.temporaryImageUrl,
+      temporaryImagePath: temporaryImagePath ?? this.temporaryImagePath,
+      gender: gender ?? this.gender,
+      isGenderValid: isGenderValid ?? this.isGenderValid,
+      canUpdateProfile: canUpdateProfile ?? this.canUpdateProfile,
     );
   }
 }
@@ -34,9 +42,9 @@ class ProfileState {
 class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final appUserRepo = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
-  final formKey = GlobalKey<FormState>();
-  final nicknameController = TextEditingController();
+
   final _picker = ImagePicker();
+  late File? pickedImage;
 
   // 업로드된 이미지 url 임시 저장
   String? temporaryImageUrl;
@@ -46,58 +54,38 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     return const ProfileState();
   }
 
-  Future<void> updateNickname() async {
-    try {
-      if (currentUser == null) {
-        log('currentUser is null');
-        return;
-      }
+  // 사용자가 고른 이미지 로컬에 저장
+  Future<void> savePickedImageToLocal() async {
+    final xfile = await _picker.pickImage(source: ImageSource.gallery);
+    if (xfile == null) return;
+    pickedImage = File(xfile.path);
 
-      // 닉네임 validator 확인
-      final isValid = formKey.currentState?.validate() ?? false;
-      if (!isValid) return;
+    final directory = await getApplicationDocumentsDirectory();
+    final customFolder = Directory('${directory.path}/profile_images');
 
-      // 닉네임 업데이트
-      log(
-        '닉네임 업데이트 시도 - user ${currentUser!.uid}, 새 닉네임 : ${nicknameController.text}',
-      );
-      await appUserRepo.updateNickname(
-        uid: currentUser!.uid,
-        nickname: nicknameController.text,
-      );
-    } catch (e) {
-      log('닉네임 업데이트 실패 : $e');
+    if (!await customFolder.exists()) {
+      await customFolder.create(recursive: true); // 폴더가 없으면 생성
     }
+    final fileName =
+        'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final localImagePath = '${customFolder.path}/$fileName';
+
+    await File(pickedImage!.path).copy(localImagePath);
+
+    log('이미지 저장 성공 : $localImagePath ');
+    state = state.copyWith(temporaryImagePath: localImagePath);
   }
 
-  Future<String?> uploadProfileImage() async {
+  // 프로필 이미지 업데이트
+  Future<void> updateProfileImage() async {
     try {
-      if (currentUser == null) {
-        log('currentUser is null');
-        return null;
-      }
-      // 이미지 pick
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile == null) return null;
-
-      final file = File(pickedFile.path);
-      log('프로필 이미지 업로드 시도');
-      final url = await appUserRepo.uploadProfileImage(
+      // 이미지 스토리지 업로드
+      final imageUrl = await appUserRepo.uploadProfileImage(
         uid: currentUser!.uid,
-        file: file,
+        file: pickedImage!,
       );
-      state = state.copyWith(temporaryImageUrl: url);
 
-      return url;
-    } catch (e) {
-      log('프로필 이미지 업로드 실패 : $e');
-      return null;
-    }
-  }
-
-  Future<void> updateProfileImage(String imageUrl) async {
-    try {
+      // 스토리지의 이미지 사용자 컬렉션에 업데이트
       await appUserRepo.updateProfileImage(
         uid: currentUser!.uid,
         fileUrl: imageUrl,
@@ -109,6 +97,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
+  // db에서 프로필 이미지 가져오기
   Future<void> fetchProfileImageUrl() async {
     try {
       if (currentUser == null) return;
@@ -127,6 +116,46 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       }
     } catch (e) {
       log('프로필 이미지 로드 실패: $e');
+    }
+  }
+
+  // 성별 선택
+  void selectGender(String gender) {
+    state = state.copyWith(gender: gender);
+  }
+
+  // 성별 선택 확인
+  void isGenderValid() {
+    if (state.gender == null) {
+      state = state.copyWith(isGenderValid: false);
+    } else {
+      state = state.copyWith(isGenderValid: true);
+    }
+  }
+
+  // 프로필 업데이트
+  Future<void> updateProfile(String nickname, String birthDate) async {
+    if (currentUser == null) return;
+
+    final uid = currentUser!.uid;
+
+    try {
+      // 프로필이미지 업데이트
+      if (temporaryImageUrl != null) {
+        await updateProfileImage();
+      }
+
+      // 닉네임 업데이트
+      await appUserRepo.updateNickname(uid: uid, nickname: nickname);
+
+      // 생년월일 업데이트
+      await appUserRepo.updateBirthDate(uid: uid, birthDate: birthDate);
+
+      // 성별 업데이트
+      await appUserRepo.updateGender(uid: uid, gender: state.gender!);
+      log('프로필 업데이트 완료');
+    } catch (e) {
+      log('프로필 업데이트 실패: $e');
     }
   }
 }
