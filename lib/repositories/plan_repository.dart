@@ -23,45 +23,34 @@ class PlanRepository {
     final prompt = '''
 너는 여행 플래너야.
 
-다음 조건을 참고해서 여행자에게 맞는 여행 계획을 작성해줘.
+여행자에게 맞는 일정표를 아래 조건에 따라 만들어줘:
 
 - 여행일수: ${days}일
-- 지역: $region
+- 여행 지역: $region
 - 여행자 성향: $typeDescription
 
-각 날짜별로 추천 장소와 간단한 설명을 아래 형식으로 작성해줘. 추가 설명 없이 일정만 반환해.
+📌 아래 형식대로만 응답해줘. 설명 없이 **일정표만** 반환해.
 
-예시:
+---
 Day 1:
+- 장소1: 간단한 설명1
+- 장소2: 간단한 설명2
+
+Day 2:
+- 장소1: 간단한 설명1
+- 장소2: 간단한 설명2
+...
+
+Day N:
 - 장소1: 설명1
 - 장소2: 설명2
 
-Day 2:
-- 장소1: 설명1
-...
 
-꼭 위 포맷을 지켜줘.
+반드시 위 형식을 그대로 지켜줘. **장소명 앞에 '- '**, 줄바꿈, 'Day N:'은 꼭 포함해줘.
+장소는 유명하거나 대표적인 곳 위주로 작성하고, 너무 많은 장소는 넣지 마.
+※ 장소명은 '__' 같은 특수문자 없이 실제 장소 이름으로 작성해줘.
 ''';
 
     return await _aiService.generate(prompt);
-  }
-
-  Future<void> saveAiRoute({
-    required String planId,
-    required Map<int, List<Map<String, String>>> aiSchedules,
-  }) async {
-    final batch = FirebaseFirestore.instance.batch();
-
-    aiSchedules.forEach((dayIndex, places) {
-      final dayRef = FirebaseFirestore.instance
-          .collection('plans')
-          .doc(planId)
-          .collection('ai_route') // 서브컬렉션 분리 저장
-          .doc('day_$dayIndex');
-
-      batch.set(dayRef, {'places': places});
-    });
-
-    await batch.commit();
   }
 }
