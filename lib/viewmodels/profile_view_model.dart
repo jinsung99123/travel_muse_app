@@ -178,7 +178,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   void resetNickname() {
-    state = const ProfileState(
+    state = state.copyWith(
       isNicknameValid: null,
       isNicknameDuplicate: null,
       nicknameMessage: _defaultNicknameMessage,
@@ -321,12 +321,19 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   void checkUpdateAvailable() {
     // 닉네임 확인
     if (state.isNicknameValid != true || state.isNicknameDuplicate == true) {
+      state = state.copyWith(canUpdateProfile: false);
       return;
     }
     // 생년월일 확인
-    if (state.isBirthDateValid != true) return;
+    if (state.isBirthDateValid != true) {
+      state = state.copyWith(canUpdateProfile: false);
+      return;
+    }
     // 성별 확인
-    if (state.isGenderValid != true) return;
+    if (state.isGenderValid != true) {
+      state = state.copyWith(canUpdateProfile: false);
+      return;
+    }
     state = state.copyWith(canUpdateProfile: true);
   }
 
