@@ -27,13 +27,19 @@ class NextButton extends StatelessWidget {
           height: 56,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: AppColors.primary[300],
+            color: isActivated ? AppColors.primary[300] : AppColors.grey[50],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
           ),
           child: Center(
-            child: Text(text, style: AppTextStyles.avaliableButtonText),
+            child: Text(
+              text,
+              style:
+                  isActivated
+                      ? AppTextStyles.avaliableButtonText
+                      : AppTextStyles.unavaliableButtonText,
+            ),
           ),
         ),
       ),

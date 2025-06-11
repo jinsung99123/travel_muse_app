@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/my_page/sheet/widgets/appbar_button.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
@@ -14,8 +13,6 @@ class EditProfileSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
-    final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
-    final nicknameController = nicknameViewmodel.nicknameController;
     final profileState = ref.watch(profileViewModelProvider);
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +36,7 @@ class EditProfileSheet extends ConsumerWidget {
               log('onpress');
               FocusScope.of(context).unfocus();
 
-              await nicknameViewmodel.updateNickname();
+              await profileViewmodel.updateNickname();
 
               if (profileState.temporaryImagePath != null) {
                 await profileViewmodel.updateProfileImage();
@@ -55,7 +52,7 @@ class EditProfileSheet extends ConsumerWidget {
             const SizedBox(height: 20),
             EditProfileImage(size: 120),
             const SizedBox(height: 20),
-            EditNickname(controller: nicknameViewmodel.nicknameController),
+            EditNickname(controller: profileViewmodel.nicknameController),
           ],
         ),
       ),

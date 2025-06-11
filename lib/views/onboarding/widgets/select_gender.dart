@@ -45,7 +45,6 @@ class SelectGender extends ConsumerWidget {
       child: GestureDetector(
         onTap: () {
           viewmodel.selectGender(value);
-          viewmodel.isGenderValid();
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

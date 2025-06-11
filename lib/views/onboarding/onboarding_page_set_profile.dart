@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
-import 'package:travel_muse_app/viewmodels/edit_nickname_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/terms_agreement_bottom_sheet.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/edit_birth_date.dart';
@@ -17,14 +15,10 @@ class OnboardingPageSetProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(profileViewModelProvider);
+    final profileViewModel = ref.read(profileViewModelProvider.notifier);
 
-    final nicknameViewmodel = ref.read(editNicknameViewModelProvider.notifier);
-    final nicknameController = nicknameViewmodel.nicknameController;
-
-    final birthDateViewmodel = ref.read(
-      editBirthDateViewModelProvider.notifier,
-    );
-    final birthDateController = birthDateViewmodel.birthDateController;
+    final nicknameController = profileViewModel.nicknameController;
+    final birthDateController = profileViewModel.birthDateController;
 
     bool canUpdate = profileState.canUpdateProfile;
 
@@ -59,15 +53,15 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     text: '다음',
                     isActivated: canUpdate,
                     onPressed: () {
-                      // TODO: 조건 만족하지 않는 경우 아예 비활성화되게 변경
-
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) {
-                          return const TermsAgreementBottomSheet();
-                        },
-                      );
+                      if (canUpdate) {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return const TermsAgreementBottomSheet();
+                          },
+                        );
+                      }
                     },
                   ),
                   SizedBox(height: 34),

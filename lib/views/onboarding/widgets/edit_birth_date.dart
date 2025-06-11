@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/viewmodels/edit_birth_date_view_model.dart';
+import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
 class EditBirthDate extends ConsumerWidget {
   const EditBirthDate({super.key, required this.controller});
@@ -12,7 +12,7 @@ class EditBirthDate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(editBirthDateViewModelProvider);
+    final state = ref.watch(profileViewModelProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -31,8 +31,8 @@ class EditBirthDate extends ConsumerWidget {
 
                 onChanged: (value) {
                   ref
-                      .read(editBirthDateViewModelProvider.notifier)
-                      .checkInputChanged(value);
+                      .read(profileViewModelProvider.notifier)
+                      .checkBirthDateChanged(value);
                 },
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
@@ -50,12 +50,12 @@ class EditBirthDate extends ConsumerWidget {
               ),
             ),
           ),
-          state.message != null
+          state.birthDateMessage != null
               ? SizedBox(
                 child: Text(
-                  state.message ?? '',
+                  state.birthDateMessage ?? '',
                   style:
-                      state.isValid == false
+                      state.isBirthDateValid == false
                           ? AppTextStyles.errorText
                           : AppTextStyles.helperText,
                 ),
