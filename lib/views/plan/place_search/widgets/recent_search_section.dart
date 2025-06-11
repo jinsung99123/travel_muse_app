@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/providers/resent_search_provider.dart';
+import 'package:travel_muse_app/providers/recent_search_provider.dart';
 
 class RecentSearchSection extends ConsumerWidget {
   const RecentSearchSection({

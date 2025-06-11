@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/providers/resent_search_provider.dart';
+import 'package:travel_muse_app/providers/recent_search_provider.dart';
 import 'package:travel_muse_app/providers/search_provider.dart';
 import 'package:travel_muse_app/views/plan/place_search/widgets/recent_search_section.dart';
 import 'package:travel_muse_app/views/plan/place_search/widgets/search_bar.dart';
