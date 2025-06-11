@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class AppTextStyles {
+  // 앱 타이틀
+  static const TextStyle appTitle = TextStyle(
+    color: AppColors.black,
+    fontSize: 36,
+    fontFamily: 'Ssangmun',
+    fontWeight: FontWeight.w700,
+  );
+
+  // 앱 서브타이틀
+  static const TextStyle appSubTitle = TextStyle(
+    color: AppColors.black,
+    fontSize: 20,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+  );
+
   // 온보딩 타이틀
   static const TextStyle onboardingTitle = TextStyle(
     color: AppColors.black,
