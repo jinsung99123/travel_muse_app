@@ -44,8 +44,6 @@ class AuthViewModel extends Notifier<AuthState> {
     await _authService.signOut();
     state = AuthState(); // 초기화
   }
-
-  // TODO: 로그인 성공 시 Home으로 or 온보딩으로 이동 조건 분기 메서드
 }
 
 final authViewModelProvider = NotifierProvider<AuthViewModel, AuthState>(

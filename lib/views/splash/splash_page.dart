@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/home/home_page.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key, required this.firstPagebyLoginState});
+
+  final Widget firstPagebyLoginState;
 
   @override
   State<SplashPage> createState() => _SplashScreenState();
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashPage> {
     Timer(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => widget.firstPagebyLoginState),
       );
     });
   }
