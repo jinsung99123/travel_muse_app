@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({
     required this.placeData,
     this.isSelected = false,
-    this.onTap, 
+    this.onTap,
     super.key,
   });
 
   final Map<String, String> placeData;
   final bool isSelected;
-  final VoidCallback? onTap; 
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,50 +21,84 @@ class PlaceCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: isSelected ? 10 : 4,
-        color: isSelected ? Colors.lightBlue[50] : Colors.white,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              imageUrl.isNotEmpty
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        imageUrl,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? AppColors.primary[400]! : AppColors.grey[300]!,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: isSelected ? 6 : 3,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            // 썸네일
+            ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
                     )
                   : Container(
-                      width: 100,
-                      height: 100,
-                      color: Colors.grey[300],
+                      width: 90,
+                      height: 90,
+                      color: Colors.grey.shade300,
                       child: const Icon(Icons.image_not_supported),
                     ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.blue : Colors.black,
-                      ),
+            ),
+            const SizedBox(width: 16),
+
+            // 텍스트들
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(height: 8),
-                    Text(address, style: TextStyle(color: Colors.grey[600])),
-                  ],
-                ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    address,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // 체크 아이콘
+            if (isSelected)
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: Icon(
+                  Icons.check_circle_outline,
+                  color: AppColors.secondary[300],
+                  size: 24,
+                               ),
+               ),
+          ],
         ),
       ),
     );

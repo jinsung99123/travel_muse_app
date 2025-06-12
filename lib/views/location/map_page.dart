@@ -6,6 +6,7 @@ import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/viewmodels/map_view_model.dart';
 import 'package:travel_muse_app/views/location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/location/widgets/map_display.dart';
+import 'package:travel_muse_app/views/location/widgets/map_page_app_bar.dart';
 import 'package:travel_muse_app/views/location/widgets/place_carousel.dart';
 
 class MapPage extends ConsumerStatefulWidget {
@@ -118,24 +119,7 @@ class _MapPageState extends ConsumerState<MapPage>
     );
     final displayDayTabs = dayKeys.map(getDisplayDayTab).toList();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              mapState.title ?? '여행 계획',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            if (mapState.date != null)
-              Text(
-                mapState.date!,
-                style: const TextStyle(fontSize: 14, color: Colors.white70),
-              ),
-          ],
-        ),
-      ),
+      appBar: MapPageAppBar(),
       body: Column(
         children: [
           Expanded(
@@ -155,7 +139,7 @@ class _MapPageState extends ConsumerState<MapPage>
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.28,
+            height: screenHeight * 0.25,
             child: Column(
               children: [
                 DayTabBar(controller: _tabController!, days: displayDayTabs),

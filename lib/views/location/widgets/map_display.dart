@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class MapDisplay extends StatelessWidget {
   const MapDisplay({
@@ -29,12 +30,18 @@ class MapDisplay extends StatelessWidget {
       polylines: {
         if (points.length >= 2)
           Polyline(
-            polylineId: const PolylineId('route'),
+            polylineId: PolylineId('route'),
             points: points,
-            color: Colors.red,
-            width: 3,
+            color: AppColors.secondary[400]!,       
+            width: 2,
+            patterns: [
+              PatternItem.dash(20),        
+              PatternItem.gap(10),                  
+            ],
+            jointType: JointType.round,       
           ),
       },
+
       onMapCreated: onMapCreated,
     );
   }
