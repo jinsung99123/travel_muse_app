@@ -10,4 +10,9 @@ class AiService {
     final result = await _model.generateContent([Content.text(prompt)]);
     return result.text?.trim() ?? '';
   }
+
+  Future<String> generate(String prompt) async {
+    final result = await _model.generateContent([Content.text(prompt)]);
+    return result.text?.trim() ?? '';
+  }
 }

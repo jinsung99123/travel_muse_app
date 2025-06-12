@@ -30,12 +30,23 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<List<Plans>>> {
     );
   }
 
-  /// daySchedules 저장
+  /// daySchedules 수동 입력 저장용
   Future<void> saveDaySchedules({
     required String planId,
     required Map<int, List<Map<String, String>>> daySchedules,
   }) async {
-    await _repository.saveDaySchedules(planId: planId, daySchedules: daySchedules);
+    await _repository.saveDaySchedules(
+      planId: planId,
+      daySchedules: daySchedules,
+    );
+  }
+
+  /// AI 추천 일정 저장용
+  Future<void> saveAiSchedules({
+    required String planId,
+    required Map<int, List<Map<String, String>>> daySchedules,
+  }) async {
+    await _repository.saveAiRoute(planId: planId, aiSchedules: daySchedules);
   }
 
   /// route 불러오기
