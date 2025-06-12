@@ -3,6 +3,7 @@ import 'package:travel_muse_app/utills/latlng_helper.dart';
 
 Set<Marker> createMarkers({
   required List<Map<String, dynamic>> places,
+    required BitmapDescriptor icon,
   required Function(Map<String, dynamic>) onTap,
   required Function(int) onPageChanged,
   required Function(int) animateToPage,
@@ -15,6 +16,7 @@ Set<Marker> createMarkers({
 
     return Marker(
       markerId: MarkerId(place['id'] ?? '${latLng.latitude}_${latLng.longitude}_${place['title']}'),
+      icon: icon, 
       position: latLng,
       infoWindow: InfoWindow(title: '${index + 1}. ${place['title'] ?? ''}'),
       onTap: () {
