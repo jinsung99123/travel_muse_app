@@ -1,11 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/calendar_model.dart';
-import 'package:travel_muse_app/providers/calendar_repository_provider.dart';
 
 class CalendarViewModel extends StateNotifier<CalendarState> {
-  CalendarViewModel(this.ref)
-    : super(CalendarState(focusedDay: DateTime.now()));
-  final Ref ref;
+  CalendarViewModel() : super(CalendarState(focusedDay: DateTime.now()));
 
   void selectDay(DateTime selectedDay, DateTime newFocusedDay) {
     if (state.startDay == null ||
@@ -47,21 +44,5 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
         state.endDay != null &&
         day.isAfter(state.startDay!) &&
         day.isBefore(state.endDay!);
-  }
-
-  Future<void> saveTravelPlan(String planId) async {
-    final start = state.startDay;
-    final end = state.endDay;
-
-    if (start != null && end != null) {
-      final repo = ref.read(calendarRepositoryProvider);
-      await repo.updatePlanDates(
-        planId: planId,
-        startDate: start,
-        endDate: end,
-      );
-    } else {
-      throw Exception("날짜가 선택되지 않았습니다.");
-    }
   }
 }
