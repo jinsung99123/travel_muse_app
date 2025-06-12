@@ -1,72 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_restaurant_detail_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/providers/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_restaurant_list_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_carousel.dart';
 
-class RecommendedRestaurantsList extends StatelessWidget {
+class RecommendedRestaurantsList extends ConsumerWidget {
   const RecommendedRestaurantsList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<_RestaurantCardData> restaurants = [
-      _RestaurantCardData(title: '부산', imageUrl: 'assets/images/image21.png'),
-      _RestaurantCardData(title: '서울', imageUrl: 'assets/images/image22.png'),
-      _RestaurantCardData(title: '전주', imageUrl: 'assets/images/image24.png'),
-      _RestaurantCardData(title: '대구', imageUrl: 'assets/images/image25.png'),
-      _RestaurantCardData(title: '속초', imageUrl: 'assets/images/image26.png'),
-      _RestaurantCardData(title: '제천', imageUrl: 'assets/images/image27.png'),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeAsync = ref.watch(homeViewModelProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 110,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: restaurants.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final restaurant = restaurants[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RecommendedRestaurantDetailPage(),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    ClipOval(
-                      child: Image.asset(
-                        restaurant.imageUrl,
-                        width: 56,
-                        height: 56,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    SizedBox(
-                      width: 56,
-                      child: Text(
-                        restaurant.title,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+        homeAsync.when(
+          loading: () => const SizedBox(
+            height: 170,
+            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
           ),
+          error: (_, __) => const SizedBox(
+            height: 170,
+            child: Center(child: Text('추천 맛집을 불러오지 못했어요')),
+          ),
+          data: (state) => state.foods.isEmpty
+              ? const SizedBox(
+                  height: 170,
+                  child: Center(child: Text('근처 추천 맛집이 없어요')),
+                )
+              : RecommendedCarousel(places: state.foods),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 8, right: 16),
@@ -87,6 +49,7 @@ class RecommendedRestaurantsList extends StatelessWidget {
                   fontSize: 14,
                   color: Color(0xFF48CDFD),
                   fontWeight: FontWeight.w500,
+                  fontFamily: 'Pretendard',
                 ),
               ),
             ),
@@ -95,10 +58,4 @@ class RecommendedRestaurantsList extends StatelessWidget {
       ],
     );
   }
-}
-
-class _RestaurantCardData {
-  _RestaurantCardData({required this.title, required this.imageUrl});
-  final String title;
-  final String imageUrl;
 }
