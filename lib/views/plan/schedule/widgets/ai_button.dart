@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/repositories/plan_repository.dart';
+import 'package:travel_muse_app/repositories/schedule_repository.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ai_type_select_popup.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ground_circle_icon.dart';
 
@@ -35,7 +36,7 @@ class AiButton extends StatelessWidget {
 
                   final parsed = _parseAiPlan(aiPlan);
 
-                  await PlanRepository().saveAiRoute(
+                  await ScheduleRepository().saveAiRoute(
                     planId: planId,
                     aiSchedules: parsed,
                   );
