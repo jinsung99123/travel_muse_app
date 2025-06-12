@@ -1,0 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class CalendarLocationRepository {
+  CalendarLocationRepository({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
+
+  final FirebaseFirestore _firestore;
+
+  Future<void> savePlan({
+    required String planId,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String region,
+  }) async {
+    final duration = endDate.difference(startDate).inDays + 1;
+
+    await _firestore.collection('plans').doc(planId).set({
+      'startDate': Timestamp.fromDate(startDate),
+      'endDate': Timestamp.fromDate(endDate),
+      'duration': duration,
+      'region': region,
+    }, SetOptions(merge: true));
+  }
+}
