@@ -21,4 +21,24 @@ class CalendarLocationRepository {
       'region': region,
     }, SetOptions(merge: true));
   }
+
+  Future<String> createAndSavePlan({
+    required DateTime startDate,
+    required DateTime endDate,
+    required String region,
+  }) async {
+    final duration = endDate.difference(startDate).inDays + 1;
+
+    final docRef = _firestore.collection('plans').doc();
+    final planId = docRef.id;
+
+    await docRef.set({
+      'startDate': Timestamp.fromDate(startDate),
+      'endDate': Timestamp.fromDate(endDate),
+      'duration': duration,
+      'region': region,
+    });
+
+    return planId;
+  }
 }
