@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/calendar_locaion_provider.dart';
+import 'package:travel_muse_app/providers/calendar_location_provider.dart';
 
 class PlanState {
   PlanState({this.startDate, this.endDate, this.region});
@@ -70,5 +70,9 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     );
 
     return planId;
+  }
+
+  void setDateRange(DateTime start, DateTime end) {
+    state = state.copyWith(startDate: start, endDate: end);
   }
 }

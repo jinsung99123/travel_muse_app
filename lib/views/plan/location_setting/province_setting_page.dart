@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/region_data.dart';
-import 'package:travel_muse_app/providers/calendar_locaion_provider.dart';
+import 'package:travel_muse_app/providers/calendar_location_provider.dart';
 import 'package:travel_muse_app/views/plan/location_setting/district_setting_page.dart';
 import 'package:travel_muse_app/views/plan/location_setting/widgets/province_box_list.dart';
 

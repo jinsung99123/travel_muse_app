@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/region_data.dart';
-import 'package:travel_muse_app/providers/calendar_locaion_provider.dart';
+import 'package:travel_muse_app/providers/calendar_location_provider.dart';
+import 'package:travel_muse_app/providers/calendar_provider.dart';
 import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
@@ -33,6 +34,8 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0.5,
       ),
       body: SafeArea(
         child: Padding(
@@ -76,25 +79,42 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
                           ? null
                           : () async {
                             final selectedDistrict = districts[selectedIndex!];
-                            final viewModel = ref.read(
+
+                            final calendarState = ref.read(
+                              calendarViewModelProvider,
+                            );
+                            final locationViewModel = ref.read(
                               calendarLocationViewModelProvider.notifier,
                             );
-                            // 시/도 + 시/군/구 조합 저장
-                            viewModel.setRegion(
-                              '${widget.selectedProvince} ${selectedDistrict}',
+
+                            locationViewModel.setRegion(
+                              '${widget.selectedProvince} $selectedDistrict',
                             );
 
-                            // 저장 처리
+                            if (calendarState.startDay != null &&
+                                calendarState.endDay != null) {
+                              locationViewModel.setDateRange(
+                                calendarState.startDay!,
+                                calendarState.endDay!,
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('날짜를 먼저 선택해주세요')),
+                              );
+                              return;
+                            }
+
                             try {
-                              await viewModel.savePlan('your_plan_id_here');
+                              final planId =
+                                  await locationViewModel.createAndSavePlan();
                               if (context.mounted) {
                                 await Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder:
-                                        (_) => const SchedulePage(
-                                          userId: '',
-                                          planId: '',
+                                        (_) => SchedulePage(
+                                          userId: '', // 필요 시 설정
+                                          planId: planId,
                                         ),
                                   ),
                                 );
