@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/repositories/plan_repository.dart';
 import 'package:travel_muse_app/repositories/schedule_repository.dart';
+import 'package:travel_muse_app/utills/ai_route_helper.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ai_type_select_popup.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ground_circle_icon.dart';
 
@@ -28,6 +29,7 @@ class AiButton extends StatelessWidget {
               (_) => AiTypeSelectPopup(
                 onComplete: (selectedTest) async {
                   final typeCode = selectedTest;
+                  /*
                   final aiPlan = await PlanRepository().getOptimizedPlanFromAI(
                     days: days,
                     region: region,
@@ -42,6 +44,14 @@ class AiButton extends StatelessWidget {
                   );
 
                   onResult(parsed);
+                  */
+                  await generateAndSaveEnrichedAiRoute(
+                    planId: planId,
+                    days: days,
+                    region: region,
+                    typeCode: typeCode,
+                    onResult: onResult,
+                  );
                 },
               ),
         );
