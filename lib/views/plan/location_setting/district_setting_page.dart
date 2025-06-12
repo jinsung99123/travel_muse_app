@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/core/region_data.dart';
 import 'package:travel_muse_app/providers/calendar_locaion_provider.dart';
 import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_list.dart';
-
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class DistrictSettingPage extends ConsumerStatefulWidget {
-  final String selectedProvince;
-
   const DistrictSettingPage({super.key, required this.selectedProvince});
+  final String selectedProvince;
 
   @override
   _DistrictSettingPageState createState() => _DistrictSettingPageState();
@@ -21,18 +20,7 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
   @override
   void initState() {
     super.initState();
-    // 예시: 선택된 시/도에 따른 시/군/구 리스트 분기 처리
-    switch (widget.selectedProvince) {
-      case '서울':
-        districts = ['강남구', '서초구', '송파구', '마포구', '용산구'];
-        break;
-      case '부산':
-        districts = ['해운대구', '수영구', '동래구', '부산진구'];
-        break;
-      // 기타 지역 추가
-      default:
-        districts = ['지역 없음'];
-    }
+    districts = districtsByProvince[widget.selectedProvince] ?? ['지역 없음'];
   }
 
   @override
