@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:travel_muse_app/models/app_user_model.dart';
 
 class AppUserRepository {
   final _firestore = FirebaseFirestore.instance;
@@ -23,6 +24,18 @@ class AppUserRepository {
         'gender': null,
       });
     }
+  }
+
+  // 데이터베이스에서 유저 정보 get
+  Future<AppUser?> fetchLatestAppUser(String uid) async {
+    final doc =
+        await FirebaseFirestore.instance.collection('AppUsers').doc(uid).get();
+    if (doc.data() == null) {
+      return null;
+      // TODO: 뷰모델에서 유저 정보 없는 경우 처리
+      // '세션이 만료되었습니다. 다시 로그인해 주세요.' - 강제 로그아웃, 재로그인 유도
+    }
+    return AppUser.fromJson(doc.data()!);
   }
 
   // 유저 닉네임 중복확인

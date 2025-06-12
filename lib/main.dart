@@ -25,7 +25,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
       ),
-      home: StreamBuilder<User?>(
+      home:
+      // 로그인 상태에 따라 로그인/홈 분기
+      StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           final user = snapshot.data;
