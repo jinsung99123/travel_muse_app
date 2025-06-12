@@ -14,11 +14,13 @@ class CalendarPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '여행 일정 등록',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Padding(
@@ -50,15 +52,18 @@ class CalendarPage extends ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(
                   itemCount: 12,
                   itemBuilder: (context, index) {
-                    final focusedMonth = DateTime(
-                      state.focusedDay.year,
-                      state.focusedDay.month + index,
-                    );
+                    final year =
+                        state.focusedDay.year +
+                        ((state.focusedDay.month + index - 1) ~/ 12);
+                    final month =
+                        ((state.focusedDay.month + index - 1) % 12) + 1;
+
+                    final focusedMonth = DateTime(year, month);
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
@@ -72,7 +77,6 @@ class CalendarPage extends ConsumerWidget {
                   },
                 ),
               ),
-
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -87,7 +91,7 @@ class CalendarPage extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProvinceSettingPage(),
+                        builder: (context) => const ProvinceSettingPage(),
                       ),
                     );
                   },
