@@ -21,7 +21,10 @@ class AuthViewModel extends Notifier<AuthState> {
   final _appUserRepository = AppUserRepository();
 
   @override
-  AuthState build() => AuthState();
+  AuthState build() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    return AuthState(user: currentUser);
+  }
 
   // 성공 시 상태 갱신, 실패 시 log 출력
   Future<void> loginWithGoogle() async {
