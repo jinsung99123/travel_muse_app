@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ScheduleBottomButtons extends StatelessWidget {
-  const ScheduleBottomButtons({super.key, 
-  // required this.onEditTap
-  });
+  const ScheduleBottomButtons({super.key, required this.onEditTap});
 
-  // final VoidCallback onEditTap;
+  final VoidCallback onEditTap;
 
   static const _blueGrad = LinearGradient(
     colors: [Color(0xFF42A5FF), Color(0xFF67C5FF)],
@@ -18,7 +16,7 @@ class ScheduleBottomButtons extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: GestureDetector(
-        // onTap: onEditTap,
+        onTap: onEditTap,
         child: Container(
           height: 48,
           width: double.infinity,

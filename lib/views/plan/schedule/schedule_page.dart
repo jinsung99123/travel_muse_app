@@ -54,7 +54,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Future<void> _addPlace(int dayIndex) async {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
-      MaterialPageRoute(builder: (_) =>  PlaceSearchPage(planId:widget.planId,)),
+      MaterialPageRoute(builder: (_) => PlaceSearchPage(planId: widget.planId)),
     );
 
     if (selectedPlaces != null && selectedPlaces.isNotEmpty) {
@@ -198,7 +198,19 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                       );
                 },
               ),
-      bottomNavigationBar: ScheduleBottomButtons(),
+      bottomNavigationBar: ScheduleBottomButtons(
+        onEditTap: () async {
+          await ref
+              .read(scheduleViewModelProvider.notifier)
+              .saveDaySchedules(
+                planId: widget.planId,
+                daySchedules: daySchedules,
+              );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
+        },
+      ),
     );
   }
 
@@ -207,4 +219,3 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     return days[weekday - 1];
   }
 }
-
