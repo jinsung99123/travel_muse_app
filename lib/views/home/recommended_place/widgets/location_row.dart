@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/models/home_place.dart';
 
 class LocationRow extends StatelessWidget {
-  const LocationRow({super.key});
+  const LocationRow({super.key, required this.place});
+
+  final HomePlace place;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Icon(Icons.location_on, color: Colors.grey, size: 18),
-        SizedBox(width: 4),
-        Text('경기 양평군 양서면', style: TextStyle(color: Colors.grey)),
+        const Icon(Icons.location_on, color: Colors.grey, size: 18),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            place.subtitle,
+            style: const TextStyle(color: Colors.grey),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }

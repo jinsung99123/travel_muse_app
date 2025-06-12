@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/models/home_place.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlaceInfoSection extends StatelessWidget {
-  const PlaceInfoSection({super.key});
+  const PlaceInfoSection({super.key, required this.place});
+
+  final HomePlace place;
 
   @override
   Widget build(BuildContext context) {
@@ -11,17 +14,20 @@ class PlaceInfoSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('주소: 경기도 양평군 양서면 양수리 105-1', style: theme.bodyMedium),
+        if (place.subtitle.isNotEmpty)
+          Text('주소: ${place.subtitle}', style: theme.bodyMedium),
         const SizedBox(height: 4),
-        Text('전화: 031-770-1001', style: theme.bodyMedium),
+        if (place.phone != null && place.phone!.isNotEmpty)
+          Text('전화: ${place.phone}', style: theme.bodyMedium),
         const SizedBox(height: 4),
-        GestureDetector(
-          onTap: () => launchUrl(Uri.parse('https://www.yp21.go.kr')),
-          child: const Text(
-            '홈페이지: www.yp21.go.kr',
-            style: TextStyle(color: Colors.blue),
+        if (place.placeUrl != null && place.placeUrl!.isNotEmpty)
+          GestureDetector(
+            onTap: () => launchUrl(Uri.parse(place.placeUrl!)),
+            child: Text(
+              '홈페이지: ${place.placeUrl}',
+              style: const TextStyle(color: Colors.blue),
+            ),
           ),
-        ),
       ],
     );
   }
