@@ -2,36 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/map_state.dart';
-import 'package:travel_muse_app/models/plans.dart';
 import 'package:travel_muse_app/repositories/map_repository.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
-import 'package:travel_muse_app/utills/map_utils.dart';
+import 'package:travel_muse_app/utills/map_utils.dart';      
+import 'package:travel_muse_app/utills/marker_helper.dart';  
 
 class MapViewModel extends StateNotifier<MapState> {
-  MapViewModel(this._repository) : super(MapState(dayPlaces: {}));
+  MapViewModel(this._repository) : super(MapState(dayPlaces: {})) {
+    _loadAssets();                              
+  }
 
   final MapRepository _repository;
 
-  final Map<String, PageController> pageControllers = {};
-  Plans? planInfo;
+  late final BitmapDescriptor _pinIcon;
+  bool _iconReady = false;
+
+  Future<void> _loadAssets() async {
+    _pinIcon = await bitmapDescriptorFromSvgAsset(
+      'assets/icons/map_pin.svg',                   
+    );
+    _iconReady = true;
+    state = state.copyWith();                             
+  }
+
+  BitmapDescriptor get _currentIcon =>
+      _iconReady ? _pinIcon : BitmapDescriptor.defaultMarker;
 
   Future<void> loadPlanAndRoute(String planId, TickerProvider vsync) async {
     try {
-      final planData = await _repository.getPlan(planId);
-      if (planData == null) return;
-
-      planInfo = Plans.fromJson(planId, planData);
-
-      final title = planInfo?.title ?? '';
-      final date = _formatDateRange(planInfo!.startDate, planInfo!.endDate);
-
       final loadedDayPlaces = await _repository.getRouteByDay(planId);
-
-      state = state.copyWith(
-        dayPlaces: loadedDayPlaces,
-        title: title,
-        date: date,
-      );
+      state = state.copyWith(dayPlaces: loadedDayPlaces);
 
       if (loadedDayPlaces.isNotEmpty) {
         final firstDay = loadedDayPlaces.entries.first;
@@ -40,64 +40,46 @@ class MapViewModel extends StateNotifier<MapState> {
         }
       }
     } catch (e) {
-      print('❌ loadPlanAndRoute 실패: $e');
+      debugPrint('❌ loadPlanAndRoute 실패: $e');
     }
   }
 
-  String _formatDateRange(DateTime start, DateTime end) {
-    String format(DateTime date) =>
-        '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
-    return '${format(start)} ~ ${format(end)}';
-  }
+  void selectPlace(Map<String, dynamic> place) =>
+      state = state.copyWith(selectedPlace: place);
 
-  void selectPlace(Map<String,dynamic> place) {
-    state = state.copyWith(selectedPlace: place);
-  }
+  void clearSelectedPlace() =>
+      state = state.copyWith(selectedPlace: null);
 
-  void clearSelectedPlace() {
-    state = state.copyWith(selectedPlace: null);
-  }
+  final Map<String, PageController> _pageControllers = {};
 
-  PageController getPageController(String dayKey) {
-    return pageControllers.putIfAbsent(
-      dayKey,
-      () => PageController(viewportFraction: 0.85),
-    );
-  }
-
-  List<LatLng> extractLatLngs(List<Map<String, dynamic>> places) {
-    return places.map((p) => parseLatLng(p)).whereType<LatLng>().toList();
-  }
-
-  LatLngBounds createLatLngBounds(List<LatLng> latLngs) {
-    final southwestLat = latLngs
-        .map((l) => l.latitude)
-        .reduce((a, b) => a < b ? a : b);
-    final southwestLng = latLngs
-        .map((l) => l.longitude)
-        .reduce((a, b) => a < b ? a : b);
-    final northeastLat = latLngs
-        .map((l) => l.latitude)
-        .reduce((a, b) => a > b ? a : b);
-    final northeastLng = latLngs
-        .map((l) => l.longitude)
-        .reduce((a, b) => a > b ? a : b);
-    return LatLngBounds(
-      southwest: LatLng(southwestLat, southwestLng),
-      northeast: LatLng(northeastLat, northeastLng),
-    );
-  }
-
-  LatLng? getInitialLatLng(List<Map<String, dynamic>> places) {
-    if (places.isEmpty) return null;
-    return parseLatLng(places.first);
-  }
+  PageController getPageController(String dayKey) =>
+      _pageControllers.putIfAbsent(
+        dayKey,
+        () => PageController(viewportFraction: 1),
+      );
 
   void disposeControllers() {
-    for (final controller in pageControllers.values) {
-      controller.dispose();
+    for (final ctrl in _pageControllers.values) {
+      ctrl.dispose();
     }
   }
+
+  List<LatLng> extractLatLngs(List<Map<String, dynamic>> places) =>
+      places.map(parseLatLng).whereType<LatLng>().toList();
+
+  LatLngBounds createLatLngBounds(List<LatLng> latLngs) {
+    final swLat = latLngs.map((e) => e.latitude).reduce((a, b) => a < b ? a : b);
+    final swLng = latLngs.map((e) => e.longitude).reduce((a, b) => a < b ? a : b);
+    final neLat = latLngs.map((e) => e.latitude).reduce((a, b) => a > b ? a : b);
+    final neLng = latLngs.map((e) => e.longitude).reduce((a, b) => a > b ? a : b);
+    return LatLngBounds(
+      southwest: LatLng(swLat, swLng),
+      northeast: LatLng(neLat, neLng),
+    );
+  }
+
+  LatLng? getInitialLatLng(List<Map<String, dynamic>> places) =>
+      places.isEmpty ? null : parseLatLng(places.first);
 
   void moveCameraToFitAll(
     GoogleMapController? mapController,
@@ -106,8 +88,9 @@ class MapViewModel extends StateNotifier<MapState> {
     final latLngs = extractLatLngs(places);
 
     if (latLngs.length >= 2) {
-      final bounds = createLatLngBounds(latLngs);
-      mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 100));
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngBounds(createLatLngBounds(latLngs), 100),
+      );
     } else if (latLngs.isNotEmpty) {
       mapController?.animateCamera(
         CameraUpdate.newLatLngZoom(latLngs.first, 14),
@@ -117,21 +100,20 @@ class MapViewModel extends StateNotifier<MapState> {
 
   Set<Marker> getMarkers({
     required List<Map<String, dynamic>> places,
-    required String selectedDayKey,
+    required String selectedDayKey,                     
     required Function(Map<String, dynamic>) onTap,
     required Function(int) onPageChanged,
   }) {
     return createMarkers(
       places: places,
+      icon: _currentIcon,                             
       onTap: onTap,
       onPageChanged: onPageChanged,
-      animateToPage: (idx) {
-        getPageController(selectedDayKey).animateToPage(
-          idx,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      },
+      animateToPage: (idx) => getPageController(selectedDayKey).animateToPage(
+        idx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ),
     );
   }
 }
