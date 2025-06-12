@@ -113,7 +113,7 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
                                   MaterialPageRoute(
                                     builder:
                                         (_) => SchedulePage(
-                                          userId: '', // 필요 시 설정
+                                          userId: '',
                                           planId: planId,
                                         ),
                                   ),
