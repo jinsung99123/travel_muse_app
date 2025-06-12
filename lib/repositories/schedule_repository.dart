@@ -40,6 +40,7 @@ class ScheduleRepository {
     await batch.commit();
   }
 
+  /// 전체 AI 추천 일정 저장
   Future<void> saveAiRoute({
     required String planId,
     required Map<int, List<Map<String, String>>> aiSchedules,
@@ -57,6 +58,63 @@ class ScheduleRepository {
     });
 
     await batch.commit();
+  }
+
+  /// 특정 날짜 AI 추천 일정 수정
+  Future<void> updateAiRoute({
+    required String planId,
+    required int dayIndex,
+    required List<Map<String, String>> updatedPlaces,
+  }) async {
+    final dayRef = FirebaseFirestore.instance
+        .collection('plans')
+        .doc(planId)
+        .collection('ai_route')
+        .doc('day_$dayIndex');
+
+    await dayRef.update({'places': updatedPlaces});
+  }
+
+  /// 특정 날짜 AI 추천 일정 삭제
+  Future<void> deleteAiRoute({
+    required String planId,
+    required int dayIndex,
+  }) async {
+    final dayRef = FirebaseFirestore.instance
+        .collection('plans')
+        .doc(planId)
+        .collection('ai_route')
+        .doc('day_$dayIndex');
+
+    await dayRef.delete();
+  }
+
+  /// AI 추천 일정(ai_route) 불러오기
+  Future<Map<int, List<Map<String, String>>>> fetchAiRoute(
+    String planId,
+  ) async {
+    final snapshot =
+        await FirebaseFirestore.instance
+            .collection('plans')
+            .doc(planId)
+            .collection('ai_route')
+            .get();
+
+    final Map<int, List<Map<String, String>>> result = {};
+
+    for (var doc in snapshot.docs) {
+      final key = doc.id.replaceFirst('day_', '');
+      final day = int.tryParse(key);
+      if (day != null) {
+        final List<dynamic> places = doc.data()['places'] ?? [];
+        result[day] =
+            places
+                .map<Map<String, String>>((e) => Map<String, String>.from(e))
+                .toList();
+      }
+    }
+
+    return result;
   }
 
   Future<Map<int, List<Map<String, String>>>> fetchRoute(String planId) async {
