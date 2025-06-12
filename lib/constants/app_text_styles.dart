@@ -78,6 +78,15 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
   );
 
+  // 버튼 확인완료 텍스트
+  static TextStyle alreadyCheckedButtonText = TextStyle(
+    color: AppColors.primary[500],
+    fontSize: 18,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w600,
+    height: 1.50,
+  );
+
   // 온보딩 젠더박스 선택 텍스트
   static TextStyle selectedBoxText = TextStyle(
     color: AppColors.primary[500],

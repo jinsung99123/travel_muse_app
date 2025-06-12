@@ -14,57 +14,73 @@ class ProfileState {
   const ProfileState({
     this.profileImageUrl,
     this.temporaryImagePath,
+    this.currentNickname,
+    this.nicknameInput,
     this.isNicknameValid,
     this.nicknameMessage,
-    this.canCheckNickname = false,
     this.isNicknameDuplicate,
+    this.buttonState = '확인 불가',
+    this.birthDateInput,
     this.isBirthDateValid,
     this.birthDateMessage,
     this.canCheckBirthDate = false,
     this.gender,
     this.isGenderValid,
     this.canUpdateProfile = false,
+    this.canEditProfile = false,
   });
   final String? profileImageUrl;
   final String? temporaryImagePath;
+  final String? currentNickname;
+  final String? nicknameInput;
   final bool? isNicknameValid;
   final String? nicknameMessage;
-  final bool canCheckNickname;
   final bool? isNicknameDuplicate;
+  final String buttonState;
+  final String? birthDateInput;
   final bool? isBirthDateValid;
   final String? birthDateMessage;
   final bool canCheckBirthDate;
   final String? gender;
   final bool? isGenderValid;
   final bool canUpdateProfile;
+  final bool canEditProfile;
 
   ProfileState copyWith({
     String? profileImageUrl,
     String? temporaryImagePath,
+    String? currentNickname,
+    String? nicknameInput,
     bool? isNicknameValid,
     String? nicknameMessage,
-    bool? canCheckNickname,
     bool? isNicknameDuplicate,
+    String? buttonState,
+    String? birthDateInput,
     bool? isBirthDateValid,
     String? birthDateMessage,
     bool? canCheckBirthDate,
     String? gender,
     bool? isGenderValid,
     bool? canUpdateProfile,
+    bool? canEditProfile,
   }) {
     return ProfileState(
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       temporaryImagePath: temporaryImagePath ?? this.temporaryImagePath,
+      currentNickname: currentNickname ?? this.currentNickname,
+      nicknameInput: nicknameInput ?? this.nicknameInput,
       isNicknameValid: isNicknameValid ?? this.isNicknameValid,
       nicknameMessage: nicknameMessage ?? this.nicknameMessage,
-      canCheckNickname: canCheckNickname ?? this.canCheckNickname,
       isNicknameDuplicate: isNicknameDuplicate ?? this.isNicknameDuplicate,
+      buttonState: buttonState ?? this.buttonState,
+      birthDateInput: birthDateInput ?? this.birthDateInput,
       isBirthDateValid: isBirthDateValid ?? this.isBirthDateValid,
       birthDateMessage: birthDateMessage ?? this.birthDateMessage,
       canCheckBirthDate: canCheckBirthDate ?? this.canCheckBirthDate,
       gender: gender ?? this.gender,
       isGenderValid: isGenderValid ?? this.isGenderValid,
       canUpdateProfile: canUpdateProfile ?? this.canUpdateProfile,
+      canEditProfile: canEditProfile ?? this.canEditProfile,
     );
   }
 }
@@ -82,8 +98,20 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final nicknameController = TextEditingController();
   final birthDateController = TextEditingController();
 
+  Future<void> loadUserData() async {
+    if (currentUser != null) {
+      log('currentUSer != null');
+      final appUser = await appUserRepo.fetchLatestAppUser(currentUser!.uid);
+      if (appUser != null) {
+        state = state.copyWith(currentNickname: appUser.nickname);
+        log('appUser != null');
+      }
+    }
+  }
+
   @override
   ProfileState build() {
+    loadUserData();
     return ProfileState(
       nicknameMessage: _defaultNicknameMessage,
       birthDateMessage: _defaultBirthDateMessage,
@@ -117,6 +145,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
     log('이미지 저장 성공 : $localImagePath ');
     state = state.copyWith(temporaryImagePath: localImagePath);
+    checkEditAvailable();
   }
 
   // 프로필 이미지 업데이트
@@ -172,9 +201,15 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     if (state.isNicknameValid != null) {
       resetNickname();
     }
-    // 중복 확인 가능한지 확인
-    final isBlank = value.trim().isEmpty;
-    state = state.copyWith(canCheckNickname: !isBlank);
+    state = state.copyWith(nicknameInput: value);
+    if (state.nicknameInput != null && state.nicknameInput!.isNotEmpty) {
+      state = state.copyWith(buttonState: '확인 필요');
+    }
+    if (state.nicknameInput != null) {
+      if (state.nicknameInput!.isEmpty) {
+        state = state.copyWith(buttonState: '확인 불가');
+      }
+    }
   }
 
   void resetNickname() {
@@ -186,8 +221,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   // validator 실행
-  void validateNickname(String value) {
-    final nicknameErrorText = Validators.validateNickname(value);
+  void validateNickname() {
+    final nicknameErrorText = Validators.validateNickname(state.nicknameInput);
     if (nicknameErrorText != null) {
       state = state.copyWith(
         isNicknameValid: false,
@@ -199,12 +234,16 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   // 중복 확인
-  Future<void> isNicknameDuplicate(String nickname) async {
+  Future<void> isNicknameDuplicate() async {
     if (state.isNicknameDuplicate == null) {
       state = state.copyWith(nicknameMessage: null);
     }
+    if (state.nicknameInput == null) return;
+
     try {
-      final checkIsDuplicate = await appUserRepo.isNicknameDuplicate(nickname);
+      final checkIsDuplicate = await appUserRepo.isNicknameDuplicate(
+        state.nicknameInput!,
+      );
       state = state.copyWith(isNicknameDuplicate: checkIsDuplicate);
       if (checkIsDuplicate) {
         state = state.copyWith(
@@ -224,14 +263,16 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   // 닉네임 사용 가능 여부 확인
-  Future<bool> checkCanUseNickname(String nickname) async {
-    validateNickname(nickname);
+  Future<bool> checkCanUseNickname() async {
+    if (state.nicknameInput == null) return false;
+    validateNickname();
     if (state.isNicknameValid == null) return false;
     if (!state.isNicknameValid!) return false;
-    await isNicknameDuplicate(nickname);
+    await isNicknameDuplicate();
     if (state.isNicknameDuplicate == null) return false;
     if (state.isNicknameDuplicate!) return false;
-
+    state = state.copyWith(buttonState: '확인 완료');
+    checkEditAvailable();
     return true;
   }
 
@@ -274,16 +315,17 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       );
     }
     final isBlank = value.trim().isEmpty;
-    state = state.copyWith(canCheckBirthDate: !isBlank);
+    state = state.copyWith(canCheckBirthDate: !isBlank, birthDateInput: value);
 
     if (state.canCheckBirthDate) {
-      validateBirthDate(value);
+      validateBirthDate();
     }
   }
 
   // validator 실행
-  void validateBirthDate(String value) {
-    final errorMessage = Validators.validateBirthDate(value);
+  void validateBirthDate() {
+    if (state.birthDateInput == null) return;
+    final errorMessage = Validators.validateBirthDate(state.birthDateInput);
     if (errorMessage != null) {
       state = state.copyWith(
         isBirthDateValid: false,
@@ -339,22 +381,30 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
   // 프로필 업데이트
   // 회원가입 시
-  Future<void> updateProfile(String nickname, String birthDate) async {
+  Future<void> updateProfile() async {
     if (currentUser == null) return;
+    if (state.nicknameInput == null) return;
+    if (state.birthDateInput == null) return;
 
     final uid = currentUser!.uid;
 
     try {
       // 프로필이미지 업데이트
-      if (temporaryImageUrl != null) {
+      if (state.temporaryImagePath != null) {
         await updateProfileImage();
       }
 
       // 닉네임 업데이트
-      await appUserRepo.updateNickname(uid: uid, nickname: nickname);
+      await appUserRepo.updateNickname(
+        uid: uid,
+        nickname: state.nicknameInput!,
+      );
 
       // 생년월일 업데이트
-      await appUserRepo.updateBirthDate(uid: uid, birthDate: birthDate);
+      await appUserRepo.updateBirthDate(
+        uid: uid,
+        birthDate: state.birthDateInput!,
+      );
 
       // 성별 업데이트
       await appUserRepo.updateGender(uid: uid, gender: state.gender!);
@@ -363,7 +413,36 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // TODO: 프로필 수정 (마이페이지 - 프로필 수정)
+  // 수정 가능 여부 확인
+  void checkEditAvailable() {
+    if (state.temporaryImagePath != null) {
+      state = state.copyWith(canEditProfile: true);
+    }
+    // 닉네임 확인
+    if (state.isNicknameValid == true && state.isNicknameDuplicate == false) {
+      state = state.copyWith(canEditProfile: true);
+    }
+  }
+
+  // 프로필 수정
+  // 마이페이지 - 프로필 수정
+  Future<void> editProfile() async {
+    if (currentUser == null) return;
+
+    final uid = currentUser!.uid;
+
+    // 프로필이미지 업데이트
+    if (state.temporaryImagePath != null) {
+      await updateProfileImage();
+    }
+    // 닉네임 업데이트
+    if (state.nicknameInput != null) {
+      await appUserRepo.updateNickname(
+        uid: uid,
+        nickname: state.nicknameInput!,
+      );
+    }
+  }
 }
 
 final profileViewModelProvider =

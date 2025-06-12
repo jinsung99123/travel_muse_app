@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 class Validators {
   // 닉네임
   static String? validateNickname(String? value) {
     if (value == null || value.trim().isEmpty) {
+      if (value != null) {
+        log('$value');
+      }
       return '닉네임을 입력해주세요';
     }
 
