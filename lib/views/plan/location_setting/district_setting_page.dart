@@ -108,7 +108,6 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
                             try {
                               final userId =
                                   ref.watch(authViewModelProvider).user?.uid;
-                              print('현재 로그인된 유저 아이디: $userId');
 
                               if (userId == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(

@@ -51,7 +51,7 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
       startDate: start,
       endDate: end,
       region: region,
-      userId: userId, // 전달
+      userId: userId,
     );
   }
 
@@ -71,7 +71,7 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
       startDate: start,
       endDate: end,
       region: region,
-      userId: userId, // 전달
+      userId: userId,
     );
 
     return planId;

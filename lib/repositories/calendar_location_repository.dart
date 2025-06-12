@@ -11,7 +11,7 @@ class CalendarLocationRepository {
     required DateTime startDate,
     required DateTime endDate,
     required String region,
-    required String userId, // 추가
+    required String userId,
   }) async {
     final duration = endDate.difference(startDate).inDays + 1;
 
@@ -20,7 +20,7 @@ class CalendarLocationRepository {
       'endDate': Timestamp.fromDate(endDate),
       'duration': duration,
       'region': region,
-      'userId': userId, // 추가
+      'userId': userId,
     }, SetOptions(merge: true));
   }
 
@@ -28,7 +28,7 @@ class CalendarLocationRepository {
     required DateTime startDate,
     required DateTime endDate,
     required String region,
-    required String userId, // 추가
+    required String userId,
   }) async {
     final duration = endDate.difference(startDate).inDays + 1;
 
@@ -40,7 +40,7 @@ class CalendarLocationRepository {
       'endDate': Timestamp.fromDate(endDate),
       'duration': duration,
       'region': region,
-      'userId': userId, // 추가
+      'userId': userId,
     });
 
     return planId;
