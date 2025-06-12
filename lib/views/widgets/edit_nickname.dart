@@ -6,9 +6,7 @@ import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/check_duplicate_button.dart';
 
 class EditNickname extends ConsumerWidget {
-  const EditNickname({super.key, required this.controller});
-
-  final TextEditingController controller;
+  const EditNickname({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,7 +29,6 @@ class EditNickname extends ConsumerWidget {
                   Expanded(
                     // 텍스트폼필드
                     child: TextFormField(
-                      controller: controller,
                       onChanged: (value) {
                         ref
                             .read(profileViewModelProvider.notifier)
@@ -47,7 +44,7 @@ class EditNickname extends ConsumerWidget {
                         enabledBorder: AppOtherStyles.unfocusedBorder,
                         focusedBorder: AppOtherStyles.focusedBorder,
                         isDense: true,
-                        hintText: '닉네임', // TODO: 유저 기존 닉네임 연결, 없을 시 표시 X
+                        hintText: state.currentNickname ?? '',
                         errorText: null,
                         helperText: null,
                       ),

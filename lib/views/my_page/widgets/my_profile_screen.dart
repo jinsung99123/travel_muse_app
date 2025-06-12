@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/my_page/sheet/edit_profile_sheet.dart';
+import 'package:travel_muse_app/views/my_page/sheet/edit_profile_page.dart';
 
 class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({super.key});
@@ -23,7 +23,7 @@ class MyProfileScreen extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EditProfileSheet()),
+              MaterialPageRoute(builder: (context) => EditProfilePage()),
             );
           },
           style: ElevatedButton.styleFrom(

@@ -4,10 +4,10 @@ import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/onboarding/terms_agreement_bottom_sheet.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/edit_birth_date.dart';
-import 'package:travel_muse_app/views/onboarding/widgets/next_button.dart';
 import 'package:travel_muse_app/views/onboarding/widgets/select_gender.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
+import 'package:travel_muse_app/views/widgets/next_button.dart';
 
 class OnboardingPageSetProfile extends ConsumerWidget {
   const OnboardingPageSetProfile({super.key});
@@ -17,7 +17,6 @@ class OnboardingPageSetProfile extends ConsumerWidget {
     final profileState = ref.watch(profileViewModelProvider);
     final profileViewModel = ref.read(profileViewModelProvider.notifier);
 
-    final nicknameController = profileViewModel.nicknameController;
     final birthDateController = profileViewModel.birthDateController;
 
     bool canUpdate = profileState.canUpdateProfile;
@@ -41,7 +40,7 @@ class OnboardingPageSetProfile extends ConsumerWidget {
                     ),
                   ),
                   EditProfileImage(size: 88),
-                  EditNickname(controller: nicknameController),
+                  EditNickname(),
                   EditBirthDate(controller: birthDateController),
                   SelectGender(),
                 ],

@@ -29,7 +29,7 @@ class AppUserRepository {
   // 데이터베이스에서 유저 정보 get
   Future<AppUser?> fetchLatestAppUser(String uid) async {
     final doc =
-        await FirebaseFirestore.instance.collection('AppUsers').doc(uid).get();
+        await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
     if (doc.data() == null) {
       return null;
       // TODO: 뷰모델에서 유저 정보 없는 경우 처리
