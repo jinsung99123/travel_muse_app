@@ -105,6 +105,9 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       if (appUser != null) {
         state = state.copyWith(currentNickname: appUser.nickname);
         log('appUser != null');
+        if (state.currentNickname != null) {
+          state = state.copyWith(buttonState: '확인 완료');
+        }
       }
     }
   }
