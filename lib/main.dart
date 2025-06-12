@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/firebase_options.dart';
+import 'package:travel_muse_app/views/home/home_page.dart';
+import 'package:travel_muse_app/views/login/login_page.dart';
 import 'package:travel_muse_app/views/splash/splash_page.dart';
 
 void main() async {
@@ -22,7 +25,15 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
       ),
-      home: const SplashPage(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          final user = snapshot.data;
+          final Widget target =
+              user == null ? const LoginPage() : const HomePage();
+          return SplashPage(firstPagebyLoginState: target);
+        },
+      ),
     );
   }
 }
