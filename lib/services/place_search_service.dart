@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_muse_app/models/place.dart';
 
@@ -78,4 +79,21 @@ class PlaceSearchService {
     if (url != null) _thumbCache[keyword] = url;
     return url;
   }
+
+  // 지역명을 좌표로 변환하는 메서드
+Future<LatLng?> getLatLngFromRegion(String region) async {
+  final url = Uri.parse(
+    'https://dapi.kakao.com/v2/local/search/address.json?query=$region',
+  );
+  final res = await http.get(url, headers: {'Authorization': _apiKey});
+  if (res.statusCode != 200) return null;
+
+  final docs = json.decode(res.body)['documents'] as List<dynamic>;
+  if (docs.isEmpty) return null;
+
+  final lat = double.tryParse(docs[0]['y']) ?? 0;
+  final lng = double.tryParse(docs[0]['x']) ?? 0;
+  return LatLng(lat, lng);
+}
+
 }
