@@ -7,12 +7,18 @@ import 'package:travel_muse_app/repositories/app_user_repository.dart';
 import 'package:travel_muse_app/services/auth_service.dart';
 
 class AuthState {
-  AuthState({this.user});
+  AuthState({this.user, this.appUser, this.isUserNew = false});
 
   final User? user;
+  final AppUser? appUser;
+  final bool isUserNew;
 
-  AuthState copyWith({User? user, AppUser? currentAppUser}) {
-    return AuthState(user: user ?? this.user);
+  AuthState copyWith({User? user, AppUser? appUser, bool? isUserNew}) {
+    return AuthState(
+      user: user ?? this.user,
+      appUser: appUser ?? this.appUser,
+      isUserNew: isUserNew ?? this.isUserNew,
+    );
   }
 }
 
@@ -38,8 +44,28 @@ class AuthViewModel extends Notifier<AuthState> {
       await _appUserRepository.createAppUser(user!.uid);
 
       log('로그인 성공: ${result.data.runtimeType}');
+      await isUserNew();
     } else {
       log('로그인 실패: ${result.error}');
+    }
+  }
+
+  // appUser 확인 => 온보딩 필요 여부 결정
+  Future<void> isUserNew() async {
+    if (state.user == null) return;
+
+    final currentAppUser = await _appUserRepository.fetchLatestAppUser(
+      state.user!.uid,
+    );
+    state = state.copyWith(appUser: currentAppUser);
+    if (state.appUser == null) {
+      state = state.copyWith(isUserNew: null);
+      return;
+    }
+
+    if (state.appUser!.nickname == null && state.appUser!.testId.isEmpty) {
+      state = state.copyWith(isUserNew: true);
+      return;
     }
   }
 

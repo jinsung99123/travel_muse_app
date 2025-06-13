@@ -9,8 +9,8 @@ import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 import 'package:travel_muse_app/views/widgets/next_button.dart';
 
-class OnboardingPageSetProfile extends ConsumerWidget {
-  const OnboardingPageSetProfile({super.key});
+class OnboardingPage extends ConsumerWidget {
+  const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

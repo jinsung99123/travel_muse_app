@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
@@ -13,8 +12,6 @@ class EditProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewmodel = ref.read(profileViewModelProvider.notifier);
     final state = ref.watch(profileViewModelProvider);
-
-    final authViewModel = ref.read(authViewModelProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,12 +29,19 @@ class EditProfilePage extends ConsumerWidget {
               children: [
                 EditProfileImage(size: 88),
                 EditNickname(),
-                ElevatedButton(
-                  onPressed: () {
-                    authViewModel.logout();
-                  },
-                  child: Text('로그아웃'),
-                ),
+
+                // 로그아웃 버튼
+                // ElevatedButton(
+                //   onPressed: () {
+                //     authViewModel.logout();
+                //     Navigator.pushAndRemoveUntil(
+                //       context,
+                //       MaterialPageRoute(builder: (_) => LoginPage()),
+                //       (route) => false,
+                //     );
+                //   },
+                //   child: Text('로그아웃'),
+                // ),
               ],
             ),
             Column(
