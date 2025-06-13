@@ -22,46 +22,48 @@ class OptionButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: isSelected ? kPrimaryColor : const Color(0xFFCED2D3),
-              width: 1.5,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected ? kPrimaryColor : const Color(0xFF26272A),
-                  fontFamily: 'Pretendard',
-                ),
+      child: Material(
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isSelected ? kPrimaryColor : const Color(0xFFCED2D3),
+                width: 1.5,
               ),
-              if (subtitle.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(
-                    subtitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                      fontFamily: 'Pretendard',
-                    ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected ? kPrimaryColor : const Color(0xFF9E9E9E),
+                    fontFamily: 'Pretendard',
                   ),
                 ),
-            ],
+                if (subtitle.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      subtitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
