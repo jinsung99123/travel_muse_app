@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/region_data.dart';
 import 'package:travel_muse_app/providers/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/calendar_provider.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/views/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
@@ -105,15 +106,28 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
                             }
 
                             try {
+                              final userId =
+                                  ref.watch(authViewModelProvider).user?.uid;
+
+                              if (userId == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('로그인 정보가 없습니다.'),
+                                  ),
+                                );
+                                return;
+                              }
+
                               final planId =
                                   await locationViewModel.createAndSavePlan();
+
                               if (context.mounted) {
                                 await Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder:
                                         (_) => SchedulePage(
-                                          userId: '',
+                                          userId: userId,
                                           planId: planId,
                                         ),
                                   ),
