@@ -111,7 +111,6 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
                 onSubmitted: _performSearch,
               ),
             ),
-            SizedBox(height: 16),
             // 최근 검색어
             RecentSearchSection(
               onSelect: (word) {
@@ -121,7 +120,7 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
             ),
             if (_showInitialMessage)
               Padding(
-                padding: const EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.only(left: 16, top: 10),
                 child: Row(
                   children: [
                      Padding(
