@@ -18,6 +18,15 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
   );
 
+  // 앱바 타이틀
+  static const TextStyle appBarTitle = TextStyle(
+    color: AppColors.black,
+    fontSize: 18,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w700,
+    height: 1.50,
+  );
+
   // 온보딩 타이틀
   static const TextStyle onboardingTitle = TextStyle(
     color: AppColors.black,
