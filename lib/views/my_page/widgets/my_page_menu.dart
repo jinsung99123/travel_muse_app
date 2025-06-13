@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
@@ -79,21 +80,27 @@ class MyPageMenu extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color(0xFFE0E0E0))),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.grey[50]!)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                color: AppColors.black,
+                fontSize: 16,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w400,
+                height: 1.50,
+              ),
             ),
             const Icon(
               Icons.arrow_forward_ios,
               size: 16,
-              color: Colors.black54,
+              color: AppColors.black,
             ),
           ],
         ),

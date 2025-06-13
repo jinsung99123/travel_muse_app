@@ -172,7 +172,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // db에서 프로필 이미지 가져오기
   Future<void> fetchProfileImageUrl() async {
     try {
       if (currentUser == null) return;
@@ -189,6 +188,21 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         state = state.copyWith(profileImageUrl: url);
         log('프로필 이미지 로드 완료: $url');
       }
+    } catch (e) {
+      log('프로필 이미지 로드 실패: $e');
+    }
+  }
+
+  // db에서 프로필 이미지, 닉네임 가져오기
+  Future<void> fetchUserProfile() async {
+    try {
+      if (currentUser == null) return;
+      final appUser = await appUserRepo.fetchLatestAppUser(currentUser!.uid);
+      if (appUser == null) return;
+      state = state.copyWith(
+        currentNickname: appUser.nickname,
+        profileImageUrl: appUser.profileImage,
+      );
     } catch (e) {
       log('프로필 이미지 로드 실패: $e');
     }

@@ -1,42 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/my_page/sheet/edit_profile_page.dart';
 
-class MyProfileScreen extends StatelessWidget {
+class MyProfileScreen extends ConsumerStatefulWidget {
   const MyProfileScreen({super.key});
 
   @override
+  ConsumerState<MyProfileScreen> createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
+  bool _fetched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!_fetched) {
+        await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
+        _fetched = true;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const CircleAvatar(
-          radius: 35,
-          backgroundImage: AssetImage('assets/profile.png'),
-        ),
-        const SizedBox(height: 15),
-        Text(
-          '홍길동',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 15),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => EditProfilePage()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-            side: const BorderSide(color: Colors.grey, width: 1.5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+    final profileState = ref.watch(profileViewModelProvider);
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 44,
+            backgroundImage:
+                profileState.profileImageUrl != null
+                    ? NetworkImage(profileState.profileImageUrl!)
+                    : null,
+            backgroundColor: AppColors.primary[100], // 프로필이미지 없는 경우
+          ),
+          const SizedBox(height: 15),
+          Text(
+            profileState.currentNickname ?? '',
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: 18,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w700,
+              height: 1.50,
             ),
           ),
-          child: Text('프로필 수정'),
-        ),
-      ],
+          SizedBox(height: 16),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditProfilePage()),
+              );
+            },
+            child: Container(
+              width: 97,
+              height: 40,
+              decoration: ShapeDecoration(
+                color: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 1,
+                    strokeAlign: BorderSide.strokeAlignOutside,
+                    color: AppColors.grey[300]!,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  '프로필 수정',
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontSize: 14,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w600,
+                    height: 1.50,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
