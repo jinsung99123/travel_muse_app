@@ -136,7 +136,10 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
                         horizontal: 16,
                         vertical: 12,
                       ),
-                      child: NextButton(onPressed: _onNextPressed),
+                      child: NextButton(
+                        onPressed: _onNextPressed,
+                        enabled: _selectedOption != null,
+                      ),
                     ),
                   ],
                 ),

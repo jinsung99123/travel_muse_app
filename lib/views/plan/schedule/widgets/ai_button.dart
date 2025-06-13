@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/repositories/plan_repository.dart';
-import 'package:travel_muse_app/repositories/schedule_repository.dart';
-import 'package:travel_muse_app/utills/ai_route_helper.dart';
+import 'package:travel_muse_app/services/place_search_service.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ai_type_select_popup.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ground_circle_icon.dart';
 
@@ -29,8 +28,10 @@ class AiButton extends StatelessWidget {
               (_) => AiTypeSelectPopup(
                 onComplete: (selectedTest) async {
                   final typeCode = selectedTest;
-                  /*
-                  final aiPlan = await PlanRepository().getOptimizedPlanFromAI(
+                  final planRepo = PlanRepository();
+                  final placeService = PlaceSearchService();
+
+                  final aiPlan = await planRepo.getOptimizedPlanFromAI(
                     days: days,
                     region: region,
                     typeCode: typeCode,
@@ -38,20 +39,42 @@ class AiButton extends StatelessWidget {
 
                   final parsed = _parseAiPlan(aiPlan);
 
-                  await ScheduleRepository().saveAiRoute(
-                    planId: planId,
-                    aiSchedules: parsed,
-                  );
+                  final enriched = <int, List<Map<String, String>>>{};
+                  for (final entry in parsed.entries) {
+                    final day = entry.key;
+                    final enrichedPlaces = <Map<String, String>>[];
 
-                  onResult(parsed);
-                  */
-                  await generateAndSaveEnrichedAiRoute(
-                    planId: planId,
-                    days: days,
-                    region: region,
-                    typeCode: typeCode,
-                    onResult: onResult,
-                  );
+                    for (final place in entry.value) {
+                      final title = place['title']!;
+                      final description = place['description'] ?? '';
+
+                      final kakaoResults = await placeService.search(
+                        '$region $title',
+                      );
+                      final firstPlace =
+                          kakaoResults.isNotEmpty ? kakaoResults.first : null;
+                      final imageUrl = await placeService.fetchImageThumbnail(
+                        '$region $title',
+                      );
+
+                      enrichedPlaces.add({
+                        'title': title,
+                        'description': description,
+                        'lat': '${firstPlace?.latitude ?? 0.0}',
+                        'lng': '${firstPlace?.longitude ?? 0.0}',
+                        'image': imageUrl ?? '',
+                        'subtitle':
+                            firstPlace != null
+                                ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
+                                : '',
+                      });
+                    }
+
+                    enriched[day] = enrichedPlaces;
+                  }
+
+                  // Firestore 저장 없이 UI 상태만 전달 (미리보기용)
+                  onResult(enriched);
                 },
               ),
         );
