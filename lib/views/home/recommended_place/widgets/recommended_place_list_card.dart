@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/models/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedPlaceListCard extends StatelessWidget {
@@ -8,27 +9,28 @@ class RecommendedPlaceListCard extends StatelessWidget {
     required this.image,
     required this.description,
     required this.isActive,
+    required this.place,
   });
 
   final String title;
   final String image;
   final String description;
   final bool isActive;
+  final HomePlace place;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap:
-          isActive
-              ? () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const RecommendedPlaceDetailPage(),
-                  ),
-                );
-              }
-              : null,
+      onTap: isActive
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RecommendedPlaceDetailPage(place: place),
+                ),
+              );
+            }
+          : null,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -47,20 +49,26 @@ class RecommendedPlaceListCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child:
-                  image.isNotEmpty
-                      ? Image.asset(
-                        image,
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
-                      )
-                      : Container(
-                        width: 72,
-                        height: 72,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.image_not_supported),
-                      ),
+              child: image.isNotEmpty
+                  ? image.startsWith('http')
+                      ? Image.network(
+                          image,
+                          width: 72,
+                          height: 72,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          image,
+                          width: 72,
+                          height: 72,
+                          fit: BoxFit.cover,
+                        )
+                  : Container(
+                      width: 72,
+                      height: 72,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported),
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -79,11 +87,6 @@ class RecommendedPlaceListCard extends StatelessWidget {
                   Text(
                     description,
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    '음식점 > 식육식당',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),

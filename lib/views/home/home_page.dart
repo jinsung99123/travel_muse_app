@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               const RecommendedPlacesList(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: SectionTitle(title: '최근 유행하는 맛집이에요'),

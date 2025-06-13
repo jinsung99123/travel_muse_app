@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ImageSlider extends StatelessWidget {
-
   const ImageSlider({
     super.key,
     required this.imageUrls,
@@ -9,6 +8,7 @@ class ImageSlider extends StatelessWidget {
     required this.pageController,
     required this.onPageChanged,
   });
+
   final List<String> imageUrls;
   final int currentPage;
   final PageController pageController;
@@ -19,15 +19,18 @@ class ImageSlider extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 300,
           child: PageView.builder(
             controller: pageController,
             itemCount: imageUrls.length,
             onPageChanged: onPageChanged,
             itemBuilder: (context, index) {
+              final url = imageUrls[index];
               return ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(imageUrls[index], fit: BoxFit.cover),
+                child: url.startsWith('http')
+                    ? Image.network(url, fit: BoxFit.cover)
+                    : Image.asset(url, fit: BoxFit.cover),
               );
             },
           ),

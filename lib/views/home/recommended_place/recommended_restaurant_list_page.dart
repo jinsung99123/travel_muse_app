@@ -1,31 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/providers/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_restaurant_list_card.dart';
 
-class RecommendedRestaurantsListPage extends StatelessWidget {
+class RecommendedRestaurantsListPage extends ConsumerWidget {
   const RecommendedRestaurantsListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<_RestaurantData> restaurants = [
-      _RestaurantData(
-        name: '핫도그 두물머리점',
-        image: 'assets/images/image3.png',
-        description: '두물머리 명물 수제 핫도그',
-        isActive: true,
-      ),
-      _RestaurantData(
-        name: '준비 중',
-        image: '',
-        description: '곧 추가될 맛집',
-        isActive: false,
-      ),
-      _RestaurantData(
-        name: '준비 중',
-        image: '',
-        description: '곧 추가될 맛집',
-        isActive: false,
-      ),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeAsync = ref.watch(homeViewModelProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,34 +18,31 @@ class RecommendedRestaurantsListPage extends StatelessWidget {
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: ListView.separated(
-        itemCount: restaurants.length,
-        padding: const EdgeInsets.all(16),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final restaurant = restaurants[index];
-          return RecommendedRestaurantListCard(
-            name: restaurant.name,
-            image: restaurant.image,
-            description: restaurant.description,
-            isActive: restaurant.isActive,
+      body: homeAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (_, __) => const Center(child: Text('추천 맛집을 불러오지 못했어요')),
+        data: (state) {
+          final restaurants = state.foods;
+          if (restaurants.isEmpty) {
+            return const Center(child: Text('추천 맛집이 없어요'));
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: restaurants.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (_, index) {
+              final r = restaurants[index];
+              return RecommendedRestaurantListCard(
+                name: r.title,
+                image: r.thumbnail,
+                description: r.subtitle,
+                isActive: true,
+                place: r,
+              );
+            },
           );
         },
       ),
     );
   }
-}
-
-class _RestaurantData {
-  _RestaurantData({
-    required this.name,
-    required this.image,
-    required this.description,
-    required this.isActive,
-  });
-
-  final String name;
-  final String image;
-  final String description;
-  final bool isActive;
 }

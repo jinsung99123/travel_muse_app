@@ -1,31 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/providers/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_place_list_card.dart';
 
-class RecommendedPlacesListPage extends StatelessWidget {
+class RecommendedPlacesListPage extends ConsumerWidget {
   const RecommendedPlacesListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<_PlaceData> places = [
-      _PlaceData(
-        title: '두물머리',
-        image: 'assets/images/image1.png',
-        description: '물안개가 아름다운 감성 명소',
-        isActive: true,
-      ),
-      _PlaceData(
-        title: '준비 중',
-        image: '',
-        description: '곧 추가될 명소',
-        isActive: false,
-      ),
-      _PlaceData(
-        title: '준비 중',
-        image: '',
-        description: '곧 추가될 명소',
-        isActive: false,
-      ),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final homeAsync = ref.watch(homeViewModelProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,34 +18,32 @@ class RecommendedPlacesListPage extends StatelessWidget {
         elevation: 1,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: ListView.separated(
-        itemCount: places.length,
-        padding: const EdgeInsets.all(16),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final place = places[index];
-          return RecommendedPlaceListCard(
-            title: place.title,
-            image: place.image,
-            description: place.description,
-            isActive: place.isActive,
+      body: homeAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (_, __) => const Center(child: Text('추천 명소를 불러오지 못했어요')),
+        data: (state) {
+          final spots = state.spots;
+          if (spots.isEmpty) {
+            return const Center(child: Text('추천 명소가 없어요'));
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: spots.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (_, index) {
+              final spot = spots[index];
+              return RecommendedPlaceListCard(
+                title: spot.title,
+                image: spot.thumbnail,
+                description: spot.subtitle,
+                isActive: true,
+                place: spot,
+              );
+            },
           );
         },
       ),
     );
   }
-}
-
-class _PlaceData {
-  _PlaceData({
-    required this.title,
-    required this.image,
-    required this.description,
-    required this.isActive,
-  });
-
-  final String title;
-  final String image;
-  final String description;
-  final bool isActive;
 }
