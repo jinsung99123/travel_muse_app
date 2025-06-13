@@ -54,7 +54,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Future<void> _addPlace(int dayIndex) async {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
-      MaterialPageRoute(builder: (_) => PlaceSearchPage(planId: widget.planId)),
+      MaterialPageRoute(builder: (_) => PlaceSearchPage(planId: widget.planId, region: selectedPlan?.region ?? '',)),
     );
 
     if (selectedPlaces != null && selectedPlaces.isNotEmpty) {
