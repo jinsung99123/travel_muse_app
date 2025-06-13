@@ -21,13 +21,9 @@ class MyPageListItem extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignOutside,
-              color: AppColors.grey[50]!,
-            ),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
           ),
         ),
         child: Row(
