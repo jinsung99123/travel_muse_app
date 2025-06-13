@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 
@@ -53,7 +54,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(500),
-                  color: const Color(0xFFB3B9BC),
+                  color: AppColors.grey[200],
                   image:
                       imageUrlToShow != null
                           ? DecorationImage(

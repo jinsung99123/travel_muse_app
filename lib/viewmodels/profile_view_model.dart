@@ -28,6 +28,9 @@ class ProfileState {
     this.isGenderValid,
     this.canUpdateProfile = false,
     this.canEditProfile = false,
+    //
+    this.testId = const [],
+    this.planId = const [],
   });
   final String? profileImageUrl;
   final String? temporaryImagePath;
@@ -45,6 +48,9 @@ class ProfileState {
   final bool? isGenderValid;
   final bool canUpdateProfile;
   final bool canEditProfile;
+  //
+  final List<String> testId;
+  final List<String> planId;
 
   ProfileState copyWith({
     String? profileImageUrl,
@@ -63,6 +69,9 @@ class ProfileState {
     bool? isGenderValid,
     bool? canUpdateProfile,
     bool? canEditProfile,
+    //
+    List<String>? testId,
+    List<String>? planId,
   }) {
     return ProfileState(
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
@@ -81,6 +90,9 @@ class ProfileState {
       isGenderValid: isGenderValid ?? this.isGenderValid,
       canUpdateProfile: canUpdateProfile ?? this.canUpdateProfile,
       canEditProfile: canEditProfile ?? this.canEditProfile,
+      //
+      testId: testId ?? this.testId,
+      planId: planId ?? this.planId,
     );
   }
 }
@@ -119,6 +131,24 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       nicknameMessage: _defaultNicknameMessage,
       birthDateMessage: _defaultBirthDateMessage,
     );
+  }
+
+  // db에서 기존 유저정보 가져오기
+  Future<void> fetchUserProfile() async {
+    try {
+      if (currentUser == null) return;
+      final appUser = await appUserRepo.fetchLatestAppUser(currentUser!.uid);
+      if (appUser == null) return;
+      state = state.copyWith(
+        currentNickname: appUser.nickname,
+        profileImageUrl: appUser.profileImage,
+        gender: appUser.gender,
+        testId: appUser.testId,
+        planId: appUser.planId,
+      );
+    } catch (e) {
+      log('프로필 이미지 로드 실패: $e');
+    }
   }
 
   ///
@@ -188,21 +218,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         state = state.copyWith(profileImageUrl: url);
         log('프로필 이미지 로드 완료: $url');
       }
-    } catch (e) {
-      log('프로필 이미지 로드 실패: $e');
-    }
-  }
-
-  // db에서 프로필 이미지, 닉네임 가져오기
-  Future<void> fetchUserProfile() async {
-    try {
-      if (currentUser == null) return;
-      final appUser = await appUserRepo.fetchLatestAppUser(currentUser!.uid);
-      if (appUser == null) return;
-      state = state.copyWith(
-        currentNickname: appUser.nickname,
-        profileImageUrl: appUser.profileImage,
-      );
     } catch (e) {
       log('프로필 이미지 로드 실패: $e');
     }

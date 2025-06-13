@@ -12,16 +12,11 @@ class MyProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
-  bool _fetched = false;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!_fetched) {
-        await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
-        _fetched = true;
-      }
+      await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
     });
   }
 
@@ -38,8 +33,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             backgroundImage:
                 profileState.profileImageUrl != null
                     ? NetworkImage(profileState.profileImageUrl!)
-                    : null,
-            backgroundColor: AppColors.primary[100], // 프로필이미지 없는 경우
+                    : null, // TODO: 프로필이미지 없는 경우
+            backgroundColor: AppColors.primary[100],
           ),
           const SizedBox(height: 15),
           Text(
