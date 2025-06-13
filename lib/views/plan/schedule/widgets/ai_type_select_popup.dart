@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/type_select_item.dart';
@@ -125,10 +128,54 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                       onPressed:
                           _selectedTest == null
                               ? null
-                              : () {
-                                Navigator.pop(context);
-                                final typeCode = _selectedTest!.result['type'];
-                                widget.onComplete(typeCode!);
+                              : () async {
+                                // 로딩 인디케이터 먼저 띄움
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  useRootNavigator: true,
+                                  builder:
+                                      (_) => const CupertinoAlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CupertinoActivityIndicator(
+                                              radius: 14,
+                                            ),
+                                            SizedBox(height: 16),
+                                            Text(
+                                              'AI 추천 일정을 생성 중입니다...',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'Pretendard',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                );
+
+                                try {
+                                  final typeCode =
+                                      _selectedTest!.result['type']!;
+                                  widget.onComplete(typeCode);
+                                } catch (e, s) {
+                                  log(
+                                    'onComplete error',
+                                    error: e,
+                                    stackTrace: s,
+                                    name: 'AiTypeSelectPopup',
+                                    level: 1000, // severe
+                                  );
+                                } finally {
+                                  // 로딩 인디케이터 닫기
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).pop();
+                                  // 팝업도 닫기 (여기서 수행)
+                                  Navigator.pop(context);
+                                }
                               },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF48CDFD),
