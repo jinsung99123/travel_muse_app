@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
@@ -13,6 +14,8 @@ class EditProfilePage extends ConsumerWidget {
     final viewmodel = ref.read(profileViewModelProvider.notifier);
     final state = ref.watch(profileViewModelProvider);
 
+    final authViewModel = ref.read(authViewModelProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -25,7 +28,18 @@ class EditProfilePage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Stack(
           children: [
-            ListView(children: [EditProfileImage(size: 88), EditNickname()]),
+            ListView(
+              children: [
+                EditProfileImage(size: 88),
+                EditNickname(),
+                ElevatedButton(
+                  onPressed: () {
+                    authViewModel.logout();
+                  },
+                  child: Text('로그아웃'),
+                ),
+              ],
+            ),
             Column(
               children: [
                 Spacer(),
