@@ -9,8 +9,13 @@ import 'package:travel_muse_app/views/plan/place_search/widgets/search_result_li
 import 'package:travel_muse_app/views/plan/widgets/schedule_app_bar.dart';
 
 class PlaceSearchPage extends ConsumerStatefulWidget {
-  const PlaceSearchPage({super.key, required this.planId});
+  const PlaceSearchPage({
+    super.key,
+    required this.planId,
+    required this.region,
+  });
   final String planId;
+  final String region;
 
   @override
   ConsumerState<PlaceSearchPage> createState() => _PlaceSearchPageState();
@@ -19,11 +24,18 @@ class PlaceSearchPage extends ConsumerStatefulWidget {
 class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   final TextEditingController _searchController = TextEditingController();
   final Set<int> _selectedIndexes = {};
+  bool _showInitialMessage = true; // 장소 추천 안내 메세지
 
   void _performSearch(String query) {
     ref.read(recentSearchProvider.notifier).add(query);
-    ref.read(searchViewModelProvider.notifier).search(query.trim());
-    _selectedIndexes.clear(); // 검색 새로 하면 선택 초기화
+    ref
+        .read(searchViewModelProvider.notifier)
+        .search(query.trim(), region: widget.region);
+
+    setState(() {
+      _selectedIndexes.clear(); // 검색 새로 하면 선택 초기화
+      _showInitialMessage = false; //검색시 안내메세지 사라짐
+    });
   }
 
   void _toggleSelected(int index) {
@@ -39,6 +51,19 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   void _confirmSelection(List<Map<String, String>> places) {
     final selectedPlaces = _selectedIndexes.map((i) => places[i]).toList();
     Navigator.pop(context, selectedPlaces);
+  }
+
+  void _loadRecommendedPlacesByRegion() async {
+    if (widget.region.isEmpty) return;
+
+    final viewModel = ref.read(searchViewModelProvider.notifier);
+    await viewModel.loadRecommendedByRegion(widget.region);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecommendedPlacesByRegion();
   }
 
   @override
@@ -76,6 +101,7 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               ),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -93,6 +119,32 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
                 _performSearch(word);
               },
             ),
+            if (_showInitialMessage)
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                     Padding(
+                      padding: EdgeInsets.only(left: 6, right: 6),
+                      child: Icon(
+                        Icons.location_on,
+                        size: 24,
+                        color: AppColors.primary[400],
+                      ),
+                    ),
+                    Text(
+                      '${widget.region} 지역 추천 장소',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 8),
             Expanded(
               child:
                   searchResults.isEmpty
