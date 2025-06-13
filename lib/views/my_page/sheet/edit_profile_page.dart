@@ -25,7 +25,25 @@ class EditProfilePage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Stack(
           children: [
-            ListView(children: [EditProfileImage(size: 88), EditNickname()]),
+            ListView(
+              children: [
+                EditProfileImage(size: 88),
+                EditNickname(),
+
+                // 로그아웃 버튼
+                // ElevatedButton(
+                //   onPressed: () {
+                //     authViewModel.logout();
+                //     Navigator.pushAndRemoveUntil(
+                //       context,
+                //       MaterialPageRoute(builder: (_) => LoginPage()),
+                //       (route) => false,
+                //     );
+                //   },
+                //   child: Text('로그아웃'),
+                // ),
+              ],
+            ),
             Column(
               children: [
                 Spacer(),
