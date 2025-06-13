@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NextButton extends StatelessWidget {
-  const NextButton({super.key, required this.onPressed});
+  const NextButton({super.key, required this.onPressed, required this.enabled});
   final VoidCallback onPressed;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +16,12 @@ class NextButton extends StatelessWidget {
         child: CupertinoButton(
           padding: EdgeInsets.zero,
           borderRadius: BorderRadius.circular(10),
-          color: const Color(0xFF15BFFD),
-          onPressed: onPressed,
-          child: const Text(
+          color: enabled ? const Color(0xFF15BFFD) : const Color(0xFFCED2D3),
+          onPressed: enabled ? onPressed : null,
+          child: Text(
             '다음',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.white.withOpacity(enabled ? 1.0 : 0.6),
               fontSize: 18,
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
