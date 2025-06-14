@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/type_select_item.dart';
 
 class AiTypeSelectPopup extends StatefulWidget {
   const AiTypeSelectPopup({super.key, required this.onComplete});
-  final void Function(String typeCode) onComplete;
+  final Future<void> Function(String typeCode) onComplete;
 
   @override
   State<AiTypeSelectPopup> createState() => _AiTypeSelectPopupState();
@@ -125,11 +129,31 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                       onPressed:
                           _selectedTest == null
                               ? null
-                              : () {
-                                Navigator.pop(context);
-                                final typeCode = _selectedTest!.result['type'];
-                                widget.onComplete(typeCode!);
+                              : () async {
+                                EasyLoading.show(
+                                  status: 'AI 추천 일정을 생성 중입니다...',
+                                );
+                                try {
+                                  final typeCode =
+                                      _selectedTest!.result['type']!;
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 500),
+                                  ); // 실제 async 함수라면 제거
+                                  await widget.onComplete(typeCode);
+                                } catch (e, s) {
+                                  log(
+                                    'onComplete error',
+                                    error: e,
+                                    stackTrace: s,
+                                    name: 'AiTypeSelectPopup',
+                                    level: 1000,
+                                  );
+                                } finally {
+                                  EasyLoading.dismiss(); // 인디케이터 닫기
+                                  Navigator.pop(context); // 팝업 닫기
+                                }
                               },
+
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF48CDFD),
                         padding: const EdgeInsets.symmetric(
