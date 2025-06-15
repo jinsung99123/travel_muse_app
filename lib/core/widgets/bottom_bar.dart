@@ -70,25 +70,29 @@ class _BottomBarState extends State<BottomBar> {
           return Expanded(
             child: GestureDetector(
               onTap: () => _onItemTapped(index),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    items[index]['icon'] as IconData,
-                    size: 24,
-                    color: isSelected ? primaryColor : Colors.grey,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    items[index]['label'] as String,
-                    style: TextStyle(
-                      fontSize: 12,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                height: 56,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      items[index]['icon'] as IconData,
+                      size: 24,
                       color: isSelected ? primaryColor : Colors.grey,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Pretendard',
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      items[index]['label'] as String,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isSelected ? primaryColor : Colors.grey,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
