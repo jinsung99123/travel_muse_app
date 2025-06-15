@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/repositories/plan_repository.dart';
 import 'package:travel_muse_app/repositories/schedule_repository.dart';
 import 'package:travel_muse_app/services/place_search_service.dart';
 
 Future<void> generateAndSaveEnrichedAiRoute({
+  required BuildContext context,
   required String planId,
   required int days,
   required String region,
@@ -18,6 +20,7 @@ Future<void> generateAndSaveEnrichedAiRoute({
     days: days,
     region: region,
     typeCode: typeCode,
+    context: context,
   );
 
   // 파싱 (기존 _parseAiPlan 로직과 동일)

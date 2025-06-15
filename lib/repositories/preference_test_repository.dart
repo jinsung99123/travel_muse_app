@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
 
@@ -17,6 +18,7 @@ class PreferenceTestRepository {
 
   Future<PreferenceTest> classifyTestOnly(
     List<Map<String, String>> answersRaw,
+    BuildContext context,
   ) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
@@ -41,7 +43,7 @@ $resultSummary
 모험가: 체험형 모험가
 ''';
 
-    final typeCode = await _aiService.getTypeCodeFromAI(prompt);
+    final typeCode = await _aiService.getTypeCodeFromAI(prompt, context);
     final description = _typeDescriptions[typeCode] ?? '알 수 없는 유형';
     final now = DateTime.now();
 
@@ -70,9 +72,13 @@ $resultSummary
       final newId = await saveTest(test);
       return test.copyWith(testId: newId);
     } else {
-      await saveOrUpdateTest(test);
+      await updateTest(test);
       return test;
     }
+  }
+
+  Future<void> updateTest(PreferenceTest test) async {
+    await _firestore.collection(_collection).doc(test.testId).set(test.toMap());
   }
 
   Future<PreferenceTest> loadTest(String testId) async {

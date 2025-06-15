@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
 
 class PlanRepository {
@@ -16,6 +17,7 @@ class PlanRepository {
     required int days,
     required String region,
     required String typeCode,
+    required BuildContext context,
   }) async {
     final typeDescription = _typeDescriptions[typeCode] ?? typeCode;
 
@@ -50,6 +52,6 @@ Day N:
 ※ 장소명은 '__' 같은 특수문자 없이 실제 장소 이름으로 작성해줘.
 ''';
 
-    return await _aiService.generate(prompt);
+    return await _aiService.generate(prompt, context);
   }
 }
