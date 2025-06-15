@@ -76,7 +76,6 @@ $resultSummary
       return test.copyWith(testId: newId);
     } else {
       await updateTest(test);
-
       return test;
     }
   }
