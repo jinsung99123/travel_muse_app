@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_muse_app/models/plans.dart';
 
 class CalendarLocationRepository {
   CalendarLocationRepository({FirebaseFirestore? firestore})
@@ -44,5 +45,23 @@ class CalendarLocationRepository {
     });
 
     return planId;
+  }
+
+  Future<Plans?> fetchNearestFuturePlan(String userId) async {
+    final now = DateTime.now();
+
+    final querySnapshot =
+        await _firestore
+            .collection('plans')
+            .where('userId', isEqualTo: userId)
+            .where('startDate', isGreaterThanOrEqualTo: Timestamp.fromDate(now))
+            .orderBy('startDate')
+            .limit(1)
+            .get();
+
+    if (querySnapshot.docs.isEmpty) return null;
+
+    final doc = querySnapshot.docs.first;
+    return Plans.fromJson(doc.id, doc.data());
   }
 }
