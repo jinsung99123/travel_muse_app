@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.dart';
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+    final authState = ref.watch(authViewModelProvider);
+    final userId = authState.user?.uid;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,7 +47,15 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              const InfoBanner(),
+
+              if (userId != null)
+                InfoBanner(userId: userId)
+              else
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text('로그인이 필요합니다.'),
+                ),
+
               const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
