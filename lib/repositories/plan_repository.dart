@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
 
 class PlanRepository {
@@ -16,6 +17,7 @@ class PlanRepository {
     required int days,
     required String region,
     required String typeCode,
+    required BuildContext context,
   }) async {
     final typeDescription = _typeDescriptions[typeCode] ?? typeCode;
 

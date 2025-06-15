@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/repositories/preference_test_repository.dart';
@@ -19,10 +20,13 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
     return const AsyncValue.data(null);
   }
 
-  Future<void> classifyTestOnly(List<Map<String, String>> answersRaw) async {
+  Future<void> classifyTestOnly(
+    List<Map<String, String>> answersRaw,
+    BuildContext context,
+  ) async {
     state = const AsyncValue.loading();
     try {
-      final test = await _repository.classifyTestOnly(answersRaw);
+      final test = await _repository.classifyTestOnly(answersRaw, context);
       state = AsyncValue.data(test);
     } catch (e, st) {
       state = AsyncValue.error(e, st);

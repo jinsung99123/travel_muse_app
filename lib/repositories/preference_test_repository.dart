@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
 import 'package:travel_muse_app/services/ai_service.dart';
 
@@ -21,6 +22,7 @@ class PreferenceTestRepository {
 
   Future<PreferenceTest> classifyTestOnly(
     List<Map<String, String>> answersRaw,
+    BuildContext context,
   ) async {
     if (currentUser == null) {
       throw Exception('로그인되지 않은 상태에서는 테스트를 저장할 수 없습니다.');
@@ -73,10 +75,7 @@ $resultSummary
       final newId = await saveTest(test);
       return test.copyWith(testId: newId);
     } else {
-      await _firestore
-          .collection(_collection)
-          .doc(test.testId)
-          .set(test.toMap());
+      await updateTest(test);
       return test;
     }
   }
@@ -90,6 +89,10 @@ $resultSummary
       'testId': FieldValue.arrayUnion([testId]),
     });
     log('테스트아이디 업데이트 : $testId');
+  }
+
+  Future<void> updateTest(PreferenceTest test) async {
+    await _firestore.collection(_collection).doc(test.testId).set(test.toMap());
   }
 
   Future<PreferenceTest> loadTest(String testId) async {
