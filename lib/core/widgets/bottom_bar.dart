@@ -42,7 +42,10 @@ class _BottomBarState extends State<BottomBar> {
         return;
     }
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
   }
 
   @override
