@@ -7,8 +7,11 @@ import 'package:travel_muse_app/providers/preference_test_provider.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/preference/preference_loading_page.dart';
+<<<<<<< HEAD
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
+=======
+>>>>>>> 800b61a (feat: 성향 테스트 결과 리스트 db연결)
 
 class PreferenceListPage extends ConsumerStatefulWidget {
   const PreferenceListPage({super.key});
@@ -48,7 +51,9 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
           padding: const EdgeInsets.all(10),
           child:
               _tests.isEmpty
-                  ? Center(child: Text('여행 성향 테스트 결과가 없습니다.'))
+                  ? Center(
+                    child: Text('여행 성향 테스트 결과가 없습니다.'),
+                  ) 
                   : ListView.builder(
                     itemCount: _tests.length,
                     itemBuilder: (context, index) {
@@ -56,6 +61,7 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                         itemTitle: _tests[index].result['type'] ?? '알 수 없음',
                         index: index,
                         onTap: () {
+
                           Navigator.push(
                             context,
                             CupertinoPageRoute(
