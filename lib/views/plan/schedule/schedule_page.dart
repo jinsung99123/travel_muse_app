@@ -34,8 +34,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     final viewModel = ref.read(scheduleViewModelProvider.notifier);
 
     await viewModel.fetchPlans(widget.userId);
+    await viewModel.fetchSavedPlans();
     final plans = ref.read(scheduleViewModelProvider).valueOrNull;
-    selectedPlan = plans?.firstWhere((p) => p.planId == widget.planId);
+
+    selectedPlan = plans?.allPlans.firstWhere((p) => p.planId == widget.planId);
 
     final routes = await viewModel.fetchRoute(widget.planId);
     setState(() {
@@ -206,12 +208,15 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
               ),
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
+          // await ref
+          //     .read(scheduleViewModelProvider.notifier)
+          //     .saveDaySchedules(
+          //       planId: widget.planId,
+          //       daySchedules: daySchedules,
+          //     );
           await ref
               .read(scheduleViewModelProvider.notifier)
-              .saveDaySchedules(
-                planId: widget.planId,
-                daySchedules: daySchedules,
-              );
+              .addPlanIdToAppUser(widget.planId);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
