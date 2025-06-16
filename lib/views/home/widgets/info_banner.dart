@@ -15,24 +15,46 @@ class InfoBanner extends ConsumerWidget {
     final end = planState.endDate;
     final region = planState.region;
 
-    // 여행까지 남은 날짜 계산
+    /// 여행까지 남은 날짜 계산
     String calculateRemainingDays(DateTime startDate) {
       final now = DateTime.now();
-      final diff = startDate.difference(now).inDays;
-      return diff > 0 ? '$diff일 남았어요!' : '여행 중이에요!';
+      final nowDate = DateTime(now.year, now.month, now.day);
+      final startDateOnly = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+      );
+
+      final diff = startDateOnly.difference(nowDate).inDays;
+
+      if (diff > 0) {
+        return '$diff일 남았어요!';
+      } else if (diff == 0) {
+        return '오늘부터 여행이에요!';
+      } else {
+        return '여행 중이에요!';
+      }
     }
 
-    // 날짜 포맷
     String formatDate(DateTime date) {
       final formatter = DateFormat('M.d (E)', 'ko');
       return formatter.format(date);
     }
 
-    // 여행 정보가 없을 경우
-    if (start == null || end == null || region == null) {
-      // 최초 1회 자동 불러오기
-      viewModel.loadNearestUpcomingPlan();
+    String getMainRegion(String region) {
+      return region.split(' ').first;
+    }
 
+    /// 여행 종료 여부 확인
+    bool isTripFinished(DateTime endDate) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final tripEnd = DateTime(endDate.year, endDate.month, endDate.day);
+      return tripEnd.isBefore(today);
+    }
+
+    /// 여행 정보가 없거나 지난 여행만 있을 경우
+    if (start == null || end == null || region == null || isTripFinished(end)) {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Align(
@@ -58,7 +80,7 @@ class InfoBanner extends ConsumerWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '사용자님,\n$region 여행까지 ${calculateRemainingDays(start)}',
+              '사용자님,\n${calculateRemainingDays(start) == '여행 중이에요!' || calculateRemainingDays(start) == '오늘부터 여행이에요!' ? '${getMainRegion(region)} ${calculateRemainingDays(start)}' : '${getMainRegion(region)} 여행까지 ${calculateRemainingDays(start)}'}',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
