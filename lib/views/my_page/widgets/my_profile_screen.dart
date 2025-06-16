@@ -49,11 +49,16 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           ),
           SizedBox(height: 16),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => EditProfilePage()),
               );
+              if (result == true) {
+                await ref
+                    .read(profileViewModelProvider.notifier)
+                    .fetchUserProfile();
+              }
             },
             child: Container(
               width: 97,
