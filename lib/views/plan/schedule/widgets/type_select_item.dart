@@ -20,7 +20,7 @@ class TypeSelectItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
