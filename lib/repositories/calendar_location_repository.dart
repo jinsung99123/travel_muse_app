@@ -83,4 +83,30 @@ class CalendarLocationRepository {
       'planId': FieldValue.arrayUnion([planId]),
     });
   }
+
+  Future<PlanState?> fetchNearestUpcomingPlan(String userId) async {
+    final now = DateTime.now();
+
+    final querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('plans')
+            .where('userId', isEqualTo: userId)
+            .where('startDate', isGreaterThanOrEqualTo: Timestamp.fromDate(now))
+            .orderBy('startDate')
+            .limit(1)
+            .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      return null;
+    }
+
+    final doc = querySnapshot.docs.first;
+    final data = doc.data();
+
+    return PlanState(
+      startDate: (data['startDate'] as Timestamp).toDate(),
+      endDate: (data['endDate'] as Timestamp).toDate(),
+      region: data['region'] as String,
+    );
+  }
 }
