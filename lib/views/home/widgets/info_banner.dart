@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_muse_app/providers/calendar_location_provider.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
+import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
 
 class InfoBanner extends ConsumerWidget {
   const InfoBanner({super.key});
@@ -9,7 +11,10 @@ class InfoBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final planState = ref.watch(calendarLocationViewModelProvider);
-    final viewModel = ref.read(calendarLocationViewModelProvider.notifier);
+    final userId = ref.watch(authViewModelProvider).user?.uid;
+    final planId = ref.watch(
+      calendarLocationViewModelProvider.select((state) => state.planId),
+    );
 
     final start = planState.startDate;
     final end = planState.endDate;
@@ -103,7 +108,26 @@ class InfoBanner extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              // TODO: 상세보기 이동 로직 연결
+              if (userId == null) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('로그인 정보가 없습니다.')));
+                return;
+              }
+
+              if (planId == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('유효한 계획 ID가 없습니다.')),
+                );
+                return;
+              }
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SchedulePage(userId: userId, planId: planId),
+                ),
+              );
             },
             style: TextButton.styleFrom(padding: EdgeInsets.zero),
             child: const Text(
