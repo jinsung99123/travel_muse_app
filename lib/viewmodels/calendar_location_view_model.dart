@@ -3,13 +3,20 @@ import 'package:travel_muse_app/providers/calendar_location_provider.dart';
 import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 
 class PlanState {
-  PlanState({this.startDate, this.endDate, this.region});
+  PlanState({this.planId, this.startDate, this.endDate, this.region});
+  final String? planId;
   final DateTime? startDate;
   final DateTime? endDate;
   final String? region;
 
-  PlanState copyWith({DateTime? startDate, DateTime? endDate, String? region}) {
+  PlanState copyWith({
+    String? planId,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? region,
+  }) {
     return PlanState(
+      planId: planId ?? this.planId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       region: region ?? this.region,
@@ -53,6 +60,9 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
       region: region,
       userId: userId,
     );
+
+    // 상태에 planId 업데이트 (필요 시)
+    state = state.copyWith(planId: planId);
   }
 
   /// 내부에서 자동 planId 생성 후 저장
@@ -74,10 +84,25 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
       userId: userId,
     );
 
+    // 생성된 planId를 상태에 저장
+    state = state.copyWith(planId: planId);
+
     return planId;
   }
 
   void setDateRange(DateTime start, DateTime end) {
     state = state.copyWith(startDate: start, endDate: end);
+  }
+
+  Future<void> loadNearestUpcomingPlan() async {
+    final userId = ref.read(authViewModelProvider).user?.uid;
+    if (userId == null) return;
+
+    final repo = ref.read(calendarLocationRepositoryProvider);
+    final plan = await repo.fetchNearestUpcomingPlan(userId);
+
+    if (plan != null) {
+      state = plan;
+    }
   }
 }
