@@ -81,6 +81,18 @@ $resultSummary
     await _firestore.collection(_collection).doc(test.testId).set(test.toMap());
   }
 
+  // appUser testId에 테스트 아이디 저장
+  Future<void> addTestIdToUser({
+    required String userId,
+    required String testId,
+  }) async {
+    final userDocRef = _firestore.collection('appUser').doc(userId);
+
+    await userDocRef.update({
+      'testId': FieldValue.arrayUnion([testId]),
+    });
+  }
+
   Future<PreferenceTest> loadTest(String testId) async {
     return await fetchTest(testId);
   }
