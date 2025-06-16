@@ -53,7 +53,6 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
                           '${formatMonthDay(savedPlans[index].startDate)}~${formatMonthDay(savedPlans[index].startDate)} ${formatRegion(savedPlans[index].region)} 여행',
                       index: index,
                       onTap: () {
-                        log('여행 세부 보기');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
