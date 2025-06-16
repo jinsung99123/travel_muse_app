@@ -7,6 +7,25 @@ import 'package:travel_muse_app/views/plan/location_setting/province_setting_pag
 class CalendarPage extends ConsumerWidget {
   const CalendarPage({super.key});
 
+  // 여행 일수 계산 함수
+  int getTripDays(DateTime start, DateTime end) {
+    return end.difference(start).inDays + 1;
+  }
+
+  // 버튼에 보여줄 텍스트 생성 함수
+  String getButtonText(DateTime? startDay, DateTime? endDay) {
+    if (startDay == null || endDay == null) {
+      return '다음';
+    } else {
+      final startStr =
+          '${startDay.year}.${startDay.month.toString().padLeft(2, '0')}.${startDay.day.toString().padLeft(2, '0')}';
+      final endStr =
+          '${endDay.year}.${endDay.month.toString().padLeft(2, '0')}.${endDay.day.toString().padLeft(2, '0')}';
+      final days = getTripDays(startDay, endDay);
+      return '$startStr ~ $endStr (${days}일) 선택하기';
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(calendarViewModelProvider.notifier);
@@ -88,16 +107,25 @@ class CalendarPage extends ConsumerWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProvinceSettingPage(),
-                      ),
-                    );
+                    if (state.startDay != null && state.endDay != null) {
+                      // 날짜가 모두 선택된 경우 다음 화면으로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProvinceSettingPage(),
+                        ),
+                      );
+                    } else {
+                      // 날짜가 선택되지 않은 경우 안내 메시지 띄우기
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('여행 날짜를 모두 선택해주세요.')),
+                      );
+                    }
                   },
-                  child: const Text(
-                    '다음',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  child: Text(
+                    getButtonText(state.startDay, state.endDay),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
