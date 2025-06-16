@@ -32,8 +32,12 @@ class DistrictBoxItem extends StatelessWidget {
         ),
         child: Text(
           text,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: text == '세종특별자치시' ? 13 : 16,
             fontWeight: FontWeight.bold,
             color: isSelected ? Colors.white : Colors.black,
           ),
