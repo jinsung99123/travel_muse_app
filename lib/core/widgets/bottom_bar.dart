@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/bottom_bar_provider.dart';
-import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
@@ -22,8 +21,8 @@ class BottomBar extends ConsumerWidget {
       Widget page;
       switch (index) {
         case 0:
-          page = const HomePage();
-          break;
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          return;
         case 1:
           page = const PlanListPage();
           break;
@@ -37,9 +36,10 @@ class BottomBar extends ConsumerWidget {
           return;
       }
 
-      Navigator.pushReplacement(
-        context,
+      // 홈만 남기고 새 페이지 push
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => page),
+        (route) => route.isFirst,
       );
     }
 
@@ -69,7 +69,7 @@ class BottomBar extends ConsumerWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 height: 100,
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10), // 아이콘과 텍스트 위로 이동
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
