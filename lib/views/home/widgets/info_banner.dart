@@ -98,7 +98,7 @@ class InfoBanner extends ConsumerWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '${end.difference(start).inDays + 1}박 ${end.difference(start).inDays + 2}일 | ${formatDate(start)} - ${formatDate(end)}',
+              '${end.difference(start).inDays}박 ${end.difference(start).inDays + 1}일 | ${formatDate(start)} - ${formatDate(end)}',
               style: const TextStyle(
                 fontSize: 14,
                 color: Color(0xFF7C878C),
