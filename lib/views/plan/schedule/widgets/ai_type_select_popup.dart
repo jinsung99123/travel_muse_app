@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_muse_app/models/preference_test_model.dart';
@@ -52,19 +51,27 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: EdgeInsets.zero,
+      backgroundColor: Colors.transparent, // 배경 여백 없게
+      contentPadding: EdgeInsets.zero, // 내부 여백도 제거
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      content: ConstrainedBox(
+      content: Container(
+        width: MediaQuery.of(context).size.width,
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.75,
+          maxHeight: MediaQuery.of(context).size.height * 0.85,
+        ),
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16),
-            decoration: ShapeDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -87,90 +94,99 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children:
                       _tests.map((test) {
                         final isSelected = _selectedTest?.testId == test.testId;
-                        return TypeSelectItem(
-                          test: test,
-                          isSelected: isSelected,
-                          onTap: () => setState(() => _selectedTest = test),
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TypeSelectItem(
+                            test: test,
+                            isSelected: isSelected,
+                            onTap: () => setState(() => _selectedTest = test),
+                          ),
                         );
                       }).toList(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: Color(0xFF98A0A4)),
-                        ),
-                      ),
-                      child: const Text(
-                        '취소',
-                        style: TextStyle(
-                          color: Color(0xFF34393B),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
+                    SizedBox(
+                      width: 123,
+                      height: 40,
+                      child: InkWell(
+                        onTap: () => Navigator.pop(context),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xFF98A0A4)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            '취소',
+                            style: TextStyle(
+                              color: Color(0xFF34393B),
+                              fontSize: 14,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w600,
+                              height: 1.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed:
-                          _selectedTest == null
-                              ? null
-                              : () async {
-                                EasyLoading.show(
-                                  status: 'AI 추천 일정을 생성 중입니다...',
-                                );
-                                try {
-                                  final typeCode =
-                                      _selectedTest!.result['type']!;
-                                  await Future.delayed(
-                                    const Duration(milliseconds: 500),
-                                  ); // 실제 async 함수라면 제거
-                                  await widget.onComplete(typeCode);
-                                } catch (e, s) {
-                                  log(
-                                    'onComplete error',
-                                    error: e,
-                                    stackTrace: s,
-                                    name: 'AiTypeSelectPopup',
-                                    level: 1000,
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 123,
+                      height: 40,
+                      child: InkWell(
+                        onTap:
+                            _selectedTest == null
+                                ? null
+                                : () async {
+                                  EasyLoading.show(
+                                    status: 'AI 추천 일정을 생성 중입니다...',
                                   );
-                                } finally {
-                                  EasyLoading.dismiss(); // 인디케이터 닫기
-                                  Navigator.pop(context); // 팝업 닫기
-                                }
-                              },
-
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF48CDFD),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        '완료',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
+                                  try {
+                                    final typeCode =
+                                        _selectedTest!.result['type']!;
+                                    await Future.delayed(
+                                      const Duration(milliseconds: 500),
+                                    );
+                                    await widget.onComplete(typeCode);
+                                  } catch (e, s) {
+                                    log(
+                                      'onComplete error',
+                                      error: e,
+                                      stackTrace: s,
+                                    );
+                                  } finally {
+                                    EasyLoading.dismiss();
+                                    Navigator.pop(context);
+                                  }
+                                },
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF48CDFD),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            '완료',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w600,
+                              height: 1.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
