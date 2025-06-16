@@ -35,6 +35,7 @@ class AiButton extends StatelessWidget {
                     days: days,
                     region: region,
                     typeCode: typeCode,
+                    context: context,
                   );
 
                   final parsed = _parseAiPlan(aiPlan);
