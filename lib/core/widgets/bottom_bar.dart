@@ -69,7 +69,7 @@ class BottomBar extends ConsumerWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 height: 100,
-                padding: const EdgeInsets.only(top: 10), // 아이콘과 텍스트 위로 이동
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
