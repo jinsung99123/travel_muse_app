@@ -51,7 +51,7 @@ class EditProfilePage extends ConsumerWidget {
                   text: '저장하기',
                   onPressed: () async {
                     await viewmodel.editProfile();
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                   isActivated: state.canEditProfile,
                 ),
