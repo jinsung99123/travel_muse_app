@@ -1,12 +1,35 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plans.dart';
+import 'package:travel_muse_app/repositories/calendar_location_repository.dart';
 import 'package:travel_muse_app/repositories/schedule_repository.dart';
 
-class ScheduleViewModel extends StateNotifier<AsyncValue<List<Plans>>> {
-  ScheduleViewModel(this._repository) : super(const AsyncLoading());
+class ScheduleState {
+  const ScheduleState({
+    this.allPlans = const <Plans>[],
+    this.savedPlans = const <Plans>[],
+  });
+
+  final List<Plans> allPlans;
+  final List<Plans> savedPlans;
+
+  ScheduleState copyWith({List<Plans>? allPlans, List<Plans>? savedPlans}) =>
+      ScheduleState(
+        allPlans: allPlans ?? this.allPlans,
+        savedPlans: savedPlans ?? this.savedPlans,
+      );
+}
+
+class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
+  ScheduleViewModel(this._repository) : super(const AsyncData(ScheduleState()));
 
   final ScheduleRepository _repository;
   List<Plans> _allPlans = [];
+  final currentUser = FirebaseAuth.instance.currentUser;
+
+  final calendarLocationRepo = CalendarLocationRepository();
 
   /// 선택된 plan 캐싱
   Plans? selectedPlan;
@@ -16,9 +39,32 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<List<Plans>>> {
     try {
       final plans = await _repository.fetchPlans(userId);
       _allPlans = plans;
-      state = AsyncData(plans);
+      state = AsyncData(state.value!.copyWith(allPlans: plans));
     } catch (e, st) {
       state = AsyncError(e, st);
+    }
+  }
+
+  // 수동 저장한 사용자 계획 불러오기
+  Future<void> fetchSavedPlans() async {
+    if (currentUser == null) return;
+    try {
+      final plans = await _repository.fetchSavedPlans(currentUser!.uid);
+      state = AsyncData(state.value!.copyWith(savedPlans: plans));
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+
+  Future<void> addPlanIdToAppUser(String planId) async {
+    if (currentUser == null) return;
+    try {
+      await _repository.addPlanIdToUser(
+        userId: currentUser!.uid,
+        planId: planId,
+      );
+    } catch (e) {
+      log('planId appUser에 추가 실패 : $e');
     }
   }
 

@@ -4,21 +4,19 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 class MyPageListItem extends StatelessWidget {
   const MyPageListItem({
     super.key,
-    required this.dbList,
+    required this.itemTitle,
     required this.index,
     required this.onTap,
   });
 
-  final List<String> dbList;
+  final String itemTitle;
   final int index;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // onTap
-      },
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
@@ -29,14 +27,19 @@ class MyPageListItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              dbList[index],
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
-                height: 1.50,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.75,
+              child: Text(
+                itemTitle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: AppColors.black,
+                  fontSize: 16,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w600,
+                  height: 1.50,
+                ),
               ),
             ),
             const Icon(

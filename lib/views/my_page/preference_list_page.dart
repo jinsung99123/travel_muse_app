@@ -43,11 +43,11 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                   : ListView.builder(
                     itemCount: testId.length,
                     itemBuilder: (context, index) {
-                      return MyPageListItem(
-                        dbList: testId,
-                        index: index,
-                        onTap: () {},
-                      );
+                      // return MyPageListItem(
+                      //   dbList: testId,
+                      //   index: index,
+                      //   onTap: () {},
+                      // );
                     },
                   ),
         ),
