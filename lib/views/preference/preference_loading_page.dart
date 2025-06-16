@@ -40,6 +40,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
                   (_) => ResultView(
                     onRestart: widget.onRestart,
                     showButtons: true,
+                    testId: '',
                   ),
             ),
           );

@@ -12,10 +12,12 @@ class ResultView extends ConsumerStatefulWidget {
     super.key,
     required this.onRestart,
     required this.showButtons,
+    required this.testId,
   });
 
   final VoidCallback onRestart;
   final bool showButtons;
+  final String testId;
 
   @override
   ConsumerState<ResultView> createState() => _ResultViewState();
@@ -32,9 +34,22 @@ class _ResultViewState extends ConsumerState<ResultView> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.testId != '') {
+        ref
+            .read(preferenceTestViewModelProvider.notifier)
+            .loadTest(widget.testId);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = ref.watch(preferenceTestViewModelProvider);
     final result = state.value?.result;
+
     final typeCode = result?['type'];
     final description = result?['details'];
     final imagePath = resultImageMap[typeCode] ?? '';
