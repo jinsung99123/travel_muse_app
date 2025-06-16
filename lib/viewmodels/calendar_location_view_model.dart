@@ -80,4 +80,16 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
   void setDateRange(DateTime start, DateTime end) {
     state = state.copyWith(startDate: start, endDate: end);
   }
+
+  Future<void> loadNearestUpcomingPlan() async {
+    final userId = ref.read(authViewModelProvider).user?.uid;
+    if (userId == null) return;
+
+    final repo = ref.read(calendarLocationRepositoryProvider);
+    final plan = await repo.fetchNearestUpcomingPlan(userId);
+
+    if (plan != null) {
+      state = plan;
+    }
+  }
 }
