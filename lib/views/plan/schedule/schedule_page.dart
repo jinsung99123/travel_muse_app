@@ -4,6 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/plans.dart';
 import 'package:travel_muse_app/providers/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
+import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ai_button.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/day_schedule_section.dart';
@@ -54,7 +55,13 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Future<void> _addPlace(int dayIndex) async {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
-      MaterialPageRoute(builder: (_) => PlaceSearchPage(planId: widget.planId, region: selectedPlan?.region ?? '',)),
+      MaterialPageRoute(
+        builder:
+            (_) => PlaceSearchPage(
+              planId: widget.planId,
+              region: selectedPlan?.region ?? '',
+            ),
+      ),
     );
 
     if (selectedPlaces != null && selectedPlaces.isNotEmpty) {
@@ -209,6 +216,11 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
+
+          await Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
         },
       ),
     );
