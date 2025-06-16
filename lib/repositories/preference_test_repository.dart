@@ -70,6 +70,14 @@ $resultSummary
     );
   }
 
+  /// Firestore에 테스트 저장
+  Future<String> saveTest(PreferenceTest test) async {
+    final docRef = _firestore.collection(_collection).doc();
+    final data = test.copyWith(testId: docRef.id).toMap();
+    await docRef.set(data);
+    return docRef.id;
+  }
+
   Future<PreferenceTest> saveOrUpdateTest(PreferenceTest test) async {
     if (test.testId.isEmpty) {
       final newId = await saveTest(test);
@@ -91,29 +99,21 @@ $resultSummary
     log('테스트아이디 업데이트 : $testId');
   }
 
-  Future<void> updateTest(PreferenceTest test) async {
-    await _firestore.collection(_collection).doc(test.testId).set(test.toMap());
-  }
-
-  Future<PreferenceTest> loadTest(String testId) async {
-    return await fetchTest(testId);
-  }
-
   final _firestore = FirebaseFirestore.instance;
   final _collection = 'preference_test';
 
-  /// Firestore에 테스트 저장
-  Future<String> saveTest(PreferenceTest test) async {
-    final docRef = _firestore.collection(_collection).doc();
-    final data = test.copyWith(testId: docRef.id).toMap();
-    await docRef.set(data);
-    return docRef.id;
+  Future<void> updateTest(PreferenceTest test) async {
+    await _firestore.collection(_collection).doc(test.testId).set(test.toMap());
   }
 
   /// Firestore에서 테스트 불러오기 (단건)
   Future<PreferenceTest> fetchTest(String testId) async {
     final doc = await _firestore.collection(_collection).doc(testId).get();
     return PreferenceTest.fromDoc(doc.id, doc.data()!);
+  }
+
+  Future<PreferenceTest> loadTest(String testId) async {
+    return await fetchTest(testId);
   }
 
   Stream<PreferenceTest> watchTest(String testId) {
