@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/preference_test_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 
@@ -10,40 +11,47 @@ class ResultActionButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final double buttonHeight = 48;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         children: [
           Expanded(
-            child: OutlinedButton(
-              onPressed: onRestart,
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF98A0A4), width: 1.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            child: GestureDetector(
+              onTap: onRestart,
+              child: Container(
+                height: buttonHeight,
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      width: 1,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                      color: AppColors.grey[300]!,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-              ),
-              child: const Text(
-                '돌아가기',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Pretendard',
-                  color: Color(0xFF34393B),
+                child: Center(
+                  child: Text(
+                    '돌아가기',
+                    style: TextStyle(
+                      color: AppColors.grey[700],
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      height: 1.50,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF48CDFD),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () async {
+            child: GestureDetector(
+              onTap: () async {
                 try {
                   await ref
                       .read(preferenceTestViewModelProvider.notifier)
@@ -71,13 +79,27 @@ class ResultActionButtons extends ConsumerWidget {
                   );
                 }
               },
-              child: const Text(
-                '저장하기',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Pretendard',
-                  color: Colors.white,
+              child: Container(
+                height: buttonHeight,
+                clipBehavior: Clip.antiAlias,
+                decoration: ShapeDecoration(
+                  color: AppColors.primary[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+
+                child: Center(
+                  child: Text(
+                    '저장하기',
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      height: 1.50,
+                    ),
+                  ),
                 ),
               ),
             ),
