@@ -52,7 +52,7 @@ class BottomBar extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      height: 56,
+      height: 100,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -68,9 +68,10 @@ class BottomBar extends ConsumerWidget {
               onTap: () => _onItemTapped(index),
               behavior: HitTestBehavior.opaque,
               child: Container(
-                height: 56,
+                height: 100,
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(
                       items[index]['icon'] as IconData,
