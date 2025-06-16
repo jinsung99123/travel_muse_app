@@ -36,7 +36,11 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
           await Navigator.pushReplacement(
             context,
             CupertinoPageRoute(
-              builder: (_) => ResultView(onRestart: widget.onRestart),
+              builder:
+                  (_) => ResultView(
+                    onRestart: widget.onRestart,
+                    showButtons: true,
+                  ),
             ),
           );
         }
