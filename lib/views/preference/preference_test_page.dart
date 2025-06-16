@@ -114,7 +114,11 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
       child: SafeArea(
         child:
             isFinished
-                ? ResultView(onRestart: _restartTest, showButtons: true)
+                ? ResultView(
+                  onRestart: _restartTest,
+                  showButtons: true,
+                  testId: '',
+                )
                 : Column(
                   children: [
                     Expanded(

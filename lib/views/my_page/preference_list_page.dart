@@ -63,6 +63,7 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                                   (_) => ResultView(
                                     onRestart: () {},
                                     showButtons: false,
+                                    testId: _tests[index].testId,
                                   ),
                             ),
                           );
