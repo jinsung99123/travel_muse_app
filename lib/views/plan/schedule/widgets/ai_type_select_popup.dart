@@ -51,9 +51,9 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      insetPadding: EdgeInsets.zero,
-      backgroundColor: Colors.transparent, // 배경 여백 없게
-      contentPadding: EdgeInsets.zero, // 내부 여백도 제거
+      insetPadding: const EdgeInsets.symmetric(horizontal: 35, vertical: 8),
+      backgroundColor: Colors.transparent,
+      contentPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       content: Container(
         width: MediaQuery.of(context).size.width,
@@ -61,139 +61,131 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
           maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
         padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: const Center(
-                    child: Text(
-                      'Ai 추천 받을 성향을 선택해주세요',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF26272A),
-                        fontSize: 18,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w600,
-                        height: 1.50,
-                      ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: const Center(
+                  child: Text(
+                    'Ai 추천 받을 성향을 선택해주세요',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF26272A),
+                      fontSize: 18,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      height: 1.50,
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      _tests.map((test) {
-                        final isSelected = _selectedTest?.testId == test.testId;
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: TypeSelectItem(
-                            test: test,
-                            isSelected: isSelected,
-                            onTap: () => setState(() => _selectedTest = test),
-                          ),
-                        );
-                      }).toList(),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 123,
-                      height: 40,
-                      child: InkWell(
-                        onTap: () => Navigator.pop(context),
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFF98A0A4)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            '취소',
-                            style: TextStyle(
-                              color: Color(0xFF34393B),
-                              fontSize: 14,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              height: 1.5,
-                            ),
+              ),
+              const SizedBox(height: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                    _tests.map((test) {
+                      final isSelected = _selectedTest?.testId == test.testId;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: TypeSelectItem(
+                          test: test,
+                          isSelected: isSelected,
+                          onTap: () => setState(() => _selectedTest = test),
+                        ),
+                      );
+                    }).toList(),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 123,
+                    height: 40,
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFF98A0A4)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          '취소',
+                          style: TextStyle(
+                            color: Color(0xFF34393B),
+                            fontSize: 14,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    SizedBox(
-                      width: 123,
-                      height: 40,
-                      child: InkWell(
-                        onTap:
-                            _selectedTest == null
-                                ? null
-                                : () async {
-                                  EasyLoading.show(
-                                    status: 'AI 추천 일정을 생성 중입니다...',
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: 123,
+                    height: 40,
+                    child: InkWell(
+                      onTap:
+                          _selectedTest == null
+                              ? null
+                              : () async {
+                                EasyLoading.show(
+                                  status: 'AI 추천 일정을 생성 중입니다...',
+                                );
+                                try {
+                                  final typeCode =
+                                      _selectedTest!.result['type']!;
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 500),
                                   );
-                                  try {
-                                    final typeCode =
-                                        _selectedTest!.result['type']!;
-                                    await Future.delayed(
-                                      const Duration(milliseconds: 500),
-                                    );
-                                    await widget.onComplete(typeCode);
-                                  } catch (e, s) {
-                                    log(
-                                      'onComplete error',
-                                      error: e,
-                                      stackTrace: s,
-                                    );
-                                  } finally {
-                                    EasyLoading.dismiss();
-                                    Navigator.pop(context);
-                                  }
-                                },
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF48CDFD),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            '완료',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              height: 1.5,
-                            ),
+                                  await widget.onComplete(typeCode);
+                                } catch (e, s) {
+                                  log(
+                                    'onComplete error',
+                                    error: e,
+                                    stackTrace: s,
+                                  );
+                                } finally {
+                                  EasyLoading.dismiss();
+                                  Navigator.pop(context);
+                                }
+                              },
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF48CDFD),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          '완료',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
