@@ -52,6 +52,6 @@ Day N:
 ※ 장소명은 '__' 같은 특수문자 없이 실제 장소 이름으로 작성해줘.
 ''';
 
-    return await _aiService.generate(prompt);
+    return await _aiService.generate(prompt, context);
   }
 }

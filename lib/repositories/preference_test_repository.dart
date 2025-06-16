@@ -46,7 +46,7 @@ $resultSummary
 모험가: 체험형 모험가
 ''';
 
-    final typeCode = await _aiService.getTypeCodeFromAI(prompt);
+    final typeCode = await _aiService.getTypeCodeFromAI(prompt, context);
     final description = _typeDescriptions[typeCode] ?? '알 수 없는 유형';
     final now = DateTime.now();
 
