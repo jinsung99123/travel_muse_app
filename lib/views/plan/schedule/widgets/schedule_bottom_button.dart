@@ -26,7 +26,7 @@ class ScheduleBottomButtons extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Text(
-            '일정 수정하기',
+            '일정 저장하기',
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
