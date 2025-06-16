@@ -7,8 +7,8 @@ import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/ai_button.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/day_schedule_section.dart';
-import 'package:travel_muse_app/views/plan/widgets/schedule_app_bar.dart';
 import 'package:travel_muse_app/views/plan/schedule/widgets/schedule_bottom_button.dart';
+import 'package:travel_muse_app/views/plan/widgets/schedule_app_bar.dart';
 
 class SchedulePage extends ConsumerStatefulWidget {
   const SchedulePage({super.key, required this.userId, required this.planId});
@@ -54,7 +54,13 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Future<void> _addPlace(int dayIndex) async {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
-      MaterialPageRoute(builder: (_) => PlaceSearchPage(planId: widget.planId, region: selectedPlan?.region ?? '',)),
+      MaterialPageRoute(
+        builder:
+            (_) => PlaceSearchPage(
+              planId: widget.planId,
+              region: selectedPlan?.region ?? '',
+            ),
+      ),
     );
 
     if (selectedPlaces != null && selectedPlaces.isNotEmpty) {
