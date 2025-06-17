@@ -38,8 +38,7 @@ dependencies:
   firebase_ai: ^2.1.0
   fluttertoast: ^8.2.12
   flutter_easyloading: ^3.0.5
-  firebase_ai: ^2.1.0
-  fluttertoast: ^8.2.12
+  sign_in_with_apple: ^7.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
