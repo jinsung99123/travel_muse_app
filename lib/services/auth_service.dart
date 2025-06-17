@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Result<T> {
   // 데이터 or 실패 사유
@@ -43,6 +44,41 @@ class AuthService {
     } on SocketException {
       return Result.failure('네트워크 오류');
     } catch (_) {
+      return Result.failure('알 수 없는 오류');
+    }
+  }
+
+  Future<Result<UserCredential>> signInWithApple() async {
+    try {
+      if (!Platform.isIOS) {
+        return Result.failure('타 플랫폼에서 로그인 시도');
+      }
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final credential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        credential,
+      );
+
+      return Result.success(userCredential);
+    } on SocketException {
+      return Result.failure('네트워크 오류');
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        return Result.failure('유저 취소');
+      }
+      return Result.failure('Apple 로그인 오류: ${e.message}');
+    } catch (e) {
       return Result.failure('알 수 없는 오류');
     }
   }

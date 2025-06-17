@@ -58,8 +58,7 @@ class LoginPage extends ConsumerWidget {
                       width: iconSize,
                       height: iconSize,
                     ),
-                    loginFunction:
-                        () => viewmodel.loginWithGoogle(), // TODO: 애플로그인으로 변경
+                    loginFunction: () => viewmodel.loginWithApple(),
                   ),
                 ],
               ),

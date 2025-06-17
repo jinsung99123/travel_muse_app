@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
 import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
+import 'package:travel_muse_app/views/login/login_page.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 import 'package:travel_muse_app/views/widgets/next_button.dart';
@@ -30,10 +32,10 @@ class EditProfilePage extends ConsumerWidget {
                 EditProfileImage(size: 88),
                 EditNickname(),
 
-                // 로그아웃 버튼
+                //로그아웃 버튼
                 // ElevatedButton(
                 //   onPressed: () {
-                //     authViewModel.logout();
+                //     ref.read(authViewModelProvider.notifier).logout();
                 //     Navigator.pushAndRemoveUntil(
                 //       context,
                 //       MaterialPageRoute(builder: (_) => LoginPage()),
