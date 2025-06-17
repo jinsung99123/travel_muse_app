@@ -72,4 +72,15 @@ class CalendarLocationRepository {
       region: data['region'] as String,
     );
   }
+
+  Future<void> addPlanIdToUser({
+    required String userId,
+    required String planId,
+  }) async {
+    final userDocRef = _firestore.collection('appUser').doc(userId);
+
+    await userDocRef.update({
+      'planId': FieldValue.arrayUnion([planId]),
+    });
+  }
 }

@@ -120,4 +120,13 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.50,
   );
+
+  // 여행 성향 설명 텍스트
+  static TextStyle preferenceDescriptionText = TextStyle(
+    color: AppColors.grey[600],
+    fontSize: 18,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
 }

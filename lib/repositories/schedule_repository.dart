@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_muse_app/models/plans.dart';
 
@@ -19,6 +21,46 @@ class ScheduleRepository {
           (doc) => Plans.fromJson(doc.id, doc.data() as Map<String, dynamic>),
         )
         .toList();
+  }
+
+  Future<List<Plans>> fetchSavedPlans(String userId) async {
+    try {
+      final userDoc = await _firestore.collection('appUser').doc(userId).get();
+
+      if (!userDoc.exists) return [];
+
+      final List<String> planIdList = List<String>.from(
+        userDoc.data()!['planId'],
+      );
+
+      if (planIdList.isEmpty) return [];
+
+      final plansQuery =
+          await _firestore
+              .collection('plans')
+              .where(FieldPath.documentId, whereIn: planIdList)
+              .get();
+
+      return plansQuery.docs
+          .map((doc) => Plans.fromJson(doc.id, doc.data()))
+          .toList();
+    } catch (e) {
+      log('fetchSavedPlans 에러: $e');
+      return [];
+    }
+  }
+
+  // appUser planId에 플랜 아이디 저장
+  Future<void> addPlanIdToUser({
+    required String userId,
+    required String planId,
+  }) async {
+    final userDocRef = _firestore.collection('appUser').doc(userId);
+
+    await userDocRef.update({
+      'planId': FieldValue.arrayUnion([planId]),
+    });
+    log('planId 등록 시도');
   }
 
   Future<void> saveDaySchedules({

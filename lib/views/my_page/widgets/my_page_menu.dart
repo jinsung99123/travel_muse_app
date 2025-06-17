@@ -21,7 +21,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PlanListPage()),
+                MaterialPageRoute(builder: (context) => PlanListPage()),
               );
             },
           ),
