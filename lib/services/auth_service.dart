@@ -53,22 +53,12 @@ class AuthService {
       if (!Platform.isIOS) {
         return Result.failure('타 플랫폼에서 로그인 시도');
       }
-      print('플랫폼: ios');
 
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.travelmuse.app', //  서비스 ID
-          redirectUri: Uri.parse(
-            'https://travelmuse-17222.firebaseapp.com/__/auth/handler', // redirect URI
-          ),
-        ),
-      );
-      print(
-        'Apple Credential: ${appleCredential.identityToken}, ${appleCredential.authorizationCode}',
       );
 
       final credential = OAuthProvider("apple.com").credential(
