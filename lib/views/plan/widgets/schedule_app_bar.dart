@@ -10,7 +10,10 @@ class ScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      leading: IconButton(
+        icon: const Icon(Icons.chevron_left),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       title: Text(
         '여행 일정 등록',
         style: TextStyle(
