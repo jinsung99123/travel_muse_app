@@ -311,13 +311,15 @@ lib/
 
 
 
-## 9.Git 브랜치 전략
+## 9.Git 협업 전략 가이드
 
-- 링크
+- [git 협업 전략 가이드](https://github.com/jinsung99123/travel_muse_app/wiki/Git-%ED%98%91%EC%97%85-%EC%A0%84%EB%9E%B5-%EA%B0%80%EC%9D%B4%EB%93%9C)
 
 
 ## 10.트러블슈팅 & 해결 사례
-- 링크
+- [AI 추천 이후 Kakao API 연동 시 429 오류 발생 문제](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-AI-%EC%B6%94%EC%B2%9C-%EC%9D%B4%ED%9B%84-Kakao-API-%EC%97%B0%EB%8F%99-%EC%8B%9C-429-%EC%98%A4%EB%A5%98-%EB%B0%9C%EC%83%9D)
+- [트러블 슈팅 MapPage 진입 시 앱 종료 및 TabController 오류 발생 문제](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-MapPage-%EC%A7%84%EC%9E%85-%EC%8B%9C-%EC%95%B1-%EC%A2%85%EB%A3%8C-%EB%B0%8F-TabController-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
+
 
 
 
