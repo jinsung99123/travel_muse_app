@@ -33,17 +33,17 @@ class EditProfilePage extends ConsumerWidget {
                 EditNickname(),
 
                 //로그아웃 버튼
-                ElevatedButton(
-                  onPressed: () {
-                    ref.read(authViewModelProvider.notifier).logout();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => LoginPage()),
-                      (route) => false,
-                    );
-                  },
-                  child: Text('로그아웃'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     ref.read(authViewModelProvider.notifier).logout();
+                //     Navigator.pushAndRemoveUntil(
+                //       context,
+                //       MaterialPageRoute(builder: (_) => LoginPage()),
+                //       (route) => false,
+                //     );
+                //   },
+                //   child: Text('로그아웃'),
+                // ),
               ],
             ),
             Column(
