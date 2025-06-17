@@ -43,7 +43,23 @@ class AuthViewModel extends Notifier<AuthState> {
       // Firestore Database에 유저 최초 등록
       await _appUserRepository.createAppUser(user!.uid);
 
-      log('로그인 성공: ${result.data.runtimeType}');
+      log('google로 로그인 성공: ${result.data!.user!.uid}');
+      await isUserNew();
+    } else {
+      log('로그인 실패: ${result.error}');
+    }
+  }
+
+  Future<void> loginWithApple() async {
+    final result = await _authService.signInWithApple();
+
+    if (result.isSuccess) {
+      final user = result.data!.user;
+      state = state.copyWith(user: user);
+
+      await _appUserRepository.createAppUser(user!.uid);
+
+      log('apple로 로그인 성공: ${result.data!.user!.uid}');
       await isUserNew();
     } else {
       log('로그인 실패: ${result.error}');

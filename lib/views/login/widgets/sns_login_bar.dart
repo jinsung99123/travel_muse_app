@@ -25,14 +25,17 @@ class SnsLoginBar extends ConsumerWidget {
     return GestureDetector(
       onTap: () async {
         await loginFunction();
-        final isNew = ref.read(authViewModelProvider).isUserNew;
+        final state = ref.watch(authViewModelProvider);
+        if (state.user != null) {
+          final isNew = ref.read(authViewModelProvider).isUserNew;
 
-        final nextPage = isNew ? const OnboardingPage() : const HomePage();
+          final nextPage = isNew ? const OnboardingPage() : const HomePage();
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => nextPage),
-        );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => nextPage),
+          );
+        }
       },
       child: Container(
         height: 56,
