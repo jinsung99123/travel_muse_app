@@ -61,7 +61,7 @@ class AuthService {
         ],
       );
 
-      final credential = OAuthProvider("apple.com").credential(
+      final credential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );

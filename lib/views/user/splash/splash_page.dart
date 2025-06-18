@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
+import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
 import 'package:travel_muse_app/views/user/onboarding/onboarding_page.dart';

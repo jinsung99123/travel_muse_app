@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
+import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/login/widgets/sns_login_bar.dart';
 
 class LoginPage extends ConsumerWidget {

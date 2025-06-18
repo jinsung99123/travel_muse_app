@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plan/planstate.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
+import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
 
 class CalendarLocationViewModel extends StateNotifier<PlanState> {
