@@ -22,7 +22,7 @@ class CalendarPage extends ConsumerWidget {
       final endStr =
           '${endDay.year}.${endDay.month.toString().padLeft(2, '0')}.${endDay.day.toString().padLeft(2, '0')}';
       final days = getTripDays(startDay, endDay);
-      return '$startStr ~ $endStr (${days}일) 선택하기';
+      return '$startStr ~ $endStr ($days일) 선택하기';
     }
   }
 
