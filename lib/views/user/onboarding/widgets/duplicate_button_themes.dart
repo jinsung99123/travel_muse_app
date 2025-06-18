@@ -3,6 +3,10 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 
 class DuplicateButtonThemes {
+  static String unavailableString = '확인 불가';
+  static String availableString = '확인 필요';
+  static String alreadyCheckedString = '확인 완료';
+
   static ShapeDecoration unavailableBoxStyle = ShapeDecoration(
     color: AppColors.grey[50],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -35,11 +39,11 @@ class DuplicateButtonThemes {
 
   ShapeDecoration getButtonStyle(String buttonState) {
     ShapeDecoration result = unavailableBoxStyle;
-    if (buttonState == '확인 불가') {
+    if (buttonState == unavailableString) {
       result = unavailableBoxStyle;
-    } else if (buttonState == '확인 필요') {
+    } else if (buttonState == availableString) {
       result = availableBoxStyle;
-    } else if (buttonState == '확인 완료') {
+    } else if (buttonState == alreadyCheckedString) {
       result = alreadyCheckedBoxStyle;
     }
     return result;
@@ -47,11 +51,11 @@ class DuplicateButtonThemes {
 
   Text getText(String buttonState) {
     Text result = unavailableText;
-    if (buttonState == '확인 불가') {
+    if (buttonState == unavailableString) {
       result = unavailableText;
-    } else if (buttonState == '확인 필요') {
+    } else if (buttonState == availableString) {
       result = availableText;
-    } else if (buttonState == '확인 완료') {
+    } else if (buttonState == alreadyCheckedString) {
       result = alreadyCheckedText;
     }
     return result;

@@ -65,7 +65,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
                                         as ImageProvider,
                             fit: BoxFit.cover,
                           )
-                          : null,
+                          : null, // TODO: 기본 프로필 이미지 디자인 작업 완료 후 -> 기본 프로필 이미지 default로 표시
                 ),
                 child:
                     imageUrlToShow == null
