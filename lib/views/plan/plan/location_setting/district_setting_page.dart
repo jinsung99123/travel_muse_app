@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
+import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
@@ -12,10 +12,10 @@ class DistrictSettingPage extends ConsumerStatefulWidget {
   final String selectedProvince;
 
   @override
-  _DistrictSettingPageState createState() => _DistrictSettingPageState();
+  DistrictSettingPageState createState() => DistrictSettingPageState();
 }
 
-class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
+class DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
   late List<String> districts;
   int? selectedIndex;
 
@@ -134,6 +134,7 @@ class _DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
                                 );
                               }
                             } catch (e) {
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('저장 중 오류가 발생했습니다: $e')),
                               );
