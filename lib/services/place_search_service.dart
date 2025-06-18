@@ -1,99 +1,140 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_muse_app/models/place.dart';
 
 class PlaceSearchService {
-  //API 기본 값 
+
   static const _baseKeywordUrl   = 'https://dapi.kakao.com/v2/local/search/keyword.json';
   static const _baseCategoryUrl  = 'https://dapi.kakao.com/v2/local/search/category.json';
   static const _baseImageUrl     = 'https://dapi.kakao.com/v2/search/image';
   static final  String _apiKey   = 'KakaoAK ${dotenv.env['KAKAO_API_KEY'] ?? ''}';
 
-  //키워드 검색
   Future<List<Place>> search(String query) async {
-    final url = Uri.parse('$_baseKeywordUrl?query=$query');
+    final url = Uri.parse('$_baseKeywordUrl?query=${Uri.encodeQueryComponent(query)}');
     return _requestPlaces(url);
   }
 
-  //키워드 + 위치
   Future<List<Place>> searchByKeyword({
     required String query,
     required double lat,
     required double lng,
-    int radius = 10000,
+    int radius = 10_000,
     int page   = 1,
     int size   = 15,
   }) async {
     final url = Uri.parse(
-      '$_baseKeywordUrl?query=$query&y=$lat&x=$lng'
+      '$_baseKeywordUrl'
+      '?query=${Uri.encodeQueryComponent(query)}'
+      '&y=$lat&x=$lng'
       '&radius=$radius&page=$page&size=$size&sort=distance',
     );
     return _requestPlaces(url);
   }
 
-  //카테고리 + 위치
   Future<List<Place>> searchByCategory({
-    required String categoryCode, 
+    required String categoryCode,
     required double lat,
     required double lng,
-    int radius = 10000,
+    int radius = 10_000,
     int page   = 1,
     int size   = 15,
   }) async {
     final url = Uri.parse(
-      '$_baseCategoryUrl?category_group_code=$categoryCode'
-      '&y=$lat&x=$lng&radius=$radius&page=$page&size=$size&sort=distance',
+      '$_baseCategoryUrl'
+      '?category_group_code=$categoryCode'
+      '&y=$lat&x=$lng'
+      '&radius=$radius&page=$page&size=$size&sort=distance',
     );
     return _requestPlaces(url);
   }
 
-  //공통 HTTP 처리
   Future<List<Place>> _requestPlaces(Uri url) async {
-    final res = await http.get(url, headers: {'Authorization': _apiKey});
-    if (res.statusCode != 200) {
-      throw Exception('Kakao API 실패: ${res.statusCode}');
+    try {
+      final res = await http.get(url, headers: {
+        'Authorization': _apiKey,
+        'User-Agent': 'Mozilla/5.0',
+      });
+
+      // 429: Too Many Requests → 앱 크래시 방지, 빈 리스트 반환
+      if (res.statusCode == 429) {
+        debugPrint('Kakao 429 Too Many Requests: ${url.queryParameters['query']}');
+        return [];
+      }
+
+      if (res.statusCode != 200) {
+        throw Exception('Kakao API 실패: ${res.statusCode}');
+      }
+
+      final docs = json.decode(res.body)['documents'] as List<dynamic>;
+      return docs.map((e) => Place.fromKakaoJson(e)).toList();
+    } catch (e) {
+      debugPrint('Kakao 요청 오류: $e');
+      return [];
     }
-    final docs = json.decode(res.body)['documents'] as List<dynamic>;
-    return docs.map((e) => Place.fromKakaoJson(e)).toList();
   }
 
-  //이미지 썸네일 직접호출
   Future<String?> fetchImageThumbnail(String keyword) async {
-    final url = Uri.parse('$_baseImageUrl?query=$keyword&size=1');
-    final res = await http.get(url, headers: {'Authorization': _apiKey});
-    if (res.statusCode != 200) return null;
+    final url = Uri.parse(
+      '$_baseImageUrl?query=${Uri.encodeQueryComponent(keyword)}&size=1',
+    );
+    try {
+      final res = await http.get(url, headers: {
+        'Authorization': _apiKey,
+        'User-Agent': 'Mozilla/5.0',
+      });
 
-    final docs = json.decode(res.body)['documents'] as List<dynamic>;
-    return docs.isNotEmpty ? docs[0]['thumbnail_url'] as String : null;
+      if (res.statusCode == 429) {
+        debugPrint('Kakao 이미지 429: $keyword');
+        return null;
+      }
+      if (res.statusCode != 200) return null;
+
+      final docs = json.decode(res.body)['documents'] as List<dynamic>;
+      return docs.isNotEmpty ? docs[0]['thumbnail_url'] as String : null;
+    } catch (e) {
+      debugPrint('썸네일 요청 실패: $e');
+      return null;
+    }
   }
 
-  //썸네일 캐시 래퍼 
-  final Map<String, String> _thumbCache = {};          // keyword -> url
-
+  //썸네일 캐싱
+  final Map<String, String> _thumbCache = {}; // keyword → url
   Future<String?> getThumbnailCached(String keyword) async {
     if (_thumbCache.containsKey(keyword)) return _thumbCache[keyword];
-
     final url = await fetchImageThumbnail(keyword);
     if (url != null) _thumbCache[keyword] = url;
     return url;
   }
+ //주소 좌표 변환
+  Future<LatLng?> getLatLngFromRegion(String region) async {
+    final url = Uri.parse(
+      'https://dapi.kakao.com/v2/local/search/address.json'
+      '?query=${Uri.encodeQueryComponent(region)}',
+    );
+    try {
+      final res = await http.get(url, headers: {
+        'Authorization': _apiKey,
+        'User-Agent': 'Mozilla/5.0',
+      });
 
-  // 지역명을 좌표로 변환하는 메서드
-Future<LatLng?> getLatLngFromRegion(String region) async {
-  final url = Uri.parse(
-    'https://dapi.kakao.com/v2/local/search/address.json?query=$region',
-  );
-  final res = await http.get(url, headers: {'Authorization': _apiKey});
-  if (res.statusCode != 200) return null;
+      if (res.statusCode == 429) {
+        debugPrint('Kakao 주소→좌표 429: $region');
+        return null;
+      }
+      if (res.statusCode != 200) return null;
 
-  final docs = json.decode(res.body)['documents'] as List<dynamic>;
-  if (docs.isEmpty) return null;
+      final docs = json.decode(res.body)['documents'] as List<dynamic>;
+      if (docs.isEmpty) return null;
 
-  final lat = double.tryParse(docs[0]['y']) ?? 0;
-  final lng = double.tryParse(docs[0]['x']) ?? 0;
-  return LatLng(lat, lng);
-}
-
+      final lat = double.tryParse(docs[0]['y']) ?? 0;
+      final lng = double.tryParse(docs[0]['x']) ?? 0;
+      return LatLng(lat, lng);
+    } catch (e) {
+      debugPrint('주소→좌표 실패: $e');
+      return null;
+    }
+  }
 }
