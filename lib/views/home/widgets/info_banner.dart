@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_muse_app/providers/calendar_location_provider.dart';
-import 'package:travel_muse_app/viewmodels/auth_view_model.dart';
-import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
+import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
+import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
 class InfoBanner extends ConsumerWidget {
   const InfoBanner({super.key});

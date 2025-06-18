@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/bottom_bar_provider.dart';
+import 'package:travel_muse_app/core/bottom_bar_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';

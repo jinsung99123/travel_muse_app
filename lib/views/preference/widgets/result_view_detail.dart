@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/models/preference_test_model.dart';
-import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/models/preference/preference_test_model.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
 

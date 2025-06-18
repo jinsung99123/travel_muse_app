@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/home_view_model_provider.dart';
-import 'package:travel_muse_app/providers/selected_tag_provider.dart';
+import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
+import 'package:travel_muse_app/providers/home/selected_tag_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/hashtag_selector.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_carousel.dart';
@@ -24,14 +24,18 @@ class RecommendedPlacesList extends ConsumerWidget {
           onTagTap: (tag) => selectedTagNotifier.state = tag,
         ),
         homeAsync.when(
-          loading: () => const SizedBox(
-              height: 170,
-              child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
-          error: (_, __) => const SizedBox(
-              height: 170,
-              child: Center(child: Text('추천 명소를 불러오지 못했어요'))),
+          loading:
+              () => const SizedBox(
+                height: 170,
+                child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              ),
+          error:
+              (_, __) => const SizedBox(
+                height: 170,
+                child: Center(child: Text('추천 명소를 불러오지 못했어요')),
+              ),
           data: (state) {
-            final spots = viewModel.getFilteredSpots(state.spots,selectedTag);
+            final spots = viewModel.getFilteredSpots(state.spots, selectedTag);
             if (spots.isEmpty) {
               return const SizedBox(
                 height: 170,
@@ -46,12 +50,13 @@ class RecommendedPlacesList extends ConsumerWidget {
           child: Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const RecommendedPlacesListPage(),
-                ),
-              ),
+              onPressed:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const RecommendedPlacesListPage(),
+                    ),
+                  ),
               child: const Text(
                 '더보기 >',
                 style: TextStyle(

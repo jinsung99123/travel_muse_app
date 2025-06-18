@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 
 class ResultActionButtons extends ConsumerWidget {

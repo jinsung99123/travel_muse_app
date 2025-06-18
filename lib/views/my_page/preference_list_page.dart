@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
-import 'package:travel_muse_app/models/preference_test_model.dart';
-import 'package:travel_muse_app/providers/preference_test_provider.dart';
-import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
+import 'package:travel_muse_app/models/preference/preference_test_model.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
+import 'package:travel_muse_app/viewmodels/user/profile_view_model.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
 

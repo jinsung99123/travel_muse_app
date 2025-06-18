@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/models/home_place.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/action_button_row.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
@@ -33,11 +33,15 @@ class _RecommendedPlaceDetailPageState
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        titleSpacing: 0, 
+        titleSpacing: 0,
         title: Row(
           children: [
             IconButton(
-              icon:  Icon(Icons.chevron_left, color: AppColors.grey[500], size: 24,),
+              icon: Icon(
+                Icons.chevron_left,
+                color: AppColors.grey[500],
+                size: 24,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
             const SizedBox(width: 4),
@@ -47,7 +51,7 @@ class _RecommendedPlaceDetailPageState
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Colors.black,
-                fontFamily: 'Pretendard'
+                fontFamily: 'Pretendard',
               ),
             ),
           ],

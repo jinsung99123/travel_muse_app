@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/core/format_month_day.dart';
-import 'package:travel_muse_app/core/format_region.dart';
+import 'package:travel_muse_app/utills/format_month_day.dart';
+import 'package:travel_muse_app/utills/format_region.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
-import 'package:travel_muse_app/providers/schedule_provider.dart';
-import 'package:travel_muse_app/viewmodels/profile_view_model.dart';
-import 'package:travel_muse_app/viewmodels/schedule_view_model.dart';
+import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
+import 'package:travel_muse_app/viewmodels/user/profile_view_model.dart';
+import 'package:travel_muse_app/viewmodels/plan/schedule_view_model.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
-import 'package:travel_muse_app/views/plan/schedule/schedule_page.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
 class PlanListPage extends ConsumerStatefulWidget {
   const PlanListPage({super.key});

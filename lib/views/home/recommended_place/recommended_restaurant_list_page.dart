@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/home_view_model_provider.dart';
+import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_restaurant_list_card.dart';
 
 class RecommendedRestaurantsListPage extends ConsumerWidget {

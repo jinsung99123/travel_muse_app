@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:travel_muse_app/models/home_place.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 
 class PlaceMapView extends StatelessWidget {
   const PlaceMapView({super.key, required this.place});
@@ -16,10 +16,7 @@ class PlaceMapView extends StatelessWidget {
       child: SizedBox(
         height: 200,
         child: GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: position,
-            zoom: 13,
-          ),
+          initialCameraPosition: CameraPosition(target: position, zoom: 13),
           markers: {
             Marker(
               markerId: MarkerId(place.id),

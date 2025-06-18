@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
-import 'package:travel_muse_app/providers/home_view_model_provider.dart';
+import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_place_list_card.dart';
 
 class RecommendedPlacesListPage extends ConsumerWidget {

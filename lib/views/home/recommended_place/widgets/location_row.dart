@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/models/home_place.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 
 class LocationRow extends StatelessWidget {
   const LocationRow({super.key, required this.place});
