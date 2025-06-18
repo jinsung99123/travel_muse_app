@@ -45,8 +45,7 @@ class LoginPage extends ConsumerWidget {
                       width: iconSize,
                       height: iconSize,
                     ),
-                    loginFunction:
-                        () => viewmodel.loginWithGoogle(), // SignWithGoogle
+                    loginFunction: () => viewmodel.loginWithGoogle(),
                   ),
                   SizedBox(height: 12),
                   SnsLoginBar(

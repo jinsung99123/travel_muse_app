@@ -22,6 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
       Widget nextPage = LoginPage();
 
       Timer(const Duration(seconds: 2), () async {
+        final navigator = Navigator.of(context);
         if (ref.read(authViewModelProvider).user != null) {
           final viewmodel = ref.read(authViewModelProvider.notifier);
           await viewmodel.isUserNew();
@@ -36,9 +37,10 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
           }
         }
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => nextPage),
+        unawaited(
+          navigator.pushReplacement(
+            MaterialPageRoute(builder: (context) => nextPage),
+          ),
         );
       });
     });

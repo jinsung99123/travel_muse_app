@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 
-class NextButton extends StatelessWidget {
-  const NextButton({
+class UserNextButton extends StatelessWidget {
+  const UserNextButton({
     super.key,
     required this.text,
     required this.onPressed,
@@ -19,7 +19,6 @@ class NextButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: GestureDetector(
         onTap: () {
-          //
           onPressed();
         },
         child: Container(
