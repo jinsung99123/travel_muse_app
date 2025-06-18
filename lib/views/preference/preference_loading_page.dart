@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
 
 class PreferenceLoadingPage extends ConsumerStatefulWidget {

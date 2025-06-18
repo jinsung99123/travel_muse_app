@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/core/widgets/svg_icon.dart';
-import 'package:travel_muse_app/views/calendar/calendar_page.dart';
+import 'package:travel_muse_app/views/plan/plan/calendar/calendar_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 
 class TravelRegisterButton extends StatelessWidget {

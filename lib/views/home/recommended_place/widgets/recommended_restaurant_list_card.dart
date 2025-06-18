@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/models/home_place.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedRestaurantListCard extends StatelessWidget {
@@ -9,7 +9,7 @@ class RecommendedRestaurantListCard extends StatelessWidget {
     required this.image,
     required this.description,
     required this.isActive,
-    this.place, 
+    this.place,
   });
 
   final String name;
@@ -21,16 +21,17 @@ class RecommendedRestaurantListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isActive && place != null
-          ? () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => RecommendedPlaceDetailPage(place: place!),
-                ),
-              );
-            }
-          : null,
+      onTap:
+          isActive && place != null
+              ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => RecommendedPlaceDetailPage(place: place!),
+                  ),
+                );
+              }
+              : null,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -49,26 +50,27 @@ class RecommendedRestaurantListCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: image.isNotEmpty
-                  ? (image.startsWith('http')
-                      ? Image.network(
-                          image,
-                          width: 72,
-                          height: 72,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          image,
-                          width: 72,
-                          height: 72,
-                          fit: BoxFit.cover,
-                        ))
-                  : Container(
-                      width: 72,
-                      height: 72,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported),
-                    ),
+              child:
+                  image.isNotEmpty
+                      ? (image.startsWith('http')
+                          ? Image.network(
+                            image,
+                            width: 72,
+                            height: 72,
+                            fit: BoxFit.cover,
+                          )
+                          : Image.asset(
+                            image,
+                            width: 72,
+                            height: 72,
+                            fit: BoxFit.cover,
+                          ))
+                      : Container(
+                        width: 72,
+                        height: 72,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.image_not_supported),
+                      ),
             ),
             const SizedBox(width: 12),
             Expanded(

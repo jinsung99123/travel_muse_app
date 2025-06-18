@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/repositories/plan_repository.dart';
-import 'package:travel_muse_app/repositories/schedule_repository.dart';
-import 'package:travel_muse_app/services/place_search_service.dart';
+import 'package:travel_muse_app/repositories/plan/plan_repository.dart';
+import 'package:travel_muse_app/repositories/plan/schedule_repository.dart';
+import 'package:travel_muse_app/services/plan/place_search_service.dart';
 
 Future<void> generateAndSaveEnrichedAiRoute({
   required BuildContext context,

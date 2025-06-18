@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/models/home_place.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedCarousel extends StatelessWidget {
   const RecommendedCarousel({super.key, required this.places});
   final List<HomePlace> places;
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,7 @@ class RecommendedCarousel extends StatelessWidget {
                         width: 118,
                         height: 139,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.image),
+                        errorBuilder: (_, __, ___) => const Icon(Icons.image),
                       ),
                     ),
                   ),

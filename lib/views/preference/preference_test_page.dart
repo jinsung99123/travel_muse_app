@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/preference_test_provider.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/preference_loading_page.dart';
 import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/page_indicator_bar.dart';
