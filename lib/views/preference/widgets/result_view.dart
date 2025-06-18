@@ -60,7 +60,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
     return Scaffold(
       appBar: !widget.showButtons ? AppBar(title: Text('나의 여행 성향')) : null,
-      backgroundColor: CupertinoColors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           ListView(

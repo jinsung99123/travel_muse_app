@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/preference_loading_page.dart';
 import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
@@ -9,10 +9,6 @@ import 'package:travel_muse_app/views/preference/widgets/preference_questions.da
 import 'package:travel_muse_app/views/preference/widgets/question_card.dart';
 import 'package:travel_muse_app/views/preference/widgets/question_list_view.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
-
-const Color kPrimaryColor = Color(0xFF03A9F4);
-const Color kSecondaryColor = Color(0xFF2979FF);
-const Color kTertiaryColor = Color(0xFFBDBDBD);
 
 class PreferenceTestPage extends ConsumerStatefulWidget {
   const PreferenceTestPage({super.key});
@@ -37,12 +33,13 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
   }
 
   void _onNextPressed() {
-    if (_selectedOption == null) return;
+    final selected = _selectedOption;
+    if (selected == null) return;
 
     final answer = {
       'questionId': _currentQuestion['questionId']!,
       'question': _currentQuestion['question']!,
-      'selectedOption': _selectedOption!,
+      'selectedOption': selected,
       'type': _currentQuestion['type']!,
       'details': _currentQuestion['details']!,
     };
@@ -61,13 +58,14 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
     _nextQuestion();
   }
 
-  void _nextQuestion() {
+  void _nextQuestion() async {
     if (_currentIndex < preferenceQuestions.length - 1) {
       setState(() {
         _currentIndex++;
       });
     } else {
-      Navigator.push(
+      if (!mounted) return;
+      await Navigator.push(
         context,
         CupertinoPageRoute(
           builder:
@@ -93,10 +91,10 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
     final bool isFinished = _currentIndex >= preferenceQuestions.length;
 
     return CupertinoPageScaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       navigationBar: CupertinoNavigationBar(
-        middle: const Text('성향 테스트', style: TextStyle(color: kTertiaryColor)),
-        backgroundColor: kPrimaryColor,
+        middle: Text('성향 테스트', style: TextStyle(color: AppColors.grey[400])),
+        backgroundColor: AppColors.primary[300],
         leading: GestureDetector(
           onTap: () {
             if (_currentIndex > 0) {
@@ -108,7 +106,7 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
               Navigator.pop(context);
             }
           },
-          child: const Icon(CupertinoIcons.back, color: kTertiaryColor),
+          child: Icon(CupertinoIcons.back, color: AppColors.grey[400]),
         ),
       ),
       child: SafeArea(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_restaurant_list_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_carousel.dart';
@@ -47,11 +48,11 @@ class RecommendedRestaurantsList extends ConsumerWidget {
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 '더보기 >',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Color(0xFF48CDFD),
+                  color: AppColors.primary[300],
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Pretendard',
                 ),

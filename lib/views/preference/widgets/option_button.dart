@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class OptionButton extends StatelessWidget {
@@ -29,10 +30,11 @@ class OptionButton extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isSelected ? kPrimaryColor : const Color(0xFFCED2D3),
+                color:
+                    isSelected ? AppColors.primary[300]! : AppColors.grey[100]!,
                 width: 1.5,
               ),
             ),
@@ -45,7 +47,10 @@ class OptionButton extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? kPrimaryColor : const Color(0xFF9E9E9E),
+                    color:
+                        isSelected
+                            ? AppColors.primary[300]
+                            : AppColors.grey[500],
                     fontFamily: 'Pretendard',
                   ),
                 ),
@@ -55,9 +60,9 @@ class OptionButton extends StatelessWidget {
                     child: Text(
                       subtitle,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey,
+                        color: AppColors.grey[400],
                         fontFamily: 'Pretendard',
                       ),
                     ),

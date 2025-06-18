@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class ScrollBarIndicator extends StatelessWidget {
   const ScrollBarIndicator({super.key});
@@ -15,7 +16,7 @@ class ScrollBarIndicator extends StatelessWidget {
           width: 144,
           height: 5,
           decoration: BoxDecoration(
-            color: Colors.black,
+            color: AppColors.black,
             borderRadius: BorderRadius.circular(100),
           ),
         ),

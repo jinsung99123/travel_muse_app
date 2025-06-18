@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class SurveyPreviewItem extends StatelessWidget {
   const SurveyPreviewItem({
@@ -20,14 +21,14 @@ class SurveyPreviewItem extends StatelessWidget {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: const Color(0xFFE1EDFF), // 배경색
+              color: AppColors.secondary[50],
               borderRadius: BorderRadius.circular(500),
             ),
             alignment: Alignment.center,
             child: Text(
               number,
-              style: const TextStyle(
-                color: Color(0xFF4891FD), // 텍스트 컬러
+              style: TextStyle(
+                color: AppColors.secondary[300],
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -43,7 +44,7 @@ class SurveyPreviewItem extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                 ),
                 const SizedBox(height: 10),

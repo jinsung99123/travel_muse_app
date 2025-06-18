@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
@@ -69,7 +70,7 @@ class InfoBanner extends ConsumerWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF26272A),
+              color: AppColors.black,
               height: 1.5,
             ),
           ),
@@ -89,7 +90,7 @@ class InfoBanner extends ConsumerWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF26272A),
+                color: AppColors.black,
                 height: 1.5,
               ),
             ),
@@ -99,9 +100,9 @@ class InfoBanner extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               '${end.difference(start).inDays}박 ${end.difference(start).inDays + 1}일 | ${formatDate(start)} - ${formatDate(end)}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: Color(0xFF7C878C),
+                color: AppColors.grey[400],
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -130,9 +131,9 @@ class InfoBanner extends ConsumerWidget {
               );
             },
             style: TextButton.styleFrom(padding: EdgeInsets.zero),
-            child: const Text(
+            child: Text(
               '자세히 보기',
-              style: TextStyle(fontSize: 14, color: Color(0xFF98A0A4)),
+              style: TextStyle(fontSize: 14, color: AppColors.grey[300]),
             ),
           ),
         ],

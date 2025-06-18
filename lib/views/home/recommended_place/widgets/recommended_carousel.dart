@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
@@ -36,7 +37,7 @@ class RecommendedCarousel extends StatelessWidget {
                     child: Container(
                       width: 118,
                       height: 139,
-                      color: Colors.grey[300],
+                      color: AppColors.grey[100],
                       child: Image.network(
                         p.thumbnail,
                         width: 118,
@@ -54,7 +55,7 @@ class RecommendedCarousel extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                 ],

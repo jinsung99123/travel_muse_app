@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/svg_icon.dart';
-import 'package:travel_muse_app/views/plan/plan/calendar/calendar_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
+import 'package:travel_muse_app/views/plan/plan/calendar/calendar_page.dart';
 
 class TravelRegisterButton extends StatelessWidget {
   const TravelRegisterButton({super.key});
@@ -23,13 +24,13 @@ class TravelRegisterButton extends StatelessWidget {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: const Color(0xFFB3B9BC)),
+                color: AppColors.white,
+                border: Border.all(color: AppColors.grey[200]!),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Stack(
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.topRight,
                     child: Text(
                       '여행 일정\n변경',
@@ -37,7 +38,7 @@ class TravelRegisterButton extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF4C5356),
+                        color: AppColors.grey[600],
                         height: 1.1,
                       ),
                     ),
@@ -66,7 +67,7 @@ class TravelRegisterButton extends StatelessWidget {
               height: 101,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF48CDFD),
+                color: AppColors.primary[300],
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Stack(
@@ -79,7 +80,7 @@ class TravelRegisterButton extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: AppColors.white,
                         height: 1.1,
                       ),
                     ),

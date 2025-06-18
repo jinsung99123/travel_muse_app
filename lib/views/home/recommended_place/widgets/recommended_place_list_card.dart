@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
@@ -34,12 +35,12 @@ class RecommendedPlaceListCard extends StatelessWidget {
               : null,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFB3E5FC), width: 1),
+          border: Border.all(color: AppColors.primary[100]!, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: AppColors.black.withOpacity(0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -68,7 +69,7 @@ class RecommendedPlaceListCard extends StatelessWidget {
                       : Container(
                         width: 72,
                         height: 72,
-                        color: Colors.grey[300],
+                        color: AppColors.grey[100],
                         child: const Icon(Icons.image_not_supported),
                       ),
             ),
@@ -82,18 +83,18 @@ class RecommendedPlaceListCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: AppColors.black,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                    style: TextStyle(fontSize: 14, color: AppColors.grey[700]),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.grey),
+            Icon(Icons.chevron_right, color: AppColors.grey[400]),
           ],
         ),
       ),
