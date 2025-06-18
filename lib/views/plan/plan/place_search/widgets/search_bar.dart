@@ -16,7 +16,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 내부 패딩 ↑↓8  ←→16
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 내부 패딩 width8  height16
       decoration: BoxDecoration(
         color: AppColors.grey[50],               // 검색바 배경색
         borderRadius: BorderRadius.circular(28), // 완전 둥근 필 형태
