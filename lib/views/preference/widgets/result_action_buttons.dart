@@ -57,13 +57,13 @@ class ResultActionButtons extends ConsumerWidget {
                       .read(preferenceTestViewModelProvider.notifier)
                       .saveTestToFirestore();
                   if (context.mounted) {
-                    Navigator.pushReplacement(
+                    await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => const HomePage()),
                     );
                   }
                 } catch (e) {
-                  showCupertinoDialog(
+                  await showCupertinoDialog(
                     context: context,
                     builder:
                         (context) => CupertinoAlertDialog(
