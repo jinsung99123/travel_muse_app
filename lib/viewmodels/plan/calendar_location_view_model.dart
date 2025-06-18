@@ -73,7 +73,7 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     final userId = ref.read(authViewModelProvider).user?.uid;
 
     if (start == null || end == null || region == null || userId == null) {
-      throw Exception("날짜, 지역 또는 사용자 정보가 누락되었습니다.");
+      throw Exception('날짜, 지역 또는 사용자 정보가 누락되었습니다.');
     }
 
     final repo = ref.read(calendarLocationRepositoryProvider);
