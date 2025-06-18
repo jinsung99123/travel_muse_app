@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/save_button.dart';
