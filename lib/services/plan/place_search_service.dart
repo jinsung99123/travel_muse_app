@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_muse_app/models/plan/place.dart';
+import 'package:travel_muse_app/providers/plan/schedule/recent_search_provider.dart';
+import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 
 class PlaceSearchService {
   //API 기본 값
@@ -14,7 +17,7 @@ class PlaceSearchService {
   static const _baseImageUrl = 'https://dapi.kakao.com/v2/search/image';
   static final String _apiKey = 'KakaoAK ${dotenv.env['KAKAO_API_KEY'] ?? ''}';
 
-  //키워드 검색
+  ///키워드 검색
   Future<List<Place>> search(String query) async {
     final url = Uri.parse(
       '$_baseKeywordUrl?query=${Uri.encodeQueryComponent(query)}',
@@ -40,7 +43,7 @@ class PlaceSearchService {
     return _requestPlaces(url);
   }
 
-  //카테고리 + 위치
+  ///카테고리 + 위치
   Future<List<Place>> searchByCategory({
     required String categoryCode,
     required double lat,
@@ -58,7 +61,7 @@ class PlaceSearchService {
     return _requestPlaces(url);
   }
 
-  //공통 HTTP 처리
+  ///공통 HTTP 처리
   Future<List<Place>> _requestPlaces(Uri url) async {
     try {
       final res = await http.get(
@@ -86,7 +89,7 @@ class PlaceSearchService {
     }
   }
 
-  //이미지 썸네일 직접호출
+  ///이미지 썸네일 직접호출
   Future<String?> fetchImageThumbnail(String keyword) async {
     final url = Uri.parse(
       '$_baseImageUrl?query=${Uri.encodeQueryComponent(keyword)}&size=1',
@@ -109,7 +112,7 @@ class PlaceSearchService {
     }
   }
 
-  //썸네일 캐싱
+  ///썸네일 캐싱
   final Map<String, String> _thumbCache = {}; // keyword -> url
 
   Future<String?> getThumbnailCached(String keyword) async {
@@ -120,7 +123,7 @@ class PlaceSearchService {
     return url;
   }
 
-  //주소 좌표 변환
+  ///주소 좌표 변환
   Future<LatLng?> getLatLngFromRegion(String region) async {
     final url = Uri.parse(
       'https://dapi.kakao.com/v2/local/search/address.json'
@@ -148,5 +151,17 @@ class PlaceSearchService {
       debugPrint('주소→좌표 실패: $e');
       return null;
     }
+  }
+
+  /// 실제 검색 실행 + 최근 검색어 저장
+  static void performSearch(WidgetRef ref, String region, String query) {
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return;
+
+    // 최근 검색어 저장
+    ref.read(recentSearchProvider.notifier).add(trimmed);
+
+    // 검색 API 호출
+    ref.read(searchViewModelProvider.notifier).search(trimmed, region: region);
   }
 }
