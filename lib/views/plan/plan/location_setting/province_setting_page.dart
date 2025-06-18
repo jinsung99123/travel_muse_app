@@ -13,28 +13,6 @@ class ProvinceSettingPage extends ConsumerStatefulWidget {
 }
 
 class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
-  final List<String> items = provinces;
-
-  final List<String> emojis = [
-    '🏙️',
-    '🌊',
-    '🍂',
-    '✈️',
-    '🌳',
-    '🏛️',
-    '⚓',
-    '🏰',
-    '🏞️',
-    '⛰️',
-    '🏔️',
-    '🌾',
-    '🍚',
-    '🌸',
-    '🏯',
-    '🚢',
-    '🌴',
-  ];
-
   int? selectedIndex;
 
   @override
@@ -63,7 +41,7 @@ class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
               const SizedBox(height: 16),
               Expanded(
                 child: ProvinceBoxList(
-                  items: items,
+                  items: provinces,
                   emojis: emojis,
                   selectedIndices:
                       selectedIndex != null ? {selectedIndex!} : {},
@@ -90,7 +68,7 @@ class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
                       selectedIndex == null
                           ? null
                           : () {
-                            final selectedRegion = items[selectedIndex!];
+                            final selectedRegion = provinces[selectedIndex!];
                             ref
                                 .read(
                                   calendarLocationViewModelProvider.notifier,
