@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
@@ -49,7 +50,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           const SizedBox(height: 320),
@@ -70,7 +71,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
               style: TextStyle(
                 fontSize: 24,
                 fontFamily: 'Ssangmun',
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),
