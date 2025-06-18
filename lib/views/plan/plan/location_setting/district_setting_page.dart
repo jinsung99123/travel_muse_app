@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/core/region_data.dart';
+import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
 import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';

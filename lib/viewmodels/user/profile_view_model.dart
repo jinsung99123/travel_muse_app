@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:travel_muse_app/core/validators.dart';
+import 'package:travel_muse_app/utills/validators.dart';
 import 'package:travel_muse_app/models/user/profile_state.dart';
 import 'package:travel_muse_app/repositories/user/app_user_repository.dart';
 
