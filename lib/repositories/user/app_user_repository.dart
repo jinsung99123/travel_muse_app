@@ -26,16 +26,51 @@ class AppUserRepository {
     }
   }
 
-  // 데이터베이스에서 유저 정보 get
+  // 데이터베이스에서 uid로 해당 유저 정보 get
   Future<AppUser?> fetchLatestAppUser(String uid) async {
     final doc =
         await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
     if (doc.data() == null) {
       return null;
-      // TODO: 뷰모델에서 유저 정보 없는 경우 처리
-      // '세션이 만료되었습니다. 다시 로그인해 주세요.' - 강제 로그아웃, 재로그인 유도
     }
     return AppUser.fromJson(doc.data()!);
+  }
+
+  // 프로필 이미지 스토리지에 업로드, url return
+  Future<String> uploadProfileImage({
+    required String uid,
+    required File file,
+  }) async {
+    final fileName = '${uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    // 이미지 업로드 & get url
+    final ref = _storage.ref().child('userProfiles/$uid/$fileName');
+    await ref.putFile(file);
+    final fileUrl = await ref.getDownloadURL();
+
+    return fileUrl;
+  }
+
+  // appUser 프로필이미지 url 가져오기
+  Future<String?> fetchProfileImageUrl({required String uid}) async {
+    final doc =
+        await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
+
+    final url = doc.data()?['profileImage'];
+
+    if (url is String && url.isNotEmpty) {
+      return url;
+    }
+    return null;
+  }
+
+  // 유저 프로필이미지 업데이트
+  Future<void> updateProfileImage({
+    required String uid,
+    required String fileUrl,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({
+      'profileImage': fileUrl,
+    });
   }
 
   // 유저 닉네임 중복확인
@@ -57,31 +92,6 @@ class AppUserRepository {
   }) async {
     await _firestore.collection('appUser').doc(uid).update({
       'nickname': nickname,
-    });
-  }
-
-  // 이미지 스토리지에 업로드, url return
-  Future<String> uploadProfileImage({
-    required String uid,
-    required File file,
-  }) async {
-    final fileName = '${uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-    // 이미지 업로드 & get url
-    final ref = _storage.ref().child('userProfiles/$uid/$fileName');
-    await ref.putFile(file);
-    final fileUrl = await ref.getDownloadURL();
-
-    return fileUrl;
-  }
-
-  // 유저 프로필이미지 업데이트
-  Future<void> updateProfileImage({
-    required String uid,
-    required String fileUrl,
-  }) async {
-    // 이미지 url 데이터베이스 업데이트
-    await _firestore.collection('appUser').doc(uid).update({
-      'profileImage': fileUrl,
     });
   }
 
