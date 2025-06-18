@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
@@ -11,10 +12,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -32,12 +31,12 @@ class HomePage extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       'Travelmuse',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1C1F20),
+                        color: AppColors.grey[800],
                       ),
                     ),
                   ],

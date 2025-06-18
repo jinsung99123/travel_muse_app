@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,7 +26,7 @@ class PlaceInfoSection extends StatelessWidget {
             onTap: () => launchUrl(Uri.parse(place.placeUrl!)),
             child: Text(
               '홈페이지: ${place.placeUrl}',
-              style: const TextStyle(color: Colors.blue),
+              style: TextStyle(color: AppColors.primary[300]),
             ),
           ),
       ],

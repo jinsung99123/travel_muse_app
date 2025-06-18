@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
@@ -23,37 +24,37 @@ class ResultViewDetail extends ConsumerWidget {
     };
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
 
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 50),
-              Text(
+              const SizedBox(height: 50),
+              const Text(
                 '사용자님이 선택하신\n선택지들이에요',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Pretendard',
-                  color: Color(0xFF26272A),
+                  color: AppColors.black,
                   height: 1.5,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 '선택지를 변경하려면 돌아가기 버튼을 눌러\n테스트 화면으로 돌아가서 변경해주세요',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Pretendard',
-                  color: Color(0xFF7C878C),
+                  color: AppColors.grey[400],
                   height: 1.5,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
           ...answers.map((answer) {
@@ -65,7 +66,7 @@ class ResultViewDetail extends ConsumerWidget {
               margin: const EdgeInsets.symmetric(vertical: 6),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                color: const Color(0xFFF7F9FA),
+                color: AppColors.grey[50],
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -73,9 +74,9 @@ class ResultViewDetail extends ConsumerWidget {
                 children: [
                   Text(
                     question,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF48CDFD),
+                      color: AppColors.primary[300],
                       fontFamily: 'Pretendard',
                       fontSize: 16,
                     ),
@@ -83,8 +84,8 @@ class ResultViewDetail extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     '선택: $selectedOption',
-                    style: const TextStyle(
-                      color: Colors.black87,
+                    style: TextStyle(
+                      color: AppColors.grey[700],
                       fontFamily: 'Pretendard',
                       fontSize: 14,
                     ),

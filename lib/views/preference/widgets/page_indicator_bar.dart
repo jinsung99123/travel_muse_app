@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class PageIndicatorBar extends StatelessWidget {
   const PageIndicatorBar({
@@ -24,8 +25,8 @@ class PageIndicatorBar extends StatelessWidget {
             decoration: BoxDecoration(
               color:
                   index == currentIndex
-                      ? const Color(0xFF15BFFD)
-                      : const Color(0xFFCED2D3),
+                      ? AppColors.primary[400]
+                      : AppColors.grey[100],
               borderRadius: BorderRadius.circular(10),
             ),
           ),

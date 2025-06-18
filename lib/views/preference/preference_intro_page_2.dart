@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class PreferenceIntroPage2 extends StatelessWidget {
@@ -8,30 +9,30 @@ class PreferenceIntroPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 32, 16, 0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Ai 기반 맞춤 추천을 위해\n사용자님의 여행 성향을 알려주세요',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF26272A),
+                      color: AppColors.black,
                       height: 1.5,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     '6가지 질문에 대답해주신 대로\n여행성향 결과를 파악해서 추천해드릴게요!',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF7C878C),
+                      color: AppColors.grey[400],
                       height: 1.5,
                     ),
                   ),
@@ -62,7 +63,7 @@ class PreferenceIntroPage2 extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                   onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/providers/home/selected_tag_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
@@ -57,12 +58,12 @@ class RecommendedPlacesList extends ConsumerWidget {
                       builder: (_) => const RecommendedPlacesListPage(),
                     ),
                   ),
-              child: const Text(
+              child: Text(
                 '더보기 >',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 14,
-                  color: Color(0xFF48CDFD),
+                  color: AppColors.primary[300],
                   fontWeight: FontWeight.w500,
                 ),
               ),

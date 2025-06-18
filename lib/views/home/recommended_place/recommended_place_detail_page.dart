@@ -28,9 +28,9 @@ class _RecommendedPlaceDetailPageState
     final place = widget.place;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
         titleSpacing: 0,
@@ -50,7 +50,7 @@ class _RecommendedPlaceDetailPageState
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.black,
+                color: AppColors.black,
                 fontFamily: 'Pretendard',
               ),
             ),
@@ -59,12 +59,12 @@ class _RecommendedPlaceDetailPageState
       ),
 
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFFE0F7FA),
-        foregroundColor: const Color(0xFF03A9F4),
+        backgroundColor: AppColors.primary[50],
+        foregroundColor: AppColors.primary[300],
         icon: const Icon(Icons.directions),
         label: const Text('길찾기'),
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Color(0xFF03A9F4), width: 1.5),
+          side: BorderSide(color: AppColors.primary[300]!, width: 1.5),
           borderRadius: BorderRadius.circular(16),
         ),
         onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_restaurant_list_card.dart';
 
@@ -11,12 +12,15 @@ class RecommendedRestaurantsListPage extends ConsumerWidget {
     final homeAsync = ref.watch(homeViewModelProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text('추천 맛집 전체 보기', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: const Text(
+          '추천 맛집 전체 보기',
+          style: TextStyle(color: AppColors.black),
+        ),
+        backgroundColor: AppColors.white,
         elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: AppColors.black),
       ),
       body: homeAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
