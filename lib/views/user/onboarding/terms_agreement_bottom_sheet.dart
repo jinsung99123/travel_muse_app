@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/providers/user/terms_agreement_view_model_provider.dart';
-
 import 'package:travel_muse_app/views/preference/preference_intro_page_2.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agree_all.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agreement_title.dart';
