@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
+import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/district_setting_page.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/province_box_list.dart';
 
@@ -9,10 +9,10 @@ class ProvinceSettingPage extends ConsumerStatefulWidget {
   const ProvinceSettingPage({super.key});
 
   @override
-  _ProvinceSettingPageState createState() => _ProvinceSettingPageState();
+  ProvinceSettingPageState createState() => ProvinceSettingPageState();
 }
 
-class _ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
+class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
   final List<String> items = provinces;
 
   final List<String> emojis = [
