@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
 import 'package:travel_muse_app/repositories/preference/preference_test_repository.dart';
+import 'package:travel_muse_app/services/preference/preference_test_service.dart';
 
 final preferenceTestViewModelProvider =
     NotifierProvider<PreferenceTestViewModel, AsyncValue<PreferenceTest?>>(
@@ -13,6 +14,7 @@ final preferenceTestViewModelProvider =
 
 class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
   final _repository = PreferenceTestRepository();
+  final _service = PreferenceTestService();
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -20,19 +22,21 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
     return const AsyncValue.data(null);
   }
 
+  /// 테스트 분석만 수행
   Future<void> classifyTestOnly(
     List<Map<String, String>> answersRaw,
     BuildContext context,
   ) async {
     state = const AsyncValue.loading();
     try {
-      final test = await _repository.classifyTestOnly(answersRaw, context);
+      final test = await _service.classify(answersRaw, context);
       state = AsyncValue.data(test);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
   }
 
+  /// 테스트 결과 저장
   Future<void> saveTestToFirestore() async {
     final current = state.value;
     if (current == null) return;
@@ -46,6 +50,7 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
     }
   }
 
+  /// 테스트 불러오기
   Future<void> loadTest(String testId) async {
     state = const AsyncValue.loading();
     try {
@@ -56,6 +61,7 @@ class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
     }
   }
 
+  /// 유저의 테스트 목록 조회
   Future<List<PreferenceTest>> fetchTestsByUserId() async {
     if (user == null) return [];
     try {
