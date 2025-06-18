@@ -135,4 +135,9 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
       return null;
     }
   }
+
+  Future<bool> hasRoute(String planId) async {
+    final snap = await _repository.fetchRoute(planId);
+    return snap.isNotEmpty;
+  }
 }
