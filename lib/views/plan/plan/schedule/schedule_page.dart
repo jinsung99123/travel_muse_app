@@ -38,22 +38,21 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     await viewModel.fetchSavedPlans();
     final plans = ref.read(scheduleViewModelProvider).valueOrNull;
 
-    selectedPlan = plans?.allPlans.firstWhere((p) => p.planId == widget.planId);
+    selectedPlan =
+        plans?.allPlans.firstWhere((p) => p.planId == widget.planId);
 
     final routes = await viewModel.fetchRoute(widget.planId);
     setState(() {
-      daySchedules = {
-        for (final entry in routes.entries)
-          entry.key: List<Map<String, String>>.from(entry.value),
-      };
+      daySchedules = routes;
     });
   }
 
+  // 일정 편집 관련
   void _onReorder(int dayIndex, int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) newIndex -= 1;
-      final movedItem = daySchedules[dayIndex]!.removeAt(oldIndex);
-      daySchedules[dayIndex]!.insert(newIndex, movedItem);
+      final moved = daySchedules[dayIndex]!.removeAt(oldIndex);
+      daySchedules[dayIndex]!.insert(newIndex, moved);
     });
   }
 
@@ -61,11 +60,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
       MaterialPageRoute(
-        builder:
-            (_) => PlaceSearchPage(
-              planId: widget.planId,
-              region: selectedPlan?.region ?? '',
-            ),
+        builder: (_) => PlaceSearchPage(
+          planId: widget.planId,
+          region: selectedPlan?.region ?? '',
+        ),
       ),
     );
 
@@ -85,6 +83,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     setState(() {
       daySchedules[dayIndex]?.removeAt(placeIndex);
     });
+
     ref
         .read(scheduleViewModelProvider.notifier)
         .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
@@ -106,67 +105,68 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     return Scaffold(
       appBar: ScheduleAppBar(planId: widget.planId),
       body: SafeArea(
-        child: planState.when(
-          data: (_) {
-            if (selectedPlan == null) {
-              return const Center(child: Text('선택된 일정이 없습니다.'));
-            }
+        child: Column(
+          children: [
+            // 상단 헤더
+            ScheduleHeader(
+              isEditing: _isEditing,
+              onToggleEdit: _toggleEdit,
+            ),
 
-            return Column(
-              children: [
-                ScheduleHeader(
-                  isEditing: _isEditing,
-                  onToggleEdit: _toggleEdit,
-                ),
-                Expanded(
-                  child: DayScheduleList(
+            // Day 리스트
+            Expanded(
+              child: planState.when(
+                data: (_) {
+                  if (selectedPlan == null) {
+                    return const Center(child: Text('선택된 일정이 없습니다.'));
+                  }
+
+                  return DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
                     isEditing: _isEditing,
                     onReorder: _onReorder,
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
-                  ),
-                ),
-              ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('에러 발생: $e')),
+                  );
+                },
+                loading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Center(child: Text('에러 발생: $e')),
+              ),
+            ),
+          ],
         ),
       ),
-      floatingActionButton:
-          selectedPlan == null
-              ? null
-              : AiButton(
-                planId: widget.planId,
-                days: calculateTripDays(
-                  selectedPlan!.startDate,
-                  selectedPlan!.endDate,
-                ),
-                region: selectedPlan!.region,
-                onResult: (parsed) {
-                  setState(() {
-                    daySchedules = parsed;
-                  });
-                  ref
-                      .read(scheduleViewModelProvider.notifier)
-                      .saveAiSchedules(
-                        planId: widget.planId,
-                        daySchedules: parsed,
-                      );
-                },
+
+      // AI 일정 자동 생성 버튼
+      floatingActionButton: selectedPlan == null
+          ? null
+          : AiButton(
+              planId: widget.planId,
+              days: calculateTripDays(
+                selectedPlan!.startDate,
+                selectedPlan!.endDate,
               ),
+              region: selectedPlan!.region,
+              onResult: (parsed) {
+                setState(() => daySchedules = parsed);
+                ref
+                    .read(scheduleViewModelProvider.notifier)
+                    .saveAiSchedules(planId: widget.planId, daySchedules: parsed);
+              },
+            ),
+
+      // 하단 완료 버튼
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
           await ref
               .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
 
-          if (!mounted) return;
-          ScaffoldMessenger.of(
-            context
-          ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('일정이 저장되었습니다.')),
+          );
 
           await Navigator.pushReplacement(
             context,
