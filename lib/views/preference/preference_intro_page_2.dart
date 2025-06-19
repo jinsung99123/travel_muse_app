@@ -14,7 +14,7 @@ class PreferenceIntroPage2 extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,8 +44,8 @@ class PreferenceIntroPage2 extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   'assets/images/test_start.png',
-                  width: 250,
-                  height: 250,
+                  width: 333,
+                  height: 333,
                   fit: BoxFit.contain,
                 ),
               ),
