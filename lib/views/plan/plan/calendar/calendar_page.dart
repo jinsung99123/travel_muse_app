@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_guide_text.dart';
@@ -21,7 +22,7 @@ class CalendarPage extends ConsumerWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.grey[800],
         elevation: 0,
       ),
       body: SafeArea(
@@ -31,7 +32,7 @@ class CalendarPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const CalendarGuideText(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               Expanded(
                 child: ListView.builder(
                   itemCount: 12,
@@ -61,7 +62,7 @@ class CalendarPage extends ConsumerWidget {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[300],
+                    backgroundColor: AppColors.primary[300],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

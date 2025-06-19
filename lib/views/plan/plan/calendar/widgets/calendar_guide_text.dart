@@ -12,14 +12,10 @@ class CalendarGuideText extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             '여행할 날짜를 선택해주세요',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              fontFamily: 'Pretendard',
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 16),
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -28,7 +24,6 @@ class CalendarGuideText extends StatelessWidget {
               color: Colors.grey[400],
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              fontFamily: 'Pretendard',
             ),
           ),
         ),
