@@ -39,7 +39,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.testId != '') {
         ref
-            .read(preferenceTestViewModelProvider.notifier)
+            .read(preferenceTestStateNotifierProvider.notifier)
             .loadTest(widget.testId);
       }
     });
@@ -47,7 +47,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(preferenceTestViewModelProvider);
+    final state = ref.watch(preferenceTestStateNotifierProvider);
     final result = state.value?.result;
 
     final typeCode = result?['type'];

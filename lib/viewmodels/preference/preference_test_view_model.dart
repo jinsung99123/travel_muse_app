@@ -1,75 +1,78 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/models/preference/preference_test_model.dart';
-import 'package:travel_muse_app/repositories/preference/preference_test_repository.dart';
-import 'package:travel_muse_app/services/preference/preference_test_service.dart';
+import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
+import 'package:travel_muse_app/views/preference/preference_loading_page.dart';
+import 'package:travel_muse_app/views/preference/preference_test_page.dart';
+import 'package:travel_muse_app/views/preference/widgets/preference_questions.dart';
 
-final preferenceTestViewModelProvider =
-    NotifierProvider<PreferenceTestViewModel, AsyncValue<PreferenceTest?>>(
-      () => PreferenceTestViewModel(),
+class PreferenceTestViewModel {
+  PreferenceTestViewModel(this.ref);
+  final WidgetRef ref;
+
+  /// 현재 인덱스의 질문 반환
+  Map<String, String> getCurrentQuestion(int index) {
+    return preferenceQuestions[index];
+  }
+
+  /// 질문에서 보기 항목 리스트 추출
+  List<String> getOptions(Map<String, String> question) {
+    return question['details']!.split(', ');
+  }
+
+  /// answers 배열에 선택된 답변 저장 (기존 답변 있으면 덮어쓰기)
+  void saveAnswer({
+    required List<Map<String, String>> answers,
+    required Map<String, String> question,
+    required String selectedOption,
+  }) {
+    final answer = {
+      'questionId': question['questionId']!,
+      'question': question['question']!,
+      'selectedOption': selectedOption,
+      'type': question['type']!,
+      'details': question['details']!,
+    };
+
+    final existingIndex = answers.indexWhere(
+      (element) => element['questionId'] == question['questionId'],
     );
 
-class PreferenceTestViewModel extends Notifier<AsyncValue<PreferenceTest?>> {
-  final _repository = PreferenceTestRepository();
-  final _service = PreferenceTestService();
-  final user = FirebaseAuth.instance.currentUser;
-
-  @override
-  AsyncValue<PreferenceTest?> build() {
-    return const AsyncValue.data(null);
-  }
-
-  /// 테스트 분석만 수행
-  Future<void> classifyTestOnly(
-    List<Map<String, String>> answersRaw,
-    BuildContext context,
-  ) async {
-    state = const AsyncValue.loading();
-    try {
-      final test = await _service.classify(answersRaw, context);
-      state = AsyncValue.data(test);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+    if (existingIndex != -1) {
+      answers[existingIndex] = answer;
+    } else {
+      answers.add(answer);
     }
   }
 
-  /// 테스트 결과 저장
-  Future<void> saveTestToFirestore() async {
-    final current = state.value;
-    if (current == null) return;
-
-    try {
-      final saved = await _repository.saveOrUpdateTest(current);
-      await _repository.addTestIdToUser(testId: current.testId);
-      state = AsyncValue.data(saved);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+  /// 다음 질문으로 이동하거나, 마지막이면 로딩 페이지로 이동
+  Future<void> goToNext({
+    required BuildContext context,
+    required int currentIndex,
+    required List<Map<String, String>> answers,
+    required VoidCallback onRestart,
+    required VoidCallback incrementIndex,
+  }) async {
+    if (currentIndex < preferenceQuestions.length - 1) {
+      incrementIndex();
+    } else {
+      if (!context.mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder:
+              (_) =>
+                  PreferenceLoadingPage(answers: answers, onRestart: onRestart),
+        ),
+      );
     }
   }
 
-  /// 테스트 불러오기
-  Future<void> loadTest(String testId) async {
-    state = const AsyncValue.loading();
-    try {
-      final test = await _repository.loadTest(testId);
-      state = AsyncValue.data(test);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
-  }
-
-  /// 유저의 테스트 목록 조회
-  Future<List<PreferenceTest>> fetchTestsByUserId() async {
-    if (user == null) return [];
-    try {
-      final tests = await _repository.fetchTestsByUserId(user!.uid);
-      return tests;
-    } catch (e) {
-      log('유저 테스트 결과 목록 로드 실패 : $e');
-      return [];
-    }
+  /// 테스트 초기화 및 첫 페이지로 이동
+  void restartTest(BuildContext context) {
+    ref.invalidate(preferenceTestStateNotifierProvider);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const PreferenceTestPage()),
+    );
   }
 }

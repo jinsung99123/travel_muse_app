@@ -54,7 +54,7 @@ class ResultActionButtons extends ConsumerWidget {
               onTap: () async {
                 try {
                   await ref
-                      .read(preferenceTestViewModelProvider.notifier)
+                      .read(preferenceTestStateNotifierProvider.notifier)
                       .saveTestToFirestore();
                   if (context.mounted) {
                     await Navigator.pushReplacement(
@@ -64,15 +64,17 @@ class ResultActionButtons extends ConsumerWidget {
                   }
                 } catch (e) {
                   await showCupertinoDialog(
+                    /// ignore: use_build_context_synchronously
                     context: context,
                     builder:
-                        (context) => CupertinoAlertDialog(
+                        (dialogContext) => CupertinoAlertDialog(
                           title: const Text('저장 오류'),
-                          content: Text('저장 중 문제가 발생했습니다.\n\$e'),
+                          content: Text('저장 중 문제가 발생했습니다.\n$e'),
                           actions: [
                             CupertinoDialogAction(
                               child: const Text('확인'),
-                              onPressed: () => Navigator.of(context).pop(),
+                              onPressed:
+                                  () => Navigator.of(dialogContext).pop(),
                             ),
                           ],
                         ),
