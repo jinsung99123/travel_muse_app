@@ -43,7 +43,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
     final routes = await viewModel.fetchRoute(widget.planId);
     setState(() {
-      daySchedules = routes;
+      daySchedules = {
+        for (final entry in routes.entries)
+          entry.key: List<Map<String, String>>.from(entry.value),
+      };
     });
   }
 
@@ -83,7 +86,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     setState(() {
       daySchedules[dayIndex]?.removeAt(placeIndex);
     });
-
     ref
         .read(scheduleViewModelProvider.notifier)
         .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
@@ -105,37 +107,35 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     return Scaffold(
       appBar: ScheduleAppBar(planId: widget.planId),
       body: SafeArea(
-        child: Column(
-          children: [
-            // 상단 헤더
-            ScheduleHeader(
-              isEditing: _isEditing,
-              onToggleEdit: _toggleEdit,
-            ),
 
-            // Day 리스트
-            Expanded(
-              child: planState.when(
-                data: (_) {
-                  if (selectedPlan == null) {
-                    return const Center(child: Text('선택된 일정이 없습니다.'));
-                  }
+        child: planState.when(
+          data: (_) {
+            if (selectedPlan == null) {
+              return const Center(child: Text('선택된 일정이 없습니다.'));
+            }
 
-                  return DayScheduleList(
+            return Column(
+              children: [
+                ScheduleHeader(
+                  isEditing: _isEditing,
+                  onToggleEdit: _toggleEdit,
+                ),
+                Expanded(
+                  child: DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
                     isEditing: _isEditing,
                     onReorder: _onReorder,
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
-                  );
-                },
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('에러 발생: $e')),
-              ),
-            ),
-          ],
+
+                  ),
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text('에러 발생: $e')),
         ),
       ),
 
@@ -161,18 +161,11 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         onEditTap: () async {
           await ref
               .read(scheduleViewModelProvider.notifier)
-              .saveDaySchedules(
-                planId: widget.planId,
-                daySchedules: daySchedules,
-              );
-          await ref
-              .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('일정이 저장되었습니다.')),
-          );
-
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context
+          ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
           await Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const HomePage()),
