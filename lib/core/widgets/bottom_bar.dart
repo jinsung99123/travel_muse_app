@@ -6,14 +6,14 @@ import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 
 class BottomBar extends ConsumerWidget {
-  const BottomBar({Key? key}) : super(key: key);
+  const BottomBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomBarProvider);
     final primaryColor = const Color(0xFF03A9F4);
 
-    void _onItemTapped(int index) {
+    void onItemTapped(int index) {
       if (index == currentIndex) return;
 
       ref.read(bottomBarProvider.notifier).state = index;
@@ -65,7 +65,7 @@ class BottomBar extends ConsumerWidget {
           final isSelected = index == currentIndex;
           return Expanded(
             child: GestureDetector(
-              onTap: () => _onItemTapped(index),
+              onTap: () => onItemTapped(index),
               behavior: HitTestBehavior.opaque,
               child: Container(
                 height: 100,

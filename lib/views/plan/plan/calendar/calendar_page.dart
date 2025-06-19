@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
+import 'package:travel_muse_app/utills/date_utils.dart';
+import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_guide_text.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_widget.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/province_setting_page.dart';
 
 class CalendarPage extends ConsumerWidget {
   const CalendarPage({super.key});
-
-  // 여행 일수 계산 함수
-  int getTripDays(DateTime start, DateTime end) {
-    return end.difference(start).inDays + 1;
-  }
-
-  // 버튼에 보여줄 텍스트 생성 함수
-  String getButtonText(DateTime? startDay, DateTime? endDay) {
-    if (startDay == null || endDay == null) {
-      return '다음';
-    } else {
-      final startStr =
-          '${startDay.year}.${startDay.month.toString().padLeft(2, '0')}.${startDay.day.toString().padLeft(2, '0')}';
-      final endStr =
-          '${endDay.year}.${endDay.month.toString().padLeft(2, '0')}.${endDay.day.toString().padLeft(2, '0')}';
-      final days = getTripDays(startDay, endDay);
-      return '$startStr ~ $endStr (${days}일) 선택하기';
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,30 +30,7 @@ class CalendarPage extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '여행할 날짜를 선택해주세요',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '첫 번째 날과 마지막 날짜를 선택하면 \n자동으로 선택돼요',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-              ),
+              const CalendarGuideText(),
               const SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(

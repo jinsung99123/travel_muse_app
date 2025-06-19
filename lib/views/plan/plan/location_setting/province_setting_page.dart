@@ -1,40 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/utills/region_data.dart';
-import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
-import 'package:travel_muse_app/views/plan/plan/location_setting/district_setting_page.dart';
+import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/next_button.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/province_box_list.dart';
 
 class ProvinceSettingPage extends ConsumerStatefulWidget {
   const ProvinceSettingPage({super.key});
 
   @override
-  _ProvinceSettingPageState createState() => _ProvinceSettingPageState();
+  ProvinceSettingPageState createState() => ProvinceSettingPageState();
 }
 
-class _ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
-  final List<String> items = provinces;
-
-  final List<String> emojis = [
-    '🏙️',
-    '🌊',
-    '🍂',
-    '✈️',
-    '🌳',
-    '🏛️',
-    '⚓',
-    '🏰',
-    '🏞️',
-    '⛰️',
-    '🏔️',
-    '🌾',
-    '🍚',
-    '🌸',
-    '🏯',
-    '🚢',
-    '🌴',
-  ];
-
+class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
   int? selectedIndex;
 
   @override
@@ -63,7 +40,7 @@ class _ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
               const SizedBox(height: 16),
               Expanded(
                 child: ProvinceBoxList(
-                  items: items,
+                  items: provinces,
                   emojis: emojis,
                   selectedIndices:
                       selectedIndex != null ? {selectedIndex!} : {},
@@ -75,44 +52,7 @@ class _ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        selectedIndex == null ? Colors.grey : Colors.blue[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed:
-                      selectedIndex == null
-                          ? null
-                          : () {
-                            final selectedRegion = items[selectedIndex!];
-                            ref
-                                .read(
-                                  calendarLocationViewModelProvider.notifier,
-                                )
-                                .setRegion(selectedRegion);
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (_) => DistrictSettingPage(
-                                      selectedProvince: selectedRegion,
-                                    ),
-                              ),
-                            );
-                          },
-                  child: const Text(
-                    '다음',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ),
+              NextButton(selectedIndex: selectedIndex, provinces: provinces),
               const SizedBox(height: 16),
             ],
           ),

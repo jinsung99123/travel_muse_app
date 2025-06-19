@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_muse_app/viewmodels/plan/calendar_location_view_model.dart';
+import 'package:travel_muse_app/models/plan/planstate.dart';
 
 class CalendarLocationRepository {
   CalendarLocationRepository({FirebaseFirestore? firestore})
@@ -7,6 +7,7 @@ class CalendarLocationRepository {
 
   final FirebaseFirestore _firestore;
 
+  /// planId에 해당하는 플랜 정보를 Firestore에 저장 또는 업데이트
   Future<void> savePlan({
     required String planId,
     required DateTime startDate,
@@ -25,6 +26,7 @@ class CalendarLocationRepository {
     }, SetOptions(merge: true));
   }
 
+  /// 새 planId를 생성하고 플랜 데이터를 Firestore에 저장
   Future<String> createAndSavePlan({
     required DateTime startDate,
     required DateTime endDate,
@@ -47,6 +49,7 @@ class CalendarLocationRepository {
     return planId;
   }
 
+  /// userId의 플랜 중 가장 가까운 미래의 플랜 로드
   Future<PlanState?> fetchNearestUpcomingPlan(String userId) async {
     final now = DateTime.now();
 
@@ -73,6 +76,7 @@ class CalendarLocationRepository {
     );
   }
 
+  /// userId의 사용자 문서에 planId를 추가
   Future<void> addPlanIdToUser({
     required String userId,
     required String planId,

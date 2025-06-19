@@ -23,3 +23,22 @@ int calculateTripDays(dynamic start, dynamic end) {
 
   return endDate.difference(startDate).inDays + 1;
 }
+
+// 여행 일수 계산 함수
+int getTripDays(DateTime start, DateTime end) {
+  return end.difference(start).inDays + 1;
+}
+
+// 버튼에 보여줄 텍스트 생성 함수
+String getButtonText(DateTime? startDay, DateTime? endDay) {
+  if (startDay == null || endDay == null) {
+    return '다음';
+  } else {
+    final startStr =
+        '${startDay.year}.${startDay.month.toString().padLeft(2, '0')}.${startDay.day.toString().padLeft(2, '0')}';
+    final endStr =
+        '${endDay.year}.${endDay.month.toString().padLeft(2, '0')}.${endDay.day.toString().padLeft(2, '0')}';
+    final days = getTripDays(startDay, endDay);
+    return '$startStr ~ $endStr ($days일) 선택하기';
+  }
+}
