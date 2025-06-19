@@ -50,7 +50,7 @@ class LoginPage extends ConsumerWidget {
                   SizedBox(height: 12),
                   SnsLoginBar(
                     sns: 'Apple',
-                    backgroundColor: AppColors.black,
+                    backgroundColor: Color(0xFF000000),
                     textColor: AppColors.white,
                     imageWidget: SvgPicture.asset(
                       'assets/sns_icons/apple.svg',
