@@ -28,21 +28,21 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   final TextEditingController _searchController = TextEditingController();
   bool _showInitialMessage = true;
 
-  // 🔍 검색 실행 (서비스 이용)
+  // 검색 실행 (서비스 이용)
   void _handleSearch(String query) {
     PlaceSearchService.performSearch(ref, widget.region, query);
     ref.read(selectedIndexProvider.notifier).clear();
     setState(() => _showInitialMessage = false);
   }
 
-  // ✅ 선택 완료
+  // 선택 완료
   void _confirmSelection(List<Map<String, String>> places) {
     final selected = ref.read(selectedIndexProvider);
     final selectedPlaces = selected.map((i) => places[i]).toList();
     Navigator.pop(context, selectedPlaces);
   }
 
-  // 🔔 지역 추천 목록
+  // 지역 추천 목록
   Future<void> _loadRecommendedPlacesByRegion() async {
     if (widget.region.isEmpty) return;
     await ref.read(searchViewModelProvider.notifier).loadRecommendedByRegion(widget.region);
