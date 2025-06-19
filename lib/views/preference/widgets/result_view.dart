@@ -53,6 +53,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
     final typeCode = result?['type'];
     final description = result?['details'];
     final imagePath = resultImageMap[typeCode] ?? '';
+    final nickname = result?['nickname'] ?? '사용자';
 
     if (state.isLoading || typeCode == null || description == null) {
       return const Center(child: CircularProgressIndicator());
@@ -74,12 +75,14 @@ class _ResultViewState extends ConsumerState<ResultView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '사용자님의 여행 성향은 \n$typeCode예요!',
-                      style: AppTextStyles.onboardingTitle,
+                      '$nickname님의 여행 성향은 \n$typeCode예요!',
+                      style: AppTextStyles.onboardingTitle.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '사용자님의 여행 성향은 마이페이지에서 \n언제든지 변경할 수 있어요',
+                      '$nickname님의 여행 성향은 마이페이지에서 \n언제든지 확인할 수 있어요',
                       style: AppTextStyles.onboardingSubTitle,
                     ),
                   ],

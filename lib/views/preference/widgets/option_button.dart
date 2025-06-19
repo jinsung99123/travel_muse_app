@@ -26,7 +26,9 @@ class OptionButton extends StatelessWidget {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            width: 343,
+            height: 88,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
@@ -37,17 +39,18 @@ class OptionButton extends StatelessWidget {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   title,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color:
                         isSelected
-                            ? AppColors.primary[300]
+                            ? AppColors.primary[500]
                             : AppColors.grey[500],
                     fontFamily: 'Pretendard',
                   ),

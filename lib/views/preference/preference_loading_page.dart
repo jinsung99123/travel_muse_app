@@ -55,30 +55,35 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
     return CupertinoPageScaffold(
       backgroundColor: AppColors.white,
       child: SafeArea(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 '사용자님의 성향을 파악 중이에요',
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
               ),
-              const SizedBox(height: 32),
-              Container(
-                width: 292,
-                height: 290,
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/loading.png',
+              const Spacer(),
+              Center(
+                child: SizedBox(
                   width: 292,
                   height: 290,
-                  fit: BoxFit.contain,
+
+                  child: Image.asset(
+                    'assets/images/loading.png',
+                    width: 292,
+                    height: 290,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
+              const Spacer(),
             ],
           ),
         ),
