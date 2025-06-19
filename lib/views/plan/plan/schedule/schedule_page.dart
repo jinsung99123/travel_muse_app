@@ -38,8 +38,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     await viewModel.fetchSavedPlans();
     final plans = ref.read(scheduleViewModelProvider).valueOrNull;
 
-    selectedPlan =
-        plans?.allPlans.firstWhere((p) => p.planId == widget.planId);
+    selectedPlan = plans?.allPlans.firstWhere((p) => p.planId == widget.planId);
 
     final routes = await viewModel.fetchRoute(widget.planId);
     setState(() {
@@ -60,10 +59,11 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     final selectedPlaces = await Navigator.push<List<Map<String, String>>>(
       context,
       MaterialPageRoute(
-        builder: (_) => PlaceSearchPage(
-          planId: widget.planId,
-          region: selectedPlan?.region ?? '',
-        ),
+        builder:
+            (_) => PlaceSearchPage(
+              planId: widget.planId,
+              region: selectedPlan?.region ?? '',
+            ),
       ),
     );
 
@@ -108,10 +108,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         child: Column(
           children: [
             // 상단 헤더
-            ScheduleHeader(
-              isEditing: _isEditing,
-              onToggleEdit: _toggleEdit,
-            ),
+            ScheduleHeader(isEditing: _isEditing, onToggleEdit: _toggleEdit),
+
             // Day 리스트
             Expanded(
               child: planState.when(
@@ -130,8 +128,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
                   );
                 },
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(child: Text('에러 발생: $e')),
               ),
             ),
@@ -154,12 +151,17 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     daySchedules = parsed;
                   });
                 },
-
               ),
-              
+
       // 하단 완료 버튼
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
+          await ref
+              .read(scheduleViewModelProvider.notifier)
+              .saveDaySchedules(
+                planId: widget.planId,
+                daySchedules: daySchedules,
+              );
           await ref
               .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
