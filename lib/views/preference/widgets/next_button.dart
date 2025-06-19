@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class NextButton extends StatelessWidget {
@@ -22,6 +21,7 @@ class NextButton extends StatelessWidget {
           child: Text(
             '다음',
             style: TextStyle(
+              /// ignore: deprecated_member_use
               color: AppColors.white.withOpacity(enabled ? 1.0 : 0.6),
               fontSize: 18,
               fontWeight: FontWeight.w600,
