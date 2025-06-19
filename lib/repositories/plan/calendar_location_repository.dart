@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_muse_app/viewmodels/plan/calendar_location_view_model.dart';
+import 'package:travel_muse_app/models/plan/planstate.dart';
 
 class CalendarLocationRepository {
   CalendarLocationRepository({FirebaseFirestore? firestore})

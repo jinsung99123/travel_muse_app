@@ -1,28 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/models/plan/planstate.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
-
-class PlanState {
-  PlanState({this.planId, this.startDate, this.endDate, this.region});
-  final String? planId;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final String? region;
-
-  PlanState copyWith({
-    String? planId,
-    DateTime? startDate,
-    DateTime? endDate,
-    String? region,
-  }) {
-    return PlanState(
-      planId: planId ?? this.planId,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      region: region ?? this.region,
-    );
-  }
-}
 
 class CalendarLocationViewModel extends StateNotifier<PlanState> {
   CalendarLocationViewModel(this.ref) : super(PlanState());
