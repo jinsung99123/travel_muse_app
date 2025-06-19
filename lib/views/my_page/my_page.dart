@@ -11,7 +11,7 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text('마이페이지', style: AppTextStyles.appBarTitle),
         centerTitle: false,

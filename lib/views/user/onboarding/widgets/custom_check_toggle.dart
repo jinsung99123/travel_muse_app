@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/viewmodels/user/terms_agreement_view_model.dart';
+import 'package:travel_muse_app/providers/user/terms_agreement_view_model_provider.dart';
 
 class CustomCheckToggle extends ConsumerWidget {
   const CustomCheckToggle({super.key, required this.index});

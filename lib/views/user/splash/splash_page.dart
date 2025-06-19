@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/viewmodels/user/auth_view_model.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
 import 'package:travel_muse_app/views/user/onboarding/onboarding_page.dart';
@@ -22,6 +23,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
       Widget nextPage = LoginPage();
 
       Timer(const Duration(seconds: 2), () async {
+        final navigator = Navigator.of(context);
         if (ref.read(authViewModelProvider).user != null) {
           final viewmodel = ref.read(authViewModelProvider.notifier);
           await viewmodel.isUserNew();
@@ -36,9 +38,10 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
           }
         }
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => nextPage),
+        unawaited(
+          navigator.pushReplacement(
+            MaterialPageRoute(builder: (context) => nextPage),
+          ),
         );
       });
     });
@@ -47,7 +50,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           const SizedBox(height: 320),
@@ -68,7 +71,7 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
               style: TextStyle(
                 fontSize: 24,
                 fontFamily: 'Ssangmun',
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),

@@ -4,14 +4,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Result<T> {
-  // 데이터 or 실패 사유
+  /// 데이터 or 실패 사유
   Result.success(this.data) : error = null;
   Result.failure(this.error) : data = null;
 
   final T? data;
   final String? error;
 
-  // 성공 여부
   bool get isSuccess => data != null;
 }
 
@@ -61,7 +60,7 @@ class AuthService {
         ],
       );
 
-      final credential = OAuthProvider("apple.com").credential(
+      final credential = OAuthProvider('apple.com').credential(
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );

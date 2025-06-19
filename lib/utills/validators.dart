@@ -5,7 +5,7 @@ class Validators {
   static String? validateNickname(String? value) {
     if (value == null || value.trim().isEmpty) {
       if (value != null) {
-        log('$value');
+        log(value);
       }
       return '닉네임을 입력해주세요';
     }

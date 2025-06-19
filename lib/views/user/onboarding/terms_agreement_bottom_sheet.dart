@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/viewmodels/user/profile_view_model.dart';
-import 'package:travel_muse_app/viewmodels/user/terms_agreement_view_model.dart';
+import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/terms_agreement_view_model_provider.dart';
+import 'package:travel_muse_app/views/preference/preference_intro_page_2.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agree_all.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agreement_title.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_list.dart';
-import 'package:travel_muse_app/views/preference/preference_intro_page_2.dart';
-import 'package:travel_muse_app/views/widgets/next_button.dart';
+import 'package:travel_muse_app/views/widgets/user_next_button.dart';
 
 class TermsAgreementBottomSheet extends ConsumerWidget {
   const TermsAgreementBottomSheet({super.key});
@@ -37,15 +39,19 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
             TermsList(termsKeys: termsKeys),
             Padding(
               padding: const EdgeInsets.only(bottom: 34),
-              child: NextButton(
+              child: UserNextButton(
                 text: '가입 완료',
                 isActivated: allRequiresAgreed,
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   if (allRequiresAgreed) {
                     await viewmodel.updateProfile();
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),
+                    unawaited(
+                      navigator.push(
+                        MaterialPageRoute(
+                          builder: (_) => PreferenceIntroPage2(),
+                        ),
+                      ),
                     );
                   }
                 },

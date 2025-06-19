@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/viewmodels/user/profile_view_model.dart';
+import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/onboarding/terms_agreement_bottom_sheet.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/edit_birth_date.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/select_gender.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
-import 'package:travel_muse_app/views/widgets/next_button.dart';
+import 'package:travel_muse_app/views/widgets/user_next_button.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({super.key});
@@ -48,7 +48,7 @@ class OnboardingPage extends ConsumerWidget {
               Column(
                 children: [
                   Spacer(),
-                  NextButton(
+                  UserNextButton(
                     text: '다음',
                     isActivated: canUpdate,
                     onPressed: () {
