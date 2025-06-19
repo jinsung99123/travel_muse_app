@@ -22,43 +22,38 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
         ref.watch(termsAgreementViewModelProvider).allRequiresAgreed;
     final viewmodel = ref.read(profileViewModelProvider.notifier);
 
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
 
-        child: Wrap(
-          children: [
-            TermsAgreementTitle(),
-            TermsAgreeAll(),
-            TermsList(termsKeys: termsKeys),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 34),
-              child: UserNextButton(
-                text: '가입 완료',
-                isActivated: allRequiresAgreed,
-                onPressed: () async {
-                  final navigator = Navigator.of(context);
-                  if (allRequiresAgreed) {
-                    await viewmodel.updateProfile();
-                    unawaited(
-                      navigator.push(
-                        MaterialPageRoute(
-                          builder: (_) => PreferenceIntroPage2(),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
+      child: Wrap(
+        children: [
+          TermsAgreementTitle(),
+          TermsAgreeAll(),
+          TermsList(termsKeys: termsKeys),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 34),
+            child: UserNextButton(
+              text: '가입 완료',
+              isActivated: allRequiresAgreed,
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                if (allRequiresAgreed) {
+                  await viewmodel.updateProfile();
+                  unawaited(
+                    navigator.push(
+                      MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),
+                    ),
+                  );
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

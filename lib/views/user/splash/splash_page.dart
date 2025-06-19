@@ -51,31 +51,38 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Column(
-        children: [
-          const SizedBox(height: 320),
-          Center(
-            child: Image.asset(
-              'assets/images/Logo.png',
-              width: 216,
-              height: 216,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 80),
-            child: Text(
-              'TravelMuse',
-              style: TextStyle(
-                fontSize: 24,
-                fontFamily: 'Ssangmun',
-                color: AppColors.black,
+      body: SizedBox(
+        height: double.maxFinite,
+        child: Column(
+          children: [
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: Image.asset(
+                  'assets/images/Logo.png',
+                  width: 216,
+                  height: 216,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-        ],
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'TravelMuse',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Ssangmun',
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }

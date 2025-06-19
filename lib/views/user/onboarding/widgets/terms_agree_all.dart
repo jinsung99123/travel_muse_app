@@ -27,8 +27,9 @@ class TermsAgreeAll extends StatelessWidget {
                   height: 1.50,
                 ),
               ),
+              SizedBox(height: 8),
               Text(
-                '서비스 이용을 위해 아래 약관에 모두 동의합니다',
+                '서비스 이용을 위해 아래 약관에 모두 동의합니다.',
                 style: AppTextStyles.helperText,
               ),
             ],

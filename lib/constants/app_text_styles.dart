@@ -51,6 +51,7 @@ class AppTextStyles {
     fontSize: 16,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w400,
+    height: 1.50,
   );
 
   // 텍스트폼필드 헬퍼텍스트
@@ -68,6 +69,7 @@ class AppTextStyles {
     fontSize: 14,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w400,
+    height: 1.5,
   );
 
   // 버튼 활성화 텍스트
@@ -85,6 +87,7 @@ class AppTextStyles {
     fontSize: 18,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
+    height: 1.5,
   );
 
   // 버튼 확인완료 텍스트
@@ -102,6 +105,7 @@ class AppTextStyles {
     fontSize: 18,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
+    height: 1.50,
   );
 
   // 온보딩 젠더박스 미선택 텍스트
@@ -110,6 +114,7 @@ class AppTextStyles {
     fontSize: 18,
     fontFamily: 'Pretendard',
     fontWeight: FontWeight.w600,
+    height: 1.50,
   );
 
   // 약관 텍스트

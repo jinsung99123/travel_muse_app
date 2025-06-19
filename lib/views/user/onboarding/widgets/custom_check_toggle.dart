@@ -26,21 +26,24 @@ class CustomCheckToggle extends ConsumerWidget {
             .read(termsAgreementViewModelProvider.notifier)
             .toggleAgreement(termKey);
       },
-      child: Container(
-        width: 24,
-        height: 24,
-        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: isSelected! ? AppColors.primary[300] : AppColors.grey[300],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(500),
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Container(
+          width: 24,
+          height: 24,
+          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+          clipBehavior: Clip.antiAlias,
+          decoration: ShapeDecoration(
+            color: isSelected! ? AppColors.primary[300] : AppColors.grey[300],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(500),
+            ),
           ),
-        ),
-        child: SvgPicture.asset(
-          'assets/icons/check.svg',
-          width: 10.5,
-          height: 9.25,
+          child: SvgPicture.asset(
+            'assets/icons/check.svg',
+            width: 10.5,
+            height: 9.25,
+          ),
         ),
       ),
     );
