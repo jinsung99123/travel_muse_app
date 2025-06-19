@@ -199,22 +199,16 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   setState(() {
                     daySchedules = parsed;
                   });
-                  ref
-                      .read(scheduleViewModelProvider.notifier)
-                      .saveAiSchedules(
-                        planId: widget.planId,
-                        daySchedules: parsed,
-                      );
                 },
               ),
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
-          // await ref
-          //     .read(scheduleViewModelProvider.notifier)
-          //     .saveDaySchedules(
-          //       planId: widget.planId,
-          //       daySchedules: daySchedules,
-          //     );
+          await ref
+              .read(scheduleViewModelProvider.notifier)
+              .saveDaySchedules(
+                planId: widget.planId,
+                daySchedules: daySchedules,
+              );
           await ref
               .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
