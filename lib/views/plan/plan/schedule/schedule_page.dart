@@ -43,10 +43,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
     final routes = await viewModel.fetchRoute(widget.planId);
     setState(() {
-      daySchedules = {
-        for (final entry in routes.entries)
-          entry.key: List<Map<String, String>>.from(entry.value),
-      };
+      daySchedules = routes;
     });
   }
 
@@ -86,6 +83,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     setState(() {
       daySchedules[dayIndex]?.removeAt(placeIndex);
     });
+
     ref
         .read(scheduleViewModelProvider.notifier)
         .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
@@ -107,21 +105,22 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     return Scaffold(
       appBar: ScheduleAppBar(planId: widget.planId),
       body: SafeArea(
+        child: Column(
+          children: [
+            // 상단 헤더
+            ScheduleHeader(
+              isEditing: _isEditing,
+              onToggleEdit: _toggleEdit,
+            ),
+            // Day 리스트
+            Expanded(
+              child: planState.when(
+                data: (_) {
+                  if (selectedPlan == null) {
+                    return const Center(child: Text('선택된 일정이 없습니다.'));
+                  }
 
-        child: planState.when(
-          data: (_) {
-            if (selectedPlan == null) {
-              return const Center(child: Text('선택된 일정이 없습니다.'));
-            }
-
-            return Column(
-              children: [
-                ScheduleHeader(
-                  isEditing: _isEditing,
-                  onToggleEdit: _toggleEdit,
-                ),
-                Expanded(
-                  child: DayScheduleList(
+                  return DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
                     isEditing: _isEditing,
@@ -129,13 +128,14 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
 
-                  ),
-                ),
-              ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('에러 발생: $e')),
+                  );
+                },
+                loading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Center(child: Text('에러 발생: $e')),
+              ),
+            ),
+          ],
         ),
       ),
 
@@ -154,8 +154,9 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     daySchedules = parsed;
                   });
                 },
-              ),
 
+              ),
+              
       // 하단 완료 버튼
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
