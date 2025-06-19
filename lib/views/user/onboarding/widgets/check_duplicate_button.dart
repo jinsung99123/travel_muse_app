@@ -12,7 +12,7 @@ class DuplicateCheckButton extends ConsumerWidget {
     final viewmodel = ref.read(profileViewModelProvider.notifier);
 
     return SizedBox(
-      width: 113,
+      width: 115,
       height: 56,
       child: GestureDetector(
         onTap: () async {
@@ -21,6 +21,7 @@ class DuplicateCheckButton extends ConsumerWidget {
           await viewmodel.checkCanUseNickname();
         },
         child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: DuplicateButtonThemes().getButtonStyle(state.buttonState),
           child: Center(
             child: DuplicateButtonThemes().getText(state.buttonState),

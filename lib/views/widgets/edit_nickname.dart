@@ -35,7 +35,6 @@ class EditNickname extends ConsumerWidget {
                             .checkNicknameChanged(value);
                       },
                       textAlignVertical: TextAlignVertical.center,
-                      // 높이, 내부 텍스트 정렬
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 16,

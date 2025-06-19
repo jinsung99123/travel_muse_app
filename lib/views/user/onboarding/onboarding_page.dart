@@ -39,7 +39,7 @@ class OnboardingPage extends ConsumerWidget {
                       style: AppTextStyles.onboardingTitle,
                     ),
                   ),
-                  EditProfileImage(size: 88),
+                  EditProfileImage(),
                   EditNickname(),
                   EditBirthDate(controller: birthDateController),
                   SelectGender(),

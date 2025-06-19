@@ -22,6 +22,7 @@ class UserNextButton extends StatelessWidget {
           onPressed();
         },
         child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           width: double.infinity,
           height: 56,
           clipBehavior: Clip.antiAlias,

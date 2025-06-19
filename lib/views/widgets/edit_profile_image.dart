@@ -8,8 +8,7 @@ import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 
 class EditProfileImage extends ConsumerStatefulWidget {
-  const EditProfileImage({super.key, required this.size});
-  final double size;
+  const EditProfileImage({super.key});
 
   @override
   ConsumerState<EditProfileImage> createState() => _EditProfileImageState();
@@ -49,8 +48,8 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
                   .savePickedImageToLocal();
             },
             child: SizedBox(
-              width: widget.size,
-              height: widget.size,
+              width: 88,
+              height: 88,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(500),
