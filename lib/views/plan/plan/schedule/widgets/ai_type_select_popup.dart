@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/type_select_item.dart';
 
@@ -62,7 +63,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
         ),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
         ),
         child: SingleChildScrollView(
@@ -78,7 +79,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                     'Ai 추천 받을 성향을 선택해주세요',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF26272A),
+                      color: AppColors.black,
                       fontSize: 18,
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w600,
@@ -116,14 +117,14 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xFF98A0A4)),
+                          color: AppColors.white,
+                          border: Border.all(color:  AppColors.primary[400]!),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Text(
+                        child: Text(
                           '취소',
                           style: TextStyle(
-                            color: Color(0xFF34393B),
+                            color: AppColors.grey[300],
                             fontSize: 14,
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
@@ -167,13 +168,13 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF48CDFD),
+                          color:  AppColors.primary[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Text(
                           '완료',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 14,
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,

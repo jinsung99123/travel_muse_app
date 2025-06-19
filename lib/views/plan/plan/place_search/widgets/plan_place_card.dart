@@ -20,7 +20,7 @@ class PlanPlaceCard extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(minHeight: 100),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? AppColors.primary[400]! : AppColors.grey[100]!,
@@ -50,7 +50,7 @@ class PlanPlaceCard extends StatelessWidget {
                   : Container(
                       width: 80,
                       height: 80,
-                      color: Colors.grey.shade300,
+                      color: AppColors.grey[100],
                     ),
             ),
             const SizedBox(width: 12),

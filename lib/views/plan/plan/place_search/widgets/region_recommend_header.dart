@@ -24,7 +24,7 @@ class RegionRecommendHeader extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: AppColors.black,
               fontFamily: 'Pretendard',
             ),
           ),

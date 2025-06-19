@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class ScheduleBottomButtons extends StatelessWidget {
   const ScheduleBottomButtons({super.key, required this.onEditTap});
 
   final VoidCallback onEditTap;
 
-  static const _blueGrad = LinearGradient(
-    colors: [Color(0xFF42A5FF), Color(0xFF67C5FF)],
+  static final blueGrad = LinearGradient(
+    colors: [AppColors.primary[200]!,AppColors.primary[300]!],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
@@ -22,13 +23,13 @@ class ScheduleBottomButtons extends StatelessWidget {
           width: double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: _blueGrad,
+            gradient: blueGrad,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Text(
+          child:  Text(
             '일정 저장하기',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',

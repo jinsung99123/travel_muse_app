@@ -10,7 +10,7 @@ class MapPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.chevron_left, color: AppColors.grey[500],
@@ -32,7 +32,7 @@ class MapPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         preferredSize: const Size.fromHeight(1),
         child: Container(
           height: 1,
-          color: Colors.grey.shade300,
+          color: AppColors.grey[300],
         ),
       ),
     );
