@@ -16,10 +16,10 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 내부 패딩 width8  height16
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
       decoration: BoxDecoration(
-        color: AppColors.grey[50],               // 검색바 배경색
-        borderRadius: BorderRadius.circular(28), // 완전 둥근 필 형태
+        color: AppColors.grey[50],               
+        borderRadius: BorderRadius.circular(28), 
       ),
       child: Row(
         children: [
@@ -28,8 +28,8 @@ class SearchBar extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: Icon(
               Icons.search,
-              size: 24,                           // 24×24 아이콘
-              color: AppColors.grey[200],         // 아이콘 색상
+              size: 24,                           
+              color: AppColors.grey[200],         
             ),
           ),
           const SizedBox(width: 8),
@@ -43,7 +43,7 @@ class SearchBar extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               decoration:  InputDecoration(
-                isCollapsed: true,                // 기본 패딩 제거
+                isCollapsed: true,                
                 hintText: '검색어를 입력해주세요',
                 hintStyle: TextStyle(
                   color: AppColors.grey[400],

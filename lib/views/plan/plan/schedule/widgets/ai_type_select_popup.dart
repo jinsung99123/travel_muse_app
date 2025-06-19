@@ -118,7 +118,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          border: Border.all(color:  AppColors.primary[400]!),
+                          border: Border.all(color: AppColors.primary[400]!),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
@@ -143,12 +143,14 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                           _selectedTest == null
                               ? null
                               : () async {
+                                final dialogContext = context;
                                 await EasyLoading.show(
                                   status: 'AI 추천 일정을 생성 중입니다...',
                                 );
                                 try {
                                   final typeCode =
                                       _selectedTest!.result['type']!;
+
                                   await Future.delayed(
                                     const Duration(milliseconds: 500),
                                   );
@@ -161,14 +163,15 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                   );
                                 } finally {
                                   await EasyLoading.dismiss();
-                                  Navigator.pop(context);
+                                  // ignore: use_build_context_synchronously
+                                    Navigator.pop(dialogContext);
                                 }
                               },
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color:  AppColors.primary[300],
+                          color: AppColors.primary[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Text(

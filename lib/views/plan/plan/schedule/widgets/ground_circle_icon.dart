@@ -17,12 +17,12 @@ class GradientCircleIcon extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient:  LinearGradient(
-          begin: Alignment(-0.3, -1.0),           // 대각선 방향
+          begin: Alignment(-0.3, -1.0),          
           end: Alignment(0.0, 1.2),
           colors: [
             Colors.white,
-            AppColors.primary[300]!,                    // 중간 밝은 파랑
-            AppColors.primary[400]!,                    // 진한 파랑
+            AppColors.primary[300]!,                    
+            AppColors.primary[400]!,                    
           ],
           stops: [0.0, 0.5, 1.0],
         ),
