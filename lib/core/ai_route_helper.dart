@@ -75,7 +75,8 @@ Future<void> generateAndSaveEnrichedAiRoute({
     enriched[day] = enrichedPlaces;
   }
 
-  await scheduleRepo.saveAiRoute(planId: planId, aiSchedules: enriched);
+  ///route만 저장으로 변경
+  await scheduleRepo.saveDaySchedules(planId: planId, daySchedules: enriched);
 
   onResult(enriched);
 }

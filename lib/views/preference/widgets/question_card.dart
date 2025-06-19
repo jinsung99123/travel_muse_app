@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class QuestionCard extends StatelessWidget {
   const QuestionCard({super.key, required this.question});
@@ -17,7 +18,7 @@ class QuestionCard extends StatelessWidget {
           Text(
             question,
             style: const TextStyle(
-              color: Color(0xFF26272A),
+              color: AppColors.black,
               fontSize: 24,
               fontWeight: FontWeight.w700,
               height: 1.5,
@@ -25,10 +26,10 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '이 질문을 바탕으로 여행 성향을 분석해드릴게요!',
             style: TextStyle(
-              color: Color(0xFF7C878C),
+              color: AppColors.grey[400],
               fontSize: 16,
               fontWeight: FontWeight.w400,
               height: 1.5,

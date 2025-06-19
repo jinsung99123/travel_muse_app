@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
 
@@ -29,7 +30,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await ref
-            .read(preferenceTestViewModelProvider.notifier)
+            .read(preferenceTestStateNotifierProvider.notifier)
             .classifyTestOnly(widget.answers, context);
 
         if (mounted) {
@@ -52,7 +53,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.white,
+      backgroundColor: AppColors.white,
       child: SafeArea(
         child: Center(
           child: Column(
@@ -63,7 +64,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: CupertinoColors.black,
+                  color: AppColors.black,
                 ),
               ),
               const SizedBox(height: 32),

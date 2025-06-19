@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({super.key, required this.title, this.onMoreTap});
@@ -21,7 +22,7 @@ class SectionTitle extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.black,
+                color: AppColors.black,
               ),
             ),
           ),
