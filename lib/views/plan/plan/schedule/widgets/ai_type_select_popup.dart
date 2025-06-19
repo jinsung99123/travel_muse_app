@@ -142,7 +142,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                           _selectedTest == null
                               ? null
                               : () async {
-                                EasyLoading.show(
+                                await EasyLoading.show(
                                   status: 'AI 추천 일정을 생성 중입니다...',
                                 );
                                 try {
@@ -159,7 +159,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                     stackTrace: s,
                                   );
                                 } finally {
-                                  EasyLoading.dismiss();
+                                  await EasyLoading.dismiss();
                                   Navigator.pop(context);
                                 }
                               },

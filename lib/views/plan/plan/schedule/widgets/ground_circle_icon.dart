@@ -28,12 +28,12 @@ class GradientCircleIcon extends StatelessWidget {
         boxShadow: [
           //그림자
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+           color: Color.fromRGBO(0, 0, 0, 0.03),
             offset: const Offset(0, 1),
             blurRadius: 2,
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Color.fromRGBO(0, 0, 0, 0.03),
             offset: const Offset(0, 4),
             blurRadius: 1,
           ),
