@@ -139,27 +139,32 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         ),
       ),
 
-      // AI 일정 자동 생성 버튼
-      floatingActionButton: selectedPlan == null
-          ? null
-          : AiButton(
-              planId: widget.planId,
-              days: calculateTripDays(
-                selectedPlan!.startDate,
-                selectedPlan!.endDate,
+      floatingActionButton:
+          selectedPlan == null
+              ? null
+              : AiButton(
+                planId: widget.planId,
+                days: calculateTripDays(
+                  selectedPlan!.startDate,
+                  selectedPlan!.endDate,
+                ),
+                region: selectedPlan!.region,
+                onResult: (parsed) {
+                  setState(() {
+                    daySchedules = parsed;
+                  });
+                },
               ),
-              region: selectedPlan!.region,
-              onResult: (parsed) {
-                setState(() => daySchedules = parsed);
-                ref
-                    .read(scheduleViewModelProvider.notifier)
-                    .saveAiSchedules(planId: widget.planId, daySchedules: parsed);
-              },
-            ),
 
       // 하단 완료 버튼
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
+          await ref
+              .read(scheduleViewModelProvider.notifier)
+              .saveDaySchedules(
+                planId: widget.planId,
+                daySchedules: daySchedules,
+              );
           await ref
               .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
