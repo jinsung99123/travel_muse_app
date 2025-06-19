@@ -26,7 +26,7 @@ class PlanRepository {
 
 여행자에게 맞는 일정표를 아래 조건에 따라 만들어줘:
 
-- 여행일수: ${days}일
+- 여행일수: $days일
 - 여행 지역: $region
 - 여행자 성향: $typeDescription
 
