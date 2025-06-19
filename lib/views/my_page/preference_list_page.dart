@@ -24,7 +24,7 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
       await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
       final tests =
           await ref
-              .read(preferenceTestViewModelProvider.notifier)
+              .read(preferenceTestStateNotifierProvider.notifier)
               .fetchTestsByUserId();
       setState(() {
         _tests = tests;

@@ -30,7 +30,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await ref
-            .read(preferenceTestViewModelProvider.notifier)
+            .read(preferenceTestStateNotifierProvider.notifier)
             .classifyTestOnly(widget.answers, context);
 
         if (mounted) {

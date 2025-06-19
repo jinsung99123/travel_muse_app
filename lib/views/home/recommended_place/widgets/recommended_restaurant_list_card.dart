@@ -40,6 +40,7 @@ class RecommendedRestaurantListCard extends StatelessWidget {
           border: Border.all(color: AppColors.primary[100]!, width: 1),
           boxShadow: [
             BoxShadow(
+              /// ignore: deprecated_member_use
               color: AppColors.black.withOpacity(0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),

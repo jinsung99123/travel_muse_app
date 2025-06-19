@@ -11,7 +11,7 @@ class ResultViewDetail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(preferenceTestViewModelProvider);
+    final state = ref.watch(preferenceTestStateNotifierProvider);
 
     if (state.value == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -94,6 +94,8 @@ class ResultViewDetail extends ConsumerWidget {
               ),
             );
           }).toList(),
+
+          /// ignore: unnecessary_to_list
           const SizedBox(height: 24),
           ResultActionButtons(
             onRestart: () {
