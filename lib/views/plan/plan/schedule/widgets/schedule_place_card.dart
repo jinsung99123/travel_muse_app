@@ -30,14 +30,14 @@ class SchedulePlaceCard extends StatelessWidget {
         border: Border.all(
           color:
               showHandle
-                  ? const Color(0xFFBFD1FF) // 편집 중 파란 테두리
-                  : const Color(0xFFE1E1E1),
+                  ?  AppColors.secondary[400]! // 편집 중 파란 테두리
+                  : AppColors.grey[300]!,
         ),
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.05),
+            color: Color.fromRGBO(0, 0, 0, 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -94,7 +94,7 @@ class SchedulePlaceCard extends StatelessWidget {
           if (showHandle)
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: const Icon(Icons.reorder, color: Color(0xFF9E9E9E)),
+              child:  Icon(Icons.reorder, color: AppColors.grey[300]),
             ),
         ],
       ),

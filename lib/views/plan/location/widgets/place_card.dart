@@ -24,7 +24,7 @@ class PlaceCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected ? AppColors.primary[400]! : AppColors.grey[300]!,
@@ -32,7 +32,7 @@ class PlaceCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: AppColors.black,
               blurRadius: isSelected ? 6 : 3,
               offset: const Offset(0, 2),
             ),
@@ -54,7 +54,7 @@ class PlaceCard extends StatelessWidget {
                   : Container(
                       width: 90,
                       height: 90,
-                      color: Colors.grey.shade300,
+                      color: AppColors.grey[100],
                       child: const Icon(Icons.image_not_supported),
                     ),
             ),
@@ -79,7 +79,7 @@ class PlaceCard extends StatelessWidget {
                     address,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Colors.black54,
+                      color: AppColors.black,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

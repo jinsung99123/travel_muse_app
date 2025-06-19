@@ -1,6 +1,7 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
 
+/// 여행 장소 리스트를 기반으로 Google Maps에 표시할 마커들을 생성합니다.
 Set<Marker> createMarkers({
   required List<Map<String, dynamic>> places,
     required BitmapDescriptor icon,
@@ -36,7 +37,7 @@ Set<Marker> createMarkers({
     );
   }).whereType<Marker>().toSet();
 }
-
+/// Day 키 값을 기반으로 탭 라벨 문자열을 생성합니다.
 String getDisplayDayTab(String key) {
   final num = int.tryParse(key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
   return 'Day ${num + 1}';

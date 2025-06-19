@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
 
 class TypeSelectItem extends StatelessWidget {
@@ -31,13 +32,13 @@ class TypeSelectItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     isSelected
-                        ? const Color(0xFF15BFFD)
-                        : const Color(0xFFCED2D3),
+                        ? AppColors.primary[400]
+                        : AppColors.grey[100],
                 shape: BoxShape.circle,
               ),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -52,7 +53,7 @@ class TypeSelectItem extends StatelessWidget {
                   fontSize: 16,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF26272A),
+                  color: AppColors.black,
                   height: 1.5,
                 ),
               ),

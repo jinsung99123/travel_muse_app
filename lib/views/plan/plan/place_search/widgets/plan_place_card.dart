@@ -20,7 +20,7 @@ class PlanPlaceCard extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(minHeight: 100),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? AppColors.primary[400]! : AppColors.grey[100]!,
@@ -28,7 +28,7 @@ class PlanPlaceCard extends StatelessWidget {
           ), 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: const Color.fromRGBO(0, 0, 0, 0.05),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -37,7 +37,7 @@ class PlanPlaceCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            // ─ 썸네일 ─
+            // 썸네일 
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: imageUrl != null && imageUrl.isNotEmpty
@@ -50,7 +50,7 @@ class PlanPlaceCard extends StatelessWidget {
                   : Container(
                       width: 80,
                       height: 80,
-                      color: Colors.grey.shade300,
+                      color: AppColors.grey[100],
                     ),
             ),
             const SizedBox(width: 12),
@@ -77,7 +77,6 @@ class PlanPlaceCard extends StatelessWidget {
                         Text(
                           place['subtitle'] ?? '',
                           maxLines: 2,
-                          // overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 14,
                             color: AppColors.grey[400],

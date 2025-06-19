@@ -45,7 +45,7 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     }
   }
 
-  // 수동 저장한 사용자 계획 불러오기
+  /// 수동 저장한 사용자 계획 불러오기
   Future<void> fetchSavedPlans() async {
     if (currentUser == null) return;
     try {
@@ -56,6 +56,7 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     }
   }
 
+  /// 현재 로그인한 사용자의 appUser 문서에 planId를 추가합니다.
   Future<void> addPlanIdToAppUser(String planId) async {
     if (currentUser == null) return;
     try {
@@ -128,6 +129,7 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     return await _repository.fetchRoute(planId);
   }
 
+  /// 주어진 [planId]에 해당하는 여행 계획(Plan)을 반환합니다.
   Plans? getPlanById(String planId) {
     try {
       return _allPlans.firstWhere((p) => p.planId == planId);
@@ -136,7 +138,8 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     }
   }
 
-   Future<bool> hasRoute(String planId) async {
+  /// 주어진 [planId]에 해당하는 일정(Route)이 존재하는지 확인합니다.
+  Future<bool> hasRoute(String planId) async {
     final snap = await _repository.fetchRoute(planId);
     return snap.isNotEmpty;
   }

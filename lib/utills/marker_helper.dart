@@ -3,11 +3,12 @@ import 'dart:ui' as ui;
 import 'package:flutter_svg/flutter_svg.dart';      
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+/// SVG 에셋 파일을 기반으로 Google Maps의 마커 아이콘(BitmapDescriptor)을 생성합니다.
 Future<BitmapDescriptor> bitmapDescriptorFromSvgAsset(
   String assetPath, {
   ui.Size size = const ui.Size(48, 48),
 }) async {
-  // 1) SVG → PictureInfo
+  // SVG → PictureInfo
   final pictureInfo = await vg.loadPicture(
     SvgAssetLoader(assetPath),
     null,

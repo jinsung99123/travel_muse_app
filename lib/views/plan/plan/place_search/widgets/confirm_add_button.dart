@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
-class ScheduleBottomButtons extends StatelessWidget {
-  const ScheduleBottomButtons({super.key, required this.onEditTap});
-
-  final VoidCallback onEditTap;
-
-  static final blueGrad = LinearGradient(
-    colors: [AppColors.primary[200]!,AppColors.primary[300]!],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
+class ConfirmAddButton extends StatelessWidget {
+  const ConfirmAddButton({super.key, required this.visible, this.onTap});
+  final bool visible;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    if (!visible) return const SizedBox.shrink();
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: GestureDetector(
-        onTap: onEditTap,
+        onTap: onTap,
         child: Container(
-          height: 48,
-          width: double.infinity,
+          height: 56,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: blueGrad,
+            color: AppColors.primary[300],
             borderRadius: BorderRadius.circular(10),
           ),
-          child:  Text(
-            '일정 저장하기',
+          child: const Text(
+            '추가하기',
             style: TextStyle(
               color: AppColors.white,
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
               fontFamily: 'Pretendard',
             ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart';
-import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_section.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_list.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_bottom_button.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_header.dart';
 import 'package:travel_muse_app/views/plan/plan/widgets/schedule_app_bar.dart';
 
 class SchedulePage extends ConsumerStatefulWidget {
@@ -46,11 +46,12 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     });
   }
 
+  // 일정 편집 관련
   void _onReorder(int dayIndex, int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) newIndex -= 1;
-      final movedItem = daySchedules[dayIndex]!.removeAt(oldIndex);
-      daySchedules[dayIndex]!.insert(newIndex, movedItem);
+      final moved = daySchedules[dayIndex]!.removeAt(oldIndex);
+      daySchedules[dayIndex]!.insert(newIndex, moved);
     });
   }
 
@@ -88,6 +89,15 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
   }
 
+  Future<void> _toggleEdit() async {
+    setState(() => _isEditing = !_isEditing);
+    if (!_isEditing) {
+      await ref
+          .read(scheduleViewModelProvider.notifier)
+          .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final planState = ref.watch(scheduleViewModelProvider);
@@ -97,85 +107,25 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  const Text(
-                    '여행 일정을 등록해주세요',
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(32, 27),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () async {
-                      setState(() => _isEditing = !_isEditing);
-                      if (!_isEditing) {
-                        await ref
-                            .read(scheduleViewModelProvider.notifier)
-                            .saveDaySchedules(
-                              planId: widget.planId,
-                              daySchedules: daySchedules,
-                            );
-                      }
-                    },
-                    child: Text(
-                      _isEditing ? '완료' : '편집',
-                      style: TextStyle(
-                        color: AppColors.primary[500],
-                        fontFamily: 'Pretendard',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // 상단 헤더
+            ScheduleHeader(isEditing: _isEditing, onToggleEdit: _toggleEdit),
+
+            // Day 리스트
             Expanded(
               child: planState.when(
-                data: (plans) {
+                data: (_) {
                   if (selectedPlan == null) {
                     return const Center(child: Text('선택된 일정이 없습니다.'));
                   }
 
-                  final dayCount =
-                      selectedPlan!.endDate
-                          .difference(selectedPlan!.startDate)
-                          .inDays +
-                      1;
+                  return DayScheduleList(
+                    selectedPlan: selectedPlan!,
+                    daySchedules: daySchedules,
+                    isEditing: _isEditing,
+                    onReorder: _onReorder,
+                    onAddPlace: _addPlace,
+                    onRemovePlace: _removePlace,
 
-                  return ListView.separated(
-                    itemCount: dayCount,
-                    separatorBuilder: (_, __) => const SizedBox(height: 4),
-                    itemBuilder: (context, dayIndex) {
-                      final currentDate = selectedPlan!.startDate.add(
-                        Duration(days: dayIndex),
-                      );
-                      final dayLabel =
-                          '${currentDate.month}.${currentDate.day} (${_getWeekday(currentDate.weekday)})';
-                      daySchedules.putIfAbsent(dayIndex, () => []);
-
-                      return DayScheduleSection(
-                        key: ValueKey('day-$dayIndex'),
-                        dayIndex: dayIndex,
-                        dayLabel: dayLabel,
-                        schedules: daySchedules[dayIndex]!,
-                        isEditing: _isEditing,
-                        onReorder: _onReorder,
-                        onAddPlace: _addPlace,
-                        onRemovePlace: _removePlace,
-                      );
-                    },
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
@@ -185,6 +135,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           ],
         ),
       ),
+
       floatingActionButton:
           selectedPlan == null
               ? null
@@ -201,6 +152,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   });
                 },
               ),
+
+      // 하단 완료 버튼
       bottomNavigationBar: ScheduleBottomButtons(
         onEditTap: () async {
           await ref
@@ -212,21 +165,16 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           await ref
               .read(scheduleViewModelProvider.notifier)
               .addPlanIdToAppUser(widget.planId);
+          if (!mounted) return;
           ScaffoldMessenger.of(
-            context,
+            context
           ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
-
           await Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (_) => const HomePage()),
           );
         },
       ),
     );
-  }
-
-  String _getWeekday(int weekday) {
-    const days = ['월', '화', '수', '목', '금', '토', '일'];
-    return days[weekday - 1];
   }
 }
