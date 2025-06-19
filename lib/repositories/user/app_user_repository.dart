@@ -8,7 +8,7 @@ class AppUserRepository {
   final _firestore = FirebaseFirestore.instance;
   final _storage = FirebaseStorage.instance;
 
-  // 첫 로그인 시 데이터베이스에 유저 정보 생성
+  /// 첫 로그인 시 데이터베이스에 유저 정보 생성
   Future<void> createAppUser(String uid) async {
     final docRef = _firestore.collection('appUser').doc(uid);
     final snapshot = await docRef.get();
@@ -26,7 +26,7 @@ class AppUserRepository {
     }
   }
 
-  // 데이터베이스에서 uid로 해당 유저 정보 get
+  /// 데이터베이스에서 uid로 해당 유저 정보 get
   Future<AppUser?> fetchLatestAppUser(String uid) async {
     final doc =
         await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
@@ -36,13 +36,14 @@ class AppUserRepository {
     return AppUser.fromJson(doc.data()!);
   }
 
-  // 프로필 이미지 스토리지에 업로드, url return
+  /// 프로필 이미지 스토리지에 업로드, url return
   Future<String> uploadProfileImage({
     required String uid,
     required File file,
   }) async {
     final fileName = '${uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-    // 이미지 업로드 & get url
+
+    /// 이미지 업로드 & get url
     final ref = _storage.ref().child('userProfiles/$uid/$fileName');
     await ref.putFile(file);
     final fileUrl = await ref.getDownloadURL();
@@ -50,7 +51,7 @@ class AppUserRepository {
     return fileUrl;
   }
 
-  // appUser 프로필이미지 url 가져오기
+  /// appUser 프로필이미지 url 가져오기
   Future<String?> fetchProfileImageUrl({required String uid}) async {
     final doc =
         await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
@@ -63,7 +64,7 @@ class AppUserRepository {
     return null;
   }
 
-  // 유저 프로필이미지 업데이트
+  /// 유저 프로필이미지 업데이트
   Future<void> updateProfileImage({
     required String uid,
     required String fileUrl,
@@ -73,7 +74,7 @@ class AppUserRepository {
     });
   }
 
-  // 유저 닉네임 중복확인
+  /// 유저 닉네임 중복확인
   Future<bool> isNicknameDuplicate(String nickname) async {
     final query =
         await _firestore
@@ -85,7 +86,7 @@ class AppUserRepository {
     return query.docs.isNotEmpty;
   }
 
-  // 유저 닉네임 업데이트
+  /// 유저 닉네임 업데이트
   Future<void> updateNickname({
     required String uid,
     required String nickname,
@@ -95,7 +96,7 @@ class AppUserRepository {
     });
   }
 
-  // 유저 생년월일 업데이트
+  /// 유저 생년월일 업데이트
   Future<void> updateBirthDate({
     required String uid,
     required String birthDate,
@@ -105,7 +106,7 @@ class AppUserRepository {
     });
   }
 
-  // 유저 성별 업데이트
+  /// 유저 성별 업데이트
   Future<void> updateGender({
     required String uid,
     required String gender,

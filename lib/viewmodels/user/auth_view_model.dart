@@ -16,7 +16,7 @@ class AuthViewModel extends Notifier<AuthState> {
     return AuthState(user: currentUser);
   }
 
-  // 구글 로그인
+  /// 구글 로그인
   Future<void> loginWithGoogle() async {
     final result = await _authService.signInWithGoogle();
 
@@ -24,7 +24,7 @@ class AuthViewModel extends Notifier<AuthState> {
       final user = result.data!.user;
       state = state.copyWith(user: user);
 
-      // Firestore Database에 유저 최초 등록
+      /// Firestore Database에 유저 최초 등록
       await _appUserRepository.createAppUser(user!.uid);
 
       log('google로 로그인 성공: ${result.data!.user!.uid}');
@@ -34,7 +34,7 @@ class AuthViewModel extends Notifier<AuthState> {
     }
   }
 
-  // 애플 로그인
+  /// 애플 로그인
   Future<void> loginWithApple() async {
     final result = await _authService.signInWithApple();
 
@@ -42,7 +42,7 @@ class AuthViewModel extends Notifier<AuthState> {
       final user = result.data!.user;
       state = state.copyWith(user: user);
 
-      // Firestore Database에 유저 최초 등록
+      /// Firestore Database에 유저 최초 등록
       await _appUserRepository.createAppUser(user!.uid);
 
       log('apple로 로그인 성공: ${result.data!.user!.uid}');
@@ -52,7 +52,7 @@ class AuthViewModel extends Notifier<AuthState> {
     }
   }
 
-  // appUser 확인 => 온보딩 필요 여부 결정
+  /// appUser 확인 => 온보딩 필요 여부 결정
   Future<void> isUserNew() async {
     if (state.user == null) return;
 
@@ -71,9 +71,9 @@ class AuthViewModel extends Notifier<AuthState> {
     }
   }
 
-  // 로그아웃
+  /// 로그아웃
   Future<void> logout() async {
     await _authService.signOut();
-    state = AuthState(); // 초기화
+    state = AuthState();
   }
 }

@@ -32,7 +32,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     );
   }
 
-  // db에서 기존 유저정보 가져오기
+  /// db에서 기존 유저정보 가져오기
   Future<void> fetchUserProfile() async {
     try {
       if (currentUser == null) return;
@@ -57,7 +57,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 이미지 ----------------------------------
   ///
 
-  // 사용자가 고른 이미지 로컬에 저장
+  /// 사용자가 고른 이미지 로컬에 저장
   Future<void> savePickedImageToLocal() async {
     final xfile = await _picker.pickImage(source: ImageSource.gallery);
     if (xfile == null) return;
@@ -67,7 +67,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     final customFolder = Directory('${directory.path}/profile_images');
 
     if (!await customFolder.exists()) {
-      await customFolder.create(recursive: true); // 폴더가 없으면 생성
+      await customFolder.create(recursive: true);
     }
     final fileName =
         'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -80,16 +80,16 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     checkEditAvailable();
   }
 
-  // 프로필 이미지 업데이트
+  /// 프로필 이미지 업데이트
   Future<void> updateProfileImage() async {
     try {
-      // 로컬 이미지를 스토리지에 업로드
+      /// 로컬 이미지를 스토리지에 업로드
       final imageUrl = await _repository.uploadProfileImage(
         uid: currentUser!.uid,
         file: pickedImage!,
       );
 
-      // 스토리지의 이미지 url을 appUser profileImageUrl 필드에 업데이트
+      /// 스토리지의 이미지 url을 appUser profileImageUrl 필드에 업데이트
       await _repository.updateProfileImage(
         uid: currentUser!.uid,
         fileUrl: imageUrl,
@@ -101,7 +101,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // 프로필 이미지 url 가져오기
+  /// 프로필 이미지 url 가져오기
   Future<void> fetchProfileImageUrl() async {
     if (currentUser == null) return;
 
@@ -121,9 +121,9 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 닉네임 ----------------------------------
   ///
 
-  // 사용자 입력 변경 감지
+  /// 사용자 입력 변경 감지
   void checkNicknameChanged(String value) {
-    // 이미 중복확인 한 경우 : 확인된 isValid, isDuplicate를 reset
+    /// 이미 중복확인 한 경우 : 확인된 isValid, isDuplicate를 reset
     if (state.isNicknameValid != null) {
       resetNicknameCheck();
     }
@@ -138,7 +138,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // 닉네임 확인 결과를 초기화 - 중복 확인, validator 확인
+  /// 닉네임 확인 결과를 초기화 - 중복 확인, validator 확인
   void resetNicknameCheck() {
     state = state.copyWith(
       isNicknameValid: null,
@@ -147,7 +147,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     );
   }
 
-  // validator 실행
+  /// validator 실행
   void validateNickname() {
     final nicknameErrorText = Validators.validateNickname(state.nicknameInput);
     if (nicknameErrorText != null) {
@@ -160,7 +160,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // 중복 확인
+  /// 중복 확인
   Future<void> isNicknameDuplicate() async {
     if (state.isNicknameDuplicate == null) {
       state = state.copyWith(nicknameMessage: null);
@@ -189,7 +189,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     checkUpdateAvailable();
   }
 
-  // 닉네임 사용 가능 여부 확인
+  /// 닉네임 사용 가능 여부 확인
   Future<bool> checkCanUseNickname() async {
     if (state.nicknameInput == null) return false;
     validateNickname();
@@ -203,7 +203,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     return true;
   }
 
-  // 닉네임 업데이트
+  /// 닉네임 업데이트
   Future<void> updateNickname() async {
     if (state.isNicknameValid == null || state.isNicknameValid == false) {
       return;
@@ -215,7 +215,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         return;
       }
 
-      // 닉네임 업데이트
       log(
         '닉네임 업데이트 시도 - user ${currentUser!.uid}, 새 닉네임 : ${nicknameController.text}',
       );
@@ -232,7 +231,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 생년월일 ----------------------------------
   ///
 
-  // 사용자 입력 변경 감지
+  /// 사용자 입력 변경 감지
   void checkBirthDateChanged(String value) {
     if (state.isBirthDateValid != null) {
       state = state.copyWith(
@@ -249,7 +248,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     }
   }
 
-  // validator 실행
+  /// validator 실행
   void validateBirthDate() {
     if (state.birthDateInput == null) return;
     final errorMessage = Validators.validateBirthDate(state.birthDateInput);
@@ -269,11 +268,11 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 성별 ----------------------------------
   ///
 
-  // 성별 선택
+  /// 성별 선택
   void selectGender(String gender) {
     state = state.copyWith(gender: gender);
 
-    // 성별 선택 확인
+    /// 성별 선택 확인
     if (state.gender == null) {
       state = state.copyWith(isGenderValid: false);
     } else {
@@ -286,14 +285,15 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 전체 업데이트 ----------------------------------
   ///
 
-  // 업데이트 가능 여부 확인(validator, 중복)
+  /// 업데이트 가능 여부 확인(validator, 중복)
   void checkUpdateAvailable() {
-    // 닉네임 확인
+    /// 닉네임 확인
     if (state.isNicknameValid != true || state.isNicknameDuplicate == true) {
       state = state.copyWith(canUpdateProfile: false);
       return;
     }
-    // 생년월일 확인
+
+    /// 생년월일 확인
     if (state.isBirthDateValid != true) {
       state = state.copyWith(canUpdateProfile: false);
       return;
@@ -306,8 +306,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     state = state.copyWith(canUpdateProfile: true);
   }
 
-  // 프로필 업데이트
-  // 회원가입 시
+  /// 프로필 업데이트
+  /// 회원가입 시
   Future<void> updateProfile() async {
     if (currentUser == null) return;
     if (state.nicknameInput == null) return;
@@ -316,53 +316,55 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     final uid = currentUser!.uid;
 
     try {
-      // 프로필이미지 업데이트
+      /// 프로필이미지 업데이트
       if (state.temporaryImagePath != null) {
         await updateProfileImage();
       }
 
-      // 닉네임 업데이트
+      /// 닉네임 업데이트
       await _repository.updateNickname(
         uid: uid,
         nickname: state.nicknameInput!,
       );
 
-      // 생년월일 업데이트
+      /// 생년월일 업데이트
       await _repository.updateBirthDate(
         uid: uid,
         birthDate: state.birthDateInput!,
       );
 
-      // 성별 업데이트
+      /// 성별 업데이트
       await _repository.updateGender(uid: uid, gender: state.gender!);
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }
   }
 
-  // 수정 가능 여부 확인
+  /// 수정 가능 여부 확인
   void checkEditAvailable() {
     if (state.temporaryImagePath != null) {
       state = state.copyWith(canEditProfile: true);
     }
-    // 닉네임 확인
+
+    /// 닉네임 확인
     if (state.isNicknameValid == true && state.isNicknameDuplicate == false) {
       state = state.copyWith(canEditProfile: true);
     }
   }
 
-  // 프로필 수정
-  // 마이페이지 - 프로필 수정
+  /// 프로필 수정
+  /// 마이페이지 - 프로필 수정
   Future<void> editProfile() async {
     if (currentUser == null) return;
 
     final uid = currentUser!.uid;
 
-    // 프로필이미지 업데이트
+    /// 프로필이미지 업데이트
     if (state.temporaryImagePath != null) {
       await updateProfileImage();
     }
-    // 닉네임 업데이트
+
+    /// 닉네임 업데이트
     if (state.nicknameInput != null) {
       await _repository.updateNickname(
         uid: uid,
