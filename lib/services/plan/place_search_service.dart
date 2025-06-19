@@ -25,7 +25,7 @@ class PlaceSearchService {
     return _requestPlaces(url);
   }
 
-  //키워드 + 위치
+  ///키워드 + 위치
   Future<List<Place>> searchByKeyword({
     required String query,
     required double lat,

@@ -9,6 +9,7 @@ class ScheduleRepository {
 
   final FirebaseFirestore _firestore;
 
+  /// Firestore에서 여행 플랜 리스트를 조회합니다.
   Future<List<Plans>> fetchPlans([String? userId]) async {
     Query query = _firestore.collection('plans');
     if (userId != null) {
@@ -23,6 +24,7 @@ class ScheduleRepository {
         .toList();
   }
 
+  /// 사용자가 저장한 플랜(plan)을 Firestore에서 조회합니다.
   Future<List<Plans>> fetchSavedPlans(String userId) async {
     try {
       final userDoc = await _firestore.collection('appUser').doc(userId).get();
@@ -63,6 +65,7 @@ class ScheduleRepository {
     log('planId 등록 시도');
   }
 
+/// 특정 플랜(planId)에 대한 날짜별(dayIndex) 여행 일정을 Firestore에 저장합니다.
   Future<void> saveDaySchedules({
     required String planId,
     required Map<int, List<Map<String, String>>> daySchedules,
@@ -159,6 +162,7 @@ class ScheduleRepository {
     return result;
   }
 
+  /// Firestore에 저장된 특정 플랜(planId)의 날짜별 여행 일정을 불러옵니다.
   Future<Map<int, List<Map<String, String>>>> fetchRoute(String planId) async {
     final snapshot =
         await _firestore

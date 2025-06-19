@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/repositories/plan/search_history_repository.dart';
 
+/// 최근 검색어를 관리하는 ViewModel (StateNotifier)
+/// 앱 재시작 시에도 저장된 검색어를 복원합니다.
+/// 내부적으로 [SearchHistoryRepository]를 사용해 로컬 저장소와 동기화합니다.
 class RecentSearchVM extends StateNotifier<List<String>> {
   RecentSearchVM(this._repo) : super([]) {
     _init();
@@ -31,6 +34,7 @@ class RecentSearchVM extends StateNotifier<List<String>> {
   }
 }
 
+/// 최근 검색어를 전역에서 관리하기 위한 Provider
 final recentSearchProvider =
     StateNotifierProvider<RecentSearchVM, List<String>>(
       (ref) => RecentSearchVM(SearchHistoryRepository()),

@@ -17,6 +17,7 @@ class MapViewModel extends StateNotifier<MapState> {
   late final BitmapDescriptor _pinIcon;
   bool _iconReady = false;
 
+  /// 커스텀 마커 아이콘 비트맵을 비동기로 로드합니다.
   Future<void> _loadAssets() async {
     _pinIcon = await bitmapDescriptorFromSvgAsset('assets/icons/map_pin.svg');
     _iconReady = true;
@@ -26,6 +27,7 @@ class MapViewModel extends StateNotifier<MapState> {
   BitmapDescriptor get _currentIcon =>
       _iconReady ? _pinIcon : BitmapDescriptor.defaultMarker;
 
+  /// 해당 플랜의 날짜별 장소 경로 데이터를 Firestore에서 불러옵니다.
   Future<void> loadPlanAndRoute(String planId, TickerProvider vsync) async {
     try {
       final loadedDayPlaces = await _repository.getRouteByDay(planId);
@@ -42,25 +44,32 @@ class MapViewModel extends StateNotifier<MapState> {
     }
   }
 
+  /// 장소 선택 상태 업데이트
   void selectPlace(Map<String, dynamic> place) =>
       state = state.copyWith(selectedPlace: place);
 
+  /// 선택된 장소 초기화
   void clearSelectedPlace() => state = state.copyWith(selectedPlace: null);
 
+  /// 각 날짜 키에 따른 PageController 저장소
   final Map<String, PageController> _pageControllers = {};
 
+  /// 특정 날짜 키에 해당하는 PageController 반환 또는 생성
   PageController getPageController(String dayKey) => _pageControllers
       .putIfAbsent(dayKey, () => PageController(viewportFraction: 1));
 
+  /// 모든 PageController 해제
   void disposeControllers() {
     for (final ctrl in _pageControllers.values) {
       ctrl.dispose();
     }
   }
 
+  /// 장소 리스트로부터 LatLng 좌표 리스트 추출
   List<LatLng> extractLatLngs(List<Map<String, dynamic>> places) =>
       places.map(parseLatLng).whereType<LatLng>().toList();
 
+  /// 주어진 좌표 리스트로 LatLngBounds 계산
   LatLngBounds createLatLngBounds(List<LatLng> latLngs) {
     final swLat = latLngs
         .map((e) => e.latitude)
@@ -80,9 +89,11 @@ class MapViewModel extends StateNotifier<MapState> {
     );
   }
 
+  /// 첫 장소의 좌표 반환 (없으면 null)
   LatLng? getInitialLatLng(List<Map<String, dynamic>> places) =>
       places.isEmpty ? null : parseLatLng(places.first);
 
+  /// 주어진 장소 리스트에 맞춰 카메라를 이동시킵니다.
   void moveCameraToFitAll(
     GoogleMapController? mapController,
     List<Map<String, dynamic>> places,
@@ -100,6 +111,7 @@ class MapViewModel extends StateNotifier<MapState> {
     }
   }
 
+  /// 지도에 표시할 마커 리스트를 반환합니다.
   Set<Marker> getMarkers({
     required List<Map<String, dynamic>> places,
     required String selectedDayKey,
