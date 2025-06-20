@@ -21,84 +21,78 @@ class AiButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         showDialog(
           context: context,
-          builder:
-              (_) => AiTypeSelectPopup(
-                onComplete: (selectedTest) async {
-                  final typeCode = selectedTest;
-                  final planRepo = PlanRepository();
-                  final placeService = PlaceSearchService();
+          builder: (_) => AiTypeSelectPopup(
+            onComplete: (selectedTest) async {
+              final typeCode = selectedTest;
+              final planRepo = PlanRepository();
+              final placeService = PlaceSearchService();
 
-                  final aiPlan = await planRepo.getOptimizedPlanFromAI(
-                    days: days,
-                    region: region,
-                    typeCode: typeCode,
-                    context: context,
-                  );
+              final aiPlan = await planRepo.getOptimizedPlanFromAI(
+                days: days,
+                region: region,
+                typeCode: typeCode,
+                context: context,
+              );
 
-                  final parsed = _parseAiPlan(aiPlan);
+              final parsed = _parseAiPlan(aiPlan);
 
-                  final enriched = <int, List<Map<String, String>>>{};
-                  for (final entry in parsed.entries) {
-                    final day = entry.key;
-                    final enrichedPlaces = <Map<String, String>>[];
+              final enriched = <int, List<Map<String, String>>>{};
+              for (final entry in parsed.entries) {
+                final day = entry.key;
+                final enrichedPlaces = <Map<String, String>>[];
 
-                    for (final place in entry.value) {
-                      final title = place['title']!;
-                      final description = place['description'] ?? '';
+                for (final place in entry.value) {
+                  final title = place['title']!;
+                  final description = place['description'] ?? '';
 
-                      final kakaoResults = await placeService.search(
-                        '$region $title',
-                      );
-                      final firstPlace =
-                          kakaoResults.isNotEmpty ? kakaoResults.first : null;
-                      final imageUrl = await placeService.fetchImageThumbnail(
-                        '$region $title',
-                      );
+                  final kakaoResults = await placeService.search('$region $title');
+                  final firstPlace = kakaoResults.isNotEmpty ? kakaoResults.first : null;
+                  final imageUrl = await placeService.fetchImageThumbnail('$region $title');
 
-                      enrichedPlaces.add({
-                        'title': title,
-                        'description': description,
-                        'lat': '${firstPlace?.latitude ?? 0.0}',
-                        'lng': '${firstPlace?.longitude ?? 0.0}',
-                        'image': imageUrl ?? '',
-                        'subtitle':
-                            firstPlace != null
-                                ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
-                                : '',
-                      });
-                    }
+                  enrichedPlaces.add({
+                    'title': title,
+                    'description': description,
+                    'lat': '${firstPlace?.latitude ?? 0.0}',
+                    'lng': '${firstPlace?.longitude ?? 0.0}',
+                    'image': imageUrl ?? '',
+                    'subtitle': firstPlace != null
+                        ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
+                        : '',
+                  });
+                }
 
-                    enriched[day] = enrichedPlaces;
-                  }
+                enriched[day] = enrichedPlaces;
+              }
 
-                  // Firestore 저장 없이 UI 상태만 전달 (미리보기용)
-                  onResult(enriched);
-                },
-              ),
+              onResult(enriched); // Firestore 저장 없이 UI 상태만 전달
+            },
+          ),
         );
       },
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      label: Container(
-        decoration:  BoxDecoration(
+      child: Container(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primary[50]!, AppColors.primary[300]!, AppColors.primary[400]!],
-            stops: [0.0,0.3,0.7],
+            colors: [
+              AppColors.primary[50]!,
+              AppColors.primary[300]!,
+              AppColors.primary[400]!
+            ],
+            stops: [0.0, 0.3, 0.7],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(28)),
+          borderRadius: const BorderRadius.all(Radius.circular(28)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [
             GradientCircleIcon(size: 20),
-            SizedBox(width: 8),
+            SizedBox(width: 5),
             Text(
               'Ai 추천 받기',
               style: TextStyle(
