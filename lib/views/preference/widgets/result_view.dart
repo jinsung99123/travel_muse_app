@@ -70,6 +70,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                 title: const Text('나의 여행 성향'),
                 actions: [
                   PopupMenuButton<String>(
+                    color: Colors.white,
                     icon: const Icon(Icons.more_vert),
                     onSelected: (value) async {
                       if (value == 'delete') {
@@ -103,10 +104,17 @@ class _ResultViewState extends ConsumerState<ResultView> {
                               )
                               .deleteTest(widget.testId);
                           if (context.mounted) {
+                            /// 리스트 Provider invalidate
+                            ref.invalidate(preferenceTestListProvider);
+
+                            /// 단건 상태 초기화
+                            ref.invalidate(preferenceTestStateNotifierProvider);
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('성향 테스트가 삭제되었습니다')),
                             );
-                            Navigator.pop(context);
+
+                            Navigator.pop(context, 'deleted');
                           }
                         }
                       }
@@ -115,7 +123,10 @@ class _ResultViewState extends ConsumerState<ResultView> {
                         (_) => [
                           const PopupMenuItem<String>(
                             value: 'delete',
-                            child: Text('삭제'),
+                            child: Text(
+                              '삭제',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
                         ],
                   ),

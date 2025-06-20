@@ -53,8 +53,8 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                       return MyPageListItem(
                         itemTitle: _tests[index].result['type'] ?? '알 수 없음',
                         index: index,
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final result = await Navigator.push(
                             context,
                             CupertinoPageRoute(
                               builder:
@@ -65,6 +65,19 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                                   ),
                             ),
                           );
+
+                          if (result == 'deleted') {
+                            final tests =
+                                await ref
+                                    .read(
+                                      preferenceTestStateNotifierProvider
+                                          .notifier,
+                                    )
+                                    .fetchTestsByUserId();
+                            setState(() {
+                              _tests = tests;
+                            });
+                          }
                         },
                       );
                     },
