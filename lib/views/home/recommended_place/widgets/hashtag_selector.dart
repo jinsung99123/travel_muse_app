@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
-final hashtags = ['#힐링', '#유적지', '#쇼핑', '#가족과 함께'];
+final hashtags = ['#전체', '#힐링', '#유적지', '#쇼핑', '#가족과 함께'];
 
 class HashtagSelector extends StatelessWidget {
   const HashtagSelector({

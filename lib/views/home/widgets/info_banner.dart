@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/svg_icon.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
 class InfoBanner extends ConsumerWidget {
@@ -11,6 +13,11 @@ class InfoBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profileState = ref.watch(profileViewModelProvider);
+    final nickname = profileState.currentNickname;
+    if (nickname == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     final planState = ref.watch(calendarLocationViewModelProvider);
     final userId = ref.watch(authViewModelProvider).user?.uid;
     final planId = ref.watch(
@@ -86,7 +93,7 @@ class InfoBanner extends ConsumerWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              '사용자님,\n${calculateRemainingDays(start) == '여행 중이에요!' || calculateRemainingDays(start) == '오늘부터 여행이에요!' ? '${getMainRegion(region)} ${calculateRemainingDays(start)}' : '${getMainRegion(region)} 여행까지 ${calculateRemainingDays(start)}'}',
+              '$nickname님,\n${calculateRemainingDays(start) == '여행 중이에요!' || calculateRemainingDays(start) == '오늘부터 여행이에요!' ? '${getMainRegion(region)} ${calculateRemainingDays(start)}' : '${getMainRegion(region)} 여행까지 ${calculateRemainingDays(start)}'}',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
@@ -131,9 +138,19 @@ class InfoBanner extends ConsumerWidget {
               );
             },
             style: TextButton.styleFrom(padding: EdgeInsets.zero),
-            child: Text(
-              '자세히 보기',
-              style: TextStyle(fontSize: 14, color: AppColors.grey[300]),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '자세히 보기',
+                    style: TextStyle(fontSize: 14, color: AppColors.grey[300]),
+                  ),
+                  const SizedBox(width: 4),
+                  SvgIcon.rightArrow(width: 24, height: 24),
+                ],
+              ),
             ),
           ),
         ],

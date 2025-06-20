@@ -9,93 +9,105 @@ class TravelRegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PlanListPage()),
-              );
-            },
-            child: Container(
-              height: 101,
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                border: Border.all(color: AppColors.grey[200]!),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      '여행 일정\n변경',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.grey[600],
-                        height: 1.1,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    bottom: 0,
-                    child: SvgIcon.edit(width: 36, height: 36),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+    const double horizontalPadding = 16;
+    const double buttonGap = 20;
+    const double buttonHeight = 101;
 
-        // 여행 일정 등록 버튼
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CalendarPage()),
-              );
-            },
-            child: Container(
-              height: 101,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.primary[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
-                children: [
-                  const Align(
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      '여행 일정\n등록',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.white,
-                        height: 1.1,
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    final double buttonWidth =
+        (screenWidth - (horizontalPadding * 2) - buttonGap) / 2;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+      child: Row(
+        children: [
+          SizedBox(
+            width: buttonWidth,
+            height: buttonHeight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PlanListPage()),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(color: AppColors.grey[200]!),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '여행 일정\n변경',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.grey[600],
+                          height: 1.1,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    bottom: 0,
-                    child: SvgIcon.register(width: 36, height: 36),
-                  ),
-                ],
+                    Positioned(
+                      left: 0,
+                      bottom: 0,
+                      child: SvgIcon.edit(width: 48, height: 48),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+          const SizedBox(width: buttonGap),
+          SizedBox(
+            width: buttonWidth,
+            height: buttonHeight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CalendarPage()),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColors.primary[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Stack(
+                  children: [
+                    const Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '여행 일정\n등록',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                          height: 1.1,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      bottom: 0,
+                      child: SvgIcon.register(width: 43.5, height: 48),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

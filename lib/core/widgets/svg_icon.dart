@@ -16,6 +16,10 @@ class SvgIcon {
     return SvgPicture.string(_arrow, width: width, height: height);
   }
 
+  static Widget rightArrow({double width = 24, double height = 24}) {
+    return SvgPicture.string(_rightArrow, width: width, height: height);
+  }
+
   static const String _registerSvg =
       '''<svg xmlns="http://www.w3.org/2000/svg" width="44" height="48" viewBox="0 0 44 48" fill="none">
   <path d="M38.0295 6.969L31.281 0.2205C31.1453 0.084 30.9578 0 30.75 0H3.75C1.68225 0 0 1.68225 0 3.75V44.25C0 46.3178 1.68225 48 3.75 48H27.75H39.75C41.8178 48 43.5 46.3178 43.5 44.25V36.75C43.5 34.6823 41.8178 33 39.75 33H38.25V7.5C38.25 7.29225 38.166 7.10475 38.0295 6.969ZM35.25 33H32.25V32.25C32.25 31.836 32.5868 31.5 33 31.5H34.5C34.9133 31.5 35.25 31.836 35.25 32.25V33ZM36.75 34.5V46.5H30.75V34.5H36.75ZM31.5 2.5605L35.6895 6.75H31.5V2.5605ZM1.5 44.25V3.75C1.5 2.5095 2.5095 1.5 3.75 1.5H30V7.5C30 7.91475 30.336 8.25 30.75 8.25H36.75V32.25C36.75 31.0095 35.7405 30 34.5 30H33C31.7595 30 30.75 31.0095 30.75 32.25V33H27.75C25.6823 33 24 34.6823 24 36.75V44.25C24 45.0975 24.2933 45.8715 24.7695 46.5H3.75C2.5095 46.5 1.5 45.4905 1.5 44.25ZM25.5 44.25V36.75C25.5 35.5095 26.5095 34.5 27.75 34.5H29.25V46.5H27.75C26.5095 46.5 25.5 45.4905 25.5 44.25ZM42 36.75V44.25C42 45.4905 40.9905 46.5 39.75 46.5H38.25V34.5H39.75C40.9905 34.5 42 35.5095 42 36.75Z" fill="white"/>
@@ -52,5 +56,9 @@ class SvgIcon {
   static const String _arrow =
       '''<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
   <path d="M15 18.5L9 12.5L15 6.5" stroke="#646E72" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>''';
+  static const String _rightArrow =
+      '''<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M9 18L15 12L9 6" stroke="#98A1A4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>''';
 }

@@ -63,7 +63,7 @@ class RecommendedPlacesList extends ConsumerWidget {
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontSize: 14,
-                  color: AppColors.primary[300],
+                  color: AppColors.grey[300],
                   fontWeight: FontWeight.w500,
                 ),
               ),
