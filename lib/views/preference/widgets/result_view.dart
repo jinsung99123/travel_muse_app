@@ -64,7 +64,75 @@ class _ResultViewState extends ConsumerState<ResultView> {
     }
 
     return Scaffold(
-      appBar: !widget.showButtons ? AppBar(title: Text('나의 여행 성향')) : null,
+      appBar:
+          !widget.showButtons
+              ? AppBar(
+                title: const Text('나의 여행 성향'),
+                actions: [
+                  PopupMenuButton<String>(
+                    color: Colors.white,
+                    icon: const Icon(Icons.more_vert),
+                    onSelected: (value) async {
+                      if (value == 'delete') {
+                        final confirm = await showCupertinoModalPopup<bool>(
+                          context: context,
+                          builder:
+                              (_) => CupertinoActionSheet(
+                                title: const Text('성향 테스트 삭제'),
+                                message: const Text('이 테스트 결과를 삭제하시겠어요?'),
+                                actions: [
+                                  CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: const Text('삭제하기'),
+                                  ),
+                                ],
+                                cancelButton: CupertinoActionSheetAction(
+                                  onPressed:
+                                      () => Navigator.pop(context, false),
+                                  child: const Text('취소'),
+                                ),
+                              ),
+                        );
+
+                        if (confirm == true) {
+                          await ref
+                              .read(
+                                preferenceTestStateNotifierProvider.notifier,
+                              )
+                              .deleteTest(widget.testId);
+                          if (context.mounted) {
+                            /// 리스트 Provider invalidate
+                            ref.invalidate(preferenceTestListProvider);
+
+                            /// 단건 상태 초기화
+                            ref.invalidate(preferenceTestStateNotifierProvider);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('성향 테스트가 삭제되었습니다')),
+                            );
+
+                            Navigator.pop(context, 'deleted');
+                          }
+                        }
+                      }
+                    },
+                    itemBuilder:
+                        (_) => [
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Text(
+                              '삭제',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                  ),
+                ],
+              )
+              : null,
       backgroundColor: AppColors.white,
       body: Stack(
         children: [
