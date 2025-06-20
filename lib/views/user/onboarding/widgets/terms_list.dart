@@ -28,7 +28,7 @@ class TermsList extends ConsumerWidget {
                         CustomCheckToggle(termId: termsList[index].id),
                         SizedBox(width: 12),
                         Text(
-                          termsList[index].title,
+                          '''${termsList[index].isRequired ? '(필수)' : '(선택)'} ${termsList[index].title}''',
                           style: AppTextStyles.termsText,
                         ),
                         Spacer(),
