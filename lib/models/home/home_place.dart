@@ -39,6 +39,24 @@ class HomePlace {
       distance: distance,
     );
   }
+
+  factory HomePlace.fromMap(Map<String, dynamic> map) {
+    return HomePlace(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      subtitle: map['subtitle'] ?? '',
+      thumbnail: map['image'] ?? '', 
+      latLng: LatLng(
+        double.tryParse(map['lat']?.toString() ?? '0') ?? 0,
+        double.tryParse(map['lng']?.toString() ?? '0') ?? 0,
+      ),
+      category: map['category'] ?? '',
+      phone: map['phone'],
+      placeUrl: map['placeUrl'],
+      isFavorite: map['isFavorite'] ?? false,
+      distance: map['distance'],
+    );
+  }
 }
 
 extension PlaceMapping on Place {

@@ -131,4 +131,30 @@ class MapViewModel extends StateNotifier<MapState> {
           ),
     );
   }
+
+  /// 전체 날짜의 모든 장소 리스트를 반환합니다.
+  List<Map<String, dynamic>> getAllPlaces() {
+    return state.dayPlaces.values.expand((list) => list).toList();
+  }
+
+  ///전체 위경도 반환
+  List<LatLng> getAllLatLngs() {
+    return extractLatLngs(getAllPlaces());
+  }
+
+//전체 마커 반환
+  Set<Marker> getAllMarkers({
+    required Function(Map<String, dynamic>) onTap,
+    required Function(int) onPageChanged,
+  }) {
+    return createMarkers(
+      places: getAllPlaces(),
+      icon: _currentIcon,
+      onTap: onTap,
+      onPageChanged: onPageChanged,
+      animateToPage: (idx) {
+        // 전체 탭은 Carousel 안 보이게 할 수도 있음
+      },
+    );
+  }
 }

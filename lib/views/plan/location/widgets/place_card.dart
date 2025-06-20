@@ -10,7 +10,7 @@ class PlaceCard extends StatelessWidget {
     super.key,
   });
 
-  final Map<String, String> placeData;
+  final Map<String, dynamic> placeData;
   final bool isSelected;
   final VoidCallback? onTap;
 
