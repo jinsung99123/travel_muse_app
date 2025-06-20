@@ -12,7 +12,7 @@ class ConfirmAddButton extends StatelessWidget {
     if (!visible) return const SizedBox.shrink();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0), // 양쪽 padding
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0), 
       child: SizedBox(
         width: double.infinity,
         height: 56,
