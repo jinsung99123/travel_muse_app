@@ -86,7 +86,8 @@ class AiButton extends StatelessWidget {
       label: Container(
         decoration:  BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.primary[300]!, AppColors.primary[400]!],
+            colors: [AppColors.primary[50]!, AppColors.primary[300]!, AppColors.primary[400]!],
+            stops: [0.0,0.3,0.7],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),

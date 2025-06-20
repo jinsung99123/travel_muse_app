@@ -6,24 +6,20 @@ class ScheduleBottomButtons extends StatelessWidget {
 
   final VoidCallback onEditTap;
 
-  static final blueGrad = LinearGradient(
-    colors: [AppColors.primary[200]!,AppColors.primary[300]!],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  );
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+    return Container(
+      height: 60, 
+  width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: GestureDetector(
         onTap: onEditTap,
         child: Container(
-          height: 48,
+          height: 56,
           width: double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: blueGrad,
+            color: AppColors.primary[300],
             borderRadius: BorderRadius.circular(10),
           ),
           child:  Text(

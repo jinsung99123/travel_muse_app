@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/bullet.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/dotted_line_vertical.dart';
@@ -96,16 +97,15 @@ class _DayScheduleSectionState extends State<DayScheduleSection>
                         ),
                       ),
                       const Spacer(),
-                      Icon(
+                      SvgPicture.asset(
                         _expanded
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.grey[600],
+                            ? 'assets/icons/chevron-up.svg'
+                            : 'assets/icons/chevron-down.svg',
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
 
                 //접기/펼치기 애니메이션
                 SizeTransition(
@@ -114,6 +114,7 @@ class _DayScheduleSectionState extends State<DayScheduleSection>
                   child: Column(
                     children: [
                       _buildCardList(),
+                      SizedBox(height: 16),
                       widget.schedules.isEmpty
                           ? _buildEmptyView()
                           : Center(child: _addBtn()),
@@ -192,7 +193,7 @@ class _DayScheduleSectionState extends State<DayScheduleSection>
             fontFamily: 'Pretendard',
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 16),
         _addBtn(),
       ],
     ),

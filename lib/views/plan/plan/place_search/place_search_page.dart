@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
@@ -45,7 +47,9 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   // 지역 추천 목록
   Future<void> _loadRecommendedPlacesByRegion() async {
     if (widget.region.isEmpty) return;
-    await ref.read(searchViewModelProvider.notifier).loadRecommendedByRegion(widget.region);
+    await ref
+        .read(searchViewModelProvider.notifier)
+        .loadRecommendedByRegion(widget.region);
   }
 
   @override
@@ -63,10 +67,11 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: ScheduleAppBar(planId: widget.planId),
-      bottomNavigationBar: ConfirmAddButton(
+      floatingActionButton: ConfirmAddButton(
         visible: selectedIndexes.isNotEmpty,
         onTap: () => _confirmSelection(searchResults),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,21 +93,27 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               },
             ),
             // 지역 추천 안내
-            if (_showInitialMessage) RegionRecommendHeader(region: widget.region),
+            if (_showInitialMessage)
+              RegionRecommendHeader(region: widget.region),
             const SizedBox(height: 8),
             // 검색 결과
             Expanded(
-              child: searchResults.isEmpty
-                  ? const Center(child: Text('검색 결과가 없습니다.'))
-                  : SearchResultList(
-                      places: searchResults,
-                      selectedIndexes: selectedIndexes,
-                      onToggle: (i) => ref.read(selectedIndexProvider.notifier).toggle(i),
-                    ),
+              child:
+                  searchResults.isEmpty
+                      ? const Center(child: Text('검색 결과가 없습니다.'))
+                      : SearchResultList(
+                        places: searchResults,
+                        selectedIndexes: selectedIndexes,
+                        onToggle:
+                            (i) => ref
+                                .read(selectedIndexProvider.notifier)
+                                .toggle(i),
+                      ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }

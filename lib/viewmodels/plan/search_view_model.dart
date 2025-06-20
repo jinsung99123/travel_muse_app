@@ -63,6 +63,7 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
         return {
           'title': p.name,
           'subtitle': '${p.city} ${p.district} • ${p.category}',
+          'address':p.address,
           'image': thumb ?? defaultImage,
           'lat': p.latitude.toString(),
           'lng': p.longitude.toString(),

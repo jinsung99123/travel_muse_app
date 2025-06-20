@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
@@ -125,56 +126,60 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     onReorder: _onReorder,
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
-
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, _) => Center(child: Text('에러 발생: $e')),
               ),
             ),
+            if (selectedPlan != null)
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: GestureDetector(
+                    child: AiButton(
+                      planId: widget.planId,
+                      days: calculateTripDays(
+                        selectedPlan!.startDate,
+                        selectedPlan!.endDate,
+                      ),
+                      region: selectedPlan!.region,
+                      onResult: (parsed) {
+                        setState(() {
+                          daySchedules = parsed;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
+            ScheduleBottomButtons(
+              onEditTap: () async {
+                await ref
+                    .read(scheduleViewModelProvider.notifier)
+                    .saveDaySchedules(
+                      planId: widget.planId,
+                      daySchedules: daySchedules,
+                    );
+                await ref
+                    .read(scheduleViewModelProvider.notifier)
+                    .addPlanIdToAppUser(widget.planId);
+                if (!mounted) return;
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
+                await Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage()),
+                );
+              },
+            ),
           ],
         ),
       ),
-
-      floatingActionButton:
-          selectedPlan == null
-              ? null
-              : AiButton(
-                planId: widget.planId,
-                days: calculateTripDays(
-                  selectedPlan!.startDate,
-                  selectedPlan!.endDate,
-                ),
-                region: selectedPlan!.region,
-                onResult: (parsed) {
-                  setState(() {
-                    daySchedules = parsed;
-                  });
-                },
-              ),
-
-      // 하단 완료 버튼
-      bottomNavigationBar: ScheduleBottomButtons(
-        onEditTap: () async {
-          await ref
-              .read(scheduleViewModelProvider.notifier)
-              .saveDaySchedules(
-                planId: widget.planId,
-                daySchedules: daySchedules,
-              );
-          await ref
-              .read(scheduleViewModelProvider.notifier)
-              .addPlanIdToAppUser(widget.planId);
-          if (!mounted) return;
-          ScaffoldMessenger.of(
-            context
-          ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
-          await Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomePage()),
-          );
-        },
-      ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
