@@ -43,7 +43,7 @@ class RecentSearchSection extends ConsumerWidget {
                   '전체 삭제',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.primary[600],
+                    color: AppColors.grey[300],
                     fontFamily: 'Pretendard',
                   ),
                 ),
