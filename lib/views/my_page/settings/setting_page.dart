@@ -5,6 +5,7 @@ import 'package:travel_muse_app/views/my_page/settings/environment_setting_page.
 import 'package:travel_muse_app/views/my_page/settings/notification_setting_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/service_term_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/support_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/version_page.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -17,6 +18,7 @@ class SettingPage extends StatelessWidget {
       {'title': '계정 관리', 'route': const AccountSettingPage()},
       {'title': '서비스 약관', 'route': const ServiceTermPage()},
       {'title': '고객 지원', 'route': const SupportPage()},
+      {'title': '버전 정보', 'route': const VersionPage()},
     ];
 
     return Scaffold(

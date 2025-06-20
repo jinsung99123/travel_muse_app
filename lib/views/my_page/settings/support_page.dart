@@ -5,6 +5,6 @@ class SupportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('고갹 지원')), body: Text('고객 지원'));
+    return Scaffold(appBar: AppBar(title: Text('고객 지원')), body: Text('고객 지원'));
   }
 }
