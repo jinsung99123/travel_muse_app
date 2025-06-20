@@ -25,7 +25,6 @@ class ResultViewDetail extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.white,
-
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -57,37 +56,35 @@ class ResultViewDetail extends ConsumerWidget {
               const SizedBox(height: 16),
             ],
           ),
+
+          // 질문/선택지 리스트
           ...answers.map((answer) {
             final question =
                 referenceQuestionTexts[answer.questionId] ?? '알 수 없는 질문';
             final selectedOption = answer.selectedOption;
 
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.grey[50],
-                borderRadius: BorderRadius.circular(12),
-              ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     question,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary[300],
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.grey[700],
                       fontFamily: 'Pretendard',
                       fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Text(
                     '선택: $selectedOption',
                     style: TextStyle(
-                      color: AppColors.grey[700],
+                      color: AppColors.primary[300],
                       fontFamily: 'Pretendard',
-                      fontSize: 14,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
@@ -95,8 +92,7 @@ class ResultViewDetail extends ConsumerWidget {
             );
           }).toList(),
 
-          /// ignore: unnecessary_to_list
-          const SizedBox(height: 24),
+          const SizedBox(height: 65),
           ResultActionButtons(
             onRestart: () {
               Navigator.pop(context);

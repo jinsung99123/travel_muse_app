@@ -17,6 +17,7 @@ class QuestionCard extends StatelessWidget {
         children: [
           Text(
             question,
+            textAlign: TextAlign.left,
             style: const TextStyle(
               color: AppColors.black,
               fontSize: 24,
@@ -26,16 +27,6 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            '이 질문을 바탕으로 여행 성향을 분석해드릴게요!',
-            style: TextStyle(
-              color: AppColors.grey[400],
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              height: 1.5,
-              fontFamily: 'Pretendard',
-            ),
-          ),
         ],
       ),
     );

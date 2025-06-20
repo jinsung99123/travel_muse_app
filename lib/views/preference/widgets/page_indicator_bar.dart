@@ -7,6 +7,7 @@ class PageIndicatorBar extends StatelessWidget {
     required this.currentIndex,
     this.totalCount = 6,
   });
+
   final int currentIndex;
   final int totalCount;
 
@@ -19,13 +20,13 @@ class PageIndicatorBar extends StatelessWidget {
         children: List.generate(
           totalCount,
           (index) => Container(
-            width: 46,
+            width: 57,
             height: 5,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
+            margin: const EdgeInsets.symmetric(horizontal: 6.5),
             decoration: BoxDecoration(
               color:
                   index == currentIndex
-                      ? AppColors.primary[400]
+                      ? AppColors.secondary[200]
                       : AppColors.grey[100],
               borderRadius: BorderRadius.circular(10),
             ),
