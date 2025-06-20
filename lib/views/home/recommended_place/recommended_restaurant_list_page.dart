@@ -16,7 +16,12 @@ class RecommendedRestaurantsListPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text(
           '추천 맛집 전체 보기',
-          style: TextStyle(color: AppColors.black),
+          style: TextStyle(
+            color: AppColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Pretendard',
+          ),
         ),
         backgroundColor: AppColors.white,
         elevation: 1,
