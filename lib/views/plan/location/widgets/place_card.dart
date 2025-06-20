@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class PlaceCard extends StatelessWidget {
@@ -30,13 +31,6 @@ class PlaceCard extends StatelessWidget {
             color: isSelected ? AppColors.primary[400]! : AppColors.grey[300]!,
             width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black,
-              blurRadius: isSelected ? 6 : 3,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -44,19 +38,20 @@ class PlaceCard extends StatelessWidget {
             // 썸네일
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      width: 90,
-                      height: 90,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      width: 90,
-                      height: 90,
-                      color: AppColors.grey[100],
-                      child: const Icon(Icons.image_not_supported),
-                    ),
+              child:
+                  imageUrl.isNotEmpty
+                      ? Image.network(
+                        imageUrl,
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      )
+                      : Container(
+                        width: 90,
+                        height: 90,
+                        color: AppColors.grey[100],
+                        child: const Icon(Icons.image_not_supported),
+                      ),
             ),
             const SizedBox(width: 16),
 
@@ -90,14 +85,14 @@ class PlaceCard extends StatelessWidget {
 
             // 체크 아이콘
             if (isSelected)
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Icon(
-                  Icons.check_circle_outline,
-                  color: AppColors.secondary[300],
-                  size: 24,
-                               ),
-               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  'assets/icons/check-circle.svg', 
+                  width: 28,
+                  height: 28,
+                ),
+              ),
           ],
         ),
       ),
