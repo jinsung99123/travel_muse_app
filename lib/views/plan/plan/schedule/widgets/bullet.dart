@@ -20,7 +20,7 @@ class Bullet extends StatelessWidget {
           width: bulletSize * 0.55,        // 안쪽 원 비율 (55%)
           height: bulletSize * 0.55,
           decoration:  BoxDecoration(
-            color: AppColors.secondary[300], // 안쪽 진한 파랑
+            color: AppColors.secondary[200], // 안쪽 진한 파랑
             shape: BoxShape.circle,
           ),
         ),

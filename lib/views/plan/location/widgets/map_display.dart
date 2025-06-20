@@ -19,12 +19,10 @@ class MapDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: initialLatLng,
-        zoom: 14,
-      ),
+      initialCameraPosition: CameraPosition(target: initialLatLng, zoom: 14),
       markers: markers,
       myLocationEnabled: true,
+      myLocationButtonEnabled: false,
       zoomControlsEnabled: false,
       compassEnabled: true,
       polylines: {
@@ -32,13 +30,10 @@ class MapDisplay extends StatelessWidget {
           Polyline(
             polylineId: PolylineId('route'),
             points: points,
-            color: AppColors.secondary[400]!,       
-            width: 2,
-            patterns: [
-              PatternItem.dash(20),        
-              PatternItem.gap(10),                  
-            ],
-            jointType: JointType.round,       
+            color: AppColors.secondary[400]!,
+            width: 3,
+            patterns: [PatternItem.dash(7), PatternItem.gap(7)],
+            jointType: JointType.round,
           ),
       },
 

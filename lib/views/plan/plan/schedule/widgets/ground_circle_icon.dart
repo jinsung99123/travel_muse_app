@@ -20,11 +20,11 @@ class GradientCircleIcon extends StatelessWidget {
           begin: Alignment(-0.3, -1.0),          
           end: Alignment(0.0, 1.2),
           colors: [
-            Colors.white,
+            AppColors.primary[50]!,
             AppColors.primary[300]!,                    
             AppColors.primary[400]!,                    
           ],
-          stops: [0.0, 0.5, 1.0],
+          stops: [0.0,0.3,0.7],
         ),
         boxShadow: [
           //그림자
