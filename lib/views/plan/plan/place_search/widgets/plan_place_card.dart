@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class PlanPlaceCard extends StatelessWidget {
-  const PlanPlaceCard({
-    super.key,
-    required this.place,
-    this.selected = false,
-  });
+  const PlanPlaceCard({super.key, required this.place, this.selected = false});
 
   final Map<String, String> place;
   final bool selected;
@@ -18,40 +14,34 @@ class PlanPlaceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
-        constraints: const BoxConstraints(minHeight: 100),
+        constraints: const BoxConstraints(minHeight: 66),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? AppColors.primary[400]! : AppColors.grey[100]!,
             width: selected ? 1 : 1,
-          ), 
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromRGBO(0, 0, 0, 0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          ),
         ),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            // 썸네일 
+            // 썸네일
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: imageUrl != null && imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      width: 80,
-                      height: 80,
-                      color: AppColors.grey[100],
-                    ),
+              child:
+                  imageUrl != null && imageUrl.isNotEmpty
+                      ? Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      )
+                      : Container(
+                        width: 80,
+                        height: 80,
+                        color: AppColors.grey[100],
+                      ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -73,10 +63,26 @@ class PlanPlaceCard extends StatelessWidget {
                             fontFamily: 'Pretendard',
                           ),
                         ),
+                        if (place['address'] != null &&
+                            place['address']!.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            place['address']!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Pretendard',
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 4),
                         Text(
                           place['subtitle'] ?? '',
-                          maxLines: 2,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 14,
                             color: AppColors.grey[400],
@@ -96,4 +102,3 @@ class PlanPlaceCard extends StatelessWidget {
     );
   }
 }
-
