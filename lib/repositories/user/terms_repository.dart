@@ -1,0 +1,73 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_muse_app/models/user/terms_model.dart';
+
+class TermsRepository {
+  final _firestore = FirebaseFirestore.instance;
+
+  /// 약관 업로드or업데이트 (개발 전용)
+  Future<void> updateOrUploadTerms(String termId, Terms terms) async {
+    final docRef = _firestore.collection('terms').doc(termId);
+
+    final docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      await docRef.update(terms.toJson());
+      log('✅ 약관 "$termId" 업데이트 완료');
+    } else {
+      await docRef.set(terms.toJson());
+      log('✅ 약관 "$termId" 생성 완료');
+    }
+  }
+
+  // 모든 약관 가져와서 order순으로 나열
+  Future<List<Terms>> fetchAllTermsOrdered() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance
+            .collection('terms')
+            .orderBy('order')
+            .get();
+
+    return querySnapshot.docs.map((doc) {
+      return Terms.fromJson(doc.id, doc.data());
+    }).toList();
+  }
+}
+
+/// 예시 약관(추후 삭제)
+final ageRequired = Terms(
+  title: '만 14세 이상입니다.',
+  content: '',
+  isRequired: true,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 1,
+);
+
+final serviceRequired = Terms(
+  title: '서비스 이용 약관',
+  content: '서비스 이용 약관 내용입니다.',
+  isRequired: true,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 2,
+);
+
+final privacyRequired = Terms(
+  title: '개인정보 처리 방침',
+  content: '개인정보 처리 방침 내용입니다.',
+  isRequired: true,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 3,
+);
+
+final marketingOptional = Terms(
+  title: '마케팅 수신 동의',
+  content: '마케팅 수신 동의 내용입니다.',
+  isRequired: false,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 4,
+);
