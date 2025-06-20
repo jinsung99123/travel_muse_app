@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class DistrictBoxItem extends StatelessWidget {
   const DistrictBoxItem({
@@ -24,9 +25,10 @@ class DistrictBoxItem extends StatelessWidget {
         height: height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.transparent,
+          color: isSelected ? Colors.transparent : Colors.transparent,
           border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade400,
+            color: isSelected ? AppColors.primary[400]! : Colors.grey[200]!,
+            width: 2,
           ),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -39,7 +41,7 @@ class DistrictBoxItem extends StatelessWidget {
           style: TextStyle(
             fontSize: text == '세종특별자치시' ? 13 : 16,
             fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.white : Colors.black,
+            color: isSelected ? AppColors.primary[400] : Colors.black,
           ),
         ),
       ),
