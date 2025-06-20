@@ -104,14 +104,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     final planState = ref.watch(scheduleViewModelProvider);
 
     if (selectedPlan == null) {
-    return const Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
+      return const Scaffold(
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
+      );
+    }
 
     return Scaffold(
       appBar: ScheduleAppBar(planId: widget.planId),
@@ -141,8 +137,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 error: (e, _) => Center(child: Text('에러 발생: $e')),
               ),
             ),
-
-            // 하단 버튼
             ScheduleBottomButtons(
               onEditTap: () async {
                 await ref
@@ -168,29 +162,28 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         ),
       ),
 
-   floatingActionButton: Padding(
-  padding: const EdgeInsets.only(bottom: 60, top: 8),
-  child: Align(
-    alignment: Alignment.bottomRight,
-    child: AiButton(
-      planId: widget.planId,
-      days: calculateTripDays(
-        selectedPlan!.startDate,
-        selectedPlan!.endDate, 
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 60, top: 8),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: AiButton(
+            planId: widget.planId,
+            days: calculateTripDays(
+              selectedPlan!.startDate,
+              selectedPlan!.endDate,
+            ),
+            region: selectedPlan!.region,
+            onResult: (parsed) {
+              setState(() {
+                daySchedules = parsed;
+              });
+            },
+          ),
+        ),
       ),
-      region: selectedPlan!.region,
-      onResult: (parsed) {
-        setState(() {
-          daySchedules = parsed;
-        });
-      },
-    ),
-  ),
-),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
-      // 하단 바
       bottomNavigationBar: const BottomBar(),
     );
   }
