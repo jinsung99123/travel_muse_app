@@ -60,6 +60,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 24),
               const Text(
                 '사용자님의 성향을 파악 중이에요',
                 textAlign: TextAlign.left,

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
+import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view_detail.dart';
 
@@ -49,11 +50,14 @@ class _ResultViewState extends ConsumerState<ResultView> {
   Widget build(BuildContext context) {
     final state = ref.watch(preferenceTestStateNotifierProvider);
     final result = state.value?.result;
-
+    final profileState = ref.watch(profileViewModelProvider);
+    final nickname = profileState.currentNickname;
+    if (nickname == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     final typeCode = result?['type'];
     final description = result?['details'];
     final imagePath = resultImageMap[typeCode] ?? '';
-    final nickname = result?['nickname'] ?? '사용자';
 
     if (state.isLoading || typeCode == null || description == null) {
       return const Center(child: CircularProgressIndicator());
