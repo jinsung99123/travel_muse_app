@@ -10,7 +10,7 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,7 +27,16 @@ class SectionTitle extends StatelessWidget {
             ),
           ),
           if (onMoreTap != null)
-            TextButton(onPressed: onMoreTap, child: const Text('더보기 >')),
+            TextButton(
+              onPressed: onMoreTap,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.grey[300],
+                padding: EdgeInsets.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                minimumSize: Size(0, 0),
+              ),
+              child: const Text('더보기 >', style: TextStyle(fontSize: 14)),
+            ),
         ],
       ),
     );

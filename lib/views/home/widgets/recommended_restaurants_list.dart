@@ -31,10 +31,12 @@ class RecommendedRestaurantsList extends ConsumerWidget {
                   state.foods.isEmpty
                       ? const SizedBox(
                         height: 170,
+
                         child: Center(child: Text('근처 추천 맛집이 없어요')),
                       )
-                      : RecommendedCarousel(places: state.foods),
+                      : RecommendedCarousel(places: state.foods, rounded: true),
         ),
+
         Padding(
           padding: const EdgeInsets.only(top: 8, right: 16),
           child: Align(
@@ -52,7 +54,7 @@ class RecommendedRestaurantsList extends ConsumerWidget {
                 '더보기 >',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.primary[300],
+                  color: AppColors.grey[300],
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Pretendard',
                 ),
