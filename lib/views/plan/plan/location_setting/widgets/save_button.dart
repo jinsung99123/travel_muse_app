@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
@@ -24,7 +25,7 @@ class SaveButton extends ConsumerWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor:
-              selectedIndex == null ? Colors.grey : Colors.blue[300],
+              selectedIndex == null ? Colors.grey : AppColors.primary[300],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

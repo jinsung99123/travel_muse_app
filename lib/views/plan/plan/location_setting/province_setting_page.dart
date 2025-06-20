@@ -19,9 +19,12 @@ class ProvinceSettingPageState extends ConsumerState<ProvinceSettingPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '여행 일정 등록',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[800],
+          ),
         ),
         backgroundColor: Colors.white,
       ),

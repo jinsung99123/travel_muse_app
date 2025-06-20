@@ -35,10 +35,10 @@ class CalendarWidget extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 monthText,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Pretendard',
+                  color: Colors.grey[900],
                 ),
               ),
             ),
@@ -78,6 +78,9 @@ class CalendarWidget extends StatelessWidget {
                         buildDayCell(day, isBetween(day), false),
                 selectedBuilder:
                     (context, day, _) => buildDayCell(day, false, true),
+                todayBuilder:
+                    (context, day, _) =>
+                        buildDayCell(day, isBetween(day), false),
               ),
             ),
           ],
