@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class MyPageMenu extends StatelessWidget {
@@ -46,6 +47,15 @@ class MyPageMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => PreferenceTestPage()),
+              );
+            },
+          ),
+          _buildMenuItem(
+            title: '설정',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingPage()),
               );
             },
           ),
