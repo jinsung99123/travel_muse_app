@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class SchedulePlaceCard extends StatelessWidget {
@@ -24,79 +25,115 @@ class SchedulePlaceCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
-      constraints: BoxConstraints(minHeight: cardMinH),
       margin: const EdgeInsets.symmetric(vertical: 6),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color:
-              showHandle
-                  ?  AppColors.secondary[400]! // 편집 중 파란 테두리
-                  : AppColors.grey[300]!,
+      child: Container(
+        decoration:
+            showHandle
+                ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.secondary[300]!,
+                      AppColors.secondary[400]!,
+                    ],
+                    stops: [0.5, 0.5],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                )
+                : BoxDecoration(
+                  border: Border.all(color: AppColors.grey[300]!),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+        padding: showHandle ? const EdgeInsets.all(1.5) : EdgeInsets.zero,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          constraints: BoxConstraints(minHeight: cardMinH),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(8.5),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.05),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: vPadding),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //썸네일
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  place['image'] ?? 'https://via.placeholder.com/80',
+                  width: 75,
+                  height: 75,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 12),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 125),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      place['title'] ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                    if (place['address'] != null &&
+                        place['address']!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        place['address']!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          color: AppColors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Pretendard',
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 4),
+                    Text(
+                      place['subtitle'] ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        color: AppColors.grey[400],
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        fontFamily: 'Pretendard',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              // 드래그 핸들
+              if (showHandle)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: SvgPicture.asset(
+                    'assets/icons/menu.svg',
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+            ],
+          ),
         ),
-        borderRadius: BorderRadius.circular(10),
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: vPadding),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          //썸네일
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              place['image'] ?? 'https://via.placeholder.com/80',
-              width: 75,
-              height: 75,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 12),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 125),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  place['title'] ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  place['subtitle'] ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: AppColors.grey[400],
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          // 드래그 핸들
-          if (showHandle)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child:  Icon(Icons.reorder, color: AppColors.grey[300]),
-            ),
-        ],
       ),
     );
   }
