@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class ProvinceBoxItem extends StatelessWidget {
   const ProvinceBoxItem({
@@ -20,12 +21,9 @@ class ProvinceBoxItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue.shade100 : Colors.white,
+          color: isSelected ? Colors.white : Colors.transparent,
           border: Border.all(
-            color:
-                isSelected
-                    ? Colors.blue
-                    : const Color.fromARGB(255, 238, 238, 238),
+            color: isSelected ? AppColors.primary[400]! : Colors.grey[200]!,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -33,20 +31,14 @@ class ProvinceBoxItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              emoji,
-              style: TextStyle(
-                fontSize: 16,
-                color: isSelected ? Colors.blue : Colors.grey,
-              ),
-            ),
+            Text(emoji, style: TextStyle(fontSize: 16)),
             SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.blue.shade700 : Colors.black,
+                color: isSelected ? AppColors.primary[400] : Colors.black,
               ),
             ),
           ],
