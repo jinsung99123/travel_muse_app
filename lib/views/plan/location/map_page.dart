@@ -36,15 +36,23 @@ class _MapPageState extends ConsumerState<MapPage>
 
     if (!_tabController!.indexIsChanging) {
       setState(() {});
-      final newPlaces =
-          mapState.dayPlaces[dayKeys[_tabController!.index]] ?? [];
-      _viewModel.moveCameraToFitAll(_mapController, newPlaces);
+
+      final index = _tabController!.index;
+
+      if (index == 0) {
+        final allPlaces = _viewModel.getAllPlaces();
+        _viewModel.moveCameraToFitAll(_mapController, allPlaces);
+      } else {
+        final newPlaces =
+            mapState.dayPlaces[dayKeys[_tabController!.index - 1]] ?? [];
+        _viewModel.moveCameraToFitAll(_mapController, newPlaces);
+      }
     }
   }
 
   bool _isLoading(TabController? tabController, List<String> dayKeys) {
     if (tabController == null || dayKeys.isEmpty) return true;
-    if (tabController.index >= dayKeys.length) return true;
+    if (tabController.index >= dayKeys.length + 1) return true;
     return false;
   }
 
@@ -55,7 +63,7 @@ class _MapPageState extends ConsumerState<MapPage>
     final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
     if (dayKeys.isEmpty) return;
 
-    _tabController = TabController(length: dayKeys.length, vsync: this);
+    _tabController = TabController(length: dayKeys.length + 1, vsync: this);
     _tabController!.addListener(_onTabChanged);
 
     setState(() {});
@@ -102,15 +110,19 @@ class _MapPageState extends ConsumerState<MapPage>
     }
 
     final index = _tabController!.index;
-    final selectedDayKey = dayKeys[index];
-    final selectedPlaces = mapState.dayPlaces[selectedDayKey] ?? [];
+    List<Map<String, dynamic>> selectedPlaces;
+    if (index == 0) {
+      selectedPlaces = _viewModel.getAllPlaces(); 
+    } else {
+      selectedPlaces = mapState.dayPlaces[dayKeys[index - 1]] ?? [];
+    }
 
     _initCameraPosition(selectedPlaces);
 
     final points = _viewModel.extractLatLngs(selectedPlaces);
     final markers = _viewModel.getMarkers(
       places: selectedPlaces,
-      selectedDayKey: selectedDayKey,
+      selectedDayKey: index == 0 ? 'all' : dayKeys[index - 1],
       onTap: (place) => _viewModel.selectPlace(place),
       onPageChanged: (index) {
         if (!_tabController!.indexIsChanging) {
@@ -118,7 +130,7 @@ class _MapPageState extends ConsumerState<MapPage>
         }
       },
     );
-    final displayDayTabs = dayKeys.map(getDisplayDayTab).toList();
+    final displayDayTabs = ['All', ...dayKeys.map(getDisplayDayTab)];
     return Scaffold(
       appBar: MapPageAppBar(),
       body: Column(
@@ -162,7 +174,7 @@ class _MapPageState extends ConsumerState<MapPage>
           ),
         ],
       ),
-              bottomNavigationBar: const BottomBar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
