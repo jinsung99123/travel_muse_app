@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
@@ -27,33 +28,38 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.map_outlined),
-           onPressed: () async {
-            // route 존재 여부 체크
-            final hasRoute = await ref
-                .read(scheduleViewModelProvider.notifier)
-                .hasRoute(planId);
-
-            if (!hasRoute) {
-              //없으면 스낵바만 띄우고 리턴
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: GestureDetector(
+              child: SvgPicture.asset('assets/icons/map.svg', 
+                    width: 28,
+                    height: 28,),
+             onTap: () async {
+              // route 존재 여부 체크
+              final hasRoute = await ref
+                  .read(scheduleViewModelProvider.notifier)
+                  .hasRoute(planId);
+          
+              if (!hasRoute) {
+                //없으면 스낵바만 띄우고 리턴
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('일정을 먼저 등록해주세요 🗓️')),
+                  );
+                }
+                return;
+              }
+              // 있으면 정상적으로 지도 페이지 push
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('일정을 먼저 등록해주세요 🗓️')),
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MapPage(planId: planId),
+                  ),
                 );
               }
-              return;
-            }
-            // 있으면 정상적으로 지도 페이지 push
-            if (context.mounted) {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MapPage(planId: planId),
-                ),
-              );
-            }
-          },
+            },
+          ),
         ),
       ],
       backgroundColor: Colors.white,
