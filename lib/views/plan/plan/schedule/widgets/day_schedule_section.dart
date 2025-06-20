@@ -118,6 +118,7 @@ class _DayScheduleSectionState extends State<DayScheduleSection>
                       widget.schedules.isEmpty
                           ? _buildEmptyView()
                           : Center(child: _addBtn()),
+                          SizedBox(height: 24),
                     ],
                   ),
                 ),
@@ -195,6 +196,7 @@ class _DayScheduleSectionState extends State<DayScheduleSection>
         ),
         const SizedBox(height: 16),
         _addBtn(),
+        SizedBox(height: 24),
       ],
     ),
   );

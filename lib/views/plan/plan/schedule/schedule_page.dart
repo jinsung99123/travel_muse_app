@@ -103,6 +103,12 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Widget build(BuildContext context) {
     final planState = ref.watch(scheduleViewModelProvider);
 
+    if (selectedPlan == null) {
+      return const Scaffold(
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
+      );
+    }
+
     return Scaffold(
       appBar: ScheduleAppBar(planId: widget.planId),
       body: SafeArea(
@@ -118,7 +124,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   if (selectedPlan == null) {
                     return const Center(child: Text('선택된 일정이 없습니다.'));
                   }
-
                   return DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
@@ -132,29 +137,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 error: (e, _) => Center(child: Text('에러 발생: $e')),
               ),
             ),
-            if (selectedPlan != null)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: GestureDetector(
-                    child: AiButton(
-                      planId: widget.planId,
-                      days: calculateTripDays(
-                        selectedPlan!.startDate,
-                        selectedPlan!.endDate,
-                      ),
-                      region: selectedPlan!.region,
-                      onResult: (parsed) {
-                        setState(() {
-                          daySchedules = parsed;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-
             ScheduleBottomButtons(
               onEditTap: () async {
                 await ref
@@ -179,6 +161,29 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           ],
         ),
       ),
+
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 60, top: 8),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: AiButton(
+            planId: widget.planId,
+            days: calculateTripDays(
+              selectedPlan!.startDate,
+              selectedPlan!.endDate,
+            ),
+            region: selectedPlan!.region,
+            onResult: (parsed) {
+              setState(() {
+                daySchedules = parsed;
+              });
+            },
+          ),
+        ),
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
       bottomNavigationBar: const BottomBar(),
     );
   }
