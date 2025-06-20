@@ -55,6 +55,10 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   @override
   void initState() {
     super.initState();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    ref.read(selectedIndexProvider.notifier).clear();
+  });
+
     _loadRecommendedPlacesByRegion();
   }
 

@@ -187,4 +187,42 @@ class ScheduleRepository {
 
     return result;
   }
+
+  /// 전체 일정 삭제
+Future<void> deletePlanById(String planId) async {
+  final planRef = _firestore.collection('plans').doc(planId);
+
+  final routeSnapshot = await planRef.collection('route').get();
+  final aiRouteSnapshot = await planRef.collection('ai_route').get();
+
+  final batch = _firestore.batch();
+
+  // 서브컬렉션 route 삭제
+  for (var doc in routeSnapshot.docs) {
+    batch.delete(doc.reference);
+  }
+
+  // 서브컬렉션 ai_route 삭제
+  for (var doc in aiRouteSnapshot.docs) {
+    batch.delete(doc.reference);
+  }
+
+  // plan 문서 삭제
+  batch.delete(planRef);
+
+  await batch.commit();
+}
+
+/// appUser 문서에서 planId 제거
+Future<void> removePlanIdFromUser({
+  required String userId,
+  required String planId,
+}) async {
+  final userDocRef = _firestore.collection('appUser').doc(userId);
+
+  await userDocRef.update({
+    'planId': FieldValue.arrayRemove([planId]),
+  });
+}
+
 }

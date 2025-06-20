@@ -73,10 +73,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         daySchedules.putIfAbsent(dayIndex, () => []);
         daySchedules[dayIndex]!.addAll(selectedPlaces);
       });
-
-      await ref
-          .read(scheduleViewModelProvider.notifier)
-          .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
     }
   }
 

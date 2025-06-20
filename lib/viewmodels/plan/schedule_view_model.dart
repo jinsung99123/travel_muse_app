@@ -143,4 +143,34 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     final snap = await _repository.fetchRoute(planId);
     return snap.isNotEmpty;
   }
+
+  /// 일정삭제
+  Future<void> deletePlanById(String planId) async {
+    if (currentUser == null) return;
+    try {
+      // DB에서 삭제
+      await _repository.deletePlanById(planId);
+
+      // appUser 문서에서 planId 제거
+      await _repository.removePlanIdFromUser(
+        userId: currentUser!.uid,
+        planId: planId,
+      );
+
+      // 상태 동기화
+      _allPlans.removeWhere((p) => p.planId == planId);
+      final updatedSavedPlans =
+          state.value!.savedPlans.where((p) => p.planId != planId).toList();
+
+      state = AsyncData(
+        state.value!.copyWith(
+          allPlans: _allPlans,
+          savedPlans: updatedSavedPlans,
+        ),
+      );
+    } catch (e, st) {
+      log('일정 삭제 실패: $e');
+      state = AsyncError(e, st);
+    }
+  }
 }
