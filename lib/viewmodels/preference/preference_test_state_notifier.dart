@@ -67,4 +67,15 @@ class PreferenceTestStateNotifier
       return [];
     }
   }
+
+  /// 성향 테스트 삭제
+  Future<void> deleteTest(String testId) async {
+    state = const AsyncLoading();
+    try {
+      await _repository.deleteTest(testId);
+      state = const AsyncValue.data(null); // 상태 초기화
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
 }

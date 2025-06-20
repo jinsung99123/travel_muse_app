@@ -79,4 +79,9 @@ class PreferenceTestRepository {
         .map((doc) => PreferenceTest.fromDoc(doc.id, doc.data()))
         .toList();
   }
+
+  ///테스트Id로 삭제
+  Future<void> deleteTest(String testId) async {
+    await _firestore.collection(_collection).doc(testId).delete();
+  }
 }
