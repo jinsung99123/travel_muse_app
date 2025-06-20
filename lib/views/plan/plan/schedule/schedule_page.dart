@@ -4,10 +4,12 @@ import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
+import 'package:travel_muse_app/utills/distance_sort.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_list.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/distance_sort_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_bottom_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_header.dart';
 import 'package:travel_muse_app/views/plan/plan/widgets/schedule_app_bar.dart';
@@ -159,26 +161,37 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       ),
 
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 60, top: 8),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: AiButton(
-            planId: widget.planId,
-            days: calculateTripDays(
-              selectedPlan!.startDate,
-              selectedPlan!.endDate,
+        padding: const EdgeInsets.only(bottom: 60, right: 16, left: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            DistanceSortButton(
+              daySchedules: daySchedules,
+              onResult: (sorted) {
+                setState(() {
+                  daySchedules = sorted;
+                });
+              },
             ),
-            region: selectedPlan!.region,
-            onResult: (parsed) {
-              setState(() {
-                daySchedules = parsed;
-              });
-            },
-          ),
+
+            // 오른쪽: AI 추천 버튼
+            AiButton(
+              planId: widget.planId,
+              days: calculateTripDays(
+                selectedPlan!.startDate,
+                selectedPlan!.endDate,
+              ),
+              region: selectedPlan!.region,
+              onResult: (parsed) {
+                setState(() {
+                  daySchedules = parsed;
+                });
+              },
+            ),
+          ],
         ),
       ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
       bottomNavigationBar: const BottomBar(),
     );

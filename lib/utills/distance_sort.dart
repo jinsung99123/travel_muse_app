@@ -18,19 +18,19 @@ double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
 double _toRadians(double degree) => degree * pi / 180;
 
 /// 중심 좌표(평균값) 계산
-Map<String, double> getCenterCoordinate(List<Map<String, dynamic>> places) {
+Map<String, double> getCenterCoordinate(List<Map<String, String>> places) {
   final avgLat =
-      places.map((p) => double.parse(p['lat'])).reduce((a, b) => a + b) /
+      places.map((p) => double.parse(p['lat']!)).reduce((a, b) => a + b) /
       places.length;
   final avgLng =
-      places.map((p) => double.parse(p['lng'])).reduce((a, b) => a + b) /
+      places.map((p) => double.parse(p['lng']!)).reduce((a, b) => a + b) /
       places.length;
   return {'lat': avgLat, 'lng': avgLng};
 }
 
 /// 가까운 거리순 정렬
-List<Map<String, dynamic>> sortPlacesByDistance(
-  List<Map<String, dynamic>> places,
+List<Map<String, String>> sortPlacesByDistance(
+  List<Map<String, String>> places,
 ) {
   final center = getCenterCoordinate(places);
 
@@ -38,14 +38,14 @@ List<Map<String, dynamic>> sortPlacesByDistance(
     final distA = calculateDistance(
       center['lat']!,
       center['lng']!,
-      double.parse(a['lat']),
-      double.parse(a['lng']),
+      double.parse(a['lat']!),
+      double.parse(a['lng']!),
     );
     final distB = calculateDistance(
       center['lat']!,
       center['lng']!,
-      double.parse(b['lat']),
-      double.parse(b['lng']),
+      double.parse(b['lat']!),
+      double.parse(b['lng']!),
     );
     return distA.compareTo(distB);
   });
