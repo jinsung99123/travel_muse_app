@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/views/my_page/settings/account_setting_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/environment_setting_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/notification_setting_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/service_term_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/support_page.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> settingsItems = [
-      '알림 설정',
-      '환경 설정',
-      '계정 관리',
-      '서비스 약관',
-      '고객 지원',
+    final List<Map<String, dynamic>> settingsItems = [
+      {'title': '알림 설정', 'route': const NotificationSettingPage()},
+      {'title': '환경 설정', 'route': const EnvironmentSettingPage()},
+      {'title': '계정 관리', 'route': const AccountSettingPage()},
+      {'title': '서비스 약관', 'route': const ServiceTermPage()},
+      {'title': '고객 지원', 'route': const SupportPage()},
     ];
 
     return Scaffold(
@@ -32,7 +37,14 @@ class SettingPage extends StatelessWidget {
         itemCount: settingsItems.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => settingsItems[index]['route'],
+                ),
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
@@ -46,7 +58,7 @@ class SettingPage extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.75,
                     child: Text(
-                      settingsItems[index],
+                      settingsItems[index]['title'],
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(
