@@ -20,10 +20,10 @@ class PreferenceIntroPage2 extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: 154,
-                  padding: const EdgeInsets.all(0), // 이미 바깥쪽에서 16 적용됨
+                  padding: const EdgeInsets.all(0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Ai 기반 맞춤 추천을 위해\n홍길동님의 여행 성향을 알려주세요',
