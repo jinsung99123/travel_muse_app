@@ -1,5 +1,6 @@
 class Terms {
   Terms({
+    required this.id,
     required this.title,
     required this.content,
     required this.isRequired,
@@ -8,6 +9,7 @@ class Terms {
     required this.order,
   });
 
+  final String id;
   final String title;
   final String content;
   final bool isRequired;
@@ -16,6 +18,7 @@ class Terms {
   final int order;
 
   Terms copyWith({
+    String? id,
     String? title,
     String? content,
     bool? isRequired,
@@ -24,6 +27,7 @@ class Terms {
     int? order,
   }) {
     return Terms(
+      id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
       isRequired: isRequired ?? this.isRequired,
@@ -35,6 +39,7 @@ class Terms {
 
   factory Terms.fromJson(String id, Map<String, dynamic> json) {
     return Terms(
+      id: json['id'],
       title: json['title'],
       content: json['content'],
       isRequired: json['isRequired'],
@@ -45,6 +50,7 @@ class Terms {
   }
 
   Map<String, dynamic> toJson() => {
+    'id': id,
     'title': title,
     'content': content,
     'isRequired': isRequired,

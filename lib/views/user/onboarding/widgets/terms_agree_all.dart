@@ -12,7 +12,7 @@ class TermsAgreeAll extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 24),
       child: Row(
         children: [
-          CustomCheckToggle(index: 0),
+          CustomCheckToggle(termId: null),
           SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

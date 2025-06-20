@@ -7,17 +7,17 @@ class TermsRepository {
   final _firestore = FirebaseFirestore.instance;
 
   /// 약관 업로드or업데이트 (개발 전용)
-  Future<void> updateOrUploadTerms(String termId, Terms terms) async {
-    final docRef = _firestore.collection('terms').doc(termId);
+  Future<void> updateOrUploadTerms(Terms terms) async {
+    final docRef = _firestore.collection('terms').doc(terms.id);
 
     final docSnapshot = await docRef.get();
 
     if (docSnapshot.exists) {
       await docRef.update(terms.toJson());
-      log('✅ 약관 "$termId" 업데이트 완료');
+      log('✅ 약관 "${terms.id}" 업데이트 완료');
     } else {
       await docRef.set(terms.toJson());
-      log('✅ 약관 "$termId" 생성 완료');
+      log('✅ 약관 "${terms.id}" 생성 완료');
     }
   }
 
@@ -37,6 +37,7 @@ class TermsRepository {
 
 /// 예시 약관(추후 삭제)
 final ageRequired = Terms(
+  id: 'age_required',
   title: '만 14세 이상입니다.',
   content: '',
   isRequired: true,
@@ -46,6 +47,7 @@ final ageRequired = Terms(
 );
 
 final serviceRequired = Terms(
+  id: 'service_required',
   title: '서비스 이용 약관',
   content: '서비스 이용 약관 내용입니다.',
   isRequired: true,
@@ -55,6 +57,7 @@ final serviceRequired = Terms(
 );
 
 final privacyRequired = Terms(
+  id: 'privacy_required',
   title: '개인정보 처리 방침',
   content: '개인정보 처리 방침 내용입니다.',
   isRequired: true,
@@ -64,6 +67,7 @@ final privacyRequired = Terms(
 );
 
 final marketingOptional = Terms(
+  id: 'marketing_optional',
   title: '마케팅 수신 동의',
   content: '마케팅 수신 동의 내용입니다.',
   isRequired: false,
