@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class SearchBar extends StatelessWidget {
@@ -26,11 +27,9 @@ class SearchBar extends StatelessWidget {
           GestureDetector(
             onTap: onSearch,
             behavior: HitTestBehavior.opaque,
-            child: Icon(
-              Icons.search,
-              size: 24,                           
-              color: AppColors.grey[200],         
-            ),
+            child: SvgPicture.asset('assets/icons/search.svg', 
+                  width: 28,
+                  height: 28,),
           ),
           const SizedBox(width: 8),
           Expanded(
