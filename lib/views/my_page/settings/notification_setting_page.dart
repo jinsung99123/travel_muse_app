@@ -18,7 +18,6 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
     '공지사항 및 이벤트 알림',
   ];
 
-  // 각 스위치의 초기 상태값
   final Map<String, bool> _switchValues = {
     '전체 알림': true,
     '여행 일정 알림': true,

@@ -31,7 +31,7 @@ class ServiceTermPage extends StatelessWidget {
         itemCount: settingsItems.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {}, // 기능은 나중에 추가
+            onTap: () {},
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
