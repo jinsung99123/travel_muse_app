@@ -35,13 +35,11 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     width: 28,
                     height: 28,),
              onTap: () async {
-              // route 존재 여부 체크
               final hasRoute = await ref
                   .read(scheduleViewModelProvider.notifier)
                   .hasRoute(planId);
           
               if (!hasRoute) {
-                //없으면 스낵바만 띄우고 리턴
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('일정을 먼저 등록해주세요 🗓️')),
@@ -49,7 +47,6 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 }
                 return;
               }
-              // 있으면 정상적으로 지도 페이지 push
               if (context.mounted) {
                 await Navigator.push(
                   context,
