@@ -32,7 +32,8 @@ class SnsLoginBar extends ConsumerWidget {
         if (state.user != null) {
           final isNew = ref.read(authViewModelProvider).isUserNew;
 
-          final nextPage = isNew ? const OnboardingPage() : const HomePage();
+          final nextPage =
+              isNew != null ? const OnboardingPage() : const HomePage();
 
           unawaited(
             navigator.pushReplacement(

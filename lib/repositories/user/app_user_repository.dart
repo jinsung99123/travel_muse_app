@@ -147,7 +147,15 @@ class AppUserRepository {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    await _firestore.collection('appUser').doc(user.uid).delete();
-    await user.delete();
+    final userDocRef = _firestore.collection('appUser').doc(user.uid);
+    final userAgreementsRef = userDocRef.collection('userAgreements');
+
+    // 서브컬렉션 'userAgreements' 문서 모두 삭제
+    final agreementsSnapshot = await userAgreementsRef.get();
+    for (final doc in agreementsSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    await userDocRef.delete();
   }
 }
