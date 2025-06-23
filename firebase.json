@@ -1,1 +1,43 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"travelmuse-17222","appId":"1:241683645756:android:9cadac982eae72de7f4a39","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"travelmuse-17222","appId":"1:241683645756:ios:601773c35bddbab77f4a39","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"travelmuse-17222","configurations":{"android":"1:241683645756:android:9cadac982eae72de7f4a39","ios":"1:241683645756:ios:601773c35bddbab77f4a39"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "travelmuse-17222",
+          "appId": "1:241683645756:android:9cadac982eae72de7f4a39",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "travelmuse-17222",
+          "appId": "1:241683645756:ios:601773c35bddbab77f4a39",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "travelmuse-17222",
+          "configurations": {
+            "android": "1:241683645756:android:9cadac982eae72de7f4a39",
+            "ios": "1:241683645756:ios:601773c35bddbab77f4a39"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
