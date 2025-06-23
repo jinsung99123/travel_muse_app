@@ -42,3 +42,26 @@ String getButtonText(DateTime? startDay, DateTime? endDay) {
     return '$startStr ~ $endStr ($days일) 선택하기';
   }
 }
+
+/// 게시글 작성 유효성 검사
+class PostValidator {
+  static const int minTitleLength = 1; // 제목은 한 글자 이상
+  static const int minContentLength = 5; // 본문은 5자 이상
+
+  static String? validateTitle(String text) {
+    if (text.trim().isEmpty) {
+      return '제목을 입력해주세요';
+    }
+    return null;
+  }
+
+  static String? validateContent(String text) {
+    if (text.trim().isEmpty) {
+      return '내용을 입력해주세요';
+    }
+    if (text.trim().length < minContentLength) {
+      return '5자 이상 입력해주세요';
+    }
+    return null;
+  }
+}
