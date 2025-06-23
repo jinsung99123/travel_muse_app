@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
-import 'package:travel_muse_app/views/post/widgets/image_preview_list.dart';
-import 'package:travel_muse_app/views/post/widgets/post_action_buttons.dart';
-import 'package:travel_muse_app/views/post/widgets/post_location_category.dart';
-import 'package:travel_muse_app/views/post/widgets/post_text_fields.dart';
+import 'package:travel_muse_app/views/post/widgets/write/image_preview_list.dart';
+import 'package:travel_muse_app/views/post/widgets/write/post_action_buttons.dart';
+import 'package:travel_muse_app/views/post/widgets/write/post_location_category.dart';
+import 'package:travel_muse_app/views/post/widgets/write/post_text_fields.dart';
 
 class PostWritePage extends ConsumerStatefulWidget {
-  const PostWritePage({super.key});
+  const PostWritePage({super.key, this.post});
+
+  final Post? post;
 
   @override
   ConsumerState<PostWritePage> createState() => _PostWritePageState();
@@ -21,10 +24,19 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
   final List<String> imagePaths = [];
 
   Set<String> selectedTags = {};
-  String? selectedLocation;
-
   String? titleErrorText;
   String? contentErrorText;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.post != null) {
+      titleController.text = widget.post!.title;
+      contentController.text = widget.post!.content;
+      imagePaths.addAll(widget.post!.images);
+      selectedTags = widget.post!.tags.toSet();
+    }
+  }
 
   Future<void> pickImages() async {
     final picker = ImagePicker();
@@ -49,15 +61,15 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       return;
     }
 
-    // 파이어스토어 저장
-    await ref
-        .read(postViewModelProvider.notifier)
-        .createPost(
-          title: titleController.text.trim(),
-          content: contentController.text.trim(),
-          imageUrls: imagePaths,
-          tags: selectedTags.toList(),
-        );
+    final notifier = ref.read(postViewModelProvider.notifier);
+
+    await notifier.submitPost(
+      existingPost: widget.post,
+      title: titleController.text.trim(),
+      content: contentController.text.trim(),
+      imagePaths: imagePaths,
+      tags: selectedTags.toList(),
+    );
 
     if (mounted) {
       Navigator.pop(context);
@@ -74,9 +86,9 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          '게시물 작성',
-          style: TextStyle(
+        title: Text(
+          widget.post != null ? '게시물 수정' : '게시물 작성',
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Color(0xFF1C1F20),

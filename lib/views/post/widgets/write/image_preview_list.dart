@@ -21,16 +21,26 @@ class ImagePreviewList extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (_, index) {
           final path = imagePaths[index];
+          final isUrl = path.startsWith('http');
+
           return Stack(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(path),
-                  width: 90,
-                  height: 90,
-                  fit: BoxFit.cover,
-                ),
+                child:
+                    isUrl
+                        ? Image.network(
+                          path,
+                          width: 90,
+                          height: 90,
+                          fit: BoxFit.cover,
+                        )
+                        : Image.file(
+                          File(path),
+                          width: 90,
+                          height: 90,
+                          fit: BoxFit.cover,
+                        ),
               ),
               Positioned(
                 top: 4,

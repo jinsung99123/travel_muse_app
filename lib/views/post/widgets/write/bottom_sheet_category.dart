@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_muse_app/views/post/widgets/category_chip.dart';
+import 'package:travel_muse_app/views/post/widgets/write/category_chip.dart';
 
 class BottomSheetCategory extends StatefulWidget {
   const BottomSheetCategory({

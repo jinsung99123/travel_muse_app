@@ -6,7 +6,7 @@ import 'package:travel_muse_app/core/bottom_bar_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
-import 'package:travel_muse_app/views/post/post_page.dart';
+import 'package:travel_muse_app/views/post/post_list_page.dart';
 
 class BottomBar extends ConsumerWidget {
   const BottomBar({super.key});
@@ -32,7 +32,7 @@ class BottomBar extends ConsumerWidget {
           page = const RecommendedPlacesListPage();
           break;
         case 3:
-          page = const PostPage();
+          page = const PostListPage();
           break;
         case 4:
           page = const MyPage();
