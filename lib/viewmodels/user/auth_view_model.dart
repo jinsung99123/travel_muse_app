@@ -10,10 +10,11 @@ class AuthViewModel extends Notifier<AuthState> {
   final _authService = AuthService();
   final _appUserRepository = AppUserRepository();
 
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   AuthState build() {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    return AuthState(user: currentUser);
+    return AuthState(user: user);
   }
 
   /// 구글 로그인
@@ -75,5 +76,16 @@ class AuthViewModel extends Notifier<AuthState> {
   Future<void> logout() async {
     await _authService.signOut();
     state = AuthState();
+  }
+
+  /// 탈퇴 처리
+  Future<void> deleteAccount() async {
+    if (user == null) return;
+
+    try {
+      await _appUserRepository.deleteAccount();
+    } catch (e) {
+      log('탈퇴 처리 실패 : $e');
+    }
   }
 }
