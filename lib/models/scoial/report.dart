@@ -24,6 +24,6 @@ class Report {
     'targetOwnerId': targetOwnerId,
     'reasonCode': reasonCode,
     'reasonText': reasonText,
-    'timestamp': timestamp.toIso8601String(),
+    'timestamp': timestamp,
   };
 }
