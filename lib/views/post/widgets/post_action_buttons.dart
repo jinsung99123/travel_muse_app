@@ -5,9 +5,12 @@ class PostActionButtons extends StatelessWidget {
     super.key,
     required this.onPickImages,
     required this.onSubmit,
+    required this.isWritable,
   });
+
   final VoidCallback onPickImages;
   final VoidCallback onSubmit;
+  final bool isWritable;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class PostActionButtons extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: [
-          // 사진 추가 아이콘 버튼
+          // 사진 추가 버튼
           GestureDetector(
             onTap: onPickImages,
             child: Container(
@@ -40,24 +43,26 @@ class PostActionButtons extends StatelessWidget {
 
           // 완료 버튼
           Expanded(
-            child: GestureDetector(
-              onTap: onSubmit,
-              child: Container(
-                height: 56,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE9EBEB),
+            child: ElevatedButton(
+              onPressed: isWritable ? onSubmit : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    isWritable
+                        ? const Color(0xFF49CDFE)
+                        : const Color(0xFFE9EBEB),
+                minimumSize: const Size.fromHeight(56),
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                alignment: Alignment.center,
-                child: const Text(
-                  '완료',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFB3B9BC),
-                    fontFamily: 'Pretendard',
-                    height: 1.5,
-                  ),
+              ),
+              child: Text(
+                '완료',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: isWritable ? Colors.white : const Color(0xFFB3B9BC),
+                  fontFamily: 'Pretendard',
+                  height: 1.5,
                 ),
               ),
             ),
