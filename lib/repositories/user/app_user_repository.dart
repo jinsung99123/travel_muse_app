@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travel_muse_app/models/user/app_user_model.dart';
 import 'package:travel_muse_app/models/user/user_agreement_model.dart';
@@ -14,9 +15,15 @@ class AppUserRepository {
     final docRef = _firestore.collection('appUser').doc(uid);
     final snapshot = await docRef.get();
 
+    final user = FirebaseAuth.instance.currentUser;
+    final provider = user?.providerData.first;
+    if (provider == null) return;
+
     if (!snapshot.exists) {
       await docRef.set({
         'uid': uid,
+        'loginProvider': provider.providerId,
+        'loginEmail': provider.email,
         'nickname': null,
         'profileImage': null,
         'testId': [],
