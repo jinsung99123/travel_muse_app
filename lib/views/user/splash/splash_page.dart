@@ -19,32 +19,36 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Widget nextPage = LoginPage();
-
-      Timer(const Duration(seconds: 2), () async {
-        final navigator = Navigator.of(context);
-        if (ref.read(authViewModelProvider).user != null) {
-          final viewmodel = ref.read(authViewModelProvider.notifier);
-          await viewmodel.isUserNew();
-
-          final updatedState = ref.read(authViewModelProvider);
-          log('${updatedState.appUser == null}');
-
-          if (updatedState.isUserNew) {
-            nextPage = OnboardingPage();
-          } else {
-            nextPage = HomePage();
-          }
-        }
-
-        unawaited(
-          navigator.pushReplacement(
-            MaterialPageRoute(builder: (context) => nextPage),
-          ),
-        );
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _handleNavigation();
     });
+  }
+
+  Future<void> _handleNavigation() async {
+    final navigator = Navigator.of(context);
+
+    Widget nextPage = const LoginPage();
+
+    final authState = ref.read(authViewModelProvider);
+    log('유저 정보가 있는가? : ${authState.user != null}');
+    if (authState.user != null) {
+      final viewmodel = ref.read(authViewModelProvider.notifier);
+      await viewmodel.isUserNew();
+
+      final updatedState = ref.read(authViewModelProvider);
+      log('유저 문서가 있는가? : ${updatedState.isUserNew != null}');
+      if (updatedState.isUserNew != null) {
+        nextPage = const OnboardingPage();
+      } else {
+        nextPage = const HomePage();
+      }
+    }
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    await navigator.pushReplacement(
+      MaterialPageRoute(builder: (_) => nextPage),
+    );
   }
 
   @override

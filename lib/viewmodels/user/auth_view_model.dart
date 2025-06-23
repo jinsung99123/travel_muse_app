@@ -8,7 +8,7 @@ import 'package:travel_muse_app/services/user/auth_service.dart';
 
 class AuthViewModel extends Notifier<AuthState> {
   final _authService = AuthService();
-  final _appUserRepository = AppUserRepository();
+  final _repository = AppUserRepository();
 
   final user = FirebaseAuth.instance.currentUser;
 
@@ -26,7 +26,7 @@ class AuthViewModel extends Notifier<AuthState> {
       state = state.copyWith(user: user);
 
       /// Firestore Database에 유저 최초 등록
-      await _appUserRepository.createAppUser(user!.uid);
+      await _repository.createAppUser(user!.uid);
 
       log('google로 로그인 성공: ${result.data!.user!.uid}');
       await isUserNew();
@@ -44,7 +44,7 @@ class AuthViewModel extends Notifier<AuthState> {
       state = state.copyWith(user: user);
 
       /// Firestore Database에 유저 최초 등록
-      await _appUserRepository.createAppUser(user!.uid);
+      await _repository.createAppUser(user!.uid);
 
       log('apple로 로그인 성공: ${result.data!.user!.uid}');
       await isUserNew();
@@ -57,7 +57,7 @@ class AuthViewModel extends Notifier<AuthState> {
   Future<void> isUserNew() async {
     if (state.user == null) return;
 
-    final currentAppUser = await _appUserRepository.fetchLatestAppUser(
+    final currentAppUser = await _repository.fetchLatestAppUser(
       state.user!.uid,
     );
     state = state.copyWith(appUser: currentAppUser);
@@ -83,7 +83,7 @@ class AuthViewModel extends Notifier<AuthState> {
     if (user == null) return;
 
     try {
-      await _appUserRepository.deleteAccount();
+      await _repository.deleteAccount();
     } catch (e) {
       log('탈퇴 처리 실패 : $e');
     }

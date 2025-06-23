@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/my_page/widgets/account_info.dart';
+import 'package:travel_muse_app/views/my_page/widgets/delete_account_button.dart';
+import 'package:travel_muse_app/views/my_page/widgets/log_out_button.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_profile_screen.dart';
+import 'package:travel_muse_app/views/my_page/widgets/user_info.dart';
 
 class AccountSettingPage extends StatelessWidget {
   const AccountSettingPage({super.key});
@@ -23,39 +27,13 @@ class AccountSettingPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MyProfileScreen(),
-
-          ListTile(
-            title: const Text(
-              '생년월일',
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            subtitle: const Text('1990-01-01'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text(
-              '성별',
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            subtitle: const Text('남성'),
-            onTap: () {},
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text('탈퇴하기'),
-              ),
-            ),
-          ),
+          Center(child: MyProfileScreen()),
+          Divider(),
+          AccountInfo(),
+          Divider(),
+          UserInfo(),
+          LogOutButton(),
+          DeleteAccountButton(),
         ],
       ),
     );
