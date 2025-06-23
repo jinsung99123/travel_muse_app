@@ -141,4 +141,13 @@ class AppUserRepository {
     }
     await batch.commit();
   }
+
+  /// 회원 탈퇴
+  Future<void> deleteAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    await _firestore.collection('appUser').doc(user.uid).delete();
+    await user.delete();
+  }
 }
