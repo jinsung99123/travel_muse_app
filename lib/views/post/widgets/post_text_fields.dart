@@ -5,9 +5,11 @@ class PostTextFields extends StatelessWidget {
     super.key,
     required this.titleController,
     required this.contentController,
+    required this.onChanged,
   });
   final TextEditingController titleController;
   final TextEditingController contentController;
+  final VoidCallback onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class PostTextFields extends StatelessWidget {
         // 제목 입력
         TextField(
           controller: titleController,
+          onChanged: (_) => onChanged(),
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -40,6 +43,7 @@ class PostTextFields extends StatelessWidget {
         // 본문 입력
         TextField(
           controller: contentController,
+          onChanged: (_) => onChanged(),
           maxLines: null,
           style: const TextStyle(
             fontSize: 16,
