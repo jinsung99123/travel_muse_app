@@ -10,6 +10,7 @@ class Post {
     required this.createAt,
     required this.commentCount,
     required this.likeCount,
+    required this.viewCount,
     required this.isDeleted,
     required this.isReposted,
     required this.reportCount,
@@ -24,6 +25,7 @@ class Post {
   final Timestamp createAt;
   final int commentCount;
   final int likeCount;
+  final int viewCount;
   final bool isDeleted;
   final bool isReposted;
   final int reportCount;
@@ -35,26 +37,31 @@ class Post {
       content: map['content'] ?? '',
       images: List<String>.from(map['images'] ?? []),
       tags: List<String>.from(map['tags'] ?? []),
-      createAt: map['createAt'] ?? Timestamp.now(),
+      createAt:
+          map['createAt'] is Timestamp
+              ? map['createAt'] as Timestamp
+              : Timestamp.now(),
       commentCount: map['commentCount'] ?? 0,
       likeCount: map['likeCount'] ?? 0,
+      viewCount: map['viewCount'] ?? 0,
       isDeleted: map['isDeleted'] ?? false,
       isReposted: map['isReposted'] ?? false,
       reportCount: map['reportCount'] ?? 0,
       title: map['title'] ?? '',
     );
   }
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({required bool isNew}) {
     return {
       'postId': postId,
       'userId': userId,
       'title': title,
       'content': content,
       'images': images,
-      'createAt': createAt,
+      'createAt': isNew ? FieldValue.serverTimestamp() : createAt,
       'commentCount': commentCount,
       'likeCount': likeCount,
-      'isDeleted': isDeleted,
+      'viewCount': viewCount,
+      'isDeleted': false,
       'isReposted': isReposted,
       'reportCount': reportCount,
       'tags': tags,
