@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/post/widgets/image_preview_list.dart';
 import 'package:travel_muse_app/views/post/widgets/post_action_buttons.dart';
 import 'package:travel_muse_app/views/post/widgets/post_location_category.dart';
 import 'package:travel_muse_app/views/post/widgets/post_text_fields.dart';
 
-class PostWritePage extends StatefulWidget {
+class PostWritePage extends ConsumerStatefulWidget {
   const PostWritePage({super.key});
 
   @override
-  State<PostWritePage> createState() => _PostWritePageState();
+  ConsumerState<PostWritePage> createState() => _PostWritePageState();
 }
 
-class _PostWritePageState extends State<PostWritePage> {
+class _PostWritePageState extends ConsumerState<PostWritePage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final List<String> imagePaths = [];
@@ -35,7 +37,7 @@ class _PostWritePageState extends State<PostWritePage> {
     }
   }
 
-  void _submitPost() {
+  void _submitPost() async {
     final titleError = PostValidator.validateTitle(titleController.text);
     final contentError = PostValidator.validateContent(contentController.text);
 
@@ -47,13 +49,27 @@ class _PostWritePageState extends State<PostWritePage> {
       return;
     }
 
-    // TODO: 게시물 저장 로직 실행
+    // 파이어스토어 저장
+    await ref
+        .read(postViewModelProvider.notifier)
+        .createPost(
+          title: titleController.text.trim(),
+          content: contentController.text.trim(),
+          imageUrls: imagePaths,
+          tags: selectedTags.toList(),
+        );
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isWritable =
         titleController.text.isNotEmpty || contentController.text.isNotEmpty;
+    final postState = ref.watch(postViewModelProvider);
+    final isLoading = postState is AsyncLoading;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,6 +152,7 @@ class _PostWritePageState extends State<PostWritePage> {
               onPickImages: pickImages,
               onSubmit: _submitPost,
               isWritable: isWritable,
+              isLoading: isLoading,
             ),
           ],
         ),
