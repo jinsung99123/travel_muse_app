@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travel_muse_app/models/user/app_user_model.dart';
+import 'package:travel_muse_app/models/user/user_agreement_model.dart';
 
 class AppUserRepository {
   final _firestore = FirebaseFirestore.instance;
@@ -112,5 +113,25 @@ class AppUserRepository {
     required String gender,
   }) async {
     await _firestore.collection('appUser').doc(uid).update({'gender': gender});
+  }
+
+  /// 유저 약관 동의(UserAgreement) 업데이트
+  Future<void> uploadUserAgreements(
+    String uid,
+    List<UserAgreement> agreementList,
+  ) async {
+    final batch = _firestore.batch();
+
+    final collectionRef = _firestore
+        .collection('appUser')
+        .doc(uid)
+        .collection('userAgreements');
+
+    for (final agreement in agreementList) {
+      final docRef = collectionRef.doc(agreement.termId);
+
+      batch.set(docRef, agreement.toJson(), SetOptions(merge: true));
+    }
+    await batch.commit();
   }
 }

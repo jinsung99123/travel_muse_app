@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
-import 'package:travel_muse_app/models/user/profile_state.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
-import 'package:travel_muse_app/viewmodels/user/profile_view_model.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/option_box.dart';
 
 class SelectGender extends ConsumerWidget {

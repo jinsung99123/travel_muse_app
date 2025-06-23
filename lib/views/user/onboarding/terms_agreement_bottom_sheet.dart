@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
-import 'package:travel_muse_app/providers/user/terms_agreement_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/terms_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/user_agreement_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/preference_intro_page_2.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agree_all.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/terms_agreement_title.dart';
@@ -16,11 +17,22 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final termsKeys =
-        ref.watch(termsAgreementViewModelProvider.notifier).termsKeys;
-    final allRequiresAgreed =
-        ref.watch(termsAgreementViewModelProvider).allRequiresAgreed;
-    final viewmodel = ref.read(profileViewModelProvider.notifier);
+    final agreementState = ref.watch(userAgreementViewModelProvider);
+    final agreementViewmodel = ref.read(
+      userAgreementViewModelProvider.notifier,
+    );
+
+    ref.listen(termsViewModelProvider, (_, next) {
+      next.whenData((termsList) {
+        final agreementList =
+            ref.read(userAgreementViewModelProvider).agreementList;
+        if (agreementList.isEmpty) {
+          agreementViewmodel.setUserAgreementList(termsList);
+        }
+      });
+    });
+
+    final profileViewmodel = ref.read(profileViewModelProvider.notifier);
 
     return Container(
       width: double.infinity,
@@ -34,16 +46,17 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
         children: [
           TermsAgreementTitle(),
           TermsAgreeAll(),
-          TermsList(termsKeys: termsKeys),
+          TermsList(),
           Padding(
             padding: const EdgeInsets.only(bottom: 34),
             child: UserNextButton(
               text: '가입 완료',
-              isActivated: allRequiresAgreed,
+              isActivated: agreementState.isAllRequiredAgreed,
               onPressed: () async {
                 final navigator = Navigator.of(context);
-                if (allRequiresAgreed) {
-                  await viewmodel.updateProfile();
+                if (agreementState.isAllRequiredAgreed) {
+                  await profileViewmodel.updateProfile();
+                  await agreementViewmodel.uploadUserAgreements();
                   unawaited(
                     navigator.push(
                       MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),

@@ -2,29 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/providers/user/terms_agreement_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/user_agreement_view_model_provider.dart';
 
 class CustomCheckToggle extends ConsumerWidget {
-  const CustomCheckToggle({super.key, required this.index});
+  const CustomCheckToggle({super.key, this.termId});
 
-  final int index;
+  final String? termId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final agreementState =
-        ref.watch(termsAgreementViewModelProvider).agreementState;
-
-    final termsKeys =
-        ref.watch(termsAgreementViewModelProvider.notifier).termsKeys; // 약관 리스트
-    final termKey = termsKeys[index];
-
-    final isSelected = agreementState[termKey]; // 선택된 약관의 상태
+    final agreementState = ref.watch(userAgreementViewModelProvider);
+    bool isAgreed =
+        termId == null
+            ? agreementState.isAllAgreed
+            : agreementState.agreementList
+                .firstWhere((e) => e.termId == termId)
+                .agreed;
 
     return GestureDetector(
       onTap: () {
-        ref
-            .read(termsAgreementViewModelProvider.notifier)
-            .toggleAgreement(termKey);
+        isAgreed = !isAgreed;
+        if (termId == null) {
+          ref.read(userAgreementViewModelProvider.notifier).toggleAllAgreed();
+        } else {
+          ref
+              .read(userAgreementViewModelProvider.notifier)
+              .toggleAgreedByTermId(termId: termId!, agreeOnly: false);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(2),
@@ -34,7 +38,7 @@ class CustomCheckToggle extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: isSelected! ? AppColors.primary[300] : AppColors.grey[300],
+            color: isAgreed ? AppColors.primary[300] : AppColors.grey[300],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(500),
             ),
