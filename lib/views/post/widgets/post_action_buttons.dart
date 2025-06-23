@@ -6,11 +6,13 @@ class PostActionButtons extends StatelessWidget {
     required this.onPickImages,
     required this.onSubmit,
     required this.isWritable,
+    required this.isLoading,
   });
 
   final VoidCallback onPickImages;
   final VoidCallback onSubmit;
   final bool isWritable;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +46,10 @@ class PostActionButtons extends StatelessWidget {
           // 완료 버튼
           Expanded(
             child: ElevatedButton(
-              onPressed: isWritable ? onSubmit : null,
+              onPressed: isWritable && !isLoading ? onSubmit : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    isWritable
+                    isWritable && !isLoading
                         ? const Color(0xFF49CDFE)
                         : const Color(0xFFE9EBEB),
                 minimumSize: const Size.fromHeight(56),
@@ -55,16 +57,26 @@ class PostActionButtons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text(
-                '완료',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: isWritable ? Colors.white : const Color(0xFFB3B9BC),
-                  fontFamily: 'Pretendard',
-                  height: 1.5,
-                ),
-              ),
+              child:
+                  isLoading
+                      ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text(
+                        '완료',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontFamily: 'Pretendard',
+                          height: 1.5,
+                        ),
+                      ),
             ),
           ),
         ],
