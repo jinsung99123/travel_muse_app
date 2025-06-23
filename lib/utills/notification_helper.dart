@@ -18,7 +18,9 @@ class NotificationHelper {
 
     await flutterNotificationsPlugin.initialize(
       initSetting,
-      onDidReceiveNotificationResponse: (details) {},
+      onDidReceiveNotificationResponse: (details) {
+        print(details.payload);
+      },
       onDidReceiveBackgroundNotificationResponse: notificationTapOnBackGround,
     );
   }
