@@ -41,6 +41,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       state = state.copyWith(
         currentNickname: appUser.nickname,
         profileImageUrl: appUser.profileImage,
+        birthDateInput: appUser.birthDate,
         gender: appUser.gender,
         testId: appUser.testId,
         planId: appUser.planId,

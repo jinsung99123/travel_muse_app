@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travel_muse_app/models/user/app_user_model.dart';
 import 'package:travel_muse_app/models/user/user_agreement_model.dart';
@@ -14,9 +15,15 @@ class AppUserRepository {
     final docRef = _firestore.collection('appUser').doc(uid);
     final snapshot = await docRef.get();
 
+    final user = FirebaseAuth.instance.currentUser;
+    final provider = user?.providerData.first;
+    if (provider == null) return;
+
     if (!snapshot.exists) {
       await docRef.set({
         'uid': uid,
+        'loginProvider': provider.providerId,
+        'loginEmail': provider.email,
         'nickname': null,
         'profileImage': null,
         'testId': [],
@@ -133,5 +140,22 @@ class AppUserRepository {
       batch.set(docRef, agreement.toJson(), SetOptions(merge: true));
     }
     await batch.commit();
+  }
+
+  /// 회원 탈퇴
+  Future<void> deleteAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final userDocRef = _firestore.collection('appUser').doc(user.uid);
+    final userAgreementsRef = userDocRef.collection('userAgreements');
+
+    // 서브컬렉션 'userAgreements' 문서 모두 삭제
+    final agreementsSnapshot = await userAgreementsRef.get();
+    for (final doc in agreementsSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    await userDocRef.delete();
   }
 }

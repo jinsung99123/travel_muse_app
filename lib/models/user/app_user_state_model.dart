@@ -1,6 +1,6 @@
-class AppUser {
-  AppUser({
-    required this.uid,
+class AppUserState {
+  AppUserState({
+    this.uid,
     this.loginProvider,
     this.loginEmail,
     this.nickname,
@@ -11,7 +11,7 @@ class AppUser {
     this.gender,
   });
 
-  final String uid;
+  final String? uid;
   final String? loginProvider;
   final String? loginEmail;
   final String? nickname;
@@ -21,7 +21,7 @@ class AppUser {
   final String? birthDate;
   final String? gender;
 
-  AppUser copyWith({
+  AppUserState copyWith({
     String? uid,
     String? loginProvider,
     String? loginEmail,
@@ -32,7 +32,7 @@ class AppUser {
     String? birthDate,
     String? gender,
   }) {
-    return AppUser(
+    return AppUserState(
       uid: uid ?? this.uid,
       loginProvider: loginProvider ?? this.loginProvider,
       loginEmail: loginEmail ?? this.loginEmail,
@@ -44,29 +44,4 @@ class AppUser {
       gender: gender ?? this.gender,
     );
   }
-
-  factory AppUser.fromJson(Map<String, dynamic> json) {
-    return AppUser(
-      uid: json['uid'] ?? '',
-      loginProvider: json['loginProvider'] ?? '',
-      loginEmail: json['loginEmail'] ?? '',
-      nickname: json['nickname'],
-      profileImage: json['profileImage'],
-      testId: List<String>.from(json['testId'] ?? []),
-      planId: List<String>.from(json['planId'] ?? []),
-      birthDate: json['birthDate'] ?? '',
-      gender: json['gender'] ?? '',
-    );
-  }
-  Map<String, dynamic> toJson() => {
-    'uid': uid,
-    'loginProvider': loginProvider,
-    'loginEmail': loginEmail,
-    'nickname': nickname,
-    'profileImage': profileImage,
-    'testId': testId,
-    'planId': planId,
-    'birthDate': birthDate,
-    'gender': gender,
-  };
 }
