@@ -8,12 +8,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:travel_muse_app/firebase_options.dart';
+import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/views/user/splash/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: '.env');
+  await NotificationHelper.init();
 
   // Firebase Crashlytics 에러 핸들링 추가
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
