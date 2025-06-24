@@ -15,16 +15,13 @@ class EditProfileImage extends ConsumerStatefulWidget {
 }
 
 class _EditProfileImageState extends ConsumerState<EditProfileImage> {
-  bool _fetched = false;
-
   // 프로필이미지 최초 1회 가져오기
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_fetched) {
-      ref.read(profileViewModelProvider.notifier).fetchProfileImageUrl();
-      _fetched = true;
-    }
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(profileViewModelProvider.notifier).fetchProfileImageUrl();
+    });
   }
 
   @override
@@ -45,7 +42,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
             onTap: () async {
               await ref
                   .read(profileViewModelProvider.notifier)
-                  .savePickedImageToLocal();
+                  .savePickedImageToLocal(88);
             },
             child: SizedBox(
               width: 88,
@@ -64,7 +61,7 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
                                         as ImageProvider,
                             fit: BoxFit.cover,
                           )
-                          : null, // TODO: 기본 프로필 이미지 디자인 작업 완료 후 -> 기본 프로필 이미지 default로 표시
+                          : null,
                 ),
                 child:
                     imageUrlToShow == null
