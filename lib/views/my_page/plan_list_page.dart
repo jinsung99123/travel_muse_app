@@ -78,7 +78,14 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
                         color: AppColors.error,
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const Icon(Icons.delete, color: AppColors.white),
+                        child: const Text(
+                          '삭제',
+                          style: TextStyle(color: AppColors.white,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16
+                          ),
+                        ),
                       ),
                       confirmDismiss: (direction) async {
                         return await _showDeleteDialog(plan.planId);
