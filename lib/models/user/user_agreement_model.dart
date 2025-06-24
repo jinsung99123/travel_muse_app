@@ -29,18 +29,18 @@ class UserAgreement {
       version: version ?? this.version,
       agreed: agreed ?? this.agreed,
       agreedAt: agreedAt ?? this.agreedAt,
-      url: url ?? this.url,
+      url: url ?? url,
     );
   }
 
   factory UserAgreement.fromJson(String termId, Map<String, dynamic> json) {
     return UserAgreement(
       termId: termId,
-      isRequired: json['isRequired'] as bool,
-      version: json['version'] as String,
-      agreed: json['agreed'] as bool,
-      agreedAt: DateTime.parse(json['agreedAt'] as String),
-      url: json['url'] as String?,
+      isRequired: json['isRequired'],
+      version: json['version'],
+      agreed: json['agreed'],
+      agreedAt: DateTime.parse(json['agreedAt']),
+      url: json['url'],
     );
   }
 
