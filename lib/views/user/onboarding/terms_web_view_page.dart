@@ -1,38 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class TermsWebViewPage extends StatefulWidget {
+class TermsWebViewPage extends StatelessWidget {
   const TermsWebViewPage({super.key, required this.title, required this.url});
-
   final String title;
   final String url;
 
   @override
-  State<TermsWebViewPage> createState() => _TermsWebViewPageState();
-}
-
-class _TermsWebViewPageState extends State<TermsWebViewPage> {
-  late final WebViewController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller =
+  Widget build(BuildContext context) {
+    final controller =
         WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..loadRequest(Uri.parse(widget.url));
-  }
+          ..loadRequest(Uri.parse(url));
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(color: Colors.black)),
+        title: Text(title, style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
       ),
-      body: WebViewWidget(key: UniqueKey(), controller: _controller),
+      body: WebViewWidget(controller: controller),
     );
   }
 }
