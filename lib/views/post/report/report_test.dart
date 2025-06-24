@@ -14,10 +14,10 @@ class ReportTest extends ConsumerWidget{
           onPressed: () {
             ref.read(reportViewModelProvider.notifier).submit(
               targetType: 'post',
-              targetId: 'test_post_123',
-              reporterId: 'user_test_001',
-              targetOwnerId: 'user_target_001',
-              reasonCode: 'SPAM',
+              targetId: 'EfXs6r6vDLpM20PGweJj',// 문서 Id
+              reporterId: 'user_test_001',// 신고자 Id
+              targetOwnerId: '6OoKCy0U1lalNPGTtnU3UPPr3BF3', // 게시글 작성자 userId
+              reasonCode: 'HATE',
               reasonText: '테스트 신고입니다',
             );
           },
