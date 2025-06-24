@@ -55,7 +55,7 @@ final serviceRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 2,
-  url: 'https://www.notion.so/1abc9d67bce980809f96d10b19049af2',
+  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c',
 );
 
 final privacyRequired = Terms(
@@ -77,7 +77,7 @@ final marketingOptional = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 4,
-  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c',
+  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c?pvs=12',
 );
 
 final communityPolicy = Terms(
