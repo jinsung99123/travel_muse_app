@@ -7,6 +7,7 @@ class Terms {
     required this.version,
     required this.createdAt,
     required this.order,
+    required this.url,
   });
 
   final String id;
@@ -16,6 +17,7 @@ class Terms {
   final String version;
   final DateTime createdAt;
   final int order;
+  final String url;
 
   Terms copyWith({
     String? id,
@@ -25,6 +27,7 @@ class Terms {
     String? version,
     DateTime? createdAt,
     int? order,
+    String? url,
   }) {
     return Terms(
       id: id ?? this.id,
@@ -34,18 +37,20 @@ class Terms {
       version: version ?? this.version,
       createdAt: createdAt ?? this.createdAt,
       order: order ?? this.order,
+      url: url ?? this.url,
     );
   }
 
   factory Terms.fromJson(String id, Map<String, dynamic> json) {
     return Terms(
-      id: json['id'],
+      id: json['id'] ?? id,
       title: json['title'],
       content: json['content'],
       isRequired: json['isRequired'],
       version: json['version'],
       createdAt: DateTime.parse(json['createdAt']),
       order: (json['order'] as num).toInt(),
+      url: json['url'] ?? '',
     );
   }
 
@@ -57,5 +62,6 @@ class Terms {
     'version': version,
     'createdAt': createdAt.toIso8601String(),
     'order': order,
+    'url': url,
   };
 }
