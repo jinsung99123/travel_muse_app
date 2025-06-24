@@ -15,6 +15,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
     required String content,
     required List<String> imageUrls,
     required List<String> tags,
+    Map<String, dynamic>? place,
   }) async {
     state = const AsyncLoading();
     try {
@@ -35,6 +36,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
         isDeleted: false,
         isReposted: false,
         reportCount: 0,
+        place: place,
       );
 
       await _repository.createPost(post);
@@ -51,10 +53,18 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
     required String content,
     required List<String> imageUrls,
     required List<String> tags,
+    Map<String, dynamic>? place,
   }) async {
     state = const AsyncLoading();
     try {
-      await _repository.updatePost(postId, title, content, imageUrls, tags);
+      await _repository.updatePost(
+        postId,
+        title,
+        content,
+        imageUrls,
+        tags,
+        place,
+      );
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -89,6 +99,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
     required String content,
     required List<String> imagePaths,
     required List<String> tags,
+    Map<String, dynamic>? place,
   }) async {
     state = const AsyncLoading();
     try {
@@ -101,6 +112,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
           content: content,
           imageUrls: imageUrls,
           tags: tags,
+          place: place,
         );
       } else {
         await createPost(
@@ -108,6 +120,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
           content: content,
           imageUrls: imageUrls,
           tags: tags,
+          place: place,
         );
       }
     } catch (e, st) {
