@@ -163,6 +163,16 @@ class AppUserRepository {
       await doc.reference.delete();
     }
 
+    // preference_test 문서 중 userId == user.uid 인 문서 모두 삭제
+    final preferenceSnapshot =
+        await _firestore
+            .collection('preference_test')
+            .where('userId', isEqualTo: user.uid)
+            .get();
+    for (final doc in preferenceSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
     await userDocRef.delete();
   }
 }

@@ -58,8 +58,9 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
                   await profileViewmodel.updateProfile();
                   await agreementViewmodel.uploadUserAgreements();
                   unawaited(
-                    navigator.push(
+                    navigator.pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => PreferenceIntroPage2()),
+                      (route) => false,
                     ),
                   );
                 }

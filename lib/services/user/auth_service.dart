@@ -22,6 +22,8 @@ class AuthService {
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
+        await _googleSignIn.signOut();
+        await _firebaseAuth.signOut();
         return Result.failure('유저 취소');
       }
 
@@ -74,6 +76,7 @@ class AuthService {
       return Result.failure('네트워크 오류');
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
+        await _firebaseAuth.signOut();
         return Result.failure('유저 취소');
       }
       return Result.failure('Apple 로그인 오류: ${e.message}');
@@ -83,6 +86,7 @@ class AuthService {
   }
 
   Future<void> signOut() async {
+    await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
   }
 }
