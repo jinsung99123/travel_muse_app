@@ -44,6 +44,7 @@ final ageRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 1,
+  url: '',
 );
 
 final serviceRequired = Terms(
@@ -54,6 +55,7 @@ final serviceRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 2,
+  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c',
 );
 
 final privacyRequired = Terms(
@@ -64,6 +66,7 @@ final privacyRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 3,
+  url: 'https://www.notion.so/21cc9d67bce980d58f34ec20ee46d139',
 );
 
 final marketingOptional = Terms(
@@ -74,4 +77,5 @@ final marketingOptional = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 4,
+  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c?pvs=12',
 );
