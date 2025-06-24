@@ -6,6 +6,7 @@ class HomePlace {
     required this.id,
     required this.title,
     required this.subtitle,
+    required this.address,
     required this.thumbnail,
     required this.latLng,
     required this.category,
@@ -18,6 +19,7 @@ class HomePlace {
   final String id;
   final String title;
   final String subtitle;
+  final String address;
   final String thumbnail;
   final LatLng latLng;
   final String category;
@@ -31,6 +33,7 @@ class HomePlace {
       id: p.id,
       title: p.name,
       subtitle: p.address,
+      address: p.address,
       thumbnail: thumb,
       latLng: LatLng(p.latitude, p.longitude),
       category: p.category,
@@ -45,7 +48,8 @@ class HomePlace {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       subtitle: map['subtitle'] ?? '',
-      thumbnail: map['image'] ?? '', 
+      address: map['address'] ?? '',
+      thumbnail: map['image'] ?? '',
       latLng: LatLng(
         double.tryParse(map['lat']?.toString() ?? '0') ?? 0,
         double.tryParse(map['lng']?.toString() ?? '0') ?? 0,
@@ -64,9 +68,12 @@ extension PlaceMapping on Place {
     id: id,
     title: name,
     subtitle: address,
+    address: address,
     thumbnail: thumb,
     latLng: LatLng(latitude, longitude),
     category: category,
+    phone: phone,
+    placeUrl: placeUrl,
     distance: distance,
   );
 }
