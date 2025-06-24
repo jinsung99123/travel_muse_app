@@ -79,3 +79,11 @@ final marketingOptional = Terms(
   order: 4,
   url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c?pvs=12',
 );
+
+Future<void> uploadAllTerms() async {
+  final repo = TermsRepository();
+  await repo.updateOrUploadTerms(ageRequired);
+  await repo.updateOrUploadTerms(serviceRequired);
+  await repo.updateOrUploadTerms(privacyRequired);
+  await repo.updateOrUploadTerms(marketingOptional);
+}
