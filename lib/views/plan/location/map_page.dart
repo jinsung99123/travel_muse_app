@@ -3,16 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/map_provider.dart';
+import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/viewmodels/plan/map_view_model.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/map_display.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/map_page_app_bar.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/place_carousel.dart';
+import 'package:travel_muse_app/views/plan/location/widgets/search_input_field.dart';
 
 class MapPage extends ConsumerStatefulWidget {
-  const MapPage({super.key, required this.planId});
+  const MapPage({super.key, required this.planId, this.isSelectMode = false});
   final String planId;
+  final bool isSelectMode;
 
   @override
   ConsumerState<MapPage> createState() => _MapPageState();
@@ -22,6 +25,7 @@ class _MapPageState extends ConsumerState<MapPage>
     with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
+  bool get isSelectMode => widget.planId == 'place-select-mode';
   LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
 
   late final MapViewModel _viewModel;
@@ -58,6 +62,13 @@ class _MapPageState extends ConsumerState<MapPage>
 
   Future<void> initializeControllers() async {
     if (!mounted) return;
+    if (isSelectMode) {
+      ref.read(mapViewModelProvider.notifier).setDummyDayPlaces();
+      _tabController = TabController(length: 1, vsync: this);
+      setState(() {});
+      return;
+    }
+
     await _viewModel.loadPlanAndRoute(widget.planId, this);
 
     final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
@@ -92,10 +103,15 @@ class _MapPageState extends ConsumerState<MapPage>
   }
 
   void _initCameraPosition(List<Map<String, dynamic>> selectedPlaces) {
-    if (!_cameraMoved && selectedPlaces.isNotEmpty) {
-      final initial = _viewModel.getInitialLatLng(selectedPlaces);
-      if (initial != null) {
-        _initialLatLng = initial;
+    if (!_cameraMoved) {
+      if (selectedPlaces.isNotEmpty) {
+        final initial = _viewModel.getInitialLatLng(selectedPlaces);
+        if (initial != null) {
+          _initialLatLng = initial;
+        }
+      } else {
+        /// 장소 없을 때 기본 좌표
+        _initialLatLng = const LatLng(37.5665, 126.9780); // 서울 시청
       }
     }
   }
@@ -112,7 +128,7 @@ class _MapPageState extends ConsumerState<MapPage>
     final index = _tabController!.index;
     List<Map<String, dynamic>> selectedPlaces;
     if (index == 0) {
-      selectedPlaces = _viewModel.getAllPlaces(); 
+      selectedPlaces = _viewModel.getAllPlaces();
     } else {
       selectedPlaces = mapState.dayPlaces[dayKeys[index - 1]] ?? [];
     }
@@ -129,13 +145,17 @@ class _MapPageState extends ConsumerState<MapPage>
           setState(() {});
         }
       },
+      isSelectMode: isSelectMode,
+      context: context,
     );
     final displayDayTabs = ['All', ...dayKeys.map(getDisplayDayTab)];
     return Scaffold(
       appBar: MapPageAppBar(),
-      body: Column(
+
+      body: Stack(
         children: [
-          Expanded(
+          /// 1. 지도는 전체를 꽉 채움
+          Positioned.fill(
             child: MapDisplay(
               initialLatLng: _initialLatLng,
               points: points,
@@ -154,22 +174,55 @@ class _MapPageState extends ConsumerState<MapPage>
               },
             ),
           ),
-          SizedBox(
-            height: screenHeight * 0.25,
-            child: Column(
-              children: [
-                DayTabBar(controller: _tabController!, days: displayDayTabs),
-                Expanded(
-                  child: PlaceCarousel(
-                    dayKeys: dayKeys,
-                    mapState: mapState,
-                    viewModel: _viewModel,
-                    selectedPlace: mapState.selectedPlace,
-                    mapController: _mapController,
-                    tabController: _tabController!,
-                  ),
-                ),
-              ],
+
+          /// 2. 검색창은 상단에 고정 (선택모드일 때만)
+          if (isSelectMode)
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: SearchInputField(
+                onSearch:
+                    (query) => ref
+                        .read(searchViewModelProvider.notifier)
+                        .search(query),
+              ),
+            ),
+
+          /// 3. 하단 영역: DayTabBar 또는 PlaceCarousel
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.25,
+              child: Column(
+                children: [
+                  if (!isSelectMode)
+                    Container(
+                      color: Colors.white,
+                      child: DayTabBar(
+                        controller: _tabController!,
+                        days: displayDayTabs,
+                      ),
+                    ),
+                  if (!isSelectMode)
+                    Expanded(
+                      child: Container(
+                        color: Colors.white,
+                        child: PlaceCarousel(
+                          dayKeys: dayKeys,
+                          mapState: mapState,
+                          viewModel: _viewModel,
+                          selectedPlace: mapState.selectedPlace,
+                          mapController: _mapController,
+                          tabController: _tabController!,
+                          isSelectMode: widget.isSelectMode,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
