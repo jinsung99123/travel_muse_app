@@ -13,14 +13,18 @@ class PageIndicatorBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final screenWidth = MediaQuery.of(context).size.width;
+    final totalSpacing = 6.5 * 2 * (totalCount - 1);
+    final indicatorWidth = (screenWidth - totalSpacing - 48) / totalCount;
+
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
           totalCount,
           (index) => Container(
-            width: 57,
+            width: indicatorWidth.clamp(24.0, 60.0),
             height: 5,
             margin: const EdgeInsets.symmetric(horizontal: 6.5),
             decoration: BoxDecoration(
