@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({
@@ -8,11 +10,13 @@ class PlaceCard extends StatelessWidget {
     this.isSelected = false,
     this.onTap,
     super.key,
+    required this.isSelectMode,
   });
 
   final Map<String, dynamic> placeData;
   final bool isSelected;
   final VoidCallback? onTap;
+  final bool isSelectMode;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,20 @@ class PlaceCard extends StatelessWidget {
     final imageUrl = placeData['image'] ?? '';
 
     return GestureDetector(
-      onTap: onTap,
+      onTap:
+          onTap ??
+          () {
+            ///isSelectMode일 때만 내부에서 push 처리
+            if (isSelectMode) {
+              final homePlace = HomePlace.fromMap(placeData);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RecommendedPlaceDetailPage(place: homePlace),
+                ),
+              );
+            }
+          },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
@@ -57,29 +74,33 @@ class PlaceCard extends StatelessWidget {
 
             // 텍스트들
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+              child: SizedBox(
+                height: 90,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    address,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: AppColors.black,
+                    const SizedBox(height: 4),
+                    Text(
+                      address,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.black,
+                        height: 1.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
@@ -88,7 +109,7 @@ class PlaceCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
-                  'assets/icons/check-circle.svg', 
+                  'assets/icons/check-circle.svg',
                   width: 28,
                   height: 28,
                 ),
