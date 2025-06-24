@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plan/place.dart';
+import 'package:travel_muse_app/providers/plan/schedule/map_provider.dart';
 import 'package:travel_muse_app/services/plan/nearby_place_service.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
 
 class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
-  SearchViewModel(this._placeService, this._nearbyService) : super([]);
-
+  SearchViewModel(this.ref, this._placeService, this._nearbyService)
+    : super([]);
+  final Ref ref;
   final PlaceSearchService _placeService;
   final NearbyPlaceService _nearbyService;
 
@@ -18,6 +20,13 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
       final places = await _fetchPlaces(query: query, region: region);
       final results = await _mapPlacesToViewData(places);
       state = results;
+
+      // 지도 마커 반영
+      ref
+          .read(mapViewModelProvider.notifier)
+          .setDayPlacesForSelectMode(
+            results.map((e) => e as Map<String, dynamic>).toList(),
+          );
     } catch (_) {
       state = [];
     }
@@ -63,7 +72,7 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
         return {
           'title': p.name,
           'subtitle': '${p.city} ${p.district} • ${p.category}',
-          'address':p.address,
+          'address': p.address,
           'image': thumb ?? defaultImage,
           'lat': p.latitude.toString(),
           'lng': p.longitude.toString(),

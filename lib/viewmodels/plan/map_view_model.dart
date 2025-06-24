@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/map_state.dart';
 import 'package:travel_muse_app/repositories/plan/map_repository.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/utills/marker_helper.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_sheet.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
   MapViewModel(this._repository) : super(MapState(dayPlaces: {})) {
@@ -117,18 +120,64 @@ class MapViewModel extends StateNotifier<MapState> {
     required String selectedDayKey,
     required Function(Map<String, dynamic>) onTap,
     required Function(int) onPageChanged,
+    bool isSelectMode = false, // 선택 모드 여부
+    BuildContext? context, // 디테일 바텀시트 띄우기용 context
   }) {
     return createMarkers(
       places: places,
       icon: _currentIcon,
-      onTap: onTap,
+
+      // onTap 로직만 수정
+      onTap: (place) async {
+        onTap(place);
+
+        if (isSelectMode && context != null) {
+          // 바텀시트 띄우고 결과 리턴 기다림
+          final result = await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (_) {
+              return DraggableScrollableSheet(
+                initialChildSize: 0.6,
+                minChildSize: 0.4,
+                maxChildSize: 0.95,
+                expand: false,
+                builder: (context, scrollController) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(16),
+                      ),
+                    ),
+                    child: RecommendedPlaceDetailSheet(
+                      place: HomePlace.fromMap(place),
+                      scrollController: scrollController,
+                    ),
+                  );
+                },
+              );
+            },
+          );
+
+          // 사용자가 '선택하기' 눌렀을 경우 글작성 페이지로 값 넘김
+          if (result != null && context.mounted) {
+            Navigator.pop(context, result);
+          }
+        }
+      },
+
       onPageChanged: onPageChanged,
+
       animateToPage:
-          (idx) => getPageController(selectedDayKey).animateToPage(
-            idx,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          ),
+          isSelectMode
+              ? null // 선택 모드일 땐 animate 안 함
+              : (idx) => getPageController(selectedDayKey).animateToPage(
+                idx,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              ),
     );
   }
 
@@ -142,7 +191,7 @@ class MapViewModel extends StateNotifier<MapState> {
     return extractLatLngs(getAllPlaces());
   }
 
-//전체 마커 반환
+  //전체 마커 반환
   Set<Marker> getAllMarkers({
     required Function(Map<String, dynamic>) onTap,
     required Function(int) onPageChanged,
@@ -155,6 +204,30 @@ class MapViewModel extends StateNotifier<MapState> {
       animateToPage: (idx) {
         // 전체 탭은 Carousel 안 보이게 할 수도 있음
       },
+    );
+  }
+
+  void setDummyDayPlaces() {
+    state = state.copyWith(
+      dayPlaces: {
+        'select': [], // 아무 장소도 없는 하나의 날짜 키
+      },
+    );
+  }
+
+  void setDayPlacesForSelectMode(List<Map<String, dynamic>> places) {
+    final convertedPlaces =
+        places.map((e) {
+          return e.map((key, value) => MapEntry(key, value.toString()));
+        }).toList();
+
+    final newDayPlaces = Map<String, List<Map<String, String>>>.from(
+      state.dayPlaces,
+    )..['select'] = convertedPlaces;
+
+    state = state.copyWith(
+      dayPlaces: newDayPlaces,
+      selectedPlace: convertedPlaces.isNotEmpty ? convertedPlaces.first : null,
     );
   }
 }
