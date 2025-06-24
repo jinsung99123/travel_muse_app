@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/user/onboarding/onboarding_page.dart';
@@ -30,16 +32,23 @@ class SnsLoginBar extends ConsumerWidget {
         await loginFunction();
         final state = ref.watch(authViewModelProvider);
         if (state.user != null) {
-          final isNew = ref.read(authViewModelProvider).isUserNew;
+          log('sns로그인 성공');
+          final hasAppUserDoc = await ref
+              .read(appUserViewModelProvider.notifier)
+              .doesUserDocumentExist(state.user!.uid);
+          log('appUser 문서 생성되었는가? : $hasAppUserDoc');
+          if (hasAppUserDoc) {
+            final isNew = ref.read(authViewModelProvider).isUserNew;
+            final nextPage =
+                isNew != null ? const OnboardingPage() : const HomePage();
+            log('nextPage == $nextPage');
 
-          final nextPage =
-              isNew != null ? const OnboardingPage() : const HomePage();
-
-          unawaited(
-            navigator.pushReplacement(
-              MaterialPageRoute(builder: (_) => nextPage),
-            ),
-          );
+            unawaited(
+              navigator.pushReplacement(
+                MaterialPageRoute(builder: (_) => nextPage),
+              ),
+            );
+          }
         }
       },
       child: Container(

@@ -17,7 +17,9 @@ class AppUserRepository {
 
     final user = FirebaseAuth.instance.currentUser;
     final provider = user?.providerData.first;
-    if (provider == null) return;
+    if (provider == null) {
+      return;
+    }
 
     if (!snapshot.exists) {
       await docRef.set({
@@ -32,6 +34,11 @@ class AppUserRepository {
         'gender': null,
       });
     }
+  }
+
+  Future<bool> doesUserDocumentExist(String uid) async {
+    final doc = await _firestore.collection('appUser').doc(uid).get();
+    return doc.exists;
   }
 
   /// 데이터베이스에서 uid로 해당 유저 정보 get
@@ -153,6 +160,16 @@ class AppUserRepository {
     // 서브컬렉션 'userAgreements' 문서 모두 삭제
     final agreementsSnapshot = await userAgreementsRef.get();
     for (final doc in agreementsSnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    // preference_test 문서 중 userId == user.uid 인 문서 모두 삭제
+    final preferenceSnapshot =
+        await _firestore
+            .collection('preference_test')
+            .where('userId', isEqualTo: user.uid)
+            .get();
+    for (final doc in preferenceSnapshot.docs) {
       await doc.reference.delete();
     }
 

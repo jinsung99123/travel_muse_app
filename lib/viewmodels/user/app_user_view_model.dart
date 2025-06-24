@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/models/user/app_user_model.dart';
 import 'package:travel_muse_app/models/user/app_user_state_model.dart';
 import 'package:travel_muse_app/repositories/user/app_user_repository.dart';
 
@@ -15,12 +16,12 @@ class AppUserViewModel extends AutoDisposeAsyncNotifier<AppUserState> {
     return AppUserState();
   }
 
-  Future<void> fetchAppUser() async {
+  Future<AppUser?> fetchAppUser() async {
     try {
-      if (currentUser == null) return;
+      if (currentUser == null) return null;
       final appUser = await _repository.fetchLatestAppUser(currentUser!.uid);
 
-      if (appUser == null) return;
+      if (appUser == null) return null;
       state = AsyncData(
         state.value!.copyWith(
           uid: appUser.uid,
@@ -34,8 +35,19 @@ class AppUserViewModel extends AutoDisposeAsyncNotifier<AppUserState> {
           testId: appUser.testId,
         ),
       );
+      return appUser;
     } catch (e) {
       log('기존 유저정보 로드 실패: $e');
+      return null;
+    }
+  }
+
+  Future<bool> doesUserDocumentExist(String uid) async {
+    try {
+      return await _repository.doesUserDocumentExist(uid);
+    } catch (e) {
+      log('해당 uid 문서 존재 여부 확인 실패 : $e');
+      return false;
     }
   }
 }
