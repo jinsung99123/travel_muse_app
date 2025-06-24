@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/write/image_preview_list.dart';
 import 'package:travel_muse_app/views/post/widgets/write/post_action_buttons.dart';
 import 'package:travel_muse_app/views/post/widgets/write/post_location_category.dart';
@@ -22,6 +24,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final List<String> imagePaths = [];
+  Map<String, dynamic>? selectedPlace;
 
   Set<String> selectedTags = {};
   String? titleErrorText;
@@ -35,6 +38,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       contentController.text = widget.post!.content;
       imagePaths.addAll(widget.post!.images);
       selectedTags = widget.post!.tags.toSet();
+      selectedPlace = widget.post!.place;
     }
   }
 
@@ -69,6 +73,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       content: contentController.text.trim(),
       imagePaths: imagePaths,
       tags: selectedTags.toList(),
+      place: selectedPlace,
     );
 
     if (mounted) {
@@ -143,6 +148,15 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
                         ),
                       ),
                     const SizedBox(height: 16),
+                    if (selectedPlace != null)
+                      PlacePreviewCard(
+                        title: selectedPlace!['title'] ?? '',
+                        address: selectedPlace!['address'] ?? '',
+                        latLng: LatLng(
+                          (selectedPlace!['lat'] as num).toDouble(),
+                          (selectedPlace!['lng'] as num).toDouble(),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -150,6 +164,8 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
             PostLocationCategory(
               selectedTags: selectedTags,
               onTagsChanged: (tags) => setState(() => selectedTags = tags),
+              selectedPlace: selectedPlace,
+              onPlaceChanged: (place) => setState(() => selectedPlace = place),
             ),
             const SizedBox(height: 8),
             if (imagePaths.isNotEmpty) ...[
