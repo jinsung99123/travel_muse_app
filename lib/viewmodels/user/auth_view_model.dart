@@ -75,7 +75,7 @@ class AuthViewModel extends Notifier<AuthState> {
   /// 로그아웃
   Future<void> logout() async {
     await _authService.signOut();
-    state = AuthState();
+    state = AuthState(user: null, appUser: null, isUserNew: null);
   }
 
   /// 탈퇴 처리
@@ -84,6 +84,7 @@ class AuthViewModel extends Notifier<AuthState> {
 
     try {
       await _repository.deleteAccount();
+      await _authService.signOut();
     } catch (e) {
       log('탈퇴 처리 실패 : $e');
     }
