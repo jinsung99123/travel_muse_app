@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/post/widgets/write/bottom_sheet_category.dart';
 
 class PostLocationCategory extends StatelessWidget {
@@ -6,17 +7,45 @@ class PostLocationCategory extends StatelessWidget {
     super.key,
     required this.selectedTags,
     required this.onTagsChanged,
+    required this.selectedPlace,
+    required this.onPlaceChanged,
   });
 
   final Set<String> selectedTags;
   final ValueChanged<Set<String>> onTagsChanged;
+
+  final Map<String, dynamic>? selectedPlace;
+  final ValueChanged<Map<String, dynamic>>? onPlaceChanged;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // 위치
-        buildItem(Icons.location_on_outlined, '위치 추가하기'),
+        GestureDetector(
+          onTap: () async {
+            final selectedPlace = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) => const MapPage(
+                      planId: 'place-select-mode',
+                      isSelectMode: true,
+                    ),
+              ),
+            );
+
+            if (selectedPlace != null &&
+                selectedPlace is Map<String, dynamic>) {
+              debugPrint('선택된 위치: ${selectedPlace['address']}');
+              onPlaceChanged?.call(selectedPlace);
+            }
+          },
+          child: buildItem(
+            Icons.location_on_outlined,
+            selectedPlace?['address'] ?? '위치 추가하기',
+          ),
+        ),
 
         // 카테고리
         GestureDetector(
