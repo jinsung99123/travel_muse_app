@@ -44,7 +44,7 @@ class ReportViewModel extends StateNotifier<AsyncValue<void>> {
 
       await docRef.update({
         'reportCount': FieldValue.increment(1),
-        'isReported': true,
+        'isReposted': true,
       });
 
       state = const AsyncValue.data(null);
