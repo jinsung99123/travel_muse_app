@@ -16,14 +16,8 @@ final List<Map<String, String>> termsData = [
     'title': '마케팅 수신 동의',
     'url': 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c?pvs=12',
   },
-  {
-    'title': '커뮤니티 운영정책',
-    'url': 'https://www.notion.so/21cc9d67bce980b1a257c3a7dcf39cc2',
-  },
-  {
-    'title': '위치정보 이용동의',
-    'url': 'https://www.notion.so/21cc9d67bce9802e92f5fbaceffe6190',
-  },
+  {'title': '커뮤니티 운영정책', 'url': 'https://www.notion.so/커뮤니티-운영정책-url'},
+  {'title': '위치정보 이용동의', 'url': 'https://www.notion.so/위치정보-이용동의-url'},
 ];
 
 class ServiceTermPage extends StatelessWidget {
