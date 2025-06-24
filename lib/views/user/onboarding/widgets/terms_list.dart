@@ -4,7 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/models/user/terms_model.dart';
 import 'package:travel_muse_app/providers/user/terms_view_model_provider.dart';
-import 'package:travel_muse_app/views/user/onboarding/terms_detail_bottom_sheet.dart';
+import 'package:travel_muse_app/views/user/onboarding/terms_web_view_page.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/custom_check_toggle.dart';
 
 class TermsList extends ConsumerWidget {
@@ -51,15 +51,15 @@ class TermsList extends ConsumerWidget {
     required BuildContext context,
     required Terms term,
   }) {
-    return term.content.isNotEmpty
+    return term.url.isNotEmpty
         ? GestureDetector(
           onTap: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (context) {
-                return TermsDetailBottomSheet(term: term);
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) => TermsWebViewPage(title: term.title, url: term.url),
+              ),
             );
           },
           child: Text(

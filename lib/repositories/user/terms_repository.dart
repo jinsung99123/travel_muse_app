@@ -44,6 +44,7 @@ final ageRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 1,
+  url: '',
 );
 
 final serviceRequired = Terms(
@@ -54,6 +55,7 @@ final serviceRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 2,
+  url: 'https://www.notion.so/1abc9d67bce980809f96d10b19049af2',
 );
 
 final privacyRequired = Terms(
@@ -64,6 +66,7 @@ final privacyRequired = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 3,
+  url: 'https://www.notion.so/21cc9d67bce980d58f34ec20ee46d139',
 );
 
 final marketingOptional = Terms(
@@ -74,4 +77,37 @@ final marketingOptional = Terms(
   version: '1.0',
   createdAt: DateTime.now(),
   order: 4,
+  url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c',
 );
+
+final communityPolicy = Terms(
+  id: 'community_policy',
+  title: '커뮤니티 운영정책',
+  content: '커뮤니티 운영정책 내용입니다.',
+  isRequired: true,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 5,
+  url: 'https://www.notion.so/21cc9d67bce980b1a257c3a7dcf39cc2',
+);
+
+final locationRequired = Terms(
+  id: 'location_required',
+  title: '위치정보 이용동의',
+  content: '위치정보 이용동의 내용입니다.',
+  isRequired: true,
+  version: '1.0',
+  createdAt: DateTime.now(),
+  order: 6,
+  url: 'https://www.notion.so/21cc9d67bce9802e92f5fbaceffe6190',
+);
+
+Future<void> uploadAllTerms() async {
+  final repo = TermsRepository();
+  await repo.updateOrUploadTerms(ageRequired);
+  await repo.updateOrUploadTerms(serviceRequired);
+  await repo.updateOrUploadTerms(privacyRequired);
+  await repo.updateOrUploadTerms(marketingOptional);
+  await repo.updateOrUploadTerms(communityPolicy);
+  await repo.updateOrUploadTerms(locationRequired);
+}

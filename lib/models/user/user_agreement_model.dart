@@ -5,6 +5,7 @@ class UserAgreement {
     required this.version,
     required this.agreed,
     required this.agreedAt,
+    this.url,
   });
 
   final String termId;
@@ -12,6 +13,7 @@ class UserAgreement {
   final String version;
   final bool agreed;
   final DateTime agreedAt;
+  final String? url;
 
   UserAgreement copyWith({
     String? termId,
@@ -19,6 +21,7 @@ class UserAgreement {
     String? version,
     bool? agreed,
     DateTime? agreedAt,
+    String? url,
   }) {
     return UserAgreement(
       termId: termId ?? this.termId,
@@ -26,16 +29,18 @@ class UserAgreement {
       version: version ?? this.version,
       agreed: agreed ?? this.agreed,
       agreedAt: agreedAt ?? this.agreedAt,
+      url: url ?? this.url,
     );
   }
 
   factory UserAgreement.fromJson(String termId, Map<String, dynamic> json) {
     return UserAgreement(
       termId: termId,
-      isRequired: json['isRequired'],
-      version: json['version'],
-      agreed: json['agreed'],
-      agreedAt: DateTime.parse(json['agreedAt']),
+      isRequired: json['isRequired'] as bool,
+      version: json['version'] as String,
+      agreed: json['agreed'] as bool,
+      agreedAt: DateTime.parse(json['agreedAt'] as String),
+      url: json['url'] as String?,
     );
   }
 
@@ -44,5 +49,6 @@ class UserAgreement {
     'version': version,
     'agreed': agreed,
     'agreedAt': agreedAt.toIso8601String(),
+    'url': url,
   };
 }
