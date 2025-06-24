@@ -5,6 +5,7 @@ class UserAgreement {
     required this.version,
     required this.agreed,
     required this.agreedAt,
+    this.url,
   });
 
   final String termId;
@@ -12,6 +13,7 @@ class UserAgreement {
   final String version;
   final bool agreed;
   final DateTime agreedAt;
+  final String? url;
 
   UserAgreement copyWith({
     String? termId,
@@ -26,6 +28,7 @@ class UserAgreement {
       version: version ?? this.version,
       agreed: agreed ?? this.agreed,
       agreedAt: agreedAt ?? this.agreedAt,
+      url: url ?? url,
     );
   }
 
@@ -36,6 +39,7 @@ class UserAgreement {
       version: json['version'],
       agreed: json['agreed'],
       agreedAt: DateTime.parse(json['agreedAt']),
+      url: json['url'],
     );
   }
 
@@ -44,5 +48,6 @@ class UserAgreement {
     'version': version,
     'agreed': agreed,
     'agreedAt': agreedAt.toIso8601String(),
+    'url': url,
   };
 }
