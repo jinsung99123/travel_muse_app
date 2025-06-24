@@ -11,8 +11,8 @@ class AdminReportRepository {
     final snapshot = await _firestore
         .collection('posts')
         .where('isReposted', isEqualTo: true)
-        .where('isDeleted', isEqualTo: false) // 🔥 중요!
-        .get(const GetOptions(source: Source.server)); // 🔥 서버 강제 fetch
+        .where('isDeleted', isEqualTo: false)
+        .get(const GetOptions(source: Source.server));
 
     return Future.wait(
       snapshot.docs.map((doc) async {
