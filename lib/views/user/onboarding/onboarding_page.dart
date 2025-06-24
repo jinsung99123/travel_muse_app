@@ -51,6 +51,7 @@ class OnboardingPage extends ConsumerWidget {
                   UserNextButton(
                     text: '다음',
                     isActivated: canUpdate,
+                    isUploading: false,
                     onPressed: () {
                       if (canUpdate) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -32,6 +32,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     return ProfileState(
       nicknameMessage: _defaultNicknameMessage,
       birthDateMessage: _defaultBirthDateMessage,
+      isUploading: false,
     );
   }
 
@@ -362,6 +363,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     final uid = currentUser!.uid;
 
     try {
+      state = state.copyWith(isUploading: true);
+
       /// 프로필이미지 업데이트
       if (state.temporaryImagePath != null) {
         await updateProfileImage();
@@ -381,6 +384,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
       /// 성별 업데이트
       await _repository.updateGender(uid: uid, gender: state.gender!);
+      state = state.copyWith(isUploading: false);
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }
@@ -405,17 +409,24 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
     final uid = currentUser!.uid;
 
-    /// 프로필이미지 업데이트
-    if (state.temporaryImagePath != null) {
-      await updateProfileImage();
-    }
+    try {
+      state = state.copyWith(isUploading: true);
 
-    /// 닉네임 업데이트
-    if (state.nicknameInput != null) {
-      await _repository.updateNickname(
-        uid: uid,
-        nickname: state.nicknameInput!,
-      );
+      /// 프로필이미지 업데이트
+      if (state.temporaryImagePath != null) {
+        await updateProfileImage();
+      }
+
+      /// 닉네임 업데이트
+      if (state.nicknameInput != null) {
+        await _repository.updateNickname(
+          uid: uid,
+          nickname: state.nicknameInput!,
+        );
+      }
+      state = state.copyWith(isUploading: false);
+    } catch (e) {
+      log('프로필 업데이트 실패: $e');
     }
   }
 }
