@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
-import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
+import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view_detail.dart';
 
@@ -50,14 +50,11 @@ class _ResultViewState extends ConsumerState<ResultView> {
   Widget build(BuildContext context) {
     final state = ref.watch(preferenceTestStateNotifierProvider);
     final result = state.value?.result;
-    final profileState = ref.watch(profileViewModelProvider);
-    final nickname = profileState.currentNickname;
-    if (nickname == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
     final typeCode = result?['type'];
     final description = result?['details'];
     final imagePath = resultImageMap[typeCode] ?? '';
+
+    final appUserAsync = ref.watch(appUserViewModelProvider);
 
     if (state.isLoading || typeCode == null || description == null) {
       return const Center(child: CircularProgressIndicator());
@@ -134,101 +131,106 @@ class _ResultViewState extends ConsumerState<ResultView> {
               )
               : null,
       backgroundColor: AppColors.white,
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: appUserAsync.when(
+        data:
+            (data) => Stack(
+              children: [
+                ListView(
                   children: [
-                    Text(
-                      '$nickname님의 여행 성향은 \n$typeCode예요!',
-                      style: AppTextStyles.onboardingTitle.copyWith(
-                        fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${data.nickname}님의 여행 성향은 \n$typeCode예요!',
+                            style: AppTextStyles.onboardingTitle.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${data.nickname}님의 여행 성향은 마이페이지에서 \n언제든지 확인할 수 있어요',
+                            style: AppTextStyles.onboardingSubTitle,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '$nickname님의 여행 성향은 마이페이지에서 \n언제든지 확인할 수 있어요',
-                      style: AppTextStyles.onboardingSubTitle,
+
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: ClipOval(
+                          child: Container(
+                            width: 198,
+                            height: 198,
+                            color: AppColors.white,
+                            child:
+                                imagePath.isNotEmpty
+                                    ? Image.asset(imagePath, fit: BoxFit.cover)
+                                    : const Icon(
+                                      CupertinoIcons.exclamationmark_triangle,
+                                      size: 48,
+                                      color: Colors.red,
+                                    ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        description,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.preferenceDescriptionText,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (_) => const ResultViewDetail(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('선택지 보기', style: AppTextStyles.helperText),
+                          const SizedBox(width: 4),
+                          Icon(
+                            CupertinoIcons.chevron_right,
+                            size: 16,
+                            color: AppColors.grey[400],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                widget.showButtons
+                    ? Column(
+                      children: [
+                        Spacer(),
 
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: ClipOval(
-                    child: Container(
-                      width: 198,
-                      height: 198,
-                      color: AppColors.white,
-                      child:
-                          imagePath.isNotEmpty
-                              ? Image.asset(imagePath, fit: BoxFit.cover)
-                              : const Icon(
-                                CupertinoIcons.exclamationmark_triangle,
-                                size: 48,
-                                color: Colors.red,
-                              ),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  description,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.preferenceDescriptionText,
-                ),
-              ),
-              SizedBox(height: 10),
-              CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (_) => const ResultViewDetail(),
-                    ),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('선택지 보기', style: AppTextStyles.helperText),
-                    const SizedBox(width: 4),
-                    Icon(
-                      CupertinoIcons.chevron_right,
-                      size: 16,
-                      color: AppColors.grey[400],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          widget.showButtons
-              ? Column(
-                children: [
-                  Spacer(),
-
-                  ResultActionButtons(onRestart: widget.onRestart),
-                  const SizedBox(height: 34),
-                ],
-              )
-              : SizedBox.shrink(),
-        ],
+                        ResultActionButtons(onRestart: widget.onRestart),
+                        const SizedBox(height: 34),
+                      ],
+                    )
+                    : SizedBox.shrink(),
+              ],
+            ),
+        error: (e, st) => Text('성향 검사 결과 불러오기 실패. 앱을 재시작해 주세요.'),
+        loading: () => CircularProgressIndicator(),
       ),
     );
   }

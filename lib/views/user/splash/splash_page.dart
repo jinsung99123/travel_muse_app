@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
@@ -30,17 +31,24 @@ class _SplashScreenState extends ConsumerState<SplashPage> {
     Widget nextPage = const LoginPage();
 
     final authState = ref.read(authViewModelProvider);
-    log('유저 정보가 있는가? : ${authState.user != null}');
+    log('구글/애플 로그인 정보가 있는가? : ${authState.user != null}');
     if (authState.user != null) {
-      final viewmodel = ref.read(authViewModelProvider.notifier);
-      await viewmodel.isUserNew();
+      final hasAppUserDoc = await ref
+          .read(appUserViewModelProvider.notifier)
+          .doesUserDocumentExist(authState.user!.uid);
 
-      final updatedState = ref.read(authViewModelProvider);
-      log('유저 문서가 있는가? : ${updatedState.isUserNew != null}');
-      if (updatedState.isUserNew != null) {
-        nextPage = const OnboardingPage();
-      } else {
-        nextPage = const HomePage();
+      log('appUser 문서가 있는가? $hasAppUserDoc');
+      if (hasAppUserDoc) {
+        final appUserState =
+            await ref.read(appUserViewModelProvider.notifier).fetchAppUser();
+        final nickname = appUserState?.nickname;
+        log('온보딩이 완료되었는가? ${nickname != null}');
+
+        if (nickname == null) {
+          nextPage = const OnboardingPage();
+        } else {
+          nextPage = const HomePage();
+        }
       }
     }
 

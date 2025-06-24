@@ -53,13 +53,15 @@ class OnboardingPage extends ConsumerWidget {
                     isActivated: canUpdate,
                     onPressed: () {
                       if (canUpdate) {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return const TermsAgreementBottomSheet();
-                          },
-                        );
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!context.mounted) return;
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder:
+                                (context) => const TermsAgreementBottomSheet(),
+                          );
+                        });
                       }
                     },
                   ),

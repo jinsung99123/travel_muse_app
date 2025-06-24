@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/svg_icon.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
+import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
-import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
 class InfoBanner extends ConsumerWidget {
@@ -13,11 +13,7 @@ class InfoBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileState = ref.watch(profileViewModelProvider);
-    final nickname = profileState.currentNickname;
-    if (nickname == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    final appUserAsync = ref.watch(appUserViewModelProvider);
     final planState = ref.watch(calendarLocationViewModelProvider);
     final userId = ref.watch(authViewModelProvider).user?.uid;
     final planId = ref.watch(
@@ -85,76 +81,85 @@ class InfoBanner extends ConsumerWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '$nickname님,\n${calculateRemainingDays(start) == '여행 중이에요!' || calculateRemainingDays(start) == '오늘부터 여행이에요!' ? '${getMainRegion(region)} ${calculateRemainingDays(start)}' : '${getMainRegion(region)} 여행까지 ${calculateRemainingDays(start)}'}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: AppColors.black,
-                height: 1.5,
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '${end.difference(start).inDays}박 ${end.difference(start).inDays + 1}일 | ${formatDate(start)} - ${formatDate(end)}',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.grey[400],
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              if (userId == null) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('로그인 정보가 없습니다.')));
-                return;
-              }
-
-              if (planId == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('유효한 계획 ID가 없습니다.')),
-                );
-                return;
-              }
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => SchedulePage(userId: userId, planId: planId),
-                ),
-              );
-            },
-            style: TextButton.styleFrom(padding: EdgeInsets.zero),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '자세히 보기',
-                    style: TextStyle(fontSize: 14, color: AppColors.grey[300]),
+    return appUserAsync.when(
+      data:
+          (data) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${data.nickname}님,\n${calculateRemainingDays(start) == '여행 중이에요!' || calculateRemainingDays(start) == '오늘부터 여행이에요!' ? '${getMainRegion(region)} ${calculateRemainingDays(start)}' : '${getMainRegion(region)} 여행까지 ${calculateRemainingDays(start)}'}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.black,
+                      height: 1.5,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  SvgIcon.rightArrow(width: 24, height: 24),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${end.difference(start).inDays}박 ${end.difference(start).inDays + 1}일 | ${formatDate(start)} - ${formatDate(end)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.grey[400],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('로그인 정보가 없습니다.')),
+                      );
+                      return;
+                    }
+
+                    if (planId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('유효한 계획 ID가 없습니다.')),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (_) => SchedulePage(userId: userId, planId: planId),
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '자세히 보기',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.grey[300],
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        SvgIcon.rightArrow(width: 24, height: 24),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, st) => const Text('사용자 정보를 불러올 수 없습니다.'),
     );
   }
 }

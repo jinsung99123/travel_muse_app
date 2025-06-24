@@ -17,7 +17,9 @@ class AppUserRepository {
 
     final user = FirebaseAuth.instance.currentUser;
     final provider = user?.providerData.first;
-    if (provider == null) return;
+    if (provider == null) {
+      return;
+    }
 
     if (!snapshot.exists) {
       await docRef.set({
@@ -32,6 +34,11 @@ class AppUserRepository {
         'gender': null,
       });
     }
+  }
+
+  Future<bool> doesUserDocumentExist(String uid) async {
+    final doc = await _firestore.collection('appUser').doc(uid).get();
+    return doc.exists;
   }
 
   /// 데이터베이스에서 uid로 해당 유저 정보 get
