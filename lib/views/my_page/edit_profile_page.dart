@@ -37,6 +37,7 @@ class EditProfilePage extends ConsumerWidget {
                     navigator.pop(true);
                   },
                   isActivated: state.canEditProfile,
+                  isUploading: state.isUploading,
                 ),
                 SizedBox(height: 34),
               ],

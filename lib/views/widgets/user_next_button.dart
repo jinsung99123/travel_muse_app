@@ -8,10 +8,12 @@ class UserNextButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     required this.isActivated,
+    required this.isUploading,
   });
   final String text;
   final VoidCallback onPressed;
   final bool isActivated;
+  final bool isUploading;
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +29,30 @@ class UserNextButton extends StatelessWidget {
           height: 56,
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: isActivated ? AppColors.primary[300] : AppColors.grey[50],
+            color:
+                !isUploading
+                    ? isActivated
+                        ? AppColors.primary[300]
+                        : AppColors.grey[50]
+                    : AppColors.grey[50],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
           ),
           child: Center(
-            child: Text(
-              text,
-              style:
-                  isActivated
-                      ? AppTextStyles.avaliableButtonText
-                      : AppTextStyles.unavaliableButtonText,
-            ),
+            child:
+                !isUploading
+                    ? Text(
+                      text,
+                      style:
+                          isActivated
+                              ? AppTextStyles.avaliableButtonText
+                              : AppTextStyles.unavaliableButtonText,
+                    )
+                    : CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
           ),
         ),
       ),

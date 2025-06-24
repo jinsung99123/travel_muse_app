@@ -19,6 +19,8 @@ class ProfileState {
     //
     this.testId = const [],
     this.planId = const [],
+
+    this.isUploading = false,
   });
   final String? profileImageUrl;
   final String? temporaryImagePath;
@@ -40,6 +42,8 @@ class ProfileState {
   final List<String> testId;
   final List<String> planId;
 
+  final bool isUploading;
+
   ProfileState copyWith({
     String? profileImageUrl,
     String? temporaryImagePath,
@@ -60,6 +64,8 @@ class ProfileState {
     //
     List<String>? testId,
     List<String>? planId,
+
+    bool? isUploading,
   }) {
     return ProfileState(
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
@@ -81,6 +87,8 @@ class ProfileState {
       //
       testId: testId ?? this.testId,
       planId: planId ?? this.planId,
+
+      isUploading: isUploading ?? this.isUploading,
     );
   }
 }
