@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
+import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_images.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_meta.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
   const PostDetailPage({super.key, required this.post});
@@ -20,7 +22,7 @@ class PostDetailPage extends ConsumerStatefulWidget {
 
 class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   late Post currentPost;
-  String? nickname;
+  String? nickname; 
   String? profileUrl;
 
   @override
@@ -54,7 +56,6 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
   void _showOptions() {
     final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser?.uid != currentPost.userId) return;
 
     showModalBottomSheet(
       context: context,
@@ -63,51 +64,91 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  leading: const Icon(Icons.edit),
-                  title: const Text('수정하기'),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PostWritePage(post: currentPost),
-                      ),
-                    );
-                    if (mounted) await _refreshPost();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text('삭제하기'),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder:
-                          (_) => AlertDialog(
-                            title: const Text('삭제 확인'),
-                            content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: const Text('취소'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: const Text('삭제'),
-                              ),
-                            ],
-                          ),
-                    );
-                    if (confirm == true) {
-                      await ref
-                          .read(postViewModelProvider.notifier)
-                          .deletePost(currentPost.postId);
-                      if (mounted) Navigator.pop(context);
-                    }
-                  },
-                ),
+                if (currentUser?.uid == currentPost.userId) ...[
+                  ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: const Text('수정하기'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PostWritePage(post: currentPost),
+                        ),
+                      );
+                      if (mounted) await _refreshPost();
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: const Text('삭제하기'),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder:
+                            (_) => AlertDialog(
+                              title: const Text('삭제 확인'),
+                              content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.pop(context, false),
+                                  child: const Text('취소'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text('삭제'),
+                                ),
+                              ],
+                            ),
+                      );
+                      if (confirm == true) {
+                        await ref
+                            .read(postViewModelProvider.notifier)
+                            .deletePost(currentPost.postId);
+                        if (mounted) Navigator.pop(context);
+                      }
+                    },
+                  ),
+                ] else ...[
+                  ListTile(
+                    title: const Text(
+                      '신고하기',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context); // 바텀시트 닫기
+                      showReportReasonDialog(context, (
+                        reasonCode,
+                        reasonText,
+                      ) async {
+                        await ref
+                            .read(reportViewModelProvider.notifier)
+                            .submit(
+                              targetType: 'post',
+                              targetId: currentPost.postId,
+                              reporterId: currentUser!.uid,
+                              targetOwnerId: currentPost.userId,
+                              reasonCode: reasonCode,
+                              reasonText: reasonText,
+                            );
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('신고가 접수되었습니다.')),
+                          );
+                        }
+                      });
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    title: const Text('닫기', textAlign: TextAlign.center),
+                    onTap: () => Navigator.pop(context),
+                  ),
+                ],
               ],
             ),
           ),
