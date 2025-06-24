@@ -80,27 +80,6 @@ final marketingOptional = Terms(
   url: 'https://www.notion.so/21cc9d67bce980ab9579ebf380ad5d2c?pvs=12',
 );
 
-final communityPolicy = Terms(
-  id: 'community_policy',
-  title: '커뮤니티 운영정책',
-  content: '커뮤니티 운영정책 내용입니다.',
-  isRequired: true,
-  version: '1.0',
-  createdAt: DateTime.now(),
-  order: 5,
-  url: 'https://www.notion.so/21cc9d67bce980b1a257c3a7dcf39cc2',
-);
-
-final locationRequired = Terms(
-  id: 'location_required',
-  title: '위치정보 이용동의',
-  content: '위치정보 이용동의 내용입니다.',
-  isRequired: true,
-  version: '1.0',
-  createdAt: DateTime.now(),
-  order: 6,
-  url: 'https://www.notion.so/21cc9d67bce9802e92f5fbaceffe6190',
-);
 
 Future<void> uploadAllTerms() async {
   final repo = TermsRepository();
@@ -108,6 +87,4 @@ Future<void> uploadAllTerms() async {
   await repo.updateOrUploadTerms(serviceRequired);
   await repo.updateOrUploadTerms(privacyRequired);
   await repo.updateOrUploadTerms(marketingOptional);
-  await repo.updateOrUploadTerms(communityPolicy);
-  await repo.updateOrUploadTerms(locationRequired);
 }
