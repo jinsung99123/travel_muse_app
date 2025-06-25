@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/action_button_row.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_description.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_info_section.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/place_map_view.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/place_stats_row.dart';
 
 class RecommendedPlaceDetailSheet extends StatefulWidget {
   const RecommendedPlaceDetailSheet({

@@ -42,7 +42,13 @@ class _RecommendedPlaceDetailPageState
                 color: AppColors.grey[500],
                 size: 24,
               ),
-              onPressed: () => Navigator.pop(context),
+              onPressed:
+                  () => Navigator.pop(context, {
+                    'title': place.title,
+                    'lat': place.latLng.latitude,
+                    'lng': place.latLng.longitude,
+                    'address': place.address,
+                  }),
             ),
             const SizedBox(width: 4),
             Text(
