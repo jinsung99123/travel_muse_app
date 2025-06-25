@@ -33,6 +33,7 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
     });
 
     final profileViewmodel = ref.read(profileViewModelProvider.notifier);
+    final profileState = ref.watch(profileViewModelProvider);
 
     return Container(
       width: double.infinity,
@@ -52,6 +53,7 @@ class TermsAgreementBottomSheet extends ConsumerWidget {
             child: UserNextButton(
               text: '가입 완료',
               isActivated: agreementState.isAllRequiredAgreed,
+              isUploading: profileState.isUploading,
               onPressed: () async {
                 final navigator = Navigator.of(context);
                 if (agreementState.isAllRequiredAgreed) {

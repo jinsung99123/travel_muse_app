@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:travel_muse_app/models/user/profile_state.dart';
 import 'package:travel_muse_app/repositories/user/app_user_repository.dart';
@@ -29,6 +32,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     return ProfileState(
       nicknameMessage: _defaultNicknameMessage,
       birthDateMessage: _defaultBirthDateMessage,
+      isUploading: false,
     );
   }
 
@@ -58,11 +62,14 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   /// ------------------------------ 이미지 ----------------------------------
   ///
 
-  /// 사용자가 고른 이미지 로컬에 저장
-  Future<void> savePickedImageToLocal() async {
+  /// 사용자가 고른 이미지 리사이징 + 로컬에 저장
+  Future<void> savePickedImageToLocal(int size) async {
     final xfile = await _picker.pickImage(source: ImageSource.gallery);
     if (xfile == null) return;
     pickedImage = File(xfile.path);
+
+    final resized = await resizeImage(pickedImage!, size);
+    if (resized == null) return;
 
     final directory = await getApplicationDocumentsDirectory();
     final customFolder = Directory('${directory.path}/profile_images');
@@ -74,11 +81,50 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final localImagePath = '${customFolder.path}/$fileName';
 
-    await File(pickedImage!.path).copy(localImagePath);
+    await resized.copy(localImagePath);
 
     log('이미지 저장 성공 : $localImagePath ');
     state = state.copyWith(temporaryImagePath: localImagePath);
     checkEditAvailable();
+  }
+
+  /// 이미지 리사이징
+  Future<File?> resizeImage(File file, int size) async {
+    final originalBytes = await file.readAsBytes();
+    final decodedImage = img.decodeImage(originalBytes);
+    if (decodedImage == null) return null;
+
+    final originalWidth = decodedImage.width;
+    final originalHeight = decodedImage.height;
+
+    int targetWidth, targetHeight;
+
+    if (originalWidth < originalHeight) {
+      targetWidth = size;
+      targetHeight = (originalHeight * (size / originalWidth)).round();
+    } else {
+      targetHeight = size;
+      targetWidth = (originalWidth * (size / originalHeight)).round();
+    }
+
+    final directory = await getTemporaryDirectory();
+    final targetPath = path.join(
+      directory.path,
+      'resized_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+
+    final result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      minWidth: targetWidth,
+      minHeight: targetHeight,
+      quality: 85,
+      format: CompressFormat.jpeg,
+    );
+    if (result != null) {
+      log('리사이징 완료');
+    }
+    return result != null ? File(result.path) : null;
   }
 
   /// 프로필 이미지 업데이트
@@ -317,6 +363,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     final uid = currentUser!.uid;
 
     try {
+      state = state.copyWith(isUploading: true);
+
       /// 프로필이미지 업데이트
       if (state.temporaryImagePath != null) {
         await updateProfileImage();
@@ -336,6 +384,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
       /// 성별 업데이트
       await _repository.updateGender(uid: uid, gender: state.gender!);
+      state = state.copyWith(isUploading: false);
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }
@@ -360,17 +409,24 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
     final uid = currentUser!.uid;
 
-    /// 프로필이미지 업데이트
-    if (state.temporaryImagePath != null) {
-      await updateProfileImage();
-    }
+    try {
+      state = state.copyWith(isUploading: true);
 
-    /// 닉네임 업데이트
-    if (state.nicknameInput != null) {
-      await _repository.updateNickname(
-        uid: uid,
-        nickname: state.nicknameInput!,
-      );
+      /// 프로필이미지 업데이트
+      if (state.temporaryImagePath != null) {
+        await updateProfileImage();
+      }
+
+      /// 닉네임 업데이트
+      if (state.nicknameInput != null) {
+        await _repository.updateNickname(
+          uid: uid,
+          nickname: state.nicknameInput!,
+        );
+      }
+      state = state.copyWith(isUploading: false);
+    } catch (e) {
+      log('프로필 업데이트 실패: $e');
     }
   }
 }
