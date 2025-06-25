@@ -46,14 +46,37 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
 
-    if (pickedFiles.isNotEmpty) {
-      setState(() {
-        imagePaths.addAll(pickedFiles.map((e) => e.path));
-      });
+    if (pickedFiles.isEmpty) return;
+
+    final remaining = 5 - imagePaths.length;
+
+    if (remaining <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
+      );
+      return;
+    }
+
+    final addableFiles = pickedFiles.take(remaining).toList();
+
+    setState(() {
+      imagePaths.addAll(addableFiles.map((e) => e.path));
+    });
+
+    if (addableFiles.length < pickedFiles.length) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')));
     }
   }
 
   void _submitPost() async {
+    if (imagePaths.length > 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
+      );
+      return;
+    }
     final titleError = PostValidator.validateTitle(titleController.text);
     final contentError = PostValidator.validateContent(contentController.text);
 
@@ -148,15 +171,40 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
                         ),
                       ),
                     const SizedBox(height: 16),
-                    if (selectedPlace != null)
-                      PlacePreviewCard(
-                        title: selectedPlace!['title'] ?? '',
-                        address: selectedPlace!['address'] ?? '',
-                        latLng: LatLng(
-                          (selectedPlace!['lat'] as num).toDouble(),
-                          (selectedPlace!['lng'] as num).toDouble(),
-                        ),
+                    if (selectedPlace != null) ...[
+                      Stack(
+                        children: [
+                          PlacePreviewCard(
+                            title: selectedPlace!['title'] ?? '',
+                            address: selectedPlace!['address'] ?? '',
+                            latLng: LatLng(
+                              (selectedPlace!['lat'] as num).toDouble(),
+                              (selectedPlace!['lng'] as num).toDouble(),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedPlace = null;
+                                });
+                              },
+                              child: const CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ],
                   ],
                 ),
               ),
@@ -171,7 +219,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
             if (imagePaths.isNotEmpty) ...[
               const SizedBox(height: 12),
               ImagePreviewList(
-                imagePaths: imagePaths,
+                imagePaths: imagePaths.take(5).toList(),
                 onRemove: (index) => setState(() => imagePaths.removeAt(index)),
               ),
             ],
