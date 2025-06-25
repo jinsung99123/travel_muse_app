@@ -24,7 +24,7 @@ class AdminReportRepository {
         final userId = data['userId'];
 
         final userSnapshot =
-            await _firestore.collection('users').doc(userId).get();
+            await _firestore.collection('appUser').doc(userId).get();
         final nickname =
             userSnapshot.exists
                 ? (userSnapshot.data()?['nickname'] ?? '알 수 없음')
@@ -51,7 +51,7 @@ class AdminReportRepository {
         final userId = data['userId'];
 
         final userSnapshot =
-            await _firestore.collection('users').doc(userId).get();
+            await _firestore.collection('appUser').doc(userId).get();
         final nickname =
             userSnapshot.exists
                 ? (userSnapshot.data()?['nickname'] ?? '알 수 없음')
