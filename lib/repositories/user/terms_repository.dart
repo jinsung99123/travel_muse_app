@@ -102,7 +102,6 @@ final locationRequired = Terms(
   url: 'https://www.notion.so/21cc9d67bce9802e92f5fbaceffe6190',
 );
 
-
 Future<void> uploadAllTerms() async {
   final repo = TermsRepository();
   await repo.updateOrUploadTerms(ageRequired);
