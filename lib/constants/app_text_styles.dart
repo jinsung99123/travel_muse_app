@@ -134,4 +134,31 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.50,
   );
+
+  // 포스트 리스트 타이틀 텍스트
+  static TextStyle postListTitle = TextStyle(
+    color: AppColors.black,
+    fontSize: 18,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
+
+  // 포스트 리스트 컨텐츠 텍스트
+  static TextStyle postListContent = TextStyle(
+    color: AppColors.grey[500],
+    fontSize: 16,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
+
+  // 포스트 리스트 포스트정보
+  static TextStyle postListInfo = TextStyle(
+    color: AppColors.grey[300],
+    fontSize: 14,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
 }
