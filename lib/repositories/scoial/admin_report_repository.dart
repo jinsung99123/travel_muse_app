@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_muse_app/models/scoial/reported_post.dart';
-import 'package:travel_muse_app/models/scoial/reproted_comment.dart';
+import 'package:travel_muse_app/models/scoial/reported_comment.dart';
 
 /// 관리자용 신고 콘텐츠 관리 리포지토리
 class AdminReportRepository {

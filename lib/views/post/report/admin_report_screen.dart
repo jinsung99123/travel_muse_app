@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/models/scoial/reported_comment.dart';
 import 'package:travel_muse_app/models/scoial/reported_post.dart';
-import 'package:travel_muse_app/models/scoial/reproted_comment.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/admin_report_provider.dart';
 import 'package:travel_muse_app/viewmodels/scoial/widgets/reported_card.dart';
