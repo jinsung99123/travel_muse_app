@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
+import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/action_button_row.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
@@ -9,23 +11,24 @@ import 'package:travel_muse_app/views/home/recommended_place/widgets/place_info_
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_map_view.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_stats_row.dart';
 
-class RecommendedPlaceDetailPage extends StatefulWidget {
+class RecommendedPlaceDetailPage extends ConsumerStatefulWidget {
   const RecommendedPlaceDetailPage({super.key, required this.place});
   final HomePlace place;
 
   @override
-  State<RecommendedPlaceDetailPage> createState() =>
+  ConsumerState<RecommendedPlaceDetailPage> createState() =>
       _RecommendedPlaceDetailPageState();
 }
 
 class _RecommendedPlaceDetailPageState
-    extends State<RecommendedPlaceDetailPage> {
+    extends ConsumerState<RecommendedPlaceDetailPage> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     final place = widget.place;
+    final isScrapped = ref.watch(scrapViewModelProvider).contains(place.id);
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -42,13 +45,12 @@ class _RecommendedPlaceDetailPageState
                 color: AppColors.grey[500],
                 size: 24,
               ),
-              onPressed:
-                  () => Navigator.pop(context, {
-                    'title': place.title,
-                    'lat': place.latLng.latitude,
-                    'lng': place.latLng.longitude,
-                    'address': place.address,
-                  }),
+              onPressed: () => Navigator.pop(context, {
+                'title': place.title,
+                'lat': place.latLng.latitude,
+                'lng': place.latLng.longitude,
+                'address': place.address,
+              }),
             ),
             const SizedBox(width: 4),
             Text(
@@ -60,10 +62,19 @@ class _RecommendedPlaceDetailPageState
                 fontFamily: 'Pretendard',
               ),
             ),
+            Spacer(),
+            IconButton(
+              icon: Icon(
+                isScrapped ? Icons.bookmark : Icons.bookmark_border,
+                color: isScrapped ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                ref.read(scrapViewModelProvider.notifier).toggleScrap(place);
+              },
+            ),
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: AppColors.primary[50],
         foregroundColor: AppColors.primary[300],
@@ -90,21 +101,21 @@ class _RecommendedPlaceDetailPageState
               imageUrls: [place.thumbnail],
               currentPage: _currentPage,
               pageController: _pageController,
-              onPageChanged: (index) => setState(() => _currentPage = index),
+              onPageChanged: (index) =>
+                  setState(() => _currentPage = index),
             ),
             const SizedBox(height: 16),
             PlaceStatsRow(),
             const SizedBox(height: 12),
-            LocationRow(place: widget.place),
+            LocationRow(place: place),
             const SizedBox(height: 24),
             const ActionButtonRow(),
             const SizedBox(height: 24),
             PlaceDescription(),
             const SizedBox(height: 24),
-            PlaceMapView(place: widget.place),
+            PlaceMapView(place: place),
             const SizedBox(height: 16),
-            PlaceInfoSection(place: widget.place),
-            // const PlaceDirectionInfo(), 추후 추가 고려
+            PlaceInfoSection(place: place),
             const SizedBox(height: 80),
           ],
         ),
