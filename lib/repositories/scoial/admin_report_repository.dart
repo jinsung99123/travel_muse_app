@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_muse_app/models/scoial/reported_post.dart';
 import 'package:travel_muse_app/models/scoial/reported_comment.dart';
+import 'package:travel_muse_app/models/scoial/reported_post.dart';
 
 /// 관리자용 신고 콘텐츠 관리 리포지토리
 class AdminReportRepository {
@@ -24,7 +24,7 @@ class AdminReportRepository {
         final userId = data['userId'];
 
         final userSnapshot =
-            await _firestore.collection('users').doc(userId).get();
+            await _firestore.collection('appUser').doc(userId).get();
         final nickname =
             userSnapshot.exists
                 ? (userSnapshot.data()?['nickname'] ?? '알 수 없음')
@@ -51,7 +51,7 @@ class AdminReportRepository {
         final userId = data['userId'];
 
         final userSnapshot =
-            await _firestore.collection('users').doc(userId).get();
+            await _firestore.collection('appUser').doc(userId).get();
         final nickname =
             userSnapshot.exists
                 ? (userSnapshot.data()?['nickname'] ?? '알 수 없음')
