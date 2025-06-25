@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/views/post/widgets/list/bottom_sheet_category_filter.dart';
 
 class MoreTagButton extends StatelessWidget {
   const MoreTagButton({super.key});
@@ -9,7 +10,11 @@ class MoreTagButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => const BottomSheetCategoryFilter(),
+        );
       },
       child: SizedBox(
         width: 44,

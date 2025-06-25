@@ -24,4 +24,9 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
       log('포스트 리스트 초기값 가져오기 실패 : $e');
     }
   }
+
+  /// 필터 상태 업데이트
+  void setFilterState(String? filter) {
+    state = AsyncData(state.value!.copyWith(filter: filter));
+  }
 }
