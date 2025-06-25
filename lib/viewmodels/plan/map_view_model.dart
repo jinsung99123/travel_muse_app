@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/map_state.dart';
 import 'package:travel_muse_app/repositories/plan/map_repository.dart';
+import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/utills/marker_helper.dart';
@@ -128,43 +129,44 @@ class MapViewModel extends StateNotifier<MapState> {
       icon: _currentIcon,
 
       // onTap 로직만 수정
-      onTap: (place) async {
+      onTap: (place) {
         onTap(place);
 
         if (isSelectMode && context != null) {
-          // 바텀시트 띄우고 결과 리턴 기다림
-          final result = await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (_) {
-              return DraggableScrollableSheet(
-                initialChildSize: 0.6,
-                minChildSize: 0.4,
-                maxChildSize: 0.95,
-                expand: false,
-                builder: (context, scrollController) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(16),
+          Future.microtask(() async {
+            final result = await showModalBottomSheet(
+              // ignore: use_build_context_synchronously
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) {
+                return DraggableScrollableSheet(
+                  initialChildSize: 0.6,
+                  minChildSize: 0.4,
+                  maxChildSize: 0.95,
+                  expand: false,
+                  builder: (context, scrollController) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
                       ),
-                    ),
-                    child: RecommendedPlaceDetailSheet(
-                      place: HomePlace.fromMap(place),
-                      scrollController: scrollController,
-                    ),
-                  );
-                },
-              );
-            },
-          );
+                      child: RecommendedPlaceDetailSheet(
+                        place: HomePlace.fromMap(place),
+                        scrollController: scrollController,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
 
-          // 사용자가 '선택하기' 눌렀을 경우 글작성 페이지로 값 넘김
-          if (result != null && context.mounted) {
-            Navigator.pop(context, result);
-          }
+            if (result != null && context.mounted) {
+              Navigator.pop(context, result);
+            }
+          });
         }
       },
 
@@ -229,5 +231,32 @@ class MapViewModel extends StateNotifier<MapState> {
       dayPlaces: newDayPlaces,
       selectedPlace: convertedPlaces.isNotEmpty ? convertedPlaces.first : null,
     );
+  }
+
+  Future<void> moveCameraToPlace({
+    required GoogleMapController mapController,
+    required String query,
+    required PlaceSearchService placeService,
+  }) async {
+    try {
+      final results = await placeService.search(query);
+      if (results.isEmpty) return;
+
+      final first = results.first;
+      final latLng = LatLng(first.latitude, first.longitude);
+
+      // 지도 카메라 이동
+      await mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+
+      // 선택된 장소 상태에 반영
+      selectPlace({
+        'title': first.name,
+        'lat': first.latitude,
+        'lng': first.longitude,
+        'address': first.address,
+      });
+    } catch (e) {
+      debugPrint('❌ moveCameraToPlace 실패: $e');
+    }
   }
 }
