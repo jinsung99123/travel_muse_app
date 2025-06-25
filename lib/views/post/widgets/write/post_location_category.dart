@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
+import 'package:travel_muse_app/views/plan/location/select_place_map_page.dart';
 import 'package:travel_muse_app/views/post/widgets/write/bottom_sheet_category.dart';
 
 class PostLocationCategory extends StatelessWidget {
@@ -28,7 +29,7 @@ class PostLocationCategory extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder:
-                    (_) => const MapPage(
+                    (_) => const SelectPlaceMapPage(
                       planId: 'place-select-mode',
                       isSelectMode: true,
                     ),
