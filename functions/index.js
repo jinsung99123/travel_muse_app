@@ -108,3 +108,39 @@ exports.generateThumbnailOnPostCreate = functions.firestore
 
         return null;
     });
+
+
+exports.setAdminByEmail = functions.https.onCall(async (data, context) => {
+    const requester = await admin.auth().getUser(context.auth.uid);
+    if (!requester.customClaims?.admin) {
+        throw new functions.https.HttpsError('permission-denied', '관리자만 실행할 수 있습니다.');
+    }
+
+    const email = data.email;
+
+    try {
+        const user = await admin.auth().getUserByEmail(email);
+        await admin.auth().setCustomUserClaims(user.uid, { admin: true });
+        return { message: `${email}에게 관리자 권한이 부여되었습니다.` };
+    } catch (error) {
+        throw new functions.https.HttpsError('not-found', '해당 이메일을 가진 사용자를 찾을 수 없습니다.');
+    }
+    });
+
+exports.revokeAdminByEmail = functions.https.onCall(async (data, context) => {
+  const requester = await admin.auth().getUser(context.auth.uid);
+  if (!requester.customClaims?.admin) {
+    throw new functions.https.HttpsError('permission-denied', '관리자만 실행할 수 있습니다.');
+  }
+
+  const email = data.email;
+
+  try {
+    const user = await admin.auth().getUserByEmail(email);
+    await admin.auth().setCustomUserClaims(user.uid, {}); 
+    return { message: `${email} 의 관리자 권한이 박탈되었습니다.` };
+  } catch (error) {
+    throw new functions.https.HttpsError('not-found', '해당 이메일의 사용자를 찾을 수 없습니다.');
+  }
+});
+
