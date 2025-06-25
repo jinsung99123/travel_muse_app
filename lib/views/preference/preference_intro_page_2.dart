@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
-class PreferenceIntroPage2 extends StatelessWidget {
+class PreferenceIntroPage2 extends ConsumerWidget {
   const PreferenceIntroPage2({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appUserState = ref.watch(appUserViewModelProvider);
+    final nickname = appUserState.value?.nickname ?? '';
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -25,9 +30,11 @@ class PreferenceIntroPage2 extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Ai 기반 맞춤 추천을 위해\n홍길동님의 여행 성향을 알려주세요',
-                        style: TextStyle(
+                      Text(
+                        nickname.isNotEmpty
+                            ? 'Ai 기반 맞춤 추천을 위해\n$nickname님의 여행 성향을 알려주세요'
+                            : 'Ai 기반 맞춤 추천을 위해\n여행 성향을 알려주세요',
+                        style: const TextStyle(
                           color: Color(0xFF26272A),
                           fontSize: 24,
                           fontFamily: 'Pretendard',
