@@ -61,6 +61,23 @@ class HomePlace {
       distance: map['distance'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'subtitle': subtitle,
+      'address': address,
+      'image': thumbnail,
+      'lat': latLng.latitude,
+      'lng': latLng.longitude,
+      'category': category,
+      'phone': phone,
+      'placeUrl': placeUrl,
+      'isFavorite': isFavorite,
+      'distance': distance,
+    };
+  }
 }
 
 extension PlaceMapping on Place {
