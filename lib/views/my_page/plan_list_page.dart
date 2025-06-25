@@ -9,6 +9,7 @@ import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart'
 import 'package:travel_muse_app/utills/format_month_day.dart';
 import 'package:travel_muse_app/utills/format_region.dart';
 import 'package:travel_muse_app/viewmodels/plan/schedule_view_model.dart';
+import 'package:travel_muse_app/views/my_page/widgets/delete_plan_dialog.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
@@ -20,8 +21,6 @@ class PlanListPage extends ConsumerStatefulWidget {
 }
 
 class _PlanListPageState extends ConsumerState<PlanListPage> {
-  bool _isEditMode = false;
-
   @override
   void initState() {
     super.initState();
@@ -31,35 +30,26 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
     });
   }
 
-  Future<void> _showDeleteDialog(String planId) async {
-    final confirm = await showDialog<bool>(
+  Future<bool> _showDeleteDialog(String planId) async {
+    final result = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('일정 삭제'),
-        content: const Text('이 일정을 삭제하시겠습니까?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('취소'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('삭제'),
-          ),
-        ],
-      ),
+      barrierDismissible: false,
+      builder: (ctx) => const DeletePlanDialog(),
     );
 
-    if (confirm == true) {
+    if (result == true) {
       await ref.read(scheduleViewModelProvider.notifier).deletePlanById(planId);
       await ref.read(scheduleViewModelProvider.notifier).fetchSavedPlans();
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('일정이 삭제되었습니다.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('일정이 삭제되었습니다.')));
       }
+      return true;
     }
+
+    return false;
   }
 
   @override
@@ -72,59 +62,54 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
       appBar: AppBar(
         title: const Text('나의 여행', style: AppTextStyles.appBarTitle),
         centerTitle: false,
-        actions: [
-          if (savedPlans.isNotEmpty)
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _isEditMode = !_isEditMode;
-                });
-              },
-              child: Text(
-                _isEditMode ? '완료' : '편집',
-                style: const TextStyle(color: Colors.blue),
-              ),
-            ),
-        ],
       ),
       body: SafeArea(
-        child: savedPlans.isEmpty
-            ? const Center(child: Text('여행 일정이 없습니다.'))
-            : ListView.builder(
-                itemCount: savedPlans.length,
-                itemBuilder: (context, index) {
-                  final plan = savedPlans[index];
-                  return Row(
-                    children: [
-                      if (_isEditMode)
-                        IconButton(
-                          icon:  Icon(Icons.delete, color: AppColors.primary[300]!),
-                          onPressed: () => _showDeleteDialog(plan.planId),
+        child:
+            savedPlans.isEmpty
+                ? const Center(child: Text('여행 일정이 없습니다.'))
+                : ListView.builder(
+                  itemCount: savedPlans.length,
+                  itemBuilder: (context, index) {
+                    final plan = savedPlans[index];
+                    return Dismissible(
+                      key: Key(plan.planId),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: AppColors.error,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: const Text(
+                          '삭제',
+                          style: TextStyle(color: AppColors.white,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16
+                          ),
                         ),
-                      Expanded(
-                        child: MyPageListItem(
-                          itemTitle:
-                              '${formatMonthDay(plan.startDate)}~${formatMonthDay(plan.endDate)} ${formatRegion(plan.region)} 여행',
-                          index: index,
-                          onTap: () {
-                            if (!_isEditMode) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SchedulePage(
+                      ),
+                      confirmDismiss: (direction) async {
+                        return await _showDeleteDialog(plan.planId);
+                      },
+                      child: MyPageListItem(
+                        itemTitle:
+                            '${formatMonthDay(plan.startDate)}~${formatMonthDay(plan.endDate)} ${formatRegion(plan.region)} 여행',
+                        index: index,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => SchedulePage(
                                     userId: user!.uid,
                                     planId: plan.planId,
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    ],
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
       ),
       bottomNavigationBar: const BottomBar(),
     );
