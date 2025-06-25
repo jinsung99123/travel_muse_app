@@ -7,17 +7,19 @@ class MoreTagButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 44,
-      height: 44,
-      child: Center(
-        child: SvgPicture.asset(
-          'assets/icons/chevron-down.svg',
-          height: 24,
-          width: 24,
-          colorFilter: ColorFilter.mode(
-            AppColors.secondary[400]!,
-            BlendMode.srcATop,
+    return GestureDetector(
+      onTap: () {
+        //
+      },
+      child: SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: SvgPicture.asset(
+            'assets/icons/chevron-down.svg',
+            height: 24,
+            width: 24,
+            colorFilter: ColorFilter.mode(AppColors.secondary[400]!, BlendMode.srcATop),
           ),
         ),
       ),

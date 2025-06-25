@@ -9,12 +9,12 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
 
   @override
   PostListState build() {
-    fetchLatestPosts();
+    fetchInitialPosts();
     return PostListState();
   }
 
   /// 포스트 리스트 초기값 상태 업데이트
-  Future<void> fetchLatestPosts() async {
+  Future<void> fetchInitialPosts() async {
     state = const AsyncLoading();
 
     try {
