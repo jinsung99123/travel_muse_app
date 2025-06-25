@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/write/image_preview_list.dart';
 import 'package:travel_muse_app/views/post/widgets/write/post_action_buttons.dart';
 import 'package:travel_muse_app/views/post/widgets/write/post_location_category.dart';
@@ -22,6 +24,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final List<String> imagePaths = [];
+  Map<String, dynamic>? selectedPlace;
 
   Set<String> selectedTags = {};
   String? titleErrorText;
@@ -35,6 +38,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       contentController.text = widget.post!.content;
       imagePaths.addAll(widget.post!.images);
       selectedTags = widget.post!.tags.toSet();
+      selectedPlace = widget.post!.place;
     }
   }
 
@@ -42,14 +46,37 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
 
-    if (pickedFiles.isNotEmpty) {
-      setState(() {
-        imagePaths.addAll(pickedFiles.map((e) => e.path));
-      });
+    if (pickedFiles.isEmpty) return;
+
+    final remaining = 5 - imagePaths.length;
+
+    if (remaining <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
+      );
+      return;
+    }
+
+    final addableFiles = pickedFiles.take(remaining).toList();
+
+    setState(() {
+      imagePaths.addAll(addableFiles.map((e) => e.path));
+    });
+
+    if (addableFiles.length < pickedFiles.length) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')));
     }
   }
 
   void _submitPost() async {
+    if (imagePaths.length > 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
+      );
+      return;
+    }
     final titleError = PostValidator.validateTitle(titleController.text);
     final contentError = PostValidator.validateContent(contentController.text);
 
@@ -69,6 +96,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       content: contentController.text.trim(),
       imagePaths: imagePaths,
       tags: selectedTags.toList(),
+      place: selectedPlace,
     );
 
     if (mounted) {
@@ -143,6 +171,40 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
                         ),
                       ),
                     const SizedBox(height: 16),
+                    if (selectedPlace != null) ...[
+                      Stack(
+                        children: [
+                          PlacePreviewCard(
+                            title: selectedPlace!['title'] ?? '',
+                            address: selectedPlace!['address'] ?? '',
+                            latLng: LatLng(
+                              (selectedPlace!['lat'] as num).toDouble(),
+                              (selectedPlace!['lng'] as num).toDouble(),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedPlace = null;
+                                });
+                              },
+                              child: const CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -150,12 +212,14 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
             PostLocationCategory(
               selectedTags: selectedTags,
               onTagsChanged: (tags) => setState(() => selectedTags = tags),
+              selectedPlace: selectedPlace,
+              onPlaceChanged: (place) => setState(() => selectedPlace = place),
             ),
             const SizedBox(height: 8),
             if (imagePaths.isNotEmpty) ...[
               const SizedBox(height: 12),
               ImagePreviewList(
-                imagePaths: imagePaths,
+                imagePaths: imagePaths.take(5).toList(),
                 onRemove: (index) => setState(() => imagePaths.removeAt(index)),
               ),
             ],

@@ -16,6 +16,7 @@ class PlaceCarousel extends StatelessWidget {
     required this.tabController,
     required this.selectedPlace,
     required this.mapController,
+    required this.isSelectMode,
   });
 
   final List<String> dayKeys;
@@ -24,6 +25,7 @@ class PlaceCarousel extends StatelessWidget {
   final TabController tabController;
   final Map<String, dynamic>? selectedPlace;
   final GoogleMapController? mapController;
+  final bool isSelectMode;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class PlaceCarousel extends StatelessWidget {
               child: PlaceCard(
                 placeData: place,
                 isSelected: selectedPlace?['id'] == place['id'],
+                isSelectMode: isSelectMode,
               ),
             );
           },
@@ -90,8 +93,9 @@ class PlaceCarousel extends StatelessWidget {
                     child: PlaceCard(
                       placeData: place,
                       isSelected: selectedPlace?['id'] == place['id'],
+                      isSelectMode: isSelectMode,
                       onTap: () {
-                        final homePlace = HomePlace.fromMap(place); 
+                        final homePlace = HomePlace.fromMap(place);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

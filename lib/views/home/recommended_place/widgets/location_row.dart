@@ -14,7 +14,7 @@ class LocationRow extends StatelessWidget {
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            place.subtitle,
+            place.address,
             style: const TextStyle(color: Colors.grey),
             overflow: TextOverflow.ellipsis,
           ),

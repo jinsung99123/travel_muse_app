@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
@@ -172,6 +175,15 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             const SizedBox(height: 16),
             PostDetailImages(images: currentPost.images),
             const SizedBox(height: 16),
+            if (currentPost.place != null)
+              PlacePreviewCard(
+                title: currentPost.place!['title'] ?? '',
+                address: currentPost.place!['address'] ?? '',
+                latLng: LatLng(
+                  (currentPost.place!['lat'] ?? 0).toDouble(),
+                  (currentPost.place!['lng'] ?? 0).toDouble(),
+                ),
+              ),
             PostDetailTagsAndMeta(
               tags: currentPost.tags,
               createdAt: currentPost.createAt.toDate(),

@@ -39,12 +39,14 @@ class PostRepository {
     String content,
     List<String> imageUrls,
     List<String> tags,
+    Map<String, dynamic>? place,
   ) async {
     await _postRef.doc(postId).update({
       'title': title,
       'content': content,
       'images': imageUrls,
       'tags': tags,
+      'place': place,
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

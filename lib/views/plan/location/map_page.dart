@@ -13,7 +13,6 @@ import 'package:travel_muse_app/views/plan/location/widgets/place_carousel.dart'
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key, required this.planId});
   final String planId;
-
   @override
   ConsumerState<MapPage> createState() => _MapPageState();
 }
@@ -23,22 +22,16 @@ class _MapPageState extends ConsumerState<MapPage>
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
   LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
-
   late final MapViewModel _viewModel;
   TabController? _tabController;
-
   void _onTabChanged() {
     if (!mounted) return;
     final mapState = ref.read(mapViewModelProvider);
     final dayKeys = mapState.dayPlaces.keys.toList();
-
     if (_tabController == null || dayKeys.isEmpty) return;
-
     if (!_tabController!.indexIsChanging) {
       setState(() {});
-
       final index = _tabController!.index;
-
       if (index == 0) {
         final allPlaces = _viewModel.getAllPlaces();
         _viewModel.moveCameraToFitAll(_mapController, allPlaces);
@@ -59,13 +52,10 @@ class _MapPageState extends ConsumerState<MapPage>
   Future<void> initializeControllers() async {
     if (!mounted) return;
     await _viewModel.loadPlanAndRoute(widget.planId, this);
-
     final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
     if (dayKeys.isEmpty) return;
-
     _tabController = TabController(length: dayKeys.length + 1, vsync: this);
     _tabController!.addListener(_onTabChanged);
-
     setState(() {});
   }
 
@@ -73,7 +63,6 @@ class _MapPageState extends ConsumerState<MapPage>
   void initState() {
     super.initState();
     _viewModel = ref.read(mapViewModelProvider.notifier);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initializeControllers();
     });
@@ -86,7 +75,7 @@ class _MapPageState extends ConsumerState<MapPage>
       _tabController?.dispose();
       _viewModel.disposeControllers();
     } catch (e) {
-      debugPrint('💥 dispose error: $e');
+      debugPrint(':쾅: dispose error: $e');
     }
     super.dispose();
   }
@@ -108,17 +97,14 @@ class _MapPageState extends ConsumerState<MapPage>
     if (_isLoading(_tabController, dayKeys)) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-
     final index = _tabController!.index;
     List<Map<String, dynamic>> selectedPlaces;
     if (index == 0) {
-      selectedPlaces = _viewModel.getAllPlaces(); 
+      selectedPlaces = _viewModel.getAllPlaces();
     } else {
       selectedPlaces = mapState.dayPlaces[dayKeys[index - 1]] ?? [];
     }
-
     _initCameraPosition(selectedPlaces);
-
     final points = _viewModel.extractLatLngs(selectedPlaces);
     final markers = _viewModel.getMarkers(
       places: selectedPlaces,
@@ -167,6 +153,7 @@ class _MapPageState extends ConsumerState<MapPage>
                     selectedPlace: mapState.selectedPlace,
                     mapController: _mapController,
                     tabController: _tabController!,
+                    isSelectMode: false,
                   ),
                 ),
               ],

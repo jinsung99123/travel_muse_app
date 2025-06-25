@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/map_state.dart';
 import 'package:travel_muse_app/repositories/plan/map_repository.dart';
+import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/utills/marker_helper.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_sheet.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
   MapViewModel(this._repository) : super(MapState(dayPlaces: {})) {
@@ -117,18 +121,65 @@ class MapViewModel extends StateNotifier<MapState> {
     required String selectedDayKey,
     required Function(Map<String, dynamic>) onTap,
     required Function(int) onPageChanged,
+    bool isSelectMode = false, // 선택 모드 여부
+    BuildContext? context, // 디테일 바텀시트 띄우기용 context
   }) {
     return createMarkers(
       places: places,
       icon: _currentIcon,
-      onTap: onTap,
+
+      // onTap 로직만 수정
+      onTap: (place) {
+        onTap(place);
+
+        if (isSelectMode && context != null) {
+          Future.microtask(() async {
+            final result = await showModalBottomSheet(
+              // ignore: use_build_context_synchronously
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) {
+                return DraggableScrollableSheet(
+                  initialChildSize: 0.6,
+                  minChildSize: 0.4,
+                  maxChildSize: 0.95,
+                  expand: false,
+                  builder: (context, scrollController) {
+                    return Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(16),
+                        ),
+                      ),
+                      child: RecommendedPlaceDetailSheet(
+                        place: HomePlace.fromMap(place),
+                        scrollController: scrollController,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+
+            if (result != null && context.mounted) {
+              Navigator.pop(context, result);
+            }
+          });
+        }
+      },
+
       onPageChanged: onPageChanged,
+
       animateToPage:
-          (idx) => getPageController(selectedDayKey).animateToPage(
-            idx,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          ),
+          isSelectMode
+              ? null // 선택 모드일 땐 animate 안 함
+              : (idx) => getPageController(selectedDayKey).animateToPage(
+                idx,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              ),
     );
   }
 
@@ -142,7 +193,7 @@ class MapViewModel extends StateNotifier<MapState> {
     return extractLatLngs(getAllPlaces());
   }
 
-//전체 마커 반환
+  //전체 마커 반환
   Set<Marker> getAllMarkers({
     required Function(Map<String, dynamic>) onTap,
     required Function(int) onPageChanged,
@@ -156,5 +207,56 @@ class MapViewModel extends StateNotifier<MapState> {
         // 전체 탭은 Carousel 안 보이게 할 수도 있음
       },
     );
+  }
+
+  void setDummyDayPlaces() {
+    state = state.copyWith(
+      dayPlaces: {
+        'select': [], // 아무 장소도 없는 하나의 날짜 키
+      },
+    );
+  }
+
+  void setDayPlacesForSelectMode(List<Map<String, dynamic>> places) {
+    final convertedPlaces =
+        places.map((e) {
+          return e.map((key, value) => MapEntry(key, value.toString()));
+        }).toList();
+
+    final newDayPlaces = Map<String, List<Map<String, String>>>.from(
+      state.dayPlaces,
+    )..['select'] = convertedPlaces;
+
+    state = state.copyWith(
+      dayPlaces: newDayPlaces,
+      selectedPlace: convertedPlaces.isNotEmpty ? convertedPlaces.first : null,
+    );
+  }
+
+  Future<void> moveCameraToPlace({
+    required GoogleMapController mapController,
+    required String query,
+    required PlaceSearchService placeService,
+  }) async {
+    try {
+      final results = await placeService.search(query);
+      if (results.isEmpty) return;
+
+      final first = results.first;
+      final latLng = LatLng(first.latitude, first.longitude);
+
+      // 지도 카메라 이동
+      await mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+
+      // 선택된 장소 상태에 반영
+      selectPlace({
+        'title': first.name,
+        'lat': first.latitude,
+        'lng': first.longitude,
+        'address': first.address,
+      });
+    } catch (e) {
+      debugPrint('❌ moveCameraToPlace 실패: $e');
+    }
   }
 }

@@ -15,8 +15,8 @@ class PlaceInfoSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (place.subtitle.isNotEmpty)
-          Text('주소: ${place.subtitle}', style: theme.bodyMedium),
+        if (place.address.isNotEmpty)
+          Text('주소: ${place.address}', style: theme.bodyMedium),
         const SizedBox(height: 4),
         if (place.phone != null && place.phone!.isNotEmpty)
           Text('전화: ${place.phone}', style: theme.bodyMedium),

@@ -15,6 +15,7 @@ class Post {
     required this.isReposted,
     required this.reportCount,
     required this.tags,
+    required this.place,
   });
   final String postId;
   final String userId;
@@ -29,6 +30,7 @@ class Post {
   final bool isDeleted;
   final bool isReposted;
   final int reportCount;
+  final Map<String, dynamic>? place;
 
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
@@ -48,6 +50,7 @@ class Post {
       isReposted: map['isReposted'] ?? false,
       reportCount: map['reportCount'] ?? 0,
       title: map['title'] ?? '',
+      place: map['place'],
     );
   }
   Map<String, dynamic> toMap({required bool isNew}) {
@@ -65,6 +68,7 @@ class Post {
       'isReposted': isReposted,
       'reportCount': reportCount,
       'tags': tags,
+      'place': place,
     };
   }
 }
