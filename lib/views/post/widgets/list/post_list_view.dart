@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 
 class PostListView extends StatelessWidget {
@@ -28,25 +29,39 @@ class PostListView extends StatelessWidget {
                       Text('내용입니다', style: AppTextStyles.postListContent),
                       Row(
                         children: [
-                          Text(
-                            '2일전 댓글 3 조회 0',
-                            style: AppTextStyles.postListContent,
-                          ),
+                          Text('2일전', style: AppTextStyles.postListContent),
+                          SizedBox(width: 8),
+                          Text('댓글 3', style: AppTextStyles.postListContent),
+                          SizedBox(width: 8),
+                          Text('조회 0', style: AppTextStyles.postListContent),
                         ],
                       ),
                     ],
                   ),
                   Spacer(),
-                  SizedBox(
-                    width: 72,
-                    height: 72,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        'https://picsum.photos/200/300',
-                        fit: BoxFit.cover,
+                  Stack(
+                    children: [
+                      SizedBox(
+                        width: 72,
+                        height: 72,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(7),
+                          child: Image.network(
+                            'https://picsum.photos/200/300',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        width: 23,
+                        height: 23,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: AppOtherStyles.imageCountContainer,
+                        child: Center(
+                          child: Text('5', style: AppTextStyles.imageCount),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

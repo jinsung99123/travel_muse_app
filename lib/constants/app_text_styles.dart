@@ -161,4 +161,31 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.50,
   );
+
+  // 미선택 태그 텍스트
+  static TextStyle unselectedTag = TextStyle(
+    color: AppColors.primary[300],
+    fontSize: 14,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
+
+  // 선택 태그 텍스트
+  static TextStyle selectedTag = TextStyle(
+    color: AppColors.primary[400],
+    fontSize: 14,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w600,
+    height: 1.50,
+  );
+
+  // 포스트 이미지 개수 텍스트
+  static TextStyle imageCount = TextStyle(
+    color: AppColors.grey[200],
+    fontSize: 12,
+    fontFamily: 'Pretendard',
+    fontWeight: FontWeight.w400,
+    height: 1.50,
+  );
 }

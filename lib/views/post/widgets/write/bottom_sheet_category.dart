@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/post_tags_list.dart';
 import 'package:travel_muse_app/views/post/widgets/write/category_chip.dart';
 
 class BottomSheetCategory extends StatefulWidget {
@@ -15,20 +16,7 @@ class BottomSheetCategory extends StatefulWidget {
 }
 
 class _BottomSheetCategoryState extends State<BottomSheetCategory> {
-  final List<String> allTags = [
-    '#맛집',
-    '#여행꿀팁',
-    '#명소',
-    '#힐링',
-    '#자연',
-    '#카페',
-    '#가족여행',
-    '#데이트',
-    '#한옥',
-    '#바다',
-    '#산책로',
-    '#문화유산',
-  ];
+  final List<String> allTags = PostTagsList.allTags;
 
   late Set<String> selectedTags;
 

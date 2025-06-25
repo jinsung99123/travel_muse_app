@@ -33,4 +33,33 @@ class AppOtherStyles {
     ),
     borderRadius: BorderRadius.circular(10),
   );
+
+  // 선택 포스트 태그박스
+  static final selectedTag = ShapeDecoration(
+    color: AppColors.primary[50],
+    shape: RoundedRectangleBorder(
+      side: BorderSide(width: 1, color: AppColors.primary[300]!),
+      borderRadius: BorderRadius.circular(100),
+    ),
+  );
+
+  // 미선택 포스트 태그박스
+  static final unselectedTag = ShapeDecoration(
+    color: AppColors.white,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(width: 1, color: AppColors.primary[300]!),
+      borderRadius: BorderRadius.circular(100),
+    ),
+  );
+
+  // 포스트 사진 개수 표시 컨테이너
+  static final imageCountContainer = ShapeDecoration(
+    color: const Color(0xFF4C5356),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(7),
+        bottomRight: Radius.circular(7),
+      ),
+    ),
+  );
 }
