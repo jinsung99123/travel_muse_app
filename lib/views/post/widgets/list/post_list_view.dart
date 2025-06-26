@@ -8,7 +8,9 @@ import 'package:travel_muse_app/views/post/widgets/list/post_item.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_loading_item.dart';
 
 class PostListView extends ConsumerStatefulWidget {
-  const PostListView({super.key});
+  const PostListView({super.key, required this.keyword, this.onPostUpdated});
+  final String keyword;
+  final VoidCallback? onPostUpdated;
 
   @override
   ConsumerState<PostListView> createState() => _PostListViewState();
@@ -22,13 +24,13 @@ class _PostListViewState extends ConsumerState<PostListView> {
   void initState() {
     super.initState();
     _refreshThrottler = Throttler(
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       callback: () async {
         await ref.read(postListViewModelProvider.notifier).fetchNewPosts();
       },
     );
     _scrollThrottler = Throttler(
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       callback: () async {
         await ref.read(postListViewModelProvider.notifier).fetchOldPosts();
       },
@@ -48,52 +50,67 @@ class _PostListViewState extends ConsumerState<PostListView> {
 
     return Expanded(
       child: postAsync.when(
-        data:
-            (data) => NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification.metrics.pixels >=
-                    notification.metrics.maxScrollExtent - 100) {
-                  _scrollThrottler.run();
-                }
-                return false;
+        data: (data) {
+          final allPosts = data.posts;
+          final filteredPosts =
+              widget.keyword.trim().isEmpty
+                  ? allPosts
+                  : allPosts.where((post) {
+                    final q = widget.keyword.toLowerCase();
+                    return post.title.toLowerCase().contains(q) ||
+                        post.content.toLowerCase().contains(q);
+                  }).toList();
+
+          return NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.pixels >=
+                  notification.metrics.maxScrollExtent - 100) {
+                _scrollThrottler.run();
+              }
+              return false;
+            },
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _refreshThrottler.run();
+                return Future.value();
               },
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  _refreshThrottler.run();
-                  return Future.value();
-                },
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    final post = data.posts[index];
-                    return KeyedSubtree(
-                      key: ValueKey(post.postId),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PostDetailPage(post: post),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          width: double.infinity,
-                          decoration: ShapeDecoration(
-                            color: AppColors.white,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(width: 0.20, color: AppColors.grey[200]!),
+              child: ListView.builder(
+                itemCount: filteredPosts.length,
+                itemBuilder: (context, index) {
+                  final post = filteredPosts[index];
+                  return KeyedSubtree(
+                    key: ValueKey(post.postId),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostDetailPage(post: post),
+                          ),
+                        );
+                        widget.onPostUpdated?.call();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        width: double.infinity,
+                        decoration: ShapeDecoration(
+                          color: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 0.20,
+                              color: AppColors.grey[200]!,
                             ),
                           ),
-                          child: PostItem(screenWidth: screenWidth, post: post),
                         ),
+                        child: PostItem(screenWidth: screenWidth, post: post),
                       ),
-                    );
-                  },
-                  itemCount: data.posts.length,
-                ),
+                    ),
+                  );
+                },
               ),
             ),
+          );
+        },
         loading: () => _buildLoadingList(screenWidth),
         error: (e, st) => _buildLoadingList(screenWidth),
       ),
@@ -102,9 +119,10 @@ class _PostListViewState extends ConsumerState<PostListView> {
 
   Widget _buildLoadingList(double screenWidth) {
     return ListView.builder(
+      itemCount: 10,
       itemBuilder: (context, index) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           width: double.infinity,
           decoration: ShapeDecoration(
             color: AppColors.white,
@@ -115,7 +133,6 @@ class _PostListViewState extends ConsumerState<PostListView> {
           child: PostLoadingItem(screenWidth: screenWidth),
         );
       },
-      itemCount: 10,
     );
   }
 }
