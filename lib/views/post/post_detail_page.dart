@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
@@ -62,6 +65,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     showModalBottomSheet(
+      backgroundColor: AppColors.white,
       context: context,
       builder:
           (_) => SafeArea(
@@ -69,87 +73,117 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (currentUser?.uid == currentPost.userId) ...[
-                  ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('수정하기'),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PostWritePage(post: currentPost),
-                        ),
-                      );
-                      if (mounted) await _refreshPost();
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: const Text('삭제하기'),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      final confirm = await showDialog<bool>(
-                        context: context,
-                        builder:
-                            (_) => AlertDialog(
-                              title: const Text('삭제 확인'),
-                              content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
-                              actions: [
-                                TextButton(
-                                  onPressed:
-                                      () => Navigator.pop(context, false),
-                                  child: const Text('취소'),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  child: const Text('삭제'),
-                                ),
-                              ],
+                  SizedBox(
+                    height: 80,
+                    child: Center(
+                      child: ListTile(
+                        leading: const Icon(Icons.edit),
+                        title: const Text('수정하기'),
+                        onTap: () async {
+                          Navigator.pop(context);
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PostWritePage(post: currentPost),
                             ),
-                      );
-                      if (confirm == true) {
-                        await ref
-                            .read(postViewModelProvider.notifier)
-                            .deletePost(currentPost.postId);
-                        if (mounted) Navigator.pop(context);
-                      }
-                    },
+                          );
+                          if (mounted) await _refreshPost();
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    child: Center(
+                      child: ListTile(
+                        leading: const Icon(Icons.delete),
+                        title: const Text('삭제하기'),
+                        onTap: () async {
+                          Navigator.pop(context);
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder:
+                                (_) => AlertDialog(
+                                  title: const Text('삭제 확인'),
+                                  content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed:
+                                          () => Navigator.pop(context, false),
+                                      child: const Text('취소'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: const Text('삭제'),
+                                    ),
+                                  ],
+                                ),
+                          );
+                          if (confirm == true) {
+                            await ref
+                                .read(postViewModelProvider.notifier)
+                                .deletePost(currentPost.postId);
+                            if (mounted) Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ] else ...[
-                  ListTile(
-                    title: const Text(
-                      '신고하기',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.red),
+                  SizedBox(
+                    height: 80,
+                    child: Center(
+                      child: ListTile(
+                        title: const Text(
+                          '신고하기',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.error,
+                            fontSize: 16,
+                            fontFamily: 'pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          showReportReasonDialog(context, (
+                            reasonCode,
+                            reasonText,
+                          ) async {
+                            await ref
+                                .read(reportViewModelProvider.notifier)
+                                .submit(
+                                  targetType: 'post',
+                                  targetId: currentPost.postId,
+                                  reporterId: currentUser!.uid,
+                                  targetOwnerId: currentPost.userId,
+                                  reasonCode: reasonCode,
+                                  reasonText: reasonText,
+                                );
+                            if (mounted) {
+                              CustomToast.show(
+                                context: context,
+                                message: '신고 되었습니다.',
+                                duration: const Duration(seconds: 2),
+                              );
+                            }
+                          });
+                        },
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      showReportReasonDialog(context, (
-                        reasonCode,
-                        reasonText,
-                      ) async {
-                        await ref
-                            .read(reportViewModelProvider.notifier)
-                            .submit(
-                              targetType: 'post',
-                              targetId: currentPost.postId,
-                              reporterId: currentUser!.uid,
-                              targetOwnerId: currentPost.userId,
-                              reasonCode: reasonCode,
-                              reasonText: reasonText,
-                            );
-
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('신고가 접수되었습니다.')),
-                          );
-                        }
-                      });
-                    },
                   ),
                   const Divider(height: 1),
                   ListTile(
-                    title: const Text('닫기', textAlign: TextAlign.center),
+                    title: const Text(
+                      '닫기',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontFamily: 'pretendard',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                     onTap: () => Navigator.pop(context),
                   ),
                 ],
