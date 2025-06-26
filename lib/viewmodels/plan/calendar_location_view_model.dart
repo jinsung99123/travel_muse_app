@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plan/planstate.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
@@ -71,13 +72,19 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
 
   Future<void> loadNearestUpcomingPlan() async {
     final userId = ref.read(authViewModelProvider).user?.uid;
-    if (userId == null) return;
+    if (userId == null) {
+      debugPrint('[loadNearestUpcomingPlan] 유저 ID 없음');
+      return;
+    }
 
     final repo = ref.read(calendarLocationRepositoryProvider);
     final plan = await repo.fetchNearestUpcomingPlan(userId);
 
     if (plan != null) {
+      debugPrint('[loadNearestUpcomingPlan] 가장 가까운 여행 로드됨: ${plan.startDate}');
       state = plan;
+    } else {
+      debugPrint('[loadNearestUpcomingPlan] 불러올 여행 없음');
     }
   }
 
