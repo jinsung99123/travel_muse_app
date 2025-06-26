@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/bottom_bar_provider.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/main.dart';
 import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
@@ -9,11 +11,33 @@ import 'package:travel_muse_app/views/home/widgets/recommended_restaurants_list.
 import 'package:travel_muse_app/views/home/widgets/section_title.dart';
 import 'package:travel_muse_app/views/home/widgets/travel_register_button.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(bottomBarProvider.notifier).state = 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appUserAsync = ref.watch(appUserViewModelProvider);
 
     return Scaffold(
