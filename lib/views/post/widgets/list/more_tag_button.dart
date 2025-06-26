@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/views/post/widgets/list/bottom_sheet_category_filter.dart';
+
+class MoreTagButton extends StatelessWidget {
+  const MoreTagButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => const BottomSheetCategoryFilter(),
+        );
+      },
+      child: SizedBox(
+        width: 44,
+        height: 44,
+        child: Center(
+          child: SvgPicture.asset(
+            'assets/icons/chevron-down.svg',
+            height: 24,
+            width: 24,
+            colorFilter: ColorFilter.mode(AppColors.secondary[400]!, BlendMode.srcATop),
+          ),
+        ),
+      ),
+    );
+  }
+}

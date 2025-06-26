@@ -29,6 +29,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
         content: content,
         tags: tags,
         images: imageUrls,
+        thumbnail: null,
         createAt: Timestamp.now(),
         commentCount: 0,
         viewCount: 0,
@@ -57,14 +58,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   }) async {
     state = const AsyncLoading();
     try {
-      await _repository.updatePost(
-        postId,
-        title,
-        content,
-        imageUrls,
-        tags,
-        place,
-      );
+      await _repository.updatePost(postId, title, content, imageUrls, tags, place);
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -83,9 +77,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   }
 
   /// 이미지 분리 및 업로드 후 병합 처리
-  Future<List<String>> uploadImagesWithLocalFilter(
-    List<String> imagePaths,
-  ) async {
+  Future<List<String>> uploadImagesWithLocalFilter(List<String> imagePaths) async {
     final existingUrls = imagePaths.where((p) => p.startsWith('http')).toList();
     final localPaths = imagePaths.where((p) => !p.startsWith('http')).toList();
     final uploadedUrls = await _repository.uploadImages(localPaths);
