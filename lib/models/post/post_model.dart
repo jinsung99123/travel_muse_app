@@ -40,7 +40,7 @@ class Post {
       userId: map['userId'] ?? '',
       content: map['content'] ?? '',
       images: List<String>.from(map['images'] ?? []),
-      thumbnail: map['thumbnail'] ?? '',
+      thumbnail: map['thumbnail'],
       tags: List<String>.from(map['tags'] ?? []),
       createAt:
           map['createAt'] is Timestamp ? map['createAt'] as Timestamp : Timestamp.now(),

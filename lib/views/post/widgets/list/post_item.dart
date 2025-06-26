@@ -67,7 +67,9 @@ class PostItem extends StatelessWidget {
                   height: 23,
                   clipBehavior: Clip.antiAlias,
                   decoration: AppOtherStyles.imageCountContainer,
-                  child: Center(child: Text('5', style: AppTextStyles.imageCount)),
+                  child: Center(
+                    child: Text('${post.images.length}', style: AppTextStyles.imageCount),
+                  ),
                 ),
               ],
             )
