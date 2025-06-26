@@ -9,7 +9,7 @@ import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart'
 import 'package:travel_muse_app/utills/format_month_day.dart';
 import 'package:travel_muse_app/utills/format_region.dart';
 import 'package:travel_muse_app/viewmodels/plan/schedule_view_model.dart';
-import 'package:travel_muse_app/views/my_page/widgets/delete_plan_dialog.dart';
+import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 
@@ -34,7 +34,7 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => const DeletePlanDialog(),
+      builder: (ctx) => const ConfirmDialog(title : '일정을 삭제하시겠습니까?', description : '일정 삭제하고 후에는 되돌릴 수 없어요'),
     );
 
     if (result == true) {

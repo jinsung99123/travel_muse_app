@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
-import 'package:travel_muse_app/utills/distance_sort.dart';
 import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart';
@@ -147,9 +147,11 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     .read(scheduleViewModelProvider.notifier)
                     .addPlanIdToAppUser(widget.planId);
                 if (!mounted) return;
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('일정이 저장되었습니다.')));
+                CustomToast.show(
+                  context: context,
+                  message: '일정이 저장되었습니다.',
+                  duration: const Duration(seconds: 2),
+                );
                 await Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const HomePage()),
@@ -193,7 +195,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-      bottomNavigationBar: const BottomBar(),
+      bottomNavigationBar: 
+      const BottomBar(),
     );
   }
 }

@@ -19,7 +19,7 @@ class ImageSlider extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 300,
+          height: 408,
           child: PageView.builder(
             controller: pageController,
             itemCount: imageUrls.length,
@@ -27,7 +27,7 @@ class ImageSlider extends StatelessWidget {
             itemBuilder: (context, index) {
               final url = imageUrls[index];
               return ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(0),
                 child: url.startsWith('http')
                     ? Image.network(url, fit: BoxFit.cover)
                     : Image.asset(url, fit: BoxFit.cover),

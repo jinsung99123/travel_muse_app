@@ -16,7 +16,7 @@ class RecommendedPlacesListPage extends ConsumerWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text(
-          '추천 명소 전체 보기',
+          '추천 명소',
           style: TextStyle(
             color: AppColors.black,
             fontSize: 18,
@@ -39,17 +39,22 @@ class RecommendedPlacesListPage extends ConsumerWidget {
             }
 
             return ListView.separated(
-              padding: const EdgeInsets.all(16),
               itemCount: spots.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (_, index) {
                 final spot = spots[index];
-                return RecommendedPlaceListCard(
-                  title: spot.title,
-                  image: spot.thumbnail,
-                  description: spot.subtitle,
-                  isActive: true,
-                  place: spot,
+                return Column(
+                  children: [
+                    RecommendedPlaceListCard(
+                      title: spot.title,
+                      image: spot.thumbnail,
+                      description: spot.subtitle,
+                      catecory: spot.category,
+                      isActive: true,
+                      place: spot,
+                    ),
+                Divider(height: 1, thickness: 0.5, color: AppColors.grey[200]),
+                  ],
                 );
               },
             );
