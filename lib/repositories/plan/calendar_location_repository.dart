@@ -11,15 +11,16 @@ class CalendarLocationRepository {
   Future<void> savePlan({
     required String planId,
     required DateTime startDate,
-    required DateTime endDate,
+    required DateTime? endDate, // 수정: nullable 허용
     required String region,
     required String userId,
   }) async {
-    final duration = endDate.difference(startDate).inDays + 1;
+    final actualEndDate = endDate ?? startDate; // 하루짜리 처리
+    final duration = actualEndDate.difference(startDate).inDays + 1;
 
     await _firestore.collection('plans').doc(planId).set({
       'startDate': Timestamp.fromDate(startDate),
-      'endDate': Timestamp.fromDate(endDate),
+      'endDate': Timestamp.fromDate(actualEndDate),
       'duration': duration,
       'region': region,
       'userId': userId,
@@ -29,18 +30,19 @@ class CalendarLocationRepository {
   /// 새 planId를 생성하고 플랜 데이터를 Firestore에 저장
   Future<String> createAndSavePlan({
     required DateTime startDate,
-    required DateTime endDate,
+    required DateTime? endDate, // 수정: nullable 허용
     required String region,
     required String userId,
   }) async {
-    final duration = endDate.difference(startDate).inDays + 1;
+    final actualEndDate = endDate ?? startDate; // 하루짜리 처리
+    final duration = actualEndDate.difference(startDate).inDays + 1;
 
     final docRef = _firestore.collection('plans').doc();
     final planId = docRef.id;
 
     await docRef.set({
       'startDate': Timestamp.fromDate(startDate),
-      'endDate': Timestamp.fromDate(endDate),
+      'endDate': Timestamp.fromDate(actualEndDate),
       'duration': duration,
       'region': region,
       'userId': userId,

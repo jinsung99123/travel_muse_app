@@ -49,4 +49,14 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
         day.isAfter(state.startDay!) &&
         day.isBefore(state.endDay!);
   }
+
+  /// endDay가 null이면 startDay로 설정
+  void ensureEndDay() {
+    final start = state.startDay;
+    final end = state.endDay;
+
+    if (start != null && end == null) {
+      state = state.copyWith(endDay: start);
+    }
+  }
 }
