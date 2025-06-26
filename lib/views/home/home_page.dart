@@ -4,6 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/bottom_bar_provider.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/main.dart';
+import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/widgets/info_banner.dart';
 import 'package:travel_muse_app/views/home/widgets/recommended_places_list.dart';
@@ -19,6 +20,17 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() async {
+      await ref
+          .read(calendarLocationViewModelProvider.notifier)
+          .loadNearestUpcomingPlan();
+    });
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
