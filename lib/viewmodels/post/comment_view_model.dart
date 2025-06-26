@@ -31,4 +31,8 @@ class CommentViewModel extends StateNotifier<AsyncValue<List<Comment>>> {
   Future<void> deleteComment(String commentId) async {
     await _repo.deleteComment(postId, commentId);
   }
+
+  Future<Map<String, String>> getUserInfo(String userId) {
+    return _repo.fetchUserInfo(userId);
+  }
 }

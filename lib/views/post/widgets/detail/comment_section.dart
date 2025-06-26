@@ -20,15 +20,6 @@ class CommentSection extends ConsumerWidget {
     return '${diff.inDays}일 전';
   }
 
-  Future<String> _fetchNickname(String userId) async {
-    final userDoc =
-        await FirebaseFirestore.instance
-            .collection('appUser')
-            .doc(userId)
-            .get();
-    return userDoc.data()?['nickname'] ?? '알 수 없음';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -51,13 +42,24 @@ class CommentSection extends ConsumerWidget {
                 children:
                     comments.map((comment) {
                       final isLiked = comment.likedUserIds.contains(userId);
-                      return FutureBuilder<String>(
-                        future: _fetchNickname(comment.userId),
+
+                      return FutureBuilder<Map<String, String>>(
+                        future: viewModel.getUserInfo(comment.userId),
                         builder: (context, snapshot) {
-                          final nickname = snapshot.data ?? '...';
+                          final nickname = snapshot.data?['nickname'] ?? '...';
+                          final profileUrl =
+                              snapshot.data?['profileImage'] ?? '';
                           final timeAgo = _timeAgo(comment.createdAt);
 
                           return ListTile(
+                            leading:
+                                profileUrl.isNotEmpty
+                                    ? CircleAvatar(
+                                      backgroundImage: NetworkImage(profileUrl),
+                                    )
+                                    : const CircleAvatar(
+                                      child: Icon(Icons.person),
+                                    ),
                             title: Text(comment.content),
                             subtitle: Text('$nickname • $timeAgo'),
                             trailing: PopupMenuButton<String>(

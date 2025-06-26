@@ -54,4 +54,17 @@ class CommentRepository {
   Future<void> deleteComment(String postId, String commentId) async {
     await getCommentsRef(postId).doc(commentId).delete();
   }
+
+  Future<Map<String, String>> fetchUserInfo(String userId) async {
+    final userDoc =
+        await FirebaseFirestore.instance
+            .collection('appUser')
+            .doc(userId)
+            .get();
+    final data = userDoc.data();
+    return {
+      'nickname': data?['nickname'] ?? '알 수 없음',
+      'profileImage': data?['profileImage'] ?? '',
+    };
+  }
 }
