@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 
 class LocationRow extends StatelessWidget {
@@ -10,12 +11,15 @@ class LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.location_on, color: Colors.grey, size: 18),
-        const SizedBox(width: 4),
         Expanded(
           child: Text(
             place.address,
-            style: const TextStyle(color: Colors.grey),
+            style:  TextStyle(
+              color: AppColors.grey[500],
+              fontSize: 14,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ),
