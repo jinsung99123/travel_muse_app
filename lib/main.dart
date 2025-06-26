@@ -11,6 +11,8 @@ import 'package:travel_muse_app/firebase_options.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/views/user/splash/splash_page.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
       builder: EasyLoading.init(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
