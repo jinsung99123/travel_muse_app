@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_other_styles.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
-import 'package:travel_muse_app/utills/format_time_ago.dart';
+import 'package:travel_muse_app/views/post/widgets/list/time_ago_text.dart';
 
 class PostItem extends StatelessWidget {
   const PostItem({super.key, required this.screenWidth, required this.post});
@@ -35,13 +35,7 @@ class PostItem extends StatelessWidget {
             ),
             Row(
               children: [
-                Text(
-                  FormatTimeAgo.formatTimeAgo(
-                    now: DateTime.now(),
-                    createdAt: post.createAt,
-                  ),
-                  style: AppTextStyles.postListContent,
-                ),
+                TimeAgoText(createdAt: post.createAt),
                 SizedBox(width: 8),
                 Text('댓글 ${post.commentCount}', style: AppTextStyles.postListContent),
                 SizedBox(width: 8),

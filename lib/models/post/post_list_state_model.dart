@@ -7,9 +7,6 @@ class PostListState {
   final String? filter;
 
   PostListState copyWith({List<Post>? posts, String? filter}) {
-    return PostListState(
-      posts: posts ?? this.posts,
-      filter: filter ?? this.filter,
-    );
+    return PostListState(posts: posts ?? this.posts, filter: filter ?? this.filter);
   }
 }

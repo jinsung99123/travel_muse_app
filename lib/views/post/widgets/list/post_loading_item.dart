@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/constants/app_other_styles.dart';
-import 'package:travel_muse_app/constants/app_text_styles.dart';
 
 class PostLoadingItem extends StatelessWidget {
   const PostLoadingItem({super.key, required this.screenWidth});
