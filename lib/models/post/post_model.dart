@@ -7,6 +7,7 @@ class Post {
     required this.title,
     required this.content,
     required this.images,
+    this.thumbnail,
     required this.createAt,
     required this.commentCount,
     required this.likeCount,
@@ -22,6 +23,7 @@ class Post {
   final String title;
   final String content;
   final List<String> images;
+  final String? thumbnail;
   final List<String> tags;
   final Timestamp createAt;
   final int commentCount;
@@ -38,11 +40,10 @@ class Post {
       userId: map['userId'] ?? '',
       content: map['content'] ?? '',
       images: List<String>.from(map['images'] ?? []),
+      thumbnail: map['thumbnail'] ?? '',
       tags: List<String>.from(map['tags'] ?? []),
       createAt:
-          map['createAt'] is Timestamp
-              ? map['createAt'] as Timestamp
-              : Timestamp.now(),
+          map['createAt'] is Timestamp ? map['createAt'] as Timestamp : Timestamp.now(),
       commentCount: map['commentCount'] ?? 0,
       likeCount: map['likeCount'] ?? 0,
       viewCount: map['viewCount'] ?? 0,
@@ -60,6 +61,7 @@ class Post {
       'title': title,
       'content': content,
       'images': images,
+      'thumbnail': thumbnail,
       'createAt': isNew ? FieldValue.serverTimestamp() : createAt,
       'commentCount': commentCount,
       'likeCount': likeCount,
