@@ -7,6 +7,7 @@ import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/comment_section.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
@@ -25,7 +26,7 @@ class PostDetailPage extends ConsumerStatefulWidget {
 
 class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   late Post currentPost;
-  String? nickname; 
+  String? nickname;
   String? profileUrl;
 
   @override
@@ -189,6 +190,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
               createdAt: currentPost.createAt.toDate(),
               viewCount: currentPost.viewCount,
             ),
+            const SizedBox(height: 16),
+            CommentSection(postId: currentPost.postId),
           ],
         ),
       ),
