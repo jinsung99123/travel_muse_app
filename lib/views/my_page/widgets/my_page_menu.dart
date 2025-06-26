@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/views/my_page/my_scrap_list_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
@@ -15,7 +16,7 @@ class MyPageMenu extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildMenuTitle('여행 일정'),
+          _buildMenuTitle('내 활동'),
 
           _buildMenuItem(
             title: '나의 여행',
@@ -23,6 +24,16 @@ class MyPageMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => PlanListPage()),
+              );
+            },
+          ),
+
+           _buildMenuItem(
+            title: '북마크',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyScrapListPage()),
               );
             },
           ),
