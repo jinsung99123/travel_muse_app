@@ -47,18 +47,22 @@ class SaveButton extends ConsumerWidget {
   Future<void> _handleSave(BuildContext context, WidgetRef ref) async {
     final selectedDistrict = districts[selectedIndex!];
 
-    final calendarState = ref.read(calendarViewModelProvider);
+    final calendarState = ref.watch(calendarViewModelProvider);
+    print(
+      'SaveButton _handleSave: startDay=${calendarState.startDay}, endDay=${calendarState.endDay}',
+    );
     final locationViewModel = ref.read(
       calendarLocationViewModelProvider.notifier,
     );
 
     locationViewModel.setRegion('$selectedProvince $selectedDistrict');
 
-    if (calendarState.startDay != null && calendarState.endDay != null) {
-      locationViewModel.setDateRange(
-        calendarState.startDay!,
-        calendarState.endDay!,
-      );
+    // startDay가 null이면 endDay 값으로 대체, 둘 다 null이면 저장 불가
+    final startDay = calendarState.startDay ?? calendarState.endDay;
+    final endDay = calendarState.endDay ?? calendarState.startDay;
+
+    if (startDay != null && endDay != null) {
+      locationViewModel.setDateRange(startDay, endDay);
     } else {
       ScaffoldMessenger.of(
         context,

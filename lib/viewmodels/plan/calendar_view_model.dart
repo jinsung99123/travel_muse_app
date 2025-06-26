@@ -34,6 +34,9 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
           focusedDay: newFocusedDay,
         );
       }
+      print(
+        'selectDay called: startDay=${state.startDay}, endDay=${state.endDay}',
+      );
     }
   }
 
@@ -48,5 +51,15 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
         state.endDay != null &&
         day.isAfter(state.startDay!) &&
         day.isBefore(state.endDay!);
+  }
+
+  /// endDay가 null이면 startDay로 설정
+  void ensureEndDay() {
+    final start = state.startDay;
+    final end = state.endDay;
+
+    if (start != null && end == null) {
+      state = state.copyWith(endDay: start);
+    }
   }
 }

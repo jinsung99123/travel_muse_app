@@ -68,8 +68,17 @@ class CalendarPage extends ConsumerWidget {
                     ),
                   ),
                   onPressed: () {
-                    if (state.startDay != null && state.endDay != null) {
-                      // 날짜가 모두 선택된 경우 다음 화면으로 이동
+                    final viewModel = ref.read(
+                      calendarViewModelProvider.notifier,
+                    );
+                    final state = ref.read(calendarViewModelProvider);
+
+                    final start = state.startDay;
+                    final end = state.endDay;
+
+                    if (start != null) {
+                      viewModel.ensureEndDay();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -77,12 +86,12 @@ class CalendarPage extends ConsumerWidget {
                         ),
                       );
                     } else {
-                      // 날짜가 선택되지 않은 경우 안내 메시지 띄우기
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('여행 날짜를 모두 선택해주세요.')),
+                        const SnackBar(content: Text('여행 날짜를 선택해주세요.')),
                       );
                     }
                   },
+
                   child: Text(
                     getButtonText(state.startDay, state.endDay),
                     style: const TextStyle(fontSize: 16, color: Colors.white),

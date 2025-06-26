@@ -8,22 +8,18 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
 
   final Ref ref;
 
-  /// 시작 날짜를 설정
   void setStartDate(DateTime date) {
     state = state.copyWith(startDate: date);
   }
 
-  /// 종료 날짜를 설정
   void setEndDate(DateTime date) {
     state = state.copyWith(endDate: date);
   }
 
-  /// 여행 지역을 설정
   void setRegion(String region) {
     state = state.copyWith(region: region);
   }
 
-  /// 외부에서 planId가 주어진 경우, 해당 plan 데이터를 Firestore에 저장
   Future<void> savePlan(String planId) async {
     final start = state.startDate;
     final end = state.endDate;
@@ -46,7 +42,6 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     state = state.copyWith(planId: planId);
   }
 
-  /// 내부에서 planId를 생성하여 plan 데이터를 저장
   Future<String> createAndSavePlan() async {
     final start = state.startDate;
     final end = state.endDate;
@@ -70,12 +65,10 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     return planId;
   }
 
-  /// 시작일과 종료일을 함께 설정
   void setDateRange(DateTime start, DateTime end) {
     state = state.copyWith(startDate: start, endDate: end);
   }
 
-  /// 유저의 가장 가까운 미래의 플랜을 로드
   Future<void> loadNearestUpcomingPlan() async {
     final userId = ref.read(authViewModelProvider).user?.uid;
     if (userId == null) return;
@@ -85,6 +78,50 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
 
     if (plan != null) {
       state = plan;
+    }
+  }
+
+  /// *** 새로 추가된 메서드 ***
+  /// 날짜와 지역을 인자로 받아 상태를 세팅하고 저장까지 처리하는 통합 함수
+  Future<String> savePlanWithDates(
+    String region,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final userId = ref.read(authViewModelProvider).user?.uid;
+    if (userId == null) {
+      throw Exception('사용자 정보가 누락되었습니다.');
+    }
+
+    // 상태 업데이트
+    state = state.copyWith(
+      region: region,
+      startDate: startDate,
+      endDate: endDate,
+    );
+
+    final repo = ref.read(calendarLocationRepositoryProvider);
+
+    if (state.planId != null) {
+      // 기존 planId가 있으면 업데이트
+      await repo.savePlan(
+        planId: state.planId!,
+        startDate: startDate,
+        endDate: endDate,
+        region: region,
+        userId: userId,
+      );
+      return state.planId!;
+    } else {
+      // 새로 생성 및 저장
+      final newPlanId = await repo.createAndSavePlan(
+        startDate: startDate,
+        endDate: endDate,
+        region: region,
+        userId: userId,
+      );
+      state = state.copyWith(planId: newPlanId);
+      return newPlanId;
     }
   }
 }

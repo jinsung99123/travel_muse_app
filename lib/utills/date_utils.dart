@@ -31,14 +31,21 @@ int getTripDays(DateTime start, DateTime end) {
 
 // 버튼에 보여줄 텍스트 생성 함수
 String getButtonText(DateTime? startDay, DateTime? endDay) {
-  if (startDay == null || endDay == null) {
+  if (startDay == null) {
     return '다음';
+  }
+
+  final actualEndDay = endDay ?? startDay;
+
+  final startStr =
+      '${startDay.year}.${startDay.month.toString().padLeft(2, '0')}.${startDay.day.toString().padLeft(2, '0')}';
+  final endStr =
+      '${actualEndDay.year}.${actualEndDay.month.toString().padLeft(2, '0')}.${actualEndDay.day.toString().padLeft(2, '0')}';
+  final days = getTripDays(startDay, actualEndDay);
+
+  if (startDay == actualEndDay) {
+    return '$startStr ($days일) 선택하기'; // 당일 여행이면 ~ 없이 단일 날짜만 출력
   } else {
-    final startStr =
-        '${startDay.year}.${startDay.month.toString().padLeft(2, '0')}.${startDay.day.toString().padLeft(2, '0')}';
-    final endStr =
-        '${endDay.year}.${endDay.month.toString().padLeft(2, '0')}.${endDay.day.toString().padLeft(2, '0')}';
-    final days = getTripDays(startDay, endDay);
     return '$startStr ~ $endStr ($days일) 선택하기';
   }
 }
