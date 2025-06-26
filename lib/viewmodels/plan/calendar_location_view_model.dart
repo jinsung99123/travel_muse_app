@@ -81,7 +81,9 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     final plan = await repo.fetchNearestUpcomingPlan(userId);
 
     if (plan != null) {
-      debugPrint('[loadNearestUpcomingPlan] 가장 가까운 여행 로드됨: ${plan.startDate}');
+      debugPrint(
+        '[loadNearestUpcomingPlan] 가장 가까운 여행 로드됨: ${plan.startDate}, ${plan.planId}',
+      );
       state = plan;
     } else {
       debugPrint('[loadNearestUpcomingPlan] 불러올 여행 없음');

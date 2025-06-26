@@ -31,13 +31,15 @@ class PlanState {
     );
   }
 
-  factory PlanState.fromMap(Map<String, dynamic> map) {
+  factory PlanState.fromDoc(DocumentSnapshot doc) {
+    final map = doc.data() as Map<String, dynamic>;
+
     return PlanState(
-      planId: map['planId'],
+      planId: doc.id,
       startDate: (map['startDate'] as Timestamp).toDate(),
       endDate: (map['endDate'] as Timestamp).toDate(),
-      region: map['region'],
-      userId: map['userId'],
+      region: map['region'] as String,
+      userId: map['userId'] as String,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:travel_muse_app/models/plan/planstate.dart';
 
 class CalendarLocationRepository {
@@ -51,12 +52,11 @@ class CalendarLocationRepository {
     return planId;
   }
 
-  /// userId의 플랜 중 가장 가까운 미래의 플랜 로드
   Future<PlanState?> fetchNearestUpcomingPlan(String userId) async {
     final now = DateTime.now();
 
     final querySnapshot =
-        await FirebaseFirestore.instance
+        await _firestore
             .collection('plans')
             .where('userId', isEqualTo: userId)
             .where('startDate', isGreaterThanOrEqualTo: Timestamp.fromDate(now))
@@ -64,18 +64,9 @@ class CalendarLocationRepository {
             .limit(1)
             .get();
 
-    if (querySnapshot.docs.isEmpty) {
-      return null;
-    }
+    if (querySnapshot.docs.isEmpty) return null;
 
-    final doc = querySnapshot.docs.first;
-    final data = doc.data();
-
-    return PlanState(
-      startDate: (data['startDate'] as Timestamp).toDate(),
-      endDate: (data['endDate'] as Timestamp).toDate(),
-      region: data['region'] as String,
-    );
+    return PlanState.fromDoc(querySnapshot.docs.first);
   }
 
   /// userId의 사용자 문서에 planId를 추가
