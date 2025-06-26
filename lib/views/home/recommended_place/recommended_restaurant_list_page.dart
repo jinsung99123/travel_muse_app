@@ -15,7 +15,7 @@ class RecommendedRestaurantsListPage extends ConsumerWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text(
-          '추천 맛집 전체 보기',
+          '추천 맛집',
           style: TextStyle(
             color: AppColors.black,
             fontSize: 18,
@@ -36,17 +36,26 @@ class RecommendedRestaurantsListPage extends ConsumerWidget {
             return const Center(child: Text('추천 맛집이 없어요'));
           }
           return ListView.separated(
-            padding: const EdgeInsets.all(16),
             itemCount: restaurants.length,
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (_, index) {
               final r = restaurants[index];
-              return RecommendedRestaurantListCard(
-                name: r.title,
-                image: r.thumbnail,
-                description: r.subtitle,
-                isActive: true,
-                place: r,
+              return Column(
+                children: [
+                  RecommendedRestaurantListCard(
+                    name: r.title,
+                    image: r.thumbnail,
+                    description: r.subtitle,
+                    catecory: r.category,
+                    isActive: true,
+                    place: r,
+                  ),
+                  Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: AppColors.grey[200],
+                  ),
+                ],
               );
             },
           );

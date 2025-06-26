@@ -9,6 +9,7 @@ class RecommendedRestaurantListCard extends StatelessWidget {
     required this.name,
     required this.image,
     required this.description,
+    required this.catecory,
     required this.isActive,
     this.place,
   });
@@ -16,6 +17,7 @@ class RecommendedRestaurantListCard extends StatelessWidget {
   final String name;
   final String image;
   final String description;
+  final String catecory;
   final bool isActive;
   final HomePlace? place;
 
@@ -34,20 +36,7 @@ class RecommendedRestaurantListCard extends StatelessWidget {
               }
               : null,
       child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.primary[100]!, width: 1),
-          boxShadow: [
-            BoxShadow(
-              /// ignore: deprecated_member_use
-              color: AppColors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             ClipRRect(
@@ -81,6 +70,8 @@ class RecommendedRestaurantListCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -90,12 +81,19 @@ class RecommendedRestaurantListCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
+                     maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 14, color: AppColors.grey[700]),
+                  ),
+                   Text(
+                    catecory,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14, color: AppColors.grey[400]),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: AppColors.grey[400]),
           ],
         ),
       ),
