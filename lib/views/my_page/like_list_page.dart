@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
+import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/views/post/post_detail_page.dart';
 
-class LikeListPage extends StatefulWidget {
+class LikeListPage extends ConsumerStatefulWidget {
   const LikeListPage({super.key});
 
   @override
-  State<LikeListPage> createState() => _LikeListPageState();
+  ConsumerState<LikeListPage> createState() => _LikeListPageState();
 }
 
-class _LikeListPageState extends State<LikeListPage> {
+class _LikeListPageState extends ConsumerState<LikeListPage> {
   late final String? userId;
 
   @override
@@ -20,44 +22,18 @@ class _LikeListPageState extends State<LikeListPage> {
     userId = FirebaseAuth.instance.currentUser?.uid;
   }
 
-  Future<List<Post>> _fetchLikedPosts() async {
-    if (userId == null) return [];
-
-    final firestore = FirebaseFirestore.instance;
-
-    //내가 좋아요한 postId 목록 가져오기
-    final likeSnapshot =
-        await firestore
-            .collection('likes')
-            .where('userId', isEqualTo: userId)
-            .get();
-
-    final postIds =
-        likeSnapshot.docs.map((doc) => doc['postId'] as String).toList();
-
-    //postId로 posts 컬렉션에서 실제 게시글 가져오기
-    final posts = <Post>[];
-
-    for (final postId in postIds) {
-      final doc = await firestore.collection('posts').doc(postId).get();
-      if (doc.exists) {
-        posts.add(Post.fromMap(doc.data()!));
-      }
-    }
-
-    return posts;
-  }
-
   @override
   Widget build(BuildContext context) {
     if (userId == null) {
       return const Scaffold(body: Center(child: Text('로그인이 필요합니다')));
     }
 
+    final likeRepository = ref.read(likeRepositoryProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('좋아요한 게시글')),
       body: FutureBuilder<List<Post>>(
-        future: _fetchLikedPosts(),
+        future: likeRepository.fetchLikedPosts(userId!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -92,7 +68,7 @@ class _LikeListPageState extends State<LikeListPage> {
                     ),
                   );
 
-                  if (mounted) setState(() {}); // 돌아오면 목록 재로딩
+                  if (mounted) setState(() {}); // 좋아요 취소 시 목록 갱신
                 },
               );
             },

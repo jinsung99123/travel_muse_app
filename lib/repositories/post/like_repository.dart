@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_muse_app/models/post/post_model.dart';
 
 abstract class LikeRepository {
   Future<void> addLike({required String postId, required String userId});
 
   Future<void> removeLike({required String postId, required String userId});
+  Future<List<Post>> fetchLikedPosts(String userId);
 
   Future<bool> isPostLikedByUser({
     required String postId,
@@ -60,5 +62,28 @@ class LikeRepositoryImpl implements LikeRepository {
             .where('userId', isEqualTo: userId)
             .get();
     return snapshot.docs.map((doc) => doc['postId'] as String).toList();
+  }
+
+  @override
+  Future<List<Post>> fetchLikedPosts(String userId) async {
+    final likeSnapshot =
+        await _firestore
+            .collection('likes')
+            .where('userId', isEqualTo: userId)
+            .get();
+
+    final postIds =
+        likeSnapshot.docs.map((doc) => doc['postId'] as String).toList();
+
+    final posts = <Post>[];
+
+    for (final postId in postIds) {
+      final doc = await _firestore.collection('posts').doc(postId).get();
+      if (doc.exists) {
+        posts.add(Post.fromMap(doc.data()!));
+      }
+    }
+
+    return posts;
   }
 }
