@@ -15,22 +15,29 @@ class PostListView extends ConsumerStatefulWidget {
 }
 
 class _PostListViewState extends ConsumerState<PostListView> {
-  late final Throttler _throttler;
+  late final Throttler _refreshThrottler;
+  late final Throttler _scrollThrottler;
 
   @override
   void initState() {
     super.initState();
-    _throttler = Throttler(
+    _refreshThrottler = Throttler(
       duration: Duration(seconds: 1),
       callback: () async {
         await ref.read(postListViewModelProvider.notifier).fetchNewPosts();
+      },
+    );
+    _scrollThrottler = Throttler(
+      duration: Duration(seconds: 1),
+      callback: () async {
+        await ref.read(postListViewModelProvider.notifier).fetchOldPosts();
       },
     );
   }
 
   @override
   void dispose() {
-    _throttler.dispose();
+    _refreshThrottler.dispose();
     super.dispose();
   }
 
@@ -42,40 +49,49 @@ class _PostListViewState extends ConsumerState<PostListView> {
     return Expanded(
       child: postAsync.when(
         data:
-            (data) => RefreshIndicator(
-              onRefresh: () async {
-                _throttler.run();
-                return Future.value();
+            (data) => NotificationListener<ScrollNotification>(
+              onNotification: (notification) {
+                if (notification.metrics.pixels >=
+                    notification.metrics.maxScrollExtent - 100) {
+                  _scrollThrottler.run();
+                }
+                return false;
               },
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  final post = data.posts[index];
-                  return KeyedSubtree(
-                    key: ValueKey(post.postId),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PostDetailPage(post: post),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        width: double.infinity,
-                        decoration: ShapeDecoration(
-                          color: AppColors.white,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 0.20, color: AppColors.grey[200]!),
-                          ),
-                        ),
-                        child: PostItem(screenWidth: screenWidth, post: post),
-                      ),
-                    ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _refreshThrottler.run();
+                  return Future.value();
                 },
-                itemCount: data.posts.length,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    final post = data.posts[index];
+                    return KeyedSubtree(
+                      key: ValueKey(post.postId),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PostDetailPage(post: post),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          width: double.infinity,
+                          decoration: ShapeDecoration(
+                            color: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(width: 0.20, color: AppColors.grey[200]!),
+                            ),
+                          ),
+                          child: PostItem(screenWidth: screenWidth, post: post),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: data.posts.length,
+                ),
               ),
             ),
         loading: () => _buildLoadingList(screenWidth),

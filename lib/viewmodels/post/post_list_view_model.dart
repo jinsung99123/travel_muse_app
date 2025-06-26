@@ -46,7 +46,31 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
 
       state = AsyncData(state.value!.copyWith(posts: newPosts));
     } catch (e) {
-      log('새로고침 실패 : $e');
+      log('당겨서 새로고침 실패 : $e');
+    }
+  }
+
+  Future<void> fetchOldPosts() async {
+    try {
+      final currentPosts = state.value?.posts ?? [];
+
+      List<Post> newPosts;
+
+      if (currentPosts.isEmpty) {
+        newPosts = await _repository.fetchInitialPosts();
+      } else {
+        final oldestCreateAt = currentPosts.last.createAt;
+        newPosts = await _repository.fetchOldPostsBefore(oldestCreateAt);
+
+        final existingIds = currentPosts.map((post) => post.postId).toSet();
+        newPosts = newPosts.where((post) => !existingIds.contains(post.postId)).toList();
+
+        newPosts = [...currentPosts, ...newPosts];
+      }
+
+      state = AsyncData(state.value!.copyWith(posts: newPosts));
+    } catch (e) {
+      log('무한 스크롤 실패 : $e');
     }
   }
 
