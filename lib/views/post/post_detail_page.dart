@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
+import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
@@ -123,7 +123,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                       style: TextStyle(color: Colors.red),
                     ),
                     onTap: () {
-                      Navigator.pop(context); // 바텀시트 닫기
+                      Navigator.pop(context);
                       showReportReasonDialog(context, (
                         reasonCode,
                         reasonText,
@@ -161,6 +161,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return const Center(child: Text('로그인이 필요합니다.'));
+    }
     return Scaffold(
       appBar: buildPostDetailAppBar(_showOptions),
       body: Padding(
@@ -189,6 +193,35 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
               tags: currentPost.tags,
               createdAt: currentPost.createAt.toDate(),
               viewCount: currentPost.viewCount,
+              likeCount: currentPost.likeCount,
+              isLiked: ref.watch(
+                likeViewModelProvider(
+                  LikeViewModelParams(
+                    postId: currentPost.postId,
+                    userId: user!.uid,
+                  ),
+                ),
+              ),
+              onLikePressed: () async {
+                final params = LikeViewModelParams(
+                  postId: currentPost.postId,
+                  userId: user.uid,
+                );
+
+                final likeVM = ref.read(likeViewModelProvider(params).notifier);
+                final isCurrentlyLiked = ref.read(
+                  likeViewModelProvider(params),
+                ); // 현재 상태 먼저 저장
+
+                await likeVM.toggleLike(); // 상태 반전
+
+                setState(() {
+                  currentPost = currentPost.copyWith(
+                    likeCount:
+                        currentPost.likeCount + (isCurrentlyLiked ? -1 : 1),
+                  );
+                });
+              },
             ),
             const SizedBox(height: 16),
             CommentSection(postId: currentPost.postId),

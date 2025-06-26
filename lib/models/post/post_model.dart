@@ -73,4 +73,38 @@ class Post {
       'place': place,
     };
   }
+
+  Post copyWith({
+    String? postId,
+    String? userId,
+    String? title,
+    String? content,
+    List<String>? images,
+    List<String>? tags,
+    Timestamp? createAt,
+    int? commentCount,
+    int? likeCount,
+    int? viewCount,
+    bool? isDeleted,
+    bool? isReposted,
+    int? reportCount,
+    Map<String, dynamic>? place,
+  }) {
+    return Post(
+      postId: postId ?? this.postId,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      images: images ?? this.images,
+      tags: tags ?? this.tags,
+      createAt: createAt ?? this.createAt,
+      commentCount: commentCount ?? this.commentCount,
+      likeCount: likeCount ?? this.likeCount,
+      viewCount: viewCount ?? this.viewCount,
+      isDeleted: isDeleted ?? this.isDeleted,
+      isReposted: isReposted ?? this.isReposted,
+      reportCount: reportCount ?? this.reportCount,
+      place: place ?? this.place,
+    );
+  }
 }
