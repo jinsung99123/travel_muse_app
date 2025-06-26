@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
+import 'package:travel_muse_app/providers/scoial/report_provider.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class CommentSection extends ConsumerWidget {
@@ -65,10 +68,33 @@ class CommentSection extends ConsumerWidget {
                             trailing: PopupMenuButton<String>(
                               onSelected: (value) async {
                                 if (value == 'report') {
-                                  await viewModel.reportComment(
-                                    comment.commentId,
-                                  );
-                                } else if (value == 'delete') {
+                                  // 신고 다이얼로그 표시
+                                  showReportReasonDialog(context, (
+                                    reasonCode,
+                                    reasonText,
+                                  ) async {
+                                    await ref
+                                        .read(reportViewModelProvider.notifier)
+                                        .submit(
+                                          targetType: 'comment',
+                                          targetId: comment.commentId,
+                                          postId: postId,
+                                          reporterId: userId,
+                                          targetOwnerId: comment.userId,
+                                          reasonCode: reasonCode,
+                                          reasonText: reasonText,
+                                        );
+
+                                    if (context.mounted) {
+                                      CustomToast.show(
+                                        context: context,
+                                        message: '신고 되었습니다.',
+                                        duration: const Duration(seconds: 2),
+                                      );
+                                    }
+                                  });
+                                }
+                                else if (value == 'delete') {
                                   final confirm = await showDialog<bool>(
                                     context: context,
                                     builder:
@@ -102,17 +128,19 @@ class CommentSection extends ConsumerWidget {
                                   }
                                 }
                               },
+
                               itemBuilder: (context) {
                                 final isOwner = comment.userId == userId;
                                 return [
-                                  const PopupMenuItem(
-                                    value: 'report',
-                                    child: Text('신고하기'),
-                                  ),
                                   if (isOwner)
                                     const PopupMenuItem(
                                       value: 'delete',
                                       child: Text('삭제하기'),
+                                    )
+                                  else
+                                    const PopupMenuItem(
+                                      value: 'report',
+                                      child: Text('신고하기'),
                                     ),
                                 ];
                               },
@@ -158,3 +186,4 @@ class CommentSection extends ConsumerWidget {
     );
   }
 }
+
