@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:intl/intl.dart';
 
 class CommentSection extends ConsumerWidget {
   const CommentSection({super.key, required this.postId});
@@ -61,32 +60,60 @@ class CommentSection extends ConsumerWidget {
                           return ListTile(
                             title: Text(comment.content),
                             subtitle: Text('$nickname • $timeAgo'),
-                            trailing: Wrap(
-                              spacing: 8,
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.thumb_up,
-                                    color: isLiked ? Colors.blue : Colors.grey,
+                            trailing: PopupMenuButton<String>(
+                              onSelected: (value) async {
+                                if (value == 'report') {
+                                  await viewModel.reportComment(
+                                    comment.commentId,
+                                  );
+                                } else if (value == 'delete') {
+                                  final confirm = await showDialog<bool>(
+                                    context: context,
+                                    builder:
+                                        (_) => AlertDialog(
+                                          title: const Text('댓글 삭제'),
+                                          content: const Text('댓글을 삭제하시겠습니까?'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('취소'),
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    false,
+                                                  ),
+                                            ),
+                                            TextButton(
+                                              child: const Text('삭제'),
+                                              onPressed:
+                                                  () => Navigator.pop(
+                                                    context,
+                                                    true,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                  if (confirm == true) {
+                                    await viewModel.deleteComment(
+                                      comment.commentId,
+                                    );
+                                  }
+                                }
+                              },
+                              itemBuilder: (context) {
+                                final isOwner = comment.userId == userId;
+                                return [
+                                  const PopupMenuItem(
+                                    value: 'report',
+                                    child: Text('신고하기'),
                                   ),
-                                  onPressed:
-                                      () => viewModel.toggleLike(
-                                        comment.commentId,
-                                        userId,
-                                      ),
-                                ),
-                                Text('${comment.likedUserIds.length}'),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.flag,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed:
-                                      () => viewModel.reportComment(
-                                        comment.commentId,
-                                      ),
-                                ),
-                              ],
+                                  if (isOwner)
+                                    const PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('삭제하기'),
+                                    ),
+                                ];
+                              },
                             ),
                           );
                         },

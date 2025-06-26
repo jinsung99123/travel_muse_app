@@ -27,4 +27,8 @@ class CommentViewModel extends StateNotifier<AsyncValue<List<Comment>>> {
   Future<void> reportComment(String commentId) async {
     await _repo.reportComment(postId, commentId);
   }
+
+  Future<void> deleteComment(String commentId) async {
+    await _repo.deleteComment(postId, commentId);
+  }
 }

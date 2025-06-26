@@ -50,4 +50,8 @@ class CommentRepository {
       txn.update(ref, {'reportCount': count, 'isReported': count >= 3});
     });
   }
+
+  Future<void> deleteComment(String postId, String commentId) async {
+    await getCommentsRef(postId).doc(commentId).delete();
+  }
 }
