@@ -66,7 +66,7 @@ class _AdminReportScreenState extends ConsumerState<AdminReportScreen> {
                 return ReportedCard(
                   title: '[댓글] ${item.content}',
                   subtitle:
-                      '작성자: ${item.nickname}\n게시글 ID: ${item.postId}\n신고 수: ${item.reportCount}',
+                      '작성자: ${item.nickname} \n신고 수: ${item.reportCount}',
                   onTap: () {
                     // 댓글 탭으로 이동 등 구현 가능
                   },
@@ -90,3 +90,4 @@ class _AdminReportScreenState extends ConsumerState<AdminReportScreen> {
     );
   }
 }
+

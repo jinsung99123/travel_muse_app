@@ -35,6 +35,8 @@ class ReportedComment {
       createdAt: (json['createdAt'] as Timestamp).toDate(),
       isReposted: json['isReposted'] ?? false,
       reportCount: json['reportCount'] ?? 0,
+      nickname: nickname
     );
   }
 }
+
