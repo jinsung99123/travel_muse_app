@@ -39,8 +39,19 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
     Future.microtask(() async {
       final postRepo = ref.read(postRepositoryProvider);
+
+      // 조회수 증가
       await postRepo.incrementViewCount(currentPost.postId);
 
+      // 최신 게시글 정보 다시 불러옴
+      final updatedPost = await postRepo.fetchPostById(currentPost.postId);
+      if (updatedPost != null) {
+        setState(() {
+          currentPost = updatedPost;
+        });
+      }
+
+      //작성자 정보 불러오기
       final user = await postRepo.fetchUser(currentPost.userId);
       if (user != null) {
         setState(() {
@@ -243,18 +254,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 );
 
                 final likeVM = ref.read(likeViewModelProvider(params).notifier);
-                final isCurrentlyLiked = ref.read(
-                  likeViewModelProvider(params),
-                ); // 현재 상태 먼저 저장
 
-                await likeVM.toggleLike(); // 상태 반전
+                await likeVM.toggleLike();
 
-                setState(() {
-                  currentPost = currentPost.copyWith(
-                    likeCount:
-                        currentPost.likeCount + (isCurrentlyLiked ? -1 : 1),
-                  );
-                });
+                await _refreshPost();
               },
             ),
             const SizedBox(height: 16),
