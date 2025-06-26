@@ -34,9 +34,6 @@ class CalendarViewModel extends StateNotifier<CalendarState> {
           focusedDay: newFocusedDay,
         );
       }
-      print(
-        'selectDay called: startDay=${state.startDay}, endDay=${state.endDay}',
-      );
     }
   }
 

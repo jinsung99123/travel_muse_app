@@ -48,16 +48,13 @@ class SaveButton extends ConsumerWidget {
     final selectedDistrict = districts[selectedIndex!];
 
     final calendarState = ref.watch(calendarViewModelProvider);
-    print(
-      'SaveButton _handleSave: startDay=${calendarState.startDay}, endDay=${calendarState.endDay}',
-    );
+
     final locationViewModel = ref.read(
       calendarLocationViewModelProvider.notifier,
     );
 
     locationViewModel.setRegion('$selectedProvince $selectedDistrict');
 
-    // startDay가 null이면 endDay 값으로 대체, 둘 다 null이면 저장 불가
     final startDay = calendarState.startDay ?? calendarState.endDay;
     final endDay = calendarState.endDay ?? calendarState.startDay;
 

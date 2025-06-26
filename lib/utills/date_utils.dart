@@ -44,7 +44,7 @@ String getButtonText(DateTime? startDay, DateTime? endDay) {
   final days = getTripDays(startDay, actualEndDay);
 
   if (startDay == actualEndDay) {
-    return '$startStr ($days일) 선택하기'; // 당일 여행이면 ~ 없이 단일 날짜만 출력
+    return '$startStr ($days일) 선택하기';
   } else {
     return '$startStr ~ $endStr ($days일) 선택하기';
   }

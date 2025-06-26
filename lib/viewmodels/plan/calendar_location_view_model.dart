@@ -81,7 +81,6 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     }
   }
 
-  /// *** 새로 추가된 메서드 ***
   /// 날짜와 지역을 인자로 받아 상태를 세팅하고 저장까지 처리하는 통합 함수
   Future<String> savePlanWithDates(
     String region,
