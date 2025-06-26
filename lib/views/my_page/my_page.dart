@@ -17,16 +17,14 @@ class MyPage extends StatelessWidget {
         centerTitle: false,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            MyProfileScreen(),
-            Container(
-              height: 5,
-              width: double.infinity,
-              color: AppColors.grey[50],
-            ),
-            MyPageMenu(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MyProfileScreen(),
+              Container(height: 5, width: double.infinity, color: AppColors.grey[50]),
+              MyPageMenu(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const BottomBar(),

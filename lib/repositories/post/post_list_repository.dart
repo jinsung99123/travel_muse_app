@@ -61,4 +61,16 @@ class PostListRepository {
 
     return snapshot.docs.map((doc) => Post.fromMap(doc.data())).toList();
   }
+
+  /// 특정 유저의 포스트를 최신순으로 가져오기
+  Future<List<Post>> fetchPostsByUserId(String userId) async {
+    final snapshot =
+        await _postRef
+            .where('userId', isEqualTo: userId)
+            .where('isDeleted', isEqualTo: false)
+            .orderBy('createAt', descending: true)
+            .get();
+
+    return snapshot.docs.map((doc) => Post.fromMap(doc.data())).toList();
+  }
 }

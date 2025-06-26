@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/views/my_page/like_list_page.dart';
+import 'package:travel_muse_app/views/my_page/my_post_page.dart';
 import 'package:travel_muse_app/views/my_page/my_scrap_list_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
@@ -24,7 +25,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PlanListPage()),
+                MaterialPageRoute(builder: (context) => const PlanListPage()),
               );
             },
           ),
@@ -34,7 +35,17 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyScrapListPage()),
+                MaterialPageRoute(builder: (context) => const MyScrapListPage()),
+              );
+            },
+          ),
+
+          _buildMenuItem(
+            title: '내 게시글',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyPostPage()),
               );
             },
           ),
@@ -46,9 +57,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const PreferenceListPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const PreferenceListPage()),
               );
             },
           ),
@@ -58,7 +67,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PreferenceTestPage()),
+                MaterialPageRoute(builder: (context) => const PreferenceTestPage()),
               );
             },
           ),
@@ -68,7 +77,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LikeListPage()),
+                MaterialPageRoute(builder: (context) => const LikeListPage()),
               );
             },
           ),
@@ -77,7 +86,7 @@ class MyPageMenu extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SettingPage()),
+                MaterialPageRoute(builder: (context) => const SettingPage()),
               );
             },
           ),
