@@ -132,7 +132,16 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           );
 
                           if (result == true && mounted) {
-                            await _refreshPost(); //수정이 일어난 경우에만 최신 데이터 반영
+                            final postRepo = ref.read(postRepositoryProvider);
+                            final updatedPost = await postRepo.fetchPostById(
+                              currentPost.postId,
+                            );
+                            if (updatedPost != null) {
+                              setState(() {
+                                currentPost = updatedPost; // 상세 페이지 갱신
+                              });
+                              Navigator.pop(context, updatedPost);
+                            }
                           }
                         },
                       ),
@@ -244,59 +253,68 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     if (user == null) {
       return const Center(child: Text('로그인이 필요합니다.'));
     }
-    return Scaffold(
-      appBar: buildPostDetailAppBar(_showOptions),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
-          children: [
-            PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
-            const SizedBox(height: 16),
-            PostDetailContent(
-              title: currentPost.title,
-              content: currentPost.content,
-            ),
-            const SizedBox(height: 16),
-            PostDetailImages(images: currentPost.images),
-            const SizedBox(height: 16),
-            if (currentPost.place != null)
-              PlacePreviewCard(
-                title: currentPost.place!['title'] ?? '',
-                address: currentPost.place!['address'] ?? '',
-                latLng: LatLng(
-                  (currentPost.place!['lat'] ?? 0).toDouble(),
-                  (currentPost.place!['lng'] ?? 0).toDouble(),
-                ),
+
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, currentPost);
+        return false;
+      },
+      child: Scaffold(
+        appBar: buildPostDetailAppBar(_showOptions),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListView(
+            children: [
+              PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
+              const SizedBox(height: 16),
+              PostDetailContent(
+                title: currentPost.title,
+                content: currentPost.content,
               ),
-            PostDetailTagsAndMeta(
-              tags: currentPost.tags,
-              createdAt: currentPost.createAt.toDate(),
-              viewCount: currentPost.viewCount,
-              likeCount: currentPost.likeCount,
-              isLiked: ref.watch(
-                likeViewModelProvider(
-                  LikeViewModelParams(
-                    postId: currentPost.postId,
-                    userId: user.uid,
+              const SizedBox(height: 16),
+              PostDetailImages(images: currentPost.images),
+              const SizedBox(height: 16),
+              if (currentPost.place != null)
+                PlacePreviewCard(
+                  title: currentPost.place!['title'] ?? '',
+                  address: currentPost.place!['address'] ?? '',
+                  latLng: LatLng(
+                    (currentPost.place!['lat'] ?? 0).toDouble(),
+                    (currentPost.place!['lng'] ?? 0).toDouble(),
                   ),
                 ),
+              PostDetailTagsAndMeta(
+                tags: currentPost.tags,
+                createdAt: currentPost.createAt.toDate(),
+                viewCount: currentPost.viewCount,
+                likeCount: currentPost.likeCount,
+                isLiked: ref.watch(
+                  likeViewModelProvider(
+                    LikeViewModelParams(
+                      postId: currentPost.postId,
+                      userId: user.uid,
+                    ),
+                  ),
+                ),
+                onLikePressed: () async {
+                  final params = LikeViewModelParams(
+                    postId: currentPost.postId,
+                    userId: user.uid,
+                  );
+
+                  final likeVM = ref.read(
+                    likeViewModelProvider(params).notifier,
+                  );
+
+                  await likeVM.toggleLike();
+
+                  await _refreshPost();
+                },
               ),
-              onLikePressed: () async {
-                final params = LikeViewModelParams(
-                  postId: currentPost.postId,
-                  userId: user.uid,
-                );
-
-                final likeVM = ref.read(likeViewModelProvider(params).notifier);
-
-                await likeVM.toggleLike();
-
-                await _refreshPost();
-              },
-            ),
-            const SizedBox(height: 16),
-            CommentSection(postId: currentPost.postId),
-          ],
+              const SizedBox(height: 16),
+              CommentSection(postId: currentPost.postId),
+            ],
+          ),
         ),
       ),
     );
