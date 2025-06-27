@@ -156,7 +156,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           '삭제하기',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: AppColors.error,
                             fontSize: 16,
                             fontFamily: 'pretendard',
                             fontWeight: FontWeight.w400,
