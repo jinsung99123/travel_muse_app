@@ -23,7 +23,7 @@ class _DeleteAccountButtonState extends ConsumerState<DeleteAccountButton> {
       builder:
           (context) => const ConfirmDialog(
             title: '탈퇴하시겠습니까?',
-            description: '작성한 커뮤니티 글, 댓글은 자동으로 삭제되지 않아요',
+            description: '작성한 글, 댓글은 자동으로 삭제되지 않아요',
           ),
     );
 
