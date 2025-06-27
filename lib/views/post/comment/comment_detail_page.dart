@@ -6,6 +6,7 @@ import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
+import 'package:travel_muse_app/utills/format_time_ago.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,7 +32,7 @@ class CommentDetailPage extends ConsumerWidget {
         children: [
           ListTile(
             title: Text(parentComment.content),
-            subtitle: Text('원댓글 • ${_timeAgo(parentComment.createdAt)}'),
+            subtitle: Text('원댓글 • ${timeAgo(parentComment.createdAt)}'),
           ),
           const Divider(),
           Expanded(
@@ -47,7 +48,7 @@ class CommentDetailPage extends ConsumerWidget {
                     final reply = replies[i];
                     return ListTile(
                       title: Text(reply.content),
-                      subtitle: Text(_timeAgo(reply.createdAt)),
+                      subtitle: Text(timeAgo(reply.createdAt)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -151,14 +152,4 @@ class CommentDetailPage extends ConsumerWidget {
       ),
     );
   }
-}
-
-String _timeAgo(Timestamp timestamp) {
-  final now = DateTime.now();
-  final diff = now.difference(timestamp.toDate());
-
-  if (diff.inSeconds < 60) return '방금 전';
-  if (diff.inMinutes < 60) return '${diff.inMinutes}분 전';
-  if (diff.inHours < 24) return '${diff.inHours}시간 전';
-  return '${diff.inDays}일 전';
 }

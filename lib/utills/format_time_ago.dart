@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FormatTimeAgo {
-  static String formatTimeAgo({required DateTime now, required Timestamp createdAt}) {
+  static String formatTimeAgo({
+    required DateTime now,
+    required Timestamp createdAt,
+  }) {
     final diff = now.difference(createdAt.toDate());
 
     if (diff.inSeconds <= 0) {
@@ -25,4 +28,14 @@ class FormatTimeAgo {
       return '$years년 전';
     }
   }
+}
+
+String timeAgo(Timestamp timestamp) {
+  final now = DateTime.now();
+  final diff = now.difference(timestamp.toDate());
+
+  if (diff.inSeconds < 60) return '방금 전';
+  if (diff.inMinutes < 60) return '${diff.inMinutes}분 전';
+  if (diff.inHours < 24) return '${diff.inHours}시간 전';
+  return '${diff.inDays}일 전';
 }
