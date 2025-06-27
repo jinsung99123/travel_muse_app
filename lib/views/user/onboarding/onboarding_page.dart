@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/onboarding/terms_agreement_bottom_sheet.dart';
-import 'package:travel_muse_app/views/user/onboarding/widgets/edit_birth_date.dart';
-import 'package:travel_muse_app/views/user/onboarding/widgets/select_gender.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 import 'package:travel_muse_app/views/widgets/user_next_button.dart';
@@ -15,9 +13,6 @@ class OnboardingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(profileViewModelProvider);
-    final profileViewModel = ref.read(profileViewModelProvider.notifier);
-
-    final birthDateController = profileViewModel.birthDateController;
 
     bool canUpdate = profileState.canUpdateProfile;
 
@@ -41,8 +36,6 @@ class OnboardingPage extends ConsumerWidget {
                   ),
                   EditProfileImage(),
                   EditNickname(),
-                  EditBirthDate(controller: birthDateController),
-                  SelectGender(),
                 ],
               ),
               Column(
@@ -59,8 +52,7 @@ class OnboardingPage extends ConsumerWidget {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
-                            builder:
-                                (context) => const TermsAgreementBottomSheet(),
+                            builder: (context) => const TermsAgreementBottomSheet(),
                           );
                         });
                       }

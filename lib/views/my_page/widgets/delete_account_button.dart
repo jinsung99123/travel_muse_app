@@ -1,49 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
+import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
 
-class DeleteAccountButton extends ConsumerWidget {
+class DeleteAccountButton extends ConsumerStatefulWidget {
   const DeleteAccountButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ElevatedButton(
-      onPressed: () {
-        ref.read(authViewModelProvider.notifier).deleteAccount();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => LoginPage()),
-          (route) => false,
-        );
-        // 탈퇴 전 확인 팝업(WIP)
-        // showGeneralDialog(
-        //   context: context,
-        //   barrierDismissible: true,
-        //   barrierLabel: 'Dismiss',
-        //   barrierColor: AppColors.black.withAlpha(200),
-        //   transitionDuration: const Duration(milliseconds: 200),
-        //   pageBuilder: (context, animation, secondaryAnimation) {
-        //     return GestureDetector(
-        //       onTap: () => Navigator.of(context).pop(),
-        //       child: Material(
-        //         type: MaterialType.transparency,
-        //         child: Center(
-        //           child: GestureDetector(
-        //             onTap: () {},
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(horizontal: 16),
-        //               child: CustomDialog(),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   },
-        // );
-      },
+  ConsumerState<DeleteAccountButton> createState() => _DeleteAccountButtonState();
+}
 
-      child: Text('회원 탈퇴'),
+class _DeleteAccountButtonState extends ConsumerState<DeleteAccountButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(onPressed: _showConfirmDialog, child: const Text('회원 탈퇴'));
+  }
+
+  Future<void> _showConfirmDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => const ConfirmDialog(
+            title: '탈퇴하시겠습니까?',
+            description: '작성한 글, 댓글은 자동으로 삭제되지 않아요',
+          ),
     );
+
+    if (!mounted) return;
+
+    if (result == true) {
+      await ref.read(authViewModelProvider.notifier).deleteAccount();
+
+      if (!mounted) return;
+
+      await Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginPage()),
+        (route) => false,
+      );
+    }
   }
 }
