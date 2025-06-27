@@ -90,7 +90,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
 
     final notifier = ref.read(postViewModelProvider.notifier);
 
-    await notifier.submitPost(
+    final createdPost = await notifier.submitPost(
       existingPost: widget.post,
       title: titleController.text.trim(),
       content: contentController.text.trim(),
@@ -100,7 +100,11 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     );
 
     if (mounted) {
-      Navigator.pop(context);
+      if (widget.post != null) {
+        Navigator.pop(context, true); // 수정인 경우 → true 반환
+      } else if (createdPost != null) {
+        Navigator.pop(context, createdPost); // 새 글 작성인 경우 → post 반환
+      }
     }
   }
 

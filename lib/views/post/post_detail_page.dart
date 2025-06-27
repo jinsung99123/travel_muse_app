@@ -122,14 +122,18 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           ),
                         ),
                         onTap: () async {
-                          Navigator.pop(context);
-                          await Navigator.push(
+                          Navigator.pop(context); // BottomSheet 닫기
+
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => PostWritePage(post: currentPost),
                             ),
                           );
-                          if (mounted) await _refreshPost();
+
+                          if (result == true && mounted) {
+                            await _refreshPost(); //수정이 일어난 경우에만 최신 데이터 반영
+                          }
                         },
                       ),
                     ),

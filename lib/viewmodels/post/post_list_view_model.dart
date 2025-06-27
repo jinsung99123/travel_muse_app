@@ -14,6 +14,18 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
     return PostListState();
   }
 
+  void addPost(Post post) {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final exists = currentState.posts.any((p) => p.postId == post.postId);
+    if (exists) return;
+
+    final updatedPosts = [post, ...currentState.posts];
+
+    state = AsyncData(currentState.copyWith(posts: updatedPosts));
+  }
+
   /// 포스트 리스트 초기값 상태 업데이트
   Future<void> fetchInitialPosts() async {
     state = const AsyncLoading();

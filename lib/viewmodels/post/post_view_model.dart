@@ -10,7 +10,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   final PostRepository _repository;
 
   /// 게시글 생성
-  Future<void> createPost({
+  Future<Post> createPost({
     required String title,
     required String content,
     required List<String> imageUrls,
@@ -42,8 +42,10 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
 
       await _repository.createPost(post);
       state = const AsyncData(null);
+      return post;
     } catch (e, st) {
       state = AsyncError(e, st);
+      rethrow;
     }
   }
 
@@ -58,7 +60,14 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   }) async {
     state = const AsyncLoading();
     try {
-      await _repository.updatePost(postId, title, content, imageUrls, tags, place);
+      await _repository.updatePost(
+        postId,
+        title,
+        content,
+        imageUrls,
+        tags,
+        place,
+      );
       state = const AsyncData(null);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -77,7 +86,9 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   }
 
   /// 이미지 분리 및 업로드 후 병합 처리
-  Future<List<String>> uploadImagesWithLocalFilter(List<String> imagePaths) async {
+  Future<List<String>> uploadImagesWithLocalFilter(
+    List<String> imagePaths,
+  ) async {
     final existingUrls = imagePaths.where((p) => p.startsWith('http')).toList();
     final localPaths = imagePaths.where((p) => !p.startsWith('http')).toList();
     final uploadedUrls = await _repository.uploadImages(localPaths);
@@ -85,7 +96,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
   }
 
   /// 생성/수정 통합 처리
-  Future<void> submitPost({
+  Future<Post?> submitPost({
     required Post? existingPost,
     required String title,
     required String content,
@@ -106,17 +117,20 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
           tags: tags,
           place: place,
         );
+        return null;
       } else {
-        await createPost(
+        final createdPost = await createPost(
           title: title,
           content: content,
           imageUrls: imageUrls,
           tags: tags,
           place: place,
         );
+        return createdPost;
       }
     } catch (e, st) {
       state = AsyncError(e, st);
+      return null;
     }
   }
 }
