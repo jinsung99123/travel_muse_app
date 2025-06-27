@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
@@ -20,8 +19,16 @@ import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_m
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
-  const PostDetailPage({super.key, required this.post});
-  final Post post;
+  const PostDetailPage({
+    super.key,
+    this.post,
+    this.postId,
+    this.scrollToCommentId,
+  });
+
+  final Post? post;
+  final String? postId;
+  final String? scrollToCommentId;
 
   @override
   ConsumerState<PostDetailPage> createState() => _PostDetailPageState();
@@ -35,10 +42,25 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   @override
   void initState() {
     super.initState();
-    currentPost = widget.post;
+    currentPost = widget.post!;
 
     Future.microtask(() async {
       final postRepo = ref.read(postRepositoryProvider);
+
+      if (widget.post != null) {
+        currentPost = widget.post!;
+      } else if (widget.postId != null) {
+        final fetched = await postRepo.fetchPostById(widget.postId!);
+        if (fetched != null) {
+          currentPost = fetched;
+        } else {
+          if (mounted) Navigator.pop(context);
+          return;
+        }
+      } else {
+        if (mounted) Navigator.pop(context);
+        return;
+      }
 
       // 조회수 증가
       await postRepo.incrementViewCount(currentPost.postId);
@@ -243,7 +265,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 likeViewModelProvider(
                   LikeViewModelParams(
                     postId: currentPost.postId,
-                    userId: user!.uid,
+                    userId: user.uid,
                   ),
                 ),
               ),
