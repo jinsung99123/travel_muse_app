@@ -21,32 +21,46 @@ class MyPostPage extends ConsumerWidget {
         centerTitle: false,
       ),
       body: postAsync.when(
-        data:
-            (data) => ListView.builder(
-              itemBuilder: (context, index) {
-                final post = data[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PostDetailPage(post: post)),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    width: double.infinity,
-                    decoration: ShapeDecoration(
-                      color: AppColors.white,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 0.20, color: AppColors.grey[200]!),
+        data: (data) {
+          final filtered =
+              data.where((post) => post.isDeleted == false).toList();
+
+          if (filtered.isEmpty) {
+            return const Center(child: Text('작성한 게시물이 없습니다.'));
+          }
+
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              final post = filtered[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostDetailPage(post: post),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  decoration: ShapeDecoration(
+                    color: AppColors.white,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 0.20,
+                        color: AppColors.grey[200]!,
                       ),
                     ),
-                    child: PostItem(screenWidth: screenWidth, post: post),
                   ),
-                );
-              },
-              itemCount: data.length,
-            ),
+                  child: PostItem(screenWidth: screenWidth, post: post),
+                ),
+              );
+            },
+            itemCount: filtered.length,
+          );
+        },
+
         loading: () => SizedBox.shrink(),
         error: (error, stackTrace) => Center(child: Text('작성글을 불러올 수 없습니다')),
       ),
