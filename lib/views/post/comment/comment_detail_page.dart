@@ -95,9 +95,6 @@ class CommentDetailPage extends ConsumerWidget {
                                 IconButton(
                                   icon: const Icon(Icons.more_vert),
                                   onPressed: () async {
-                                    /// ─────────────────────────────
-                                    ///  바텀시트 호출
-                                    /// ─────────────────────────────
                                     final result =
                                         await showModalBottomSheet<String>(
                                           context: context,
