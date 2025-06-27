@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
@@ -115,7 +116,7 @@ class CommentDetailPage extends ConsumerWidget {
                                                   if (isOwner) ...[
                                                     ActionItem(
                                                       label: '삭제',
-                                                      textColor: Colors.red,
+                                                      textColor:AppColors.error,
                                                       onTap:
                                                           () => Navigator.pop(
                                                             context,
@@ -126,7 +127,8 @@ class CommentDetailPage extends ConsumerWidget {
                                                   ],
                                                   if (!isOwner) ...[
                                                     ActionItem(
-                                                      label: '신고',
+                                                      label: '신고하기',
+                                                      textColor: AppColors.error,
                                                       onTap:
                                                           () => Navigator.pop(
                                                             context,
