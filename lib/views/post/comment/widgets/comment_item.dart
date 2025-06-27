@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/utills/format_time_ago.dart';
+import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
+import 'package:travel_muse_app/views/post/%08comment/widgets/action_item.dart';
 import 'package:travel_muse_app/views/post/%08comment/widgets/reply_preivew.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -46,6 +49,8 @@ class _CommentItemState extends ConsumerState<CommentItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
+              contentPadding: EdgeInsets.zero,
+              minLeadingWidth: 0,
               leading:
                   profileUrl.isNotEmpty
                       ? CircleAvatar(backgroundImage: NetworkImage(profileUrl))
@@ -54,13 +59,54 @@ class _CommentItemState extends ConsumerState<CommentItem> {
               subtitle: Text(
                 '$nickname • ${timeAgo(widget.comment.createdAt)}',
               ),
-              trailing: PopupMenuButton<String>(
-                onSelected: (value) async {
-                  if (value == 'reply') {
-                    setState(() {
-                      showReplyField = !showReplyField;
-                    });
-                  } else if (value == 'report') {
+              trailing: IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () async {
+                  final isOwner = widget.comment.userId == widget.currentUserId;
+                  final result = await showModalBottomSheet<String>(
+                    context: context,
+                    backgroundColor: AppColors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                    ),
+                    builder: (_) {
+                      return SafeArea(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ActionItem(
+                              label: '답글',
+                              onTap: () => Navigator.pop(context, 'reply'),
+                            ),
+                            const Divider(height: 1),
+                            if (isOwner) ...[
+                              ActionItem(
+                                label: '삭제',
+                                textColor: AppColors.error,
+                                onTap: () => Navigator.pop(context, 'delete'),
+                              ),
+                            ] else ...[
+                              ActionItem(
+                                label: '신고하기',
+                                textColor: AppColors.error,
+                                onTap: () => Navigator.pop(context, 'report'),
+                              ),
+                            ],
+                            const Divider(height: 1),
+                            ActionItem(
+                              label: '닫기',
+                              onTap: () => Navigator.pop(context, null),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                  if (result == 'reply') {
+                    setState(() => showReplyField = !showReplyField);
+                  } else if (result == 'report') {
                     showReportReasonDialog(context, (code, text) async {
                       await ref
                           .read(reportViewModelProvider.notifier)
@@ -73,51 +119,30 @@ class _CommentItemState extends ConsumerState<CommentItem> {
                             reasonCode: code,
                             reasonText: text,
                           );
-                      if (context.mounted) {
-                        CustomToast.show(
-                          context: context,
-                          message: '신고 되었습니다.',
-                        );
-                      }
+                      if (!mounted) return;
+                      CustomToast.show(context: context, message: '신고 되었습니다.');
                     });
-                  } else if (value == 'delete') {
+                  } else if (result == 'delete') {
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder:
-                          (_) => AlertDialog(
-                            title: const Text('댓글 삭제'),
-                            content: const Text('댓글을 삭제하시겠습니까?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: const Text('취소'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: const Text('삭제'),
-                              ),
-                            ],
+                          (_) => ConfirmDialog(
+                            title: '댓글 삭제',
+                            description: '댓글을 삭제하사겠습니까?',
                           ),
                     );
+
                     if (confirm == true) {
                       await viewModel.deleteComment(widget.comment.commentId);
+                      if (!mounted) return;
+                      CustomToast.show(
+                        context: context,
+                        message: '댓글이 삭제되었습니다.',
+                        duration: const Duration(seconds: 2),
+                      );
                     }
                   }
                 },
-                itemBuilder:
-                    (_) => [
-                      const PopupMenuItem(value: 'reply', child: Text('답글')),
-                      if (widget.comment.userId == widget.currentUserId)
-                        const PopupMenuItem(
-                          value: 'delete',
-                          child: Text('삭제하기'),
-                        )
-                      else
-                        const PopupMenuItem(
-                          value: 'report',
-                          child: Text('신고하기'),
-                        ),
-                    ],
               ),
             ),
 
