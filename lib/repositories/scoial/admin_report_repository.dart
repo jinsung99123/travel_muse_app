@@ -30,7 +30,26 @@ class AdminReportRepository {
                 ? (userSnapshot.data()?['nickname'] ?? '알 수 없음')
                 : '탈퇴한 사용자';
 
-        return ReportedPost.fromJson(data, postId, nickname: nickname);
+        // 신고 문서 조회
+        final reports =
+            await _firestore
+                .collection('reports')
+                .where('targetType', isEqualTo: 'post')
+                .where('targetId', isEqualTo: postId)
+                .get();
+
+        final reasonCode =
+            reports.docs.map((e) => e.data()['reasonCode'] as String).toList();
+        final reasonText =
+            reports.docs.map((e) => e.data()['reasonText'] as String?).toList();
+
+        return ReportedPost.fromJson(
+          data,
+          postId,
+          reasonCode: reasonCode,
+          reasonText: reasonText,
+          nickname: nickname,
+        );
       }),
     );
   }
@@ -50,6 +69,24 @@ class AdminReportRepository {
         final commentId = doc.id;
         final userId = data['userId'];
 
+        // 각 댓글에 대한 신고 사유 가져오기
+        final reportQuery =
+            await _firestore
+                .collection('reports')
+                .where('targetType', isEqualTo: 'comment')
+                .where('targetId', isEqualTo: commentId)
+                .get();
+
+        final reasonCode =
+            reportQuery.docs
+                .map((e) => e.data()['reasonCode'] as String)
+                .toList();
+
+        final reasonText =
+            reportQuery.docs
+                .map((e) => e.data()['reasonText'] as String?)
+                .toList();
+
         final userSnapshot =
             await _firestore.collection('appUser').doc(userId).get();
         final nickname =
@@ -61,6 +98,8 @@ class AdminReportRepository {
           data,
           postId,
           commentId,
+          reasonCode,
+          reasonText,
           nickname: nickname,
         );
       }),
