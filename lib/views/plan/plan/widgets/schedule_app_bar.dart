@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
@@ -58,9 +59,11 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
               if (!hasRoute) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('일정을 먼저 등록해주세요 🗓️')),
-                  );
+                  CustomToast.show(
+                                context: context,
+                                message: '일정을 먼저 등록해주세요.',
+                                duration: const Duration(seconds: 2),
+                              );
                 }
                 return;
               }
