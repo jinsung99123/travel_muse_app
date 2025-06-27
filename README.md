@@ -319,6 +319,9 @@ lib/
 ## 10.트러블슈팅 & 해결 사례
 - [AI 추천 이후 Kakao API 연동 시 429 오류 발생 문제](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-AI-%EC%B6%94%EC%B2%9C-%EC%9D%B4%ED%9B%84-Kakao-API-%EC%97%B0%EB%8F%99-%EC%8B%9C-429-%EC%98%A4%EB%A5%98-%EB%B0%9C%EC%83%9D)
 - [트러블 슈팅 MapPage 진입 시 앱 종료 및 TabController 오류 발생 문제](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-MapPage-%EC%A7%84%EC%9E%85-%EC%8B%9C-%EC%95%B1-%EC%A2%85%EB%A3%8C-%EB%B0%8F-TabController-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
+- [바텀바 스택관리](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-%EB%B0%94%ED%85%80%EB%B0%94-%EC%8A%A4%ED%83%9D%EA%B4%80%EB%A6%AC)
+- [이미지 업로드 지연 문제해결](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%A7%80%EC%97%B0-%EB%AC%B8%EC%A0%9C%ED%95%B4%EA%B2%B0)
+- [캘린더 상태관리](https://github.com/jinsung99123/travel_muse_app/wiki/README-10.-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-%EC%BA%98%EB%A6%B0%EB%8D%94-%EC%83%81%ED%83%9C%EA%B4%80%EB%A6%AC)
 
 
 
@@ -378,12 +381,12 @@ lib/
 
 ## 12.후기 및 개선 계획
 - 초기 버전 완성 후 사용자 피드백 수집 예정  
-- 향후 기능: 여행 공유 기능, SNS 연동, 일정 자동 리마인더 추가 예정  
+- 향후 기능: 여행 후기 게시판, ai 일정 자동 정렬, 관리자 페이지 추가 예정  
 
 
 
 ## 13.더 알아보기  
-🎥 앱 데모 영상은 [TravleMuse](https://www.notion.so/teamsparta/TravelMuse-2012dc3ef514805d8ac0c97e7179e82e)에서도 확인하실 수 있어요!
+🎥 앱 데모 영상은 [TravleMuse](https://www.youtube.com/watch?v=npxDu1s38yM&t=1s)에서도 확인하실 수 있어요!
 
 
 
