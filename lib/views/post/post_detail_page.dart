@@ -9,7 +9,7 @@ import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
-import 'package:travel_muse_app/views/post/widgets/detail/comment_section.dart';
+import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
@@ -146,7 +146,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                                       child: const Text('취소'),
                                     ),
                                     TextButton(
-                                      onPressed: () => Navigator.pop(context, true),
+                                      onPressed:
+                                          () => Navigator.pop(context, true),
                                       child: const Text('삭제'),
                                     ),
                                   ],
