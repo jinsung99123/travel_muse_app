@@ -43,9 +43,7 @@ class CommentDetailPage extends ConsumerWidget {
                     comments
                         .where((c) => c.parentId == parentComment.commentId)
                         .toList()
-                      ..sort(
-                        (a, b) => a.createdAt.compareTo(b.createdAt),
-                      ); // 시간순 정렬
+                      ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
                 return ListView.builder(
                   itemCount: replies.length,

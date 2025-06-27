@@ -121,14 +121,12 @@ class _CommentItemState extends ConsumerState<CommentItem> {
               ),
             ),
 
-            // 답글 미리보기
             ReplyPreview(
               postId: widget.postId,
               parentComment: widget.comment,
               currentUserId: widget.currentUserId,
             ),
 
-            // 답글 작성란 (toggle)
             if (showReplyField)
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 8),
