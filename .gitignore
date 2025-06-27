@@ -53,3 +53,4 @@ app.*.map.json
 /android/app/release
 
 functions/serviceAccountKey.json
+/ios/secret.xcconfig
