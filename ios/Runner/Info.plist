@@ -38,7 +38,7 @@
 	<key>GIDClientID</key>
 	<string>241683645756-d6uqecrq0rl9q08abd7eoo0gmj40mp27.apps.googleusercontent.com</string>
 	<key>GMSApiKey</key>
-	<string>YOUR_GOOGLE_MAPS_API_KEY_HERE</string>
+	<string>$(GOOGLE_MAP_KEY)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>http</string>
