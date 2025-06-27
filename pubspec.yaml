@@ -68,4 +68,5 @@ flutter:
     - assets/icons/
     - assets/sns_icons/
     - assets/icons/icon_active/
+    - assets/gif/
     - .env
