@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PostDetailHeader extends StatelessWidget {
-  final String? nickname;
-  final String? profileUrl;
-
   const PostDetailHeader({
     super.key,
     required this.nickname,
     required this.profileUrl,
   });
+  final String? nickname;
+  final String? profileUrl;
 
   @override
   Widget build(BuildContext context) {

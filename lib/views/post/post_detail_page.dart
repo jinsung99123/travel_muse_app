@@ -110,8 +110,16 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                     height: 80,
                     child: Center(
                       child: ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: const Text('수정하기'),
+                        title: const Text(
+                          '수정하기',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 16,
+                            fontFamily: 'pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                         onTap: () async {
                           Navigator.pop(context);
                           await Navigator.push(
@@ -125,12 +133,21 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                       ),
                     ),
                   ),
+                  const Divider(height: 1),
                   SizedBox(
                     height: 80,
                     child: Center(
                       child: ListTile(
-                        leading: const Icon(Icons.delete),
-                        title: const Text('삭제하기'),
+                        title: const Text(
+                          '삭제하기',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 16,
+                            fontFamily: 'pretendard',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                         onTap: () async {
                           Navigator.pop(context);
                           final confirm = await showDialog<bool>(
