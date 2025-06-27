@@ -67,4 +67,15 @@ class CommentRepository {
       'profileImage': data?['profileImage'] ?? '',
     };
   }
+
+  Stream<List<Comment>> getReplies(String postId, String parentId) {
+    return getCommentsRef(postId)
+        .where('parentId', isEqualTo: parentId)
+        .orderBy('createdAt', descending: false)
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => Comment.fromDoc(doc)).toList(),
+        );
+  }
 }
