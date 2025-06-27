@@ -75,6 +75,9 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
         daySchedules.putIfAbsent(dayIndex, () => []);
         daySchedules[dayIndex]!.addAll(selectedPlaces);
       });
+      await ref
+          .read(scheduleViewModelProvider.notifier)
+          .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
     }
   }
 
@@ -184,10 +187,16 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 selectedPlan!.endDate,
               ),
               region: selectedPlan!.region,
-              onResult: (parsed) {
+              onResult: (parsed) async {
                 setState(() {
                   daySchedules = parsed;
                 });
+                await ref
+                    .read(scheduleViewModelProvider.notifier)
+                    .saveDaySchedules(
+                      planId: widget.planId,
+                      daySchedules: parsed,
+                    );
               },
             ),
           ],
@@ -195,8 +204,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-      bottomNavigationBar: 
-      const BottomBar(),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
