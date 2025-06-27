@@ -62,8 +62,8 @@ class _BottomSheetCategoryState extends State<BottomSheetCategory> {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Wrap(
-                    spacing: 8,
-                    runSpacing: 12,
+                    spacing: 22,
+                    runSpacing: 15,
                     children:
                         allTags.map((tag) {
                           return CategoryChip(
