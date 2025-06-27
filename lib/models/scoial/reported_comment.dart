@@ -5,6 +5,8 @@ class ReportedComment {
   final String userId;
   final String? nickname;
   final String content;
+  final List<String> reasonCode;
+  final List<String?> reasonText;
   final DateTime createdAt;
   final bool isReposted;
   final int reportCount;
@@ -14,6 +16,8 @@ class ReportedComment {
     required this.commentId,
     required this.userId,
     required this.content,
+    required this.reasonCode,
+    required this.reasonText,
     required this.createdAt,
     required this.isReposted,
     required this.reportCount,
@@ -24,7 +28,9 @@ class ReportedComment {
   factory ReportedComment.fromJson(
     Map<String, dynamic> json,
     String postId,
-    String commentId, {
+    String commentId,
+    List<String> reasonCode,
+    List<String?> reasonText, {
     String? nickname,
   }) {
     return ReportedComment(
@@ -35,8 +41,9 @@ class ReportedComment {
       createdAt: (json['createdAt'] as Timestamp).toDate(),
       isReposted: json['isReposted'] ?? false,
       reportCount: json['reportCount'] ?? 0,
-      nickname: nickname
+      reasonCode: reasonCode,
+      reasonText: reasonText,
+      nickname: nickname,
     );
   }
 }
-
