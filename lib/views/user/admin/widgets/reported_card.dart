@@ -5,36 +5,37 @@ class ReportedCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
-    this.onDelete,
+    required this.onTap,
+    required this.onDelete,
     required this.onClear,
-    this.onTap,
+    this.onShowReasons,
   });
-
   final String title;
   final String subtitle;
-  final VoidCallback? onDelete;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
   final VoidCallback onClear;
-  final VoidCallback? onTap;
+  final VoidCallback? onShowReasons; 
+
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
+        title: Text(title),
+        subtitle: Text(subtitle),
         onTap: onTap,
-        title: Text(title, overflow: TextOverflow.ellipsis, softWrap: true),
-        subtitle: Text(subtitle, softWrap: true),
-        trailing: SizedBox(
-          width: 96,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (onDelete != null)
-                IconButton(icon: const Icon(Icons.delete), onPressed: onDelete),
-              IconButton(icon: const Icon(Icons.clear), onPressed: onClear),
-            ],
-          ),
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'delete') onDelete();
+            else if (value == 'clear') onClear();
+            else if (value == 'reasons' && onShowReasons != null) onShowReasons!();
+          },
+          itemBuilder: (_) => [
+            const PopupMenuItem(value: 'delete', child: Text('삭제')),
+            const PopupMenuItem(value: 'clear', child: Text('신고 해제')),
+            const PopupMenuItem(value: 'reasons', child: Text('신고 사유 보기')),
+          ],
         ),
       ),
     );
