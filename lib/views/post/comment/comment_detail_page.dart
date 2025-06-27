@@ -16,6 +16,7 @@ class CommentDetailPage extends ConsumerWidget {
     required this.postId,
     required this.parentComment,
   });
+
   final String postId;
   final Comment parentComment;
 
@@ -41,80 +42,111 @@ class CommentDetailPage extends ConsumerWidget {
                 final replies =
                     comments
                         .where((c) => c.parentId == parentComment.commentId)
-                        .toList();
+                        .toList()
+                      ..sort(
+                        (a, b) => a.createdAt.compareTo(b.createdAt),
+                      ); // 시간순 정렬
+
                 return ListView.builder(
                   itemCount: replies.length,
                   itemBuilder: (_, i) {
                     final reply = replies[i];
-                    return ListTile(
-                      title: Text(reply.content),
-                      subtitle: Text(timeAgo(reply.createdAt)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              reply.likedUserIds.contains(userId)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color:
-                                  reply.likedUserIds.contains(userId)
-                                      ? Colors.red
-                                      : null,
-                            ),
-                            onPressed:
-                                () => viewModel.toggleLike(
-                                  reply.commentId,
-                                  userId,
-                                ),
-                          ),
-                          PopupMenuButton<String>(
-                            onSelected: (value) async {
-                              if (value == 'report') {
-                                showReportReasonDialog(context, (
-                                  reasonCode,
-                                  reasonText,
-                                ) async {
-                                  await ref
-                                      .read(reportViewModelProvider.notifier)
-                                      .submit(
-                                        targetType: 'comment',
-                                        targetId: reply.commentId,
-                                        postId: postId,
-                                        reporterId: userId,
-                                        targetOwnerId: reply.userId,
-                                        reasonCode: reasonCode,
-                                        reasonText: reasonText,
-                                      );
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: FutureBuilder<Map<String, String>>(
+                        future: viewModel.getUserInfo(reply.userId),
+                        builder: (context, snapshot) {
+                          final nickname = snapshot.data?['nickname'] ?? '닉네임';
+                          final profileUrl =
+                              snapshot.data?['profileImage'] ?? '';
 
-                                  if (context.mounted) {
-                                    CustomToast.show(
-                                      context: context,
-                                      message: '신고 되었습니다.',
-                                      duration: const Duration(seconds: 2),
-                                    );
-                                  }
-                                });
-                              }
-                              if (value == 'delete') {
-                                await viewModel.deleteComment(reply.commentId);
-                              }
-                            },
-                            itemBuilder:
-                                (_) => [
-                                  if (reply.userId == userId)
-                                    const PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text('삭제'),
+                          return ListTile(
+                            leading:
+                                profileUrl.isNotEmpty
+                                    ? CircleAvatar(
+                                      backgroundImage: NetworkImage(profileUrl),
+                                    )
+                                    : const CircleAvatar(
+                                      child: Icon(Icons.person),
                                     ),
-                                  if (reply.userId != userId)
-                                    const PopupMenuItem(
-                                      value: 'report',
-                                      child: Text('신고'),
-                                    ),
-                                ],
-                          ),
-                        ],
+                            title: Text(reply.content),
+                            subtitle: Text(
+                              '$nickname • ${timeAgo(reply.createdAt)}',
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    reply.likedUserIds.contains(userId)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color:
+                                        reply.likedUserIds.contains(userId)
+                                            ? Colors.red
+                                            : null,
+                                  ),
+                                  onPressed:
+                                      () => viewModel.toggleLike(
+                                        reply.commentId,
+                                        userId,
+                                      ),
+                                ),
+                                PopupMenuButton<String>(
+                                  onSelected: (value) async {
+                                    if (value == 'report') {
+                                      showReportReasonDialog(context, (
+                                        reasonCode,
+                                        reasonText,
+                                      ) async {
+                                        await ref
+                                            .read(
+                                              reportViewModelProvider.notifier,
+                                            )
+                                            .submit(
+                                              targetType: 'comment',
+                                              targetId: reply.commentId,
+                                              postId: postId,
+                                              reporterId: userId,
+                                              targetOwnerId: reply.userId,
+                                              reasonCode: reasonCode,
+                                              reasonText: reasonText,
+                                            );
+                                        if (context.mounted) {
+                                          CustomToast.show(
+                                            context: context,
+                                            message: '신고 되었습니다.',
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    }
+                                    if (value == 'delete') {
+                                      await viewModel.deleteComment(
+                                        reply.commentId,
+                                      );
+                                    }
+                                  },
+                                  itemBuilder:
+                                      (_) => [
+                                        if (reply.userId == userId)
+                                          const PopupMenuItem(
+                                            value: 'delete',
+                                            child: Text('삭제'),
+                                          ),
+                                        if (reply.userId != userId)
+                                          const PopupMenuItem(
+                                            value: 'report',
+                                            child: Text('신고'),
+                                          ),
+                                      ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     );
                   },

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
-import 'package:travel_muse_app/views/post/%08comment/%08widgets/comment_item.dart';
+import 'package:travel_muse_app/views/post/%08comment/widgets/comment_item.dart';
 import 'package:uuid/uuid.dart';
 
 class CommentSection extends ConsumerWidget {
