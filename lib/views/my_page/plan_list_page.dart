@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/utills/format_month_day.dart';
@@ -34,7 +35,11 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => const ConfirmDialog(title : '일정을 삭제하시겠습니까?', description : '일정 삭제하고 후에는 되돌릴 수 없어요'),
+      builder:
+          (ctx) => const ConfirmDialog(
+            title: '일정을 삭제하시겠습니까?',
+            description: '일정 삭제하고 후에는 되돌릴 수 없어요',
+          ),
     );
 
     if (result == true) {
@@ -42,9 +47,11 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
       await ref.read(scheduleViewModelProvider.notifier).fetchSavedPlans();
 
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('일정이 삭제되었습니다.')));
+        CustomToast.show(
+          context: context,
+          message: '일정이 삭제되었습니다.',
+          duration: const Duration(seconds: 2),
+        );
       }
       return true;
     }
@@ -80,10 +87,11 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: const Text(
                           '삭제',
-                          style: TextStyle(color: AppColors.white,
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
                           ),
                         ),
                       ),

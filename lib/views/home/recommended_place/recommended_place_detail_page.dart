@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
@@ -71,6 +72,11 @@ class _RecommendedPlaceDetailPageState
               ),
               onPressed: () {
                 ref.read(scrapViewModelProvider.notifier).toggleScrap(place);
+                CustomToast.show(
+                  context: context,
+                  message: '북마크에 저장했습니다.',
+                  duration: const Duration(seconds: 2),
+                );
               },
             ),
           ],
