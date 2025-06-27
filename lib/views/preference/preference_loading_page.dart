@@ -77,7 +77,7 @@ class _PreferenceLoadingPageState extends ConsumerState<PreferenceLoadingPage> {
                   height: 290,
 
                   child: Image.asset(
-                    'assets/images/loading.png',
+                    'assets/gif/gif.gif',
                     width: 292,
                     height: 290,
                     fit: BoxFit.contain,
