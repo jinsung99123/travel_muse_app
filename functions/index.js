@@ -144,3 +144,21 @@ exports.revokeAdminByEmail = functions.https.onCall(async (data, context) => {
   }
 });
 
+///게시글 30일 뒤에 자동 삭제
+exports.deleteOldDeletedPosts = functions.pubsub.schedule("every 24 hours").onRun(async (context) => {
+    const firestore = admin.firestore();
+    const now = admin.firestore.Timestamp.now();
+    const cutoff = new Date(now.toDate().getTime() - 30 * 24 * 60 * 60 * 1000);
+  
+    const snapshot = await firestore.collection("posts")
+      .where("isDeleted", "==", true)
+      .where("createdAt", "<", cutoff)
+      .get();
+  
+    const deletePromises = snapshot.docs.map(doc => doc.ref.delete());
+    await Promise.all(deletePromises);
+  
+    console.log(`Deleted ${deletePromises.length} posts`);
+    return null;
+  });
+
