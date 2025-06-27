@@ -91,6 +91,7 @@ class _AccountInfoState extends ConsumerState<AccountInfo> {
                         child: Text(
                           data.loginEmail ?? '',
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 16,
