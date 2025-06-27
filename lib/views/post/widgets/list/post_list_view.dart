@@ -81,13 +81,18 @@ class _PostListViewState extends ConsumerState<PostListView> {
                   return KeyedSubtree(
                     key: ValueKey(post.postId),
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => PostDetailPage(post: post),
                           ),
                         );
+
+                        if (result == true) {
+                          ref.invalidate(postListViewModelProvider);
+                        }
+
                         widget.onPostUpdated?.call();
                       },
                       child: Container(

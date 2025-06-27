@@ -11,6 +11,7 @@ import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
+import 'package:travel_muse_app/views/post/widgets/detail/popup.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
@@ -152,29 +153,18 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           Navigator.pop(context);
                           final confirm = await showDialog<bool>(
                             context: context,
+                            barrierDismissible: false,
                             builder:
-                                (_) => AlertDialog(
-                                  title: const Text('삭제 확인'),
-                                  content: const Text('정말 이 게시글을 삭제하시겠습니까?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed:
-                                          () => Navigator.pop(context, false),
-                                      child: const Text('취소'),
-                                    ),
-                                    TextButton(
-                                      onPressed:
-                                          () => Navigator.pop(context, true),
-                                      child: const Text('삭제'),
-                                    ),
-                                  ],
+                                (_) => Popup(
+                                  onCancel: () => Navigator.pop(context, false),
+                                  onConfirm: () => Navigator.pop(context, true),
                                 ),
                           );
                           if (confirm == true) {
                             await ref
                                 .read(postViewModelProvider.notifier)
                                 .deletePost(currentPost.postId);
-                            if (mounted) Navigator.pop(context);
+                            if (mounted) Navigator.pop(context, true);
                           }
                         },
                       ),

@@ -21,7 +21,9 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
     try {
       final filter = state.value?.filter;
       final posts = await _repository.fetchInitialPosts(filter: filter);
-      state = AsyncData(state.value!.copyWith(posts: posts));
+      final filteredPosts =
+          posts.where((post) => post.isDeleted == false).toList();
+      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
     } catch (e) {
       log('포스트 리스트 초기값 가져오기 실패 : $e');
     }
@@ -44,12 +46,19 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
         );
 
         final existingIds = currentPosts.map((post) => post.postId).toSet();
-        newPosts = newPosts.where((post) => !existingIds.contains(post.postId)).toList();
+        newPosts =
+            newPosts
+                .where((post) => !existingIds.contains(post.postId))
+                .toList();
 
         newPosts = [...newPosts, ...currentPosts];
       }
 
-      state = AsyncData(state.value!.copyWith(posts: newPosts));
+      // isDeleted 필드 기준으로 필터링
+      final filteredPosts =
+          newPosts.where((post) => post.isDeleted == false).toList();
+
+      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
     } catch (e) {
       log('당겨서 새로고침 실패 : $e');
     }
@@ -72,12 +81,17 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
         );
 
         final existingIds = currentPosts.map((post) => post.postId).toSet();
-        newPosts = newPosts.where((post) => !existingIds.contains(post.postId)).toList();
+        newPosts =
+            newPosts
+                .where((post) => !existingIds.contains(post.postId))
+                .toList();
 
         newPosts = [...currentPosts, ...newPosts];
       }
+      final filteredPosts =
+          newPosts.where((post) => post.isDeleted == false).toList();
 
-      state = AsyncData(state.value!.copyWith(posts: newPosts));
+      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
     } catch (e) {
       log('무한 스크롤 실패 : $e');
     }
@@ -103,6 +117,8 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
     final filteredPosts =
         currentState.posts.where((post) => post.tags.contains(filter)).toList();
 
-    state = AsyncData(currentState.copyWith(posts: filteredPosts, filter: filter));
+    state = AsyncData(
+      currentState.copyWith(posts: filteredPosts, filter: filter),
+    );
   }
 }
