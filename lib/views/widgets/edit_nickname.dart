@@ -35,6 +35,10 @@ class EditNickname extends ConsumerWidget {
                             .checkNicknameChanged(value);
                       },
                       textAlignVertical: TextAlignVertical.center,
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                      ),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 16,
@@ -58,10 +62,7 @@ class EditNickname extends ConsumerWidget {
           SizedBox(
             child: Text(
               state.nicknameMessage ?? '',
-              style:
-                  showAsError
-                      ? AppTextStyles.errorText
-                      : AppTextStyles.helperText,
+              style: showAsError ? AppTextStyles.errorText : AppTextStyles.helperText,
             ),
           ),
         ],
