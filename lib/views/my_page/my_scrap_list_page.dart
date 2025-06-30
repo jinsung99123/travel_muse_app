@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
+import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 
 class MyScrapListPage extends ConsumerWidget {
@@ -29,90 +30,104 @@ class MyScrapListPage extends ConsumerWidget {
 
           return ListView.separated(
             itemCount: places.length,
-            separatorBuilder: (_, __) => Divider(
-              height: 1,
-              thickness: 0.5,
-              color: AppColors.grey[200],
-            ),
+            separatorBuilder:
+                (_, __) => Divider(
+                  height: 1,
+                  thickness: 0.5,
+                  color: AppColors.grey[200],
+                ),
             itemBuilder: (context, index) {
               final place = places[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        place.thumbnail,
-                        width: 64,
-                        height: 64,
-                        fit: BoxFit.cover,
-                      ),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RecommendedPlaceDetailPage(place: place),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            place.title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: const TextStyle(
-                              fontFamily: 'Pretendard',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            place.address,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: const TextStyle(
-                              fontFamily: 'Pretendard',
-                              fontSize: 14,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            place.category,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.grey[400],
-                            ),
-                          ),
-                        ],
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          place.thumbnail,
+                          width: 64,
+                          height: 64,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      iconSize: 24,
-                      icon: Icon(
-                        Icons.bookmark,
-                        color: AppColors.primary[300],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              place.title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontFamily: 'Pretendard',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              place.address,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontFamily: 'Pretendard',
+                                fontSize: 14,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              place.category,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.grey[400],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      onPressed: () async {
-                        final confirm = await _showDeleteDialog(context);
-                        if (confirm != true) return;
+                      IconButton(
+                        iconSize: 24,
+                        icon: Icon(
+                          Icons.bookmark,
+                          color: AppColors.primary[300],
+                        ),
+                        onPressed: () async {
+                          final confirm = await _showDeleteDialog(context);
+                          if (confirm != true) return;
 
-                        await ref
-                            .read(scrapListViewModelProvider.notifier)
-                            .remove(place);
+                          await ref
+                              .read(scrapListViewModelProvider.notifier)
+                              .remove(place);
 
-                        CustomToast.show(
-                          context: context,
-                          message: '북마크에서 삭제했습니다.',
-                          duration: const Duration(seconds: 2),
-                        );
-                      },
-                    ),
-                  ],
+                          CustomToast.show(
+                            context: context,
+                            message: '북마크에서 삭제했습니다.',
+                            duration: const Duration(seconds: 2),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -126,10 +141,11 @@ class MyScrapListPage extends ConsumerWidget {
 Future<bool?> _showDeleteDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
-    builder: (context) => const ConfirmDialog(
-      title: '스크랩을 해제하시겠습니까?',
-      description: '스크랩을 삭제하고 후에는 되돌릴 수 없어요',
-    ),
+    builder:
+        (context) => const ConfirmDialog(
+          title: '스크랩을 해제하시겠습니까?',
+          description: '스크랩을 삭제하고 후에는 되돌릴 수 없어요',
+        ),
   );
 }
 
@@ -158,3 +174,4 @@ class _EmptyScrapView extends StatelessWidget {
     );
   }
 }
+
