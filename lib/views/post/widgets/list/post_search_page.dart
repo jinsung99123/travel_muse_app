@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_list_view.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_search_bar.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
 class PostSearchPage extends StatefulWidget {
   const PostSearchPage({super.key});
@@ -15,7 +16,7 @@ class _PostSearchPageState extends State<PostSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: CustomAppBar(title: ''),
       body: Column(
         children: [
           PostSearchBar(

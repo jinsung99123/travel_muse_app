@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/user/onboarding/terms_web_view_page.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
 final List<Map<String, String>> termsData = [
   {'title': '만 14세 이상입니다.', 'url': ''},
@@ -21,19 +22,7 @@ class ServiceTermPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '서비스 약관',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      appBar: CustomAppBar(title: '서비스 약관'),
       body: ListView.builder(
         itemCount: termsData.length,
         itemBuilder: (context, index) {

@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
-AppBar buildPostDetailAppBar(VoidCallback onMoreTap) {
-  return AppBar(
-    backgroundColor: Colors.white,
-    elevation: 0,
-    leading: const BackButton(color: Colors.black),
+CustomAppBar buildPostDetailAppBar(VoidCallback onMoreTap) {
+  return CustomAppBar(
+    title: '',
     actions: [
-      IconButton(
-        icon: const Icon(Icons.more_vert, color: Colors.black),
-        onPressed: onMoreTap,
+      GestureDetector(
+        onTap: onMoreTap,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: Container(
+            width: 44,
+            height: 44,
+            color: Colors.transparent,
+            child: SvgPicture.asset(
+              'assets/icons/more-vertical.svg',
+              width: 24,
+              height: 24,
+              fit: BoxFit.scaleDown,
+            ),
+          ),
+        ),
       ),
     ],
   );

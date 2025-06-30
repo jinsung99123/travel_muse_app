@@ -5,6 +5,7 @@ import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
 class MyScrapListPage extends ConsumerWidget {
   const MyScrapListPage({super.key});
@@ -15,7 +16,7 @@ class MyScrapListPage extends ConsumerWidget {
     final state = ref.watch(scrapListViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('북마크'), centerTitle: false, elevation: 0),
+      appBar: CustomAppBar(title: '북마크'),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('에러 발생: $err')),

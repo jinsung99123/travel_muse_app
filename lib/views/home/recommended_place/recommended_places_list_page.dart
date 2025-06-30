@@ -16,20 +16,6 @@ class RecommendedPlacesListPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(title: '나의 여행'),
-      //  AppBar(
-      //   title: const Text(
-      //     '추천 명소',
-      //     style: TextStyle(
-      //       color: AppColors.black,
-      //       fontSize: 18,
-      //       fontWeight: FontWeight.w700,
-      //       fontFamily: 'Pretendard',
-      //     ),
-      //   ),
-      //   backgroundColor: AppColors.white,
-      //   elevation: 1,
-      //   iconTheme: const IconThemeData(color: AppColors.black),
-      // ),
       body: SafeArea(
         child: homeAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),

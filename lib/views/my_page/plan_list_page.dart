@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
@@ -13,6 +12,7 @@ import 'package:travel_muse_app/viewmodels/plan/schedule_view_model.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
 class PlanListPage extends ConsumerStatefulWidget {
   const PlanListPage({super.key});
@@ -66,10 +66,7 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
     final savedPlans = plans != null ? plans.savedPlans : [];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('나의 여행', style: AppTextStyles.appBarTitle),
-        centerTitle: false,
-      ),
+      appBar: CustomAppBar(title: '나의 여행'),
       body: SafeArea(
         child:
             savedPlans.isEmpty

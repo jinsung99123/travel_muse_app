@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/svg_icon.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/viewmodels/preference/preference_test_view_model.dart';
 import 'package:travel_muse_app/views/preference/widgets/next_button.dart';
 import 'package:travel_muse_app/views/preference/widgets/page_indicator_bar.dart';
@@ -79,47 +81,53 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
       backgroundColor: AppColors.white,
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primary[300],
+        backgroundColor: Colors.white,
         border: null,
-        leading: GestureDetector(
-          onTap: () {
-            if (_currentIndex > 0) {
-              setState(() {
-                _currentIndex--;
-                _selectedOption = null;
-              });
-            } else {
-              Navigator.pop(context);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgIcon.arrow(width: 27, height: 27),
-                const SizedBox(width: 8),
-                Text(
-                  '여행성향 테스트',
-                  style: TextStyle(
-                    color: AppColors.grey[800],
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (_currentIndex > 0) {
+                    setState(() {
+                      _currentIndex--;
+                      _selectedOption = null;
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Container(
+                    width: 24,
+                    height: 44,
+                    color: Colors.transparent,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/chevron-left.svg',
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(width: 16),
+              Text('여행성향 테스트', style: AppTextStyles.appBarTitle),
+            ],
           ),
         ),
       ),
       child: SafeArea(
         child:
             isFinished
-                ? ResultView(
-                  onRestart: _restartTest,
-                  showButtons: true,
-                  testId: '',
-                )
+                ? ResultView(onRestart: _restartTest, showButtons: true, testId: '')
                 : Column(
                   children: [
                     Expanded(
@@ -137,10 +145,7 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: NextButton(
                         onPressed: _onNextPressed,
                         enabled: _selectedOption != null,

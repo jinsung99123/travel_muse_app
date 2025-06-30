@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
-import 'package:travel_muse_app/utills/notification_setting.dart'; // SharedPreferences 저장소
+import 'package:travel_muse_app/utills/notification_setting.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart'; // SharedPreferences 저장소
 
 class NotificationSettingPage extends StatefulWidget {
   const NotificationSettingPage({super.key});
@@ -106,19 +107,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '알림 설정',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      appBar: CustomAppBar(title: '알림 설정'),
       body:
           _switchValues.length < settingsItems.length
               ? const Center(child: CircularProgressIndicator())

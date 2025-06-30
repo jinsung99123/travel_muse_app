@@ -7,6 +7,7 @@ import 'package:travel_muse_app/views/my_page/widgets/account_info.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_profile_screen.dart';
 import 'package:travel_muse_app/views/user/login/login_page.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 
 class AccountSettingPage extends ConsumerStatefulWidget {
   const AccountSettingPage({super.key});
@@ -19,19 +20,7 @@ class _AccountSettingPageState extends ConsumerState<AccountSettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '계정 관리',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      appBar: CustomAppBar(title: '계정 관리'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

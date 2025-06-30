@@ -39,16 +39,36 @@ class _RecommendedPlaceDetailPageState extends ConsumerState<RecommendedPlaceDet
         titleSpacing: 0,
         title: Row(
           children: [
-            IconButton(
-              icon: Icon(Icons.chevron_left, color: AppColors.grey[500], size: 24),
-              onPressed:
+            GestureDetector(
+              onTap:
                   () => Navigator.pop(context, {
                     'title': place.title,
                     'lat': place.latLng.latitude,
                     'lng': place.latLng.longitude,
                     'address': place.address,
                   }),
+              child: Container(
+                width: 44,
+                height: 44,
+                color: Colors.transparent,
+                child: SvgPicture.asset(
+                  'assets/icons/chevron-left.svg',
+                  width: 24,
+                  height: 24,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
             ),
+            // IconButton(
+            //   icon: Icon(Icons.chevron_left, color: AppColors.grey[500], size: 24),
+            //   onPressed:
+            //       () => Navigator.pop(context, {
+            //         'title': place.title,
+            //         'lat': place.latLng.latitude,
+            //         'lng': place.latLng.longitude,
+            //         'address': place.address,
+            //       }),
+            // ),
             Spacer(),
             Text(
               place.title,
