@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/firebase_options.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/views/user/splash/splash_page.dart';
@@ -41,7 +42,13 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: false,
+          titleSpacing: 0,
+          titleTextStyle: AppTextStyles.appBarTitle,
+        ),
       ),
       home: const SplashPage(),
     );
