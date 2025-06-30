@@ -18,9 +18,6 @@ class RecommendedPlacesListPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('추천 명소'),
         leading: Navigator.canPop(context) ? const CustomBackButton() : null,
-        backgroundColor: AppColors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: AppColors.black),
       ),
       body: SafeArea(
         child: homeAsync.when(
