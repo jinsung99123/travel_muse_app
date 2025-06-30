@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class EnvironmentSettingPage extends StatelessWidget {
   const EnvironmentSettingPage({super.key});
@@ -18,17 +19,8 @@ class EnvironmentSettingPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '서비스 약관',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text('환경 설정'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: ListView.builder(
         itemCount: settingsItems.length,

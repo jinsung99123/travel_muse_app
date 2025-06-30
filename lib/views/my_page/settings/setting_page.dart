@@ -10,6 +10,7 @@ import 'package:travel_muse_app/views/my_page/settings/support_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/version_page.dart';
 import 'package:travel_muse_app/views/user/admin/admin_entry.dart';
 import 'package:travel_muse_app/views/user/admin/admin_report_entry.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -58,17 +59,8 @@ class _SettingPageState extends State<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '설정',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text('설정'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: ListView.builder(
         itemCount: settingsItems.length,

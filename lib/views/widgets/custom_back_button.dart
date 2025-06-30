@@ -13,7 +13,7 @@ class CustomBackButton extends StatelessWidget {
         padding: EdgeInsets.only(top: 4),
         width: 44,
         height: 44,
-        color: Colors.amber,
+        color: Colors.transparent,
         child: SvgPicture.asset(
           'assets/icons/chevron-left.svg',
           width: 24,

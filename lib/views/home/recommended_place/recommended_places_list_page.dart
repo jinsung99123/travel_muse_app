@@ -4,6 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_place_list_card.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class RecommendedPlacesListPage extends ConsumerWidget {
   const RecommendedPlacesListPage({super.key});
@@ -15,15 +16,8 @@ class RecommendedPlacesListPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          '추천 명소',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Pretendard',
-          ),
-        ),
+        title: const Text('추천 명소'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
         backgroundColor: AppColors.white,
         elevation: 1,
         iconTheme: const IconThemeData(color: AppColors.black),
@@ -53,7 +47,7 @@ class RecommendedPlacesListPage extends ConsumerWidget {
                       isActive: true,
                       place: spot,
                     ),
-                Divider(height: 1, thickness: 0.5, color: AppColors.grey[200]),
+                    Divider(height: 1, thickness: 0.5, color: AppColors.grey[200]),
                   ],
                 );
               },

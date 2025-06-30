@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_menu.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_profile_screen.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -13,8 +13,8 @@ class MyPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: Text('마이페이지', style: AppTextStyles.appBarTitle),
-        centerTitle: false,
+        title: Text('마이페이지'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

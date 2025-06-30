@@ -7,8 +7,8 @@ import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/viewmodels/plan/map_view_model.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/day_tab_bar.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/map_display.dart';
-import 'package:travel_muse_app/views/plan/location/widgets/map_page_app_bar.dart';
 import 'package:travel_muse_app/views/plan/location/widgets/place_carousel.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key, required this.planId});
@@ -17,8 +17,7 @@ class MapPage extends ConsumerStatefulWidget {
   ConsumerState<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends ConsumerState<MapPage>
-    with TickerProviderStateMixin {
+class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
   LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
@@ -36,8 +35,7 @@ class _MapPageState extends ConsumerState<MapPage>
         final allPlaces = _viewModel.getAllPlaces();
         _viewModel.moveCameraToFitAll(_mapController, allPlaces);
       } else {
-        final newPlaces =
-            mapState.dayPlaces[dayKeys[_tabController!.index - 1]] ?? [];
+        final newPlaces = mapState.dayPlaces[dayKeys[_tabController!.index - 1]] ?? [];
         _viewModel.moveCameraToFitAll(_mapController, newPlaces);
       }
     }
@@ -118,7 +116,10 @@ class _MapPageState extends ConsumerState<MapPage>
     );
     final displayDayTabs = ['All', ...dayKeys.map(getDisplayDayTab)];
     return Scaffold(
-      appBar: MapPageAppBar(),
+      appBar: AppBar(
+        title: const Text('지도'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -130,10 +131,7 @@ class _MapPageState extends ConsumerState<MapPage>
                 _mapController = controller;
                 if (!_cameraMoved && selectedPlaces.isNotEmpty) {
                   Future.delayed(const Duration(milliseconds: 300), () {
-                    _viewModel.moveCameraToFitAll(
-                      _mapController,
-                      selectedPlaces,
-                    );
+                    _viewModel.moveCameraToFitAll(_mapController, selectedPlaces);
                     _cameraMoved = true;
                   });
                 }

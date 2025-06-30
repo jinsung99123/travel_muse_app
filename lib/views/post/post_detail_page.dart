@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
@@ -262,7 +263,28 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
         return false;
       },
       child: Scaffold(
-        appBar: buildPostDetailAppBar(_showOptions),
+        appBar: AppBar(
+          leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                _showOptions();
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 6),
+                width: 44,
+                height: 44,
+                color: Colors.transparent,
+                child: SvgPicture.asset(
+                  'assets/icons/more-vertical.svg',
+                  width: 24,
+                  height: 24,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+            ),
+          ],
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ListView(

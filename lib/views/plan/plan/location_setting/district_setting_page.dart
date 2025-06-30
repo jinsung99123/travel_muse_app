@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/utills/region_data.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/district_box_list.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/widgets/save_button.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class DistrictSettingPage extends ConsumerStatefulWidget {
   const DistrictSettingPage({super.key, required this.selectedProvince});
@@ -27,13 +28,8 @@ class DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          '여행 일정 등록',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0.5,
+        title: const Text('여행 일정 등록'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: SafeArea(
         child: Padding(
@@ -51,8 +47,7 @@ class DistrictSettingPageState extends ConsumerState<DistrictSettingPage> {
               Expanded(
                 child: DistrictBoxList(
                   items: districts,
-                  selectedIndices:
-                      selectedIndex != null ? {selectedIndex!} : {},
+                  selectedIndices: selectedIndex != null ? {selectedIndex!} : {},
                   onTap: (index) {
                     setState(() {
                       selectedIndex = index;
