@@ -7,6 +7,7 @@ import 'package:travel_muse_app/providers/preference/preference_test_provider.da
 import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view_detail.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class ResultView extends ConsumerStatefulWidget {
   const ResultView({
@@ -39,9 +40,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.testId != '') {
-        ref
-            .read(preferenceTestStateNotifierProvider.notifier)
-            .loadTest(widget.testId);
+        ref.read(preferenceTestStateNotifierProvider.notifier).loadTest(widget.testId);
       }
     });
   }
@@ -65,6 +64,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
           !widget.showButtons
               ? AppBar(
                 title: const Text('나의 여행 성향'),
+                leading: Navigator.canPop(context) ? const CustomBackButton() : null,
                 actions: [
                   PopupMenuButton<String>(
                     color: Colors.white,
@@ -87,8 +87,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                                   ),
                                 ],
                                 cancelButton: CupertinoActionSheetAction(
-                                  onPressed:
-                                      () => Navigator.pop(context, false),
+                                  onPressed: () => Navigator.pop(context, false),
                                   child: const Text('취소'),
                                 ),
                               ),
@@ -96,9 +95,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
                         if (confirm == true) {
                           await ref
-                              .read(
-                                preferenceTestStateNotifierProvider.notifier,
-                              )
+                              .read(preferenceTestStateNotifierProvider.notifier)
                               .deleteTest(widget.testId);
                           if (context.mounted) {
                             /// 리스트 Provider invalidate
@@ -120,10 +117,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                         (_) => [
                           const PopupMenuItem<String>(
                             value: 'delete',
-                            child: Text(
-                              '삭제',
-                              style: TextStyle(color: Colors.red),
-                            ),
+                            child: Text('삭제', style: TextStyle(color: Colors.red)),
                           ),
                         ],
                   ),
@@ -138,10 +132,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                 ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 24,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -197,9 +188,7 @@ class _ResultViewState extends ConsumerState<ResultView> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          CupertinoPageRoute(
-                            builder: (_) => const ResultViewDetail(),
-                          ),
+                          CupertinoPageRoute(builder: (_) => const ResultViewDetail()),
                         );
                       },
                       child: Row(
