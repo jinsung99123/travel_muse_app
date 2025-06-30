@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/services/plan/ai_service.dart';
 
 class PlanRepository {
   final _aiService = AiService();
+  final _firestore = FirebaseFirestore.instance;
 
   final Map<String, String> _typeDescriptions = {
     '계획러': '철두철미 계획러: 여행은 미리미리! 엑셀표까지 만들어야 마음이 놓이죠.',
@@ -51,5 +53,19 @@ Day N:
 ''';
 
     return await _aiService.generate(prompt, context);
+  }
+
+  /// AI 추천 횟수가 3회 미만인지 확인
+  Future<bool> isAiRecommendationAllowed(String planId) async {
+    final doc = await _firestore.collection('plans').doc(planId).get();
+    final count = (doc.data()?['ai_attempt_count'] ?? 0) as int;
+    return count < 3;
+  }
+
+  /// AI 추천 횟수 1 증가
+  Future<void> incrementAiAttemptCount(String planId) async {
+    await _firestore.collection('plans').doc(planId).set({
+      'ai_attempt_count': FieldValue.increment(1),
+    }, SetOptions(merge: true));
   }
 }

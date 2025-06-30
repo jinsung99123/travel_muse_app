@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/repositories/plan/plan_repository.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_type_select_popup.dart';
@@ -25,59 +26,88 @@ class AiButton extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
-          builder: (_) => AiTypeSelectPopup(
-            onComplete: (selectedTest) async {
-              final typeCode = selectedTest;
-              final planRepo = PlanRepository();
-              final placeService = PlaceSearchService();
+          builder:
+              (_) => AiTypeSelectPopup(
+                onComplete: (selectedTest) async {
+                  final typeCode = selectedTest;
+                  final planRepo = PlanRepository();
+                  final placeService = PlaceSearchService();
 
-              final aiPlan = await planRepo.getOptimizedPlanFromAI(
-                days: days,
-                region: region,
-                typeCode: typeCode,
-                context: context,
-              );
+                  // 호출 횟수 체크
+                  final allowed = await planRepo.isAiRecommendationAllowed(
+                    planId,
+                  );
+                  if (!allowed) {
+                    if (context.mounted) {
+                      CustomToast.show(
+                        context: context,
+                        message: 'AI 추천은 최대 3회까지만 가능합니다.',
+                      );
+                    }
+                    return;
+                  }
 
-              final parsed = _parseAiPlan(aiPlan);
+                  // 횟수 증가
+                  await planRepo.incrementAiAttemptCount(planId);
 
-              final enriched = <int, List<Map<String, String>>>{};
-              for (final entry in parsed.entries) {
-                final day = entry.key;
-                final enrichedPlaces = <Map<String, String>>[];
+                  final aiPlan = await planRepo.getOptimizedPlanFromAI(
+                    days: days,
+                    region: region,
+                    typeCode: typeCode,
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                  );
 
-                for (final place in entry.value) {
-                  final title = place['title']!;
-                  final description = place['description'] ?? '';
+                  final parsed = _parseAiPlan(aiPlan);
 
-                  final kakaoResults = await placeService.search('$region $title');
-                  final firstPlace = kakaoResults.isNotEmpty ? kakaoResults.first : null;
-                  final imageUrl = await placeService.fetchImageThumbnail('$region $title');
+                  final enriched = <int, List<Map<String, String>>>{};
+                  for (final entry in parsed.entries) {
+                    final day = entry.key;
+                    final enrichedPlaces = <Map<String, String>>[];
 
-                  enrichedPlaces.add({
-                    'title': title,
-                    'description': description,
-                    'lat': '${firstPlace?.latitude ?? 0.0}',
-                    'lng': '${firstPlace?.longitude ?? 0.0}',
-                    'image': imageUrl ?? '',
-                    'subtitle': firstPlace != null
-                        ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
-                        : '',
-                  });
-                }
+                    for (final place in entry.value) {
+                      final title = place['title']!;
+                      final description = place['description'] ?? '';
 
-                enriched[day] = enrichedPlaces;
-              }
+                      final kakaoResults = await placeService.search(
+                        '$region $title',
+                      );
+                      final firstPlace =
+                          kakaoResults.isNotEmpty ? kakaoResults.first : null;
+                      final imageUrl = await placeService.fetchImageThumbnail(
+                        '$region $title',
+                      );
 
-              onResult(enriched); // Firestore 저장 없이 UI 상태만 전달
-            },
-          ),
+                      enrichedPlaces.add({
+                        'title': title,
+                        'description': description,
+                        'lat': '${firstPlace?.latitude ?? 0.0}',
+                        'lng': '${firstPlace?.longitude ?? 0.0}',
+                        'image': imageUrl ?? '',
+                        'subtitle':
+                            firstPlace != null
+                                ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
+                                : '',
+                      });
+                    }
+
+                    enriched[day] = enrichedPlaces;
+                  }
+
+                  onResult(enriched); // Firestore 저장 없이 UI 상태만 전달
+                },
+              ),
         );
       },
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primary[50]!, AppColors.primary[300]!, AppColors.primary[400]!],
-            stops: [0.0,0.3,0.7],
+            colors: [
+              AppColors.primary[50]!,
+              AppColors.primary[300]!,
+              AppColors.primary[400]!,
+            ],
+            stops: [0.0, 0.3, 0.7],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),

@@ -23,7 +23,7 @@ Future<void> generateAndSaveEnrichedAiRoute({
     context: context,
   );
 
-  // 파싱 (기존 _parseAiPlan 로직과 동일)
+  // 파싱
   final lines = aiPlan.split('\n');
   final parsed = <int, List<Map<String, String>>>{};
   int? currentDay;
@@ -43,34 +43,39 @@ Future<void> generateAndSaveEnrichedAiRoute({
     }
   }
 
-  // Kakao API로 lat/lng/image enrich
+  // Kakao API로 lat/lng/image enrich (병렬 처리 적용)
   final enriched = <int, List<Map<String, String>>>{};
 
   for (final entry in parsed.entries) {
     final day = entry.key;
-    final enrichedPlaces = <Map<String, String>>[];
+    final places = entry.value;
 
-    for (final place in entry.value) {
-      final title = place['title']!;
-      final description = place['description'] ?? '';
+    // 각 장소 enrich 작업 병렬 처리
+    final enrichedPlaces = await Future.wait(
+      places.map((place) async {
+        final title = place['title']!;
+        final description = place['description'] ?? '';
 
-      final kakaoResults = await placeService.search('$region $title');
-      final firstPlace = kakaoResults.isNotEmpty ? kakaoResults.first : null;
+        final kakaoResults = await placeService.search('$region $title');
+        final firstPlace = kakaoResults.isNotEmpty ? kakaoResults.first : null;
 
-      final imageUrl = await placeService.fetchImageThumbnail('$region $title');
+        final imageUrl = await placeService.fetchImageThumbnail(
+          '$region $title',
+        );
 
-      enrichedPlaces.add({
-        'title': title,
-        'description': description,
-        'lat': '${firstPlace?.latitude ?? 0.0}',
-        'lng': '${firstPlace?.longitude ?? 0.0}',
-        'image': imageUrl ?? '',
-        'subtitle':
-            firstPlace != null
-                ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
-                : '',
-      });
-    }
+        return {
+          'title': title,
+          'description': description,
+          'lat': '${firstPlace?.latitude ?? 0.0}',
+          'lng': '${firstPlace?.longitude ?? 0.0}',
+          'image': imageUrl ?? '',
+          'subtitle':
+              firstPlace != null
+                  ? '${firstPlace.city} ${firstPlace.district} • ${firstPlace.category}'
+                  : '',
+        };
+      }).toList(),
+    );
 
     enriched[day] = enrichedPlaces;
   }
