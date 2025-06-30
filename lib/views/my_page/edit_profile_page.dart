@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
+import 'package:travel_muse_app/views/widgets/custom_app_bar.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 import 'package:travel_muse_app/views/widgets/user_next_button.dart';
@@ -14,13 +15,7 @@ class EditProfilePage extends ConsumerWidget {
     final state = ref.watch(profileViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          '프로필 수정',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-      ),
+      appBar: CustomAppBar(title: '프로필 수정'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Stack(
