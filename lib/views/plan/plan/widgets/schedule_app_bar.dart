@@ -7,7 +7,8 @@ import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
 
-class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
+class ScheduleAppBar extends ConsumerWidget
+    implements PreferredSizeWidget {
   const ScheduleAppBar({super.key, required this.planId});
 
   final String planId;
@@ -15,9 +16,8 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.chevron_left),
-        onPressed: () async {
+      leading: GestureDetector(
+        onTap: () async {
           final shouldPop = await showDialog<bool>(
             context: context,
             builder:
@@ -31,6 +31,19 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
             Navigator.of(context).pop();
           }
         },
+
+        child: Container(
+          padding: EdgeInsets.only(top: 4),
+          width: 44,
+          height: 44,
+          color: Colors.transparent,
+          child: SvgPicture.asset(
+            'assets/icons/chevron-left.svg',
+            width: 24,
+            height: 24,
+            fit: BoxFit.scaleDown,
+          ),
+        ),
       ),
 
       title: Text(
@@ -60,17 +73,19 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
               if (!hasRoute) {
                 if (context.mounted) {
                   CustomToast.show(
-                                context: context,
-                                message: '일정을 먼저 등록해주세요.',
-                                duration: const Duration(seconds: 2),
-                              );
+                    context: context,
+                    message: '일정을 먼저 등록해주세요.',
+                    duration: const Duration(seconds: 2),
+                  );
                 }
                 return;
               }
               if (context.mounted) {
                 await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => MapPage(planId: planId)),
+                  MaterialPageRoute(
+                    builder: (_) => MapPage(planId: planId),
+                  ),
                 );
               }
             },

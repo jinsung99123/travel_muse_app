@@ -7,6 +7,7 @@ import 'package:travel_muse_app/providers/preference/preference_test_provider.da
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_view.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class PreferenceListPage extends ConsumerStatefulWidget {
   const PreferenceListPage({super.key});
@@ -36,10 +37,8 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '나의 성향',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('나의 여행 성향'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: SafeArea(
         child: Padding(
@@ -69,10 +68,7 @@ class _PreferenceListPageState extends ConsumerState<PreferenceListPage> {
                           if (result == 'deleted') {
                             final tests =
                                 await ref
-                                    .read(
-                                      preferenceTestStateNotifierProvider
-                                          .notifier,
-                                    )
+                                    .read(preferenceTestStateNotifierProvider.notifier)
                                     .fetchTestsByUserId();
                             setState(() {
                               _tests = tests;

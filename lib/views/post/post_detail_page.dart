@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
@@ -11,13 +13,13 @@ import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
-import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_images.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_meta.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:travel_muse_app/views/post/widgets/write/confirm_dialog.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
   const PostDetailPage({
@@ -32,7 +34,8 @@ class PostDetailPage extends ConsumerStatefulWidget {
   final String? scrollToCommentId;
 
   @override
-  ConsumerState<PostDetailPage> createState() => _PostDetailPageState();
+  ConsumerState<PostDetailPage> createState() =>
+      _PostDetailPageState();
 }
 
 class _PostDetailPageState extends ConsumerState<PostDetailPage> {
@@ -67,7 +70,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       await postRepo.incrementViewCount(currentPost.postId);
 
       // 최신 게시글 정보 다시 불러옴
-      final updatedPost = await postRepo.fetchPostById(currentPost.postId);
+      final updatedPost = await postRepo.fetchPostById(
+        currentPost.postId,
+      );
       if (updatedPost != null) {
         setState(() {
           currentPost = updatedPost;
@@ -87,7 +92,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
   Future<void> _refreshPost() async {
     final postRepo = ref.read(postRepositoryProvider);
-    final updatedPost = await postRepo.fetchPostById(currentPost.postId);
+    final updatedPost = await postRepo.fetchPostById(
+      currentPost.postId,
+    );
     if (updatedPost != null) {
       setState(() {
         currentPost = updatedPost;
@@ -127,18 +134,23 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => PostWritePage(post: currentPost),
+                              builder:
+                                  (_) => PostWritePage(
+                                    post: currentPost,
+                                  ),
                             ),
                           );
 
                           if (result == true && mounted) {
-                            final postRepo = ref.read(postRepositoryProvider);
-                            final updatedPost = await postRepo.fetchPostById(
-                              currentPost.postId,
+                            final postRepo = ref.read(
+                              postRepositoryProvider,
                             );
+                            final updatedPost = await postRepo
+                                .fetchPostById(currentPost.postId);
                             if (updatedPost != null) {
                               setState(() {
-                                currentPost = updatedPost; // 상세 페이지 갱신
+                                currentPost =
+                                    updatedPost; // 상세 페이지 갱신
                               });
                               Navigator.pop(context, updatedPost);
                             }
@@ -214,7 +226,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                             reasonText,
                           ) async {
                             await ref
-                                .read(reportViewModelProvider.notifier)
+                                .read(
+                                  reportViewModelProvider.notifier,
+                                )
                                 .submit(
                                   targetType: 'post',
                                   targetId: currentPost.postId,
@@ -269,12 +283,39 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
         return false;
       },
       child: Scaffold(
-        appBar: buildPostDetailAppBar(_showOptions),
+        appBar: AppBar(
+          leading:
+              Navigator.canPop(context)
+                  ? const CustomBackButton()
+                  : null,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                _showOptions();
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 6),
+                width: 44,
+                height: 44,
+                color: Colors.transparent,
+                child: SvgPicture.asset(
+                  'assets/icons/more-vertical.svg',
+                  width: 24,
+                  height: 24,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+            ),
+          ],
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ListView(
             children: [
-              PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
+              PostDetailHeader(
+                nickname: nickname,
+                profileUrl: profileUrl,
+              ),
               const SizedBox(height: 16),
               PostDetailContent(
                 title: currentPost.title,
@@ -325,6 +366,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             ],
           ),
         ),
+        bottomNavigationBar: const BottomBar(),
       ),
     );
   }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
-import 'package:travel_muse_app/utills/notification_setting.dart'; // SharedPreferences 저장소
+import 'package:travel_muse_app/utills/notification_setting.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart'; // SharedPreferences 저장소
 
 class NotificationSettingPage extends StatefulWidget {
   const NotificationSettingPage({super.key});
 
   @override
-  State<NotificationSettingPage> createState() =>
-      _NotificationSettingPageState();
+  State<NotificationSettingPage> createState() => _NotificationSettingPageState();
 }
 
 class _NotificationSettingPageState extends State<NotificationSettingPage> {
@@ -107,17 +108,8 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '알림 설정',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text('알림 설정'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body:
           _switchValues.length < settingsItems.length
@@ -128,16 +120,10 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                   final item = settingsItems[index];
                   final value = _switchValues[item] ?? true;
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     decoration: BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: AppColors.grey[50]!,
-                        ),
+                        bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
                       ),
                     ),
                     child: Row(
@@ -168,6 +154,7 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                   );
                 },
               ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }

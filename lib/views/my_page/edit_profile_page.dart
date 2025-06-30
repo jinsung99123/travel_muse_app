@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 import 'package:travel_muse_app/views/widgets/edit_nickname.dart';
 import 'package:travel_muse_app/views/widgets/edit_profile_image.dart';
 import 'package:travel_muse_app/views/widgets/user_next_button.dart';
@@ -15,11 +16,8 @@ class EditProfilePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '프로필 수정',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
+        title: const Text('프로필 수정'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

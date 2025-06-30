@@ -6,6 +6,7 @@ import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_guide_text.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_widget.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/province_setting_page.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class CalendarPage extends ConsumerWidget {
   const CalendarPage({super.key});
@@ -17,13 +18,8 @@ class CalendarPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '여행 일정 등록',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.grey[800],
-        elevation: 0,
+        title: const Text('여행 일정 등록'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: SafeArea(
         child: Padding(
@@ -40,8 +36,7 @@ class CalendarPage extends ConsumerWidget {
                     final year =
                         state.focusedDay.year +
                         ((state.focusedDay.month + index - 1) ~/ 12);
-                    final month =
-                        ((state.focusedDay.month + index - 1) % 12) + 1;
+                    final month = ((state.focusedDay.month + index - 1) % 12) + 1;
 
                     final focusedMonth = DateTime(year, month);
 
@@ -68,9 +63,7 @@ class CalendarPage extends ConsumerWidget {
                     ),
                   ),
                   onPressed: () {
-                    final viewModel = ref.read(
-                      calendarViewModelProvider.notifier,
-                    );
+                    final viewModel = ref.read(calendarViewModelProvider.notifier);
                     final state = ref.read(calendarViewModelProvider);
 
                     final start = state.startDay;
@@ -86,9 +79,9 @@ class CalendarPage extends ConsumerWidget {
                         ),
                       );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('여행 날짜를 선택해주세요.')),
-                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(const SnackBar(content: Text('여행 날짜를 선택해주세요.')));
                     }
                   },
 

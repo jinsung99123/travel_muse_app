@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/my_page/settings/account_setting_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/environment_setting_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/notification_setting_page.dart';
@@ -9,6 +10,7 @@ import 'package:travel_muse_app/views/my_page/settings/support_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/version_page.dart';
 import 'package:travel_muse_app/views/user/admin/admin_entry.dart';
 import 'package:travel_muse_app/views/user/admin/admin_report_entry.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -51,25 +53,14 @@ class _SettingPageState extends State<SettingPage> {
       {'title': '서비스 약관', 'route': const ServiceTermPage()},
       {'title': '고객 지원', 'route': const SupportPage()},
       {'title': '버전 정보', 'route': const VersionPage()},
-      if (_isAdmin)
-        {'title': '운영자 권한 설정', 'route': const AdminEntry()},
-      if (_isAdmin)
-        {'title': '신고 컨텐츠 관리', 'route': const AdminReportEntry()},
+      if (_isAdmin) {'title': '운영자 권한 설정', 'route': const AdminEntry()},
+      if (_isAdmin) {'title': '신고 컨텐츠 관리', 'route': const AdminReportEntry()},
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '설정',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text('설정'),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: ListView.builder(
         itemCount: settingsItems.length,
@@ -78,17 +69,13 @@ class _SettingPageState extends State<SettingPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => settingsItems[index]['route'],
-                ),
+                MaterialPageRoute(builder: (_) => settingsItems[index]['route']),
               );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
-                ),
+                border: Border(bottom: BorderSide(width: 1, color: AppColors.grey[50]!)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,17 +95,14 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: AppColors.grey[600],
-                  ),
+                  Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[600]),
                 ],
               ),
             ),
           );
         },
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
