@@ -22,14 +22,17 @@ class RecommendedPlaceDetailPage extends ConsumerStatefulWidget {
       _RecommendedPlaceDetailPageState();
 }
 
-class _RecommendedPlaceDetailPageState extends ConsumerState<RecommendedPlaceDetailPage> {
+class _RecommendedPlaceDetailPageState
+    extends ConsumerState<RecommendedPlaceDetailPage> {
   int _currentPage = 0;
   final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     final place = widget.place;
-    final isScrapped = ref.watch(scrapViewModelProvider).contains(place.id);
+    final isScrapped = ref
+        .watch(scrapViewModelProvider)
+        .contains(place.id);
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -50,7 +53,7 @@ class _RecommendedPlaceDetailPageState extends ConsumerState<RecommendedPlaceDet
             padding: EdgeInsets.only(top: 4),
             width: 44,
             height: 44,
-            color: Colors.amber,
+            color: Colors.transparent,
             child: SvgPicture.asset(
               'assets/icons/chevron-left.svg',
               width: 24,
@@ -64,10 +67,15 @@ class _RecommendedPlaceDetailPageState extends ConsumerState<RecommendedPlaceDet
             iconSize: 24,
             icon: Icon(
               isScrapped ? Icons.bookmark : Icons.bookmark_border,
-              color: isScrapped ? AppColors.primary[300] : AppColors.black,
+              color:
+                  isScrapped
+                      ? AppColors.primary[300]
+                      : AppColors.black,
             ),
             onPressed: () {
-              ref.read(scrapViewModelProvider.notifier).toggleScrap(place);
+              ref
+                  .read(scrapViewModelProvider.notifier)
+                  .toggleScrap(place);
               CustomToast.show(
                 context: context,
                 message: '북마크에 저장했습니다.',
@@ -101,7 +109,8 @@ class _RecommendedPlaceDetailPageState extends ConsumerState<RecommendedPlaceDet
               imageUrls: [place.thumbnail],
               currentPage: _currentPage,
               pageController: _pageController,
-              onPageChanged: (index) => setState(() => _currentPage = index),
+              onPageChanged:
+                  (index) => setState(() => _currentPage = index),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

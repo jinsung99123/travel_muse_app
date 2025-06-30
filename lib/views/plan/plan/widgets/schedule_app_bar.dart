@@ -7,7 +7,8 @@ import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
 
-class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
+class ScheduleAppBar extends ConsumerWidget
+    implements PreferredSizeWidget {
   const ScheduleAppBar({super.key, required this.planId});
 
   final String planId;
@@ -35,7 +36,7 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
           padding: EdgeInsets.only(top: 4),
           width: 44,
           height: 44,
-          color: Colors.amber,
+          color: Colors.transparent,
           child: SvgPicture.asset(
             'assets/icons/chevron-left.svg',
             width: 24,
@@ -59,7 +60,11 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16),
           child: GestureDetector(
-            child: SvgPicture.asset('assets/icons/map.svg', width: 28, height: 28),
+            child: SvgPicture.asset(
+              'assets/icons/map.svg',
+              width: 28,
+              height: 28,
+            ),
             onTap: () async {
               final hasRoute = await ref
                   .read(scheduleViewModelProvider.notifier)
@@ -78,7 +83,9 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
               if (context.mounted) {
                 await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => MapPage(planId: planId)),
+                  MaterialPageRoute(
+                    builder: (_) => MapPage(planId: planId),
+                  ),
                 );
               }
             },

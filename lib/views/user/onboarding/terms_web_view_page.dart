@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TermsWebViewPage extends StatefulWidget {
-  const TermsWebViewPage({super.key, required this.title, required this.url});
+  const TermsWebViewPage({
+    super.key,
+    required this.title,
+    required this.url,
+  });
 
   final String title;
   final String url;
@@ -27,10 +32,11 @@ class _TermsWebViewPageState extends State<TermsWebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
+        title: Text(widget.title),
+        leading:
+            Navigator.canPop(context)
+                ? const CustomBackButton()
+                : null,
       ),
       body: WebViewWidget(key: UniqueKey(), controller: _controller),
     );

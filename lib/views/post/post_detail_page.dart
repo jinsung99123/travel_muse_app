@@ -13,23 +13,29 @@ import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
 import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
-import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_images.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_meta.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:travel_muse_app/views/post/widgets/write/confirm_dialog.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
-  const PostDetailPage({super.key, this.post, this.postId, this.scrollToCommentId});
+  const PostDetailPage({
+    super.key,
+    this.post,
+    this.postId,
+    this.scrollToCommentId,
+  });
 
   final Post? post;
   final String? postId;
   final String? scrollToCommentId;
 
   @override
-  ConsumerState<PostDetailPage> createState() => _PostDetailPageState();
+  ConsumerState<PostDetailPage> createState() =>
+      _PostDetailPageState();
 }
 
 class _PostDetailPageState extends ConsumerState<PostDetailPage> {
@@ -64,7 +70,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       await postRepo.incrementViewCount(currentPost.postId);
 
       // 최신 게시글 정보 다시 불러옴
-      final updatedPost = await postRepo.fetchPostById(currentPost.postId);
+      final updatedPost = await postRepo.fetchPostById(
+        currentPost.postId,
+      );
       if (updatedPost != null) {
         setState(() {
           currentPost = updatedPost;
@@ -84,7 +92,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
   Future<void> _refreshPost() async {
     final postRepo = ref.read(postRepositoryProvider);
-    final updatedPost = await postRepo.fetchPostById(currentPost.postId);
+    final updatedPost = await postRepo.fetchPostById(
+      currentPost.postId,
+    );
     if (updatedPost != null) {
       setState(() {
         currentPost = updatedPost;
@@ -124,18 +134,23 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => PostWritePage(post: currentPost),
+                              builder:
+                                  (_) => PostWritePage(
+                                    post: currentPost,
+                                  ),
                             ),
                           );
 
                           if (result == true && mounted) {
-                            final postRepo = ref.read(postRepositoryProvider);
-                            final updatedPost = await postRepo.fetchPostById(
-                              currentPost.postId,
+                            final postRepo = ref.read(
+                              postRepositoryProvider,
                             );
+                            final updatedPost = await postRepo
+                                .fetchPostById(currentPost.postId);
                             if (updatedPost != null) {
                               setState(() {
-                                currentPost = updatedPost; // 상세 페이지 갱신
+                                currentPost =
+                                    updatedPost; // 상세 페이지 갱신
                               });
                               Navigator.pop(context, updatedPost);
                             }
@@ -206,9 +221,14 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          showReportReasonDialog(context, (reasonCode, reasonText) async {
+                          showReportReasonDialog(context, (
+                            reasonCode,
+                            reasonText,
+                          ) async {
                             await ref
-                                .read(reportViewModelProvider.notifier)
+                                .read(
+                                  reportViewModelProvider.notifier,
+                                )
                                 .submit(
                                   targetType: 'post',
                                   targetId: currentPost.postId,
@@ -264,7 +284,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+          leading:
+              Navigator.canPop(context)
+                  ? const CustomBackButton()
+                  : null,
           actions: [
             GestureDetector(
               onTap: () {
@@ -289,9 +312,15 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ListView(
             children: [
-              PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
+              PostDetailHeader(
+                nickname: nickname,
+                profileUrl: profileUrl,
+              ),
               const SizedBox(height: 16),
-              PostDetailContent(title: currentPost.title, content: currentPost.content),
+              PostDetailContent(
+                title: currentPost.title,
+                content: currentPost.content,
+              ),
               const SizedBox(height: 16),
               PostDetailImages(images: currentPost.images),
               const SizedBox(height: 16),
@@ -311,7 +340,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 likeCount: currentPost.likeCount,
                 isLiked: ref.watch(
                   likeViewModelProvider(
-                    LikeViewModelParams(postId: currentPost.postId, userId: user.uid),
+                    LikeViewModelParams(
+                      postId: currentPost.postId,
+                      userId: user.uid,
+                    ),
                   ),
                 ),
                 onLikePressed: () async {
@@ -320,7 +352,9 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                     userId: user.uid,
                   );
 
-                  final likeVM = ref.read(likeViewModelProvider(params).notifier);
+                  final likeVM = ref.read(
+                    likeViewModelProvider(params).notifier,
+                  );
 
                   await likeVM.toggleLike();
 
