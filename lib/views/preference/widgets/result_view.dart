@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
 import 'package:travel_muse_app/providers/user/app_user_view_model_provider.dart';
 import 'package:travel_muse_app/views/preference/widgets/result_action_buttons.dart';
@@ -104,8 +105,9 @@ class _ResultViewState extends ConsumerState<ResultView> {
                             /// 단건 상태 초기화
                             ref.invalidate(preferenceTestStateNotifierProvider);
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('성향 테스트가 삭제되었습니다')),
+                            CustomToast.show(
+                              context: context,
+                              message: '성향 테스트가 삭제되었습니다',
                             );
 
                             Navigator.pop(context, 'deleted');
