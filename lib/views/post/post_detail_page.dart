@@ -8,16 +8,16 @@ import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
-import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
+import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
-import 'package:travel_muse_app/views/post/widgets/detail/popup.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_content.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_header.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_images.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_meta.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
+import 'package:travel_muse_app/views/post/widgets/write/confirm_dialog.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
   const PostDetailPage({
@@ -164,20 +164,29 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                         ),
                         onTap: () async {
                           Navigator.pop(context);
-                          final confirm = await showDialog<bool>(
+                          final result = await showDialog<bool>(
                             context: context,
-                            barrierDismissible: false,
                             builder:
-                                (_) => Popup(
-                                  onCancel: () => Navigator.pop(context, false),
-                                  onConfirm: () => Navigator.pop(context, true),
+                                (context) => const ConfirmDialog(
+                                  title: '삭제하시겠습니까?',
+                                  description: '삭제 후에는 되돌릴 수 없습니다.',
+                                  cancelText: '취소',
+                                  confirmText: '삭제',
                                 ),
                           );
-                          if (confirm == true) {
+                          if (result == true) {
                             await ref
                                 .read(postViewModelProvider.notifier)
                                 .deletePost(currentPost.postId);
-                            if (mounted) Navigator.pop(context, true);
+
+                            if (mounted) {
+                              Navigator.pop(context, true);
+                              CustomToast.show(
+                                context: context,
+                                message: '게시글이 삭제되었습니다.',
+                                duration: const Duration(seconds: 2),
+                              );
+                            }
                           }
                         },
                       ),

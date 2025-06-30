@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
@@ -102,7 +103,17 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     if (mounted) {
       if (widget.post != null) {
         Navigator.pop(context, true); // 수정인 경우 → true 반환
+        CustomToast.show(
+        context: context,
+        message: '게시물 수정이 완료되었습니다.',
+        duration: const Duration(seconds: 2),
+      );
       } else if (createdPost != null) {
+        CustomToast.show(
+        context: context,
+        message: '게시물을 성공적으로 업로드했습니다.',
+        duration: const Duration(seconds: 2),
+      );
         Navigator.pop(context, createdPost); // 새 글 작성인 경우 → post 반환
       }
     }
@@ -240,3 +251,4 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     );
   }
 }
+
