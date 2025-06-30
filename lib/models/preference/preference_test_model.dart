@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PreferenceAnswer {
-
   PreferenceAnswer({required this.questionId, required this.selectedOption});
 
   factory PreferenceAnswer.fromMap(Map<String, dynamic> map) {
@@ -10,6 +9,7 @@ class PreferenceAnswer {
       selectedOption: map['selectedOption'] ?? '',
     );
   }
+
   final String questionId;
   final String selectedOption;
 
@@ -20,7 +20,6 @@ class PreferenceAnswer {
 }
 
 class PreferenceTest {
-
   PreferenceTest({
     required this.testId,
     required this.userId,
@@ -28,6 +27,7 @@ class PreferenceTest {
     required this.result,
     required this.createdAt,
     required this.updatedAt,
+    this.answersHash,
   });
 
   ///Firestore에서 가져올 때 사용
@@ -42,8 +42,10 @@ class PreferenceTest {
       result: Map<String, String>.from(map['result']),
       createdAt: (map['createAt'] as Timestamp).toDate(),
       updatedAt: (map['updateAt'] as Timestamp).toDate(),
+      answersHash: map['answersHash'],
     );
   }
+
   final String testId;
   final String userId;
   final List<PreferenceAnswer> answers;
@@ -51,6 +53,7 @@ class PreferenceTest {
   result; // e.g., {'type': 'a', 'details': '계획형 여행가 ...'}
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? answersHash;
 
   Map<String, dynamic> toMap() => {
     'testId': testId,
@@ -59,6 +62,7 @@ class PreferenceTest {
     'result': result,
     'createAt': createdAt,
     'updateAt': updatedAt,
+    'answersHash': answersHash,
   };
 
   /// copyWith 메서드
@@ -69,6 +73,7 @@ class PreferenceTest {
     Map<String, String>? result,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? answersHash,
   }) {
     return PreferenceTest(
       testId: testId ?? this.testId,
@@ -77,6 +82,7 @@ class PreferenceTest {
       result: result ?? this.result,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      answersHash: answersHash ?? this.answersHash,
     );
   }
 }
