@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
@@ -15,11 +16,7 @@ class MyScrapListPage extends ConsumerWidget {
     final state = ref.watch(scrapListViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('북마크'),
-        centerTitle: false,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('북마크'), centerTitle: false, elevation: 0),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('에러 발생: $err')),
@@ -134,6 +131,7 @@ class MyScrapListPage extends ConsumerWidget {
           );
         },
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
