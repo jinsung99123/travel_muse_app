@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
-import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
+import 'package:travel_muse_app/views/post/post_write_page.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/place_preview_card.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/popup.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/post_detail_appbar.dart';
@@ -20,12 +21,7 @@ import 'package:travel_muse_app/views/post/widgets/detail/post_detail_tags_and_m
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
-  const PostDetailPage({
-    super.key,
-    this.post,
-    this.postId,
-    this.scrollToCommentId,
-  });
+  const PostDetailPage({super.key, this.post, this.postId, this.scrollToCommentId});
 
   final Post? post;
   final String? postId;
@@ -200,10 +196,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          showReportReasonDialog(context, (
-                            reasonCode,
-                            reasonText,
-                          ) async {
+                          showReportReasonDialog(context, (reasonCode, reasonText) async {
                             await ref
                                 .read(reportViewModelProvider.notifier)
                                 .submit(
@@ -267,10 +260,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             children: [
               PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
               const SizedBox(height: 16),
-              PostDetailContent(
-                title: currentPost.title,
-                content: currentPost.content,
-              ),
+              PostDetailContent(title: currentPost.title, content: currentPost.content),
               const SizedBox(height: 16),
               PostDetailImages(images: currentPost.images),
               const SizedBox(height: 16),
@@ -290,10 +280,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 likeCount: currentPost.likeCount,
                 isLiked: ref.watch(
                   likeViewModelProvider(
-                    LikeViewModelParams(
-                      postId: currentPost.postId,
-                      userId: user.uid,
-                    ),
+                    LikeViewModelParams(postId: currentPost.postId, userId: user.uid),
                   ),
                 ),
                 onLikePressed: () async {
@@ -302,9 +289,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                     userId: user.uid,
                   );
 
-                  final likeVM = ref.read(
-                    likeViewModelProvider(params).notifier,
-                  );
+                  final likeVM = ref.read(likeViewModelProvider(params).notifier);
 
                   await likeVM.toggleLike();
 
@@ -316,6 +301,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             ],
           ),
         ),
+        bottomNavigationBar: const BottomBar(),
       ),
     );
   }

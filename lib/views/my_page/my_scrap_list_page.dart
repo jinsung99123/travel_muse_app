@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
@@ -14,11 +15,7 @@ class MyScrapListPage extends ConsumerWidget {
     final state = ref.watch(scrapListViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('북마크'),
-        centerTitle: false,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('북마크'), centerTitle: false, elevation: 0),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('에러 발생: $err')),
@@ -29,11 +26,8 @@ class MyScrapListPage extends ConsumerWidget {
 
           return ListView.separated(
             itemCount: places.length,
-            separatorBuilder: (_, __) => Divider(
-              height: 1,
-              thickness: 0.5,
-              color: AppColors.grey[200],
-            ),
+            separatorBuilder:
+                (_, __) => Divider(height: 1, thickness: 0.5, color: AppColors.grey[200]),
             itemBuilder: (context, index) {
               final place = places[index];
               return Padding(
@@ -83,27 +77,19 @@ class MyScrapListPage extends ConsumerWidget {
                             place.category,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.grey[400],
-                            ),
+                            style: TextStyle(fontSize: 14, color: AppColors.grey[400]),
                           ),
                         ],
                       ),
                     ),
                     IconButton(
                       iconSize: 24,
-                      icon: Icon(
-                        Icons.bookmark,
-                        color: AppColors.primary[300],
-                      ),
+                      icon: Icon(Icons.bookmark, color: AppColors.primary[300]),
                       onPressed: () async {
                         final confirm = await _showDeleteDialog(context);
                         if (confirm != true) return;
 
-                        await ref
-                            .read(scrapListViewModelProvider.notifier)
-                            .remove(place);
+                        await ref.read(scrapListViewModelProvider.notifier).remove(place);
 
                         CustomToast.show(
                           context: context,
@@ -119,6 +105,7 @@ class MyScrapListPage extends ConsumerWidget {
           );
         },
       ),
+      bottomNavigationBar: const BottomBar(),
     );
   }
 }
@@ -126,10 +113,11 @@ class MyScrapListPage extends ConsumerWidget {
 Future<bool?> _showDeleteDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
-    builder: (context) => const ConfirmDialog(
-      title: '스크랩을 해제하시겠습니까?',
-      description: '스크랩을 삭제하고 후에는 되돌릴 수 없어요',
-    ),
+    builder:
+        (context) => const ConfirmDialog(
+          title: '스크랩을 해제하시겠습니까?',
+          description: '스크랩을 삭제하고 후에는 되돌릴 수 없어요',
+        ),
   );
 }
 
