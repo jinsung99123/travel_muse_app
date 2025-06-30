@@ -84,4 +84,55 @@ class PreferenceTestRepository {
   Future<void> deleteTest(String testId) async {
     await _firestore.collection(_collection).doc(testId).delete();
   }
+
+  /// answersRaw → 해시 문자열로 변환
+  String generateAnswersHash(List<PreferenceAnswer> answers) {
+    return answers
+        .map((a) => '${a.questionId}:${a.selectedOption}')
+        .join('|')
+        .hashCode
+        .toString(); // 짧게 만들기 위해 hashCode 사용
+  }
+
+  /// 해시 기반 캐시 조회
+  Future<PreferenceTest?> findTestByAnswerHash(
+    String userId,
+    String answersHash,
+  ) async {
+    final query =
+        await _firestore
+            .collection(_collection)
+            .where('userId', isEqualTo: userId)
+            .where('answersHash', isEqualTo: answersHash)
+            .limit(1)
+            .get();
+
+    if (query.docs.isEmpty) return null;
+    final doc = query.docs.first;
+    return PreferenceTest.fromDoc(doc.id, doc.data());
+  }
+
+  /// 해시값 포함 저장 (saveTest 내부용으로 확장)
+  Future<String> saveTestWithHash(
+    PreferenceTest test,
+    String answersHash,
+  ) async {
+    final docRef = _firestore.collection(_collection).doc();
+    final data = test.copyWith(testId: docRef.id).toMap();
+    data['answersHash'] = answersHash; // 해시 추가
+    await docRef.set(data);
+    return docRef.id;
+  }
+
+  Future<bool> canTakeTest(String userId, {int limit = 50}) async {
+    final doc = await _firestore.collection('appUser').doc(userId).get();
+    final count = (doc.data()?['testCount'] ?? 0) as int;
+    return count < limit;
+  }
+
+  Future<void> incrementTestCount(String userId) async {
+    await _firestore.collection('appUser').doc(userId).set({
+      'testCount': FieldValue.increment(1),
+    }, SetOptions(merge: true));
+  }
 }
