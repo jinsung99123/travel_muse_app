@@ -34,8 +34,7 @@ class PostDetailPage extends ConsumerStatefulWidget {
   final String? scrollToCommentId;
 
   @override
-  ConsumerState<PostDetailPage> createState() =>
-      _PostDetailPageState();
+  ConsumerState<PostDetailPage> createState() => _PostDetailPageState();
 }
 
 class _PostDetailPageState extends ConsumerState<PostDetailPage> {
@@ -70,9 +69,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       await postRepo.incrementViewCount(currentPost.postId);
 
       // 최신 게시글 정보 다시 불러옴
-      final updatedPost = await postRepo.fetchPostById(
-        currentPost.postId,
-      );
+      final updatedPost = await postRepo.fetchPostById(currentPost.postId);
       if (updatedPost != null) {
         setState(() {
           currentPost = updatedPost;
@@ -92,9 +89,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
   Future<void> _refreshPost() async {
     final postRepo = ref.read(postRepositoryProvider);
-    final updatedPost = await postRepo.fetchPostById(
-      currentPost.postId,
-    );
+    final updatedPost = await postRepo.fetchPostById(currentPost.postId);
     if (updatedPost != null) {
       setState(() {
         currentPost = updatedPost;
@@ -134,23 +129,18 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder:
-                                  (_) => PostWritePage(
-                                    post: currentPost,
-                                  ),
+                              builder: (_) => PostWritePage(post: currentPost),
                             ),
                           );
 
                           if (result == true && mounted) {
-                            final postRepo = ref.read(
-                              postRepositoryProvider,
+                            final postRepo = ref.read(postRepositoryProvider);
+                            final updatedPost = await postRepo.fetchPostById(
+                              currentPost.postId,
                             );
-                            final updatedPost = await postRepo
-                                .fetchPostById(currentPost.postId);
                             if (updatedPost != null) {
                               setState(() {
-                                currentPost =
-                                    updatedPost; // 상세 페이지 갱신
+                                currentPost = updatedPost; // 상세 페이지 갱신
                               });
                               Navigator.pop(context, updatedPost);
                             }
@@ -226,9 +216,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                             reasonText,
                           ) async {
                             await ref
-                                .read(
-                                  reportViewModelProvider.notifier,
-                                )
+                                .read(reportViewModelProvider.notifier)
                                 .submit(
                                   targetType: 'post',
                                   targetId: currentPost.postId,
@@ -279,15 +267,16 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, currentPost);
+        final updatedPost = await ref
+            .read(postRepositoryProvider)
+            .fetchPostById(currentPost.postId);
+        Navigator.pop(context, updatedPost ?? currentPost);
         return false;
       },
+
       child: Scaffold(
         appBar: AppBar(
-          leading:
-              Navigator.canPop(context)
-                  ? const CustomBackButton()
-                  : null,
+          leading: Navigator.canPop(context) ? const CustomBackButton() : null,
           actions: [
             GestureDetector(
               onTap: () {
@@ -312,10 +301,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: ListView(
             children: [
-              PostDetailHeader(
-                nickname: nickname,
-                profileUrl: profileUrl,
-              ),
+              PostDetailHeader(nickname: nickname, profileUrl: profileUrl),
               const SizedBox(height: 16),
               PostDetailContent(
                 title: currentPost.title,
@@ -362,7 +348,12 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 },
               ),
               const SizedBox(height: 16),
-              CommentSection(postId: currentPost.postId),
+              CommentSection(
+                postId: currentPost.postId,
+                onCommentAdded: () async {
+                  await _refreshPost(); // 현재 post 최신화
+                },
+              ),
             ],
           ),
         ),

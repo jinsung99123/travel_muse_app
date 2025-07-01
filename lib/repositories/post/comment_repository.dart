@@ -9,7 +9,17 @@ class CommentRepository {
       _firestore.collection('posts').doc(postId).collection('comments');
 
   Future<void> addComment(String postId, Comment comment) async {
-    await getCommentsRef(postId).doc(comment.commentId).set(comment.toMap());
+    final postRef = _firestore.collection('posts').doc(postId);
+    final commentRef = getCommentsRef(postId).doc(comment.commentId);
+
+    await _firestore.runTransaction((txn) async {
+      final postSnap = await txn.get(postRef);
+
+      final currentCount = (postSnap.data()?['commentCount'] ?? 0) as int;
+
+      txn.set(commentRef, comment.toMap());
+      txn.update(postRef, {'commentCount': currentCount + 1});
+    });
   }
 
   Stream<List<Comment>> getComments(String postId) {
@@ -52,7 +62,17 @@ class CommentRepository {
   }
 
   Future<void> deleteComment(String postId, String commentId) async {
-    await getCommentsRef(postId).doc(commentId).delete();
+    final postRef = _firestore.collection('posts').doc(postId);
+    final commentRef = getCommentsRef(postId).doc(commentId);
+
+    await _firestore.runTransaction((txn) async {
+      final postSnap = await txn.get(postRef);
+
+      final currentCount = (postSnap.data()?['commentCount'] ?? 1) as int;
+
+      txn.delete(commentRef);
+      txn.update(postRef, {'commentCount': currentCount - 1});
+    });
   }
 
   Future<Map<String, String>> fetchUserInfo(String userId) async {
