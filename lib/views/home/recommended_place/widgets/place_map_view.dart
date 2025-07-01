@@ -17,11 +17,11 @@ class _PlaceMapViewState extends State<PlaceMapView> {
   @override
   void initState() {
     super.initState();
-    _loadMarker();
+    _initMarker();
   }
 
-  Future<void> _loadMarker() async {
-    final icon = await bitmapDescriptorFromSvgAsset('assets/icons/icon_active/map-pin.svg');
+  Future<void> _initMarker() async {
+    final icon = await MarkerIconLoader.loadCustomIcon();
     setState(() {
       _customIcon = icon;
     });
