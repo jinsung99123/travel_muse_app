@@ -5,12 +5,13 @@ import 'package:travel_muse_app/models/post/post_list_state_model.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/repositories/post/post_list_repository.dart';
 
-class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
+class PostListViewModel
+    extends AutoDisposeAsyncNotifier<PostListState> {
   final _repository = PostListRepository();
 
   @override
   PostListState build() {
-    fetchInitialPosts();
+    refreshPosts();
     return PostListState();
   }
 
@@ -18,12 +19,16 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
     final currentState = state.value;
     if (currentState == null) return;
 
-    final exists = currentState.posts.any((p) => p.postId == post.postId);
+    final exists = currentState.posts.any(
+      (p) => p.postId == post.postId,
+    );
     if (exists) return;
 
-    final updatedPosts = [post, ...currentState.posts];
+    setFilterState(null);
 
-    state = AsyncData(currentState.copyWith(posts: updatedPosts));
+    // final updatedPosts = [post, ...currentState.posts];
+
+    // state = AsyncData(currentState.copyWith(posts: updatedPosts));
   }
 
   void updatePost(Post updatedPost) {
@@ -32,24 +37,38 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
 
     final updatedPosts =
         currentState.posts.map((post) {
-          return post.postId == updatedPost.postId ? updatedPost : post;
+          return post.postId == updatedPost.postId
+              ? updatedPost
+              : post;
         }).toList();
 
     state = AsyncData(currentState.copyWith(posts: updatedPosts));
   }
 
-  /// 포스트 리스트 초기값 상태 업데이트
+  /// 포스트 리스트 초기화 => filter=null
   Future<void> fetchInitialPosts() async {
     state = const AsyncLoading();
 
     try {
-      final filter = state.value?.filter;
-      final posts = await _repository.fetchInitialPosts(filter: filter);
-      final filteredPosts =
-          posts.where((post) => post.isDeleted == false).toList();
-      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
+      final posts = await _repository.fetchInitialPosts(filter: null);
+      state = AsyncData(PostListState(posts: posts, filter: null));
     } catch (e) {
       log('포스트 리스트 초기값 가져오기 실패 : $e');
+    }
+  }
+
+  /// 포스트 리스트 새로고침
+  Future<void> refreshPosts() async {
+    state = const AsyncLoading();
+
+    try {
+      final filter = state.value?.filter;
+      final posts = await _repository.fetchInitialPosts(
+        filter: filter,
+      );
+      state = AsyncData(state.value!.copyWith(posts: posts));
+    } catch (e) {
+      log('포스트 리스트 새로고침 실패 : $e');
     }
   }
 
@@ -61,7 +80,9 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
       List<Post> newPosts;
 
       if (currentPosts.isEmpty) {
-        newPosts = await _repository.fetchInitialPosts(filter: filter);
+        newPosts = await _repository.fetchInitialPosts(
+          filter: filter,
+        );
       } else {
         final latestCreateAt = currentPosts.first.createAt;
         newPosts = await _repository.fetchNewPostsAfter(
@@ -69,7 +90,8 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
           filter: filter,
         );
 
-        final existingIds = currentPosts.map((post) => post.postId).toSet();
+        final existingIds =
+            currentPosts.map((post) => post.postId).toSet();
         newPosts =
             newPosts
                 .where((post) => !existingIds.contains(post.postId))
@@ -79,10 +101,10 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
       }
 
       // isDeleted 필드 기준으로 필터링
-      final filteredPosts =
-          newPosts.where((post) => post.isDeleted == false).toList();
+      // final filteredPosts =
+      //     newPosts.where((post) => post.isDeleted == false).toList();
 
-      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
+      state = AsyncData(state.value!.copyWith(posts: newPosts));
     } catch (e) {
       log('당겨서 새로고침 실패 : $e');
     }
@@ -96,7 +118,9 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
       List<Post> newPosts;
 
       if (currentPosts.isEmpty) {
-        newPosts = await _repository.fetchInitialPosts(filter: filter);
+        newPosts = await _repository.fetchInitialPosts(
+          filter: filter,
+        );
       } else {
         final oldestCreateAt = currentPosts.last.createAt;
         newPosts = await _repository.fetchOldPostsBefore(
@@ -104,7 +128,8 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
           filter: filter,
         );
 
-        final existingIds = currentPosts.map((post) => post.postId).toSet();
+        final existingIds =
+            currentPosts.map((post) => post.postId).toSet();
         newPosts =
             newPosts
                 .where((post) => !existingIds.contains(post.postId))
@@ -112,37 +137,26 @@ class PostListViewModel extends AutoDisposeAsyncNotifier<PostListState> {
 
         newPosts = [...currentPosts, ...newPosts];
       }
-      final filteredPosts =
-          newPosts.where((post) => post.isDeleted == false).toList();
+      // final filteredPosts =
+      //     newPosts.where((post) => post.isDeleted == false).toList();
 
-      state = AsyncData(state.value!.copyWith(posts: filteredPosts));
+      state = AsyncData(state.value!.copyWith(posts: newPosts));
     } catch (e) {
       log('무한 스크롤 실패 : $e');
     }
   }
 
-  /// 필터 상태 업데이트
-  void setFilterState(String? filter) {
+  /// 필터 상태 업데이트 및 포스트 재로드
+  void setFilterState(String? filter) async {
     state = AsyncData(state.value!.copyWith(filter: filter));
-    filterPostsByTag(filter);
-  }
-
-  /// 현재 state의 posts 중 filter에 해당하는 태그가 있는 포스트만 남김
-  void filterPostsByTag(String? filter) {
-    final currentState = state.value;
-
-    if (currentState == null) return;
-
-    if (filter == null) {
-      state = AsyncData(currentState);
-      return;
+    try {
+      state = const AsyncLoading();
+      final posts = await _repository.fetchInitialPosts(
+        filter: filter,
+      );
+      state = AsyncData(PostListState(posts: posts, filter: filter));
+    } catch (e) {
+      log('필터 초기화 후 fetch 실패: $e');
     }
-
-    final filteredPosts =
-        currentState.posts.where((post) => post.tags.contains(filter)).toList();
-
-    state = AsyncData(
-      currentState.copyWith(posts: filteredPosts, filter: filter),
-    );
   }
 }
