@@ -1,10 +1,10 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/repositories/plan/calendar_location_repository.dart';
 import 'package:travel_muse_app/repositories/plan/schedule_repository.dart';
+import 'package:travel_muse_app/utills/date_utils.dart';
 
 class ScheduleState {
   const ScheduleState({
@@ -171,6 +171,20 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
     } catch (e, st) {
       log('일정 삭제 실패: $e');
       state = AsyncError(e, st);
+    }
+  }
+
+  /// 여행일수를 반환합니다.
+  Future<int> getTripDays(String planId) async {
+    try {
+      final plan = getPlanById(planId);
+      if (plan == null) return 1;
+
+      final tripDays = calculateTripDays(plan.startDate, plan.endDate);
+      return tripDays;
+    } catch (e) {
+      log('여행일수 계산 실패: $e');
+      return 1; // 기본값
     }
   }
 }

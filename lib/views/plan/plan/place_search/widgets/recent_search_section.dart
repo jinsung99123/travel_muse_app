@@ -17,7 +17,7 @@ class RecentSearchSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        //최근 검색어 + 전체 삭제
+        ///최근 검색어 + 전체 삭제
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -52,7 +52,7 @@ class RecentSearchSection extends ConsumerWidget {
           ),
         ),
 
-        // 칩 리스트
+        /// 칩 리스트
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Align(

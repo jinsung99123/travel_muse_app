@@ -9,7 +9,6 @@ import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/place_description.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_info_section.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_map_view.dart';
 
@@ -85,23 +84,6 @@ class _RecommendedPlaceDetailPageState
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   backgroundColor: AppColors.primary[50],
-      //   foregroundColor: AppColors.primary[300],
-      //   icon: const Icon(Icons.directions),
-      //   label: const Text('길찾기'),
-      //   shape: RoundedRectangleBorder(
-      //     side: BorderSide(color: AppColors.primary[300]!, width: 1.5),
-      //     borderRadius: BorderRadius.circular(16),
-      //   ),
-      //   onPressed: () {
-      //     final lat = place.latLng.latitude;
-      //     final lng = place.latLng.longitude;
-      //     final name = place.title;
-      //     // final url = Uri.parse('https://map.kakao.com/link/map/$name,$lat,$lng'); 추후 추가 예정
-      //     // launchUrl(url);  // launch(url.toString()); 필요시 url_launcher 사용
-      //   },
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -117,8 +99,6 @@ class _RecommendedPlaceDetailPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // const SizedBox(height: 16),
-                  // PlaceStatsRow(), 별점 좋아요
                   Text(
                     place.title,
                     style: const TextStyle(
@@ -131,7 +111,6 @@ class _RecommendedPlaceDetailPageState
                   const SizedBox(height: 12),
                   LocationRow(place: place),
                   const SizedBox(height: 24),
-                  // const ActionButtonRow(),
                   Row(
                     children: [
                       SvgPicture.asset(
@@ -151,8 +130,6 @@ class _RecommendedPlaceDetailPageState
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
-                  PlaceDescription(),
                   const SizedBox(height: 24),
                   PlaceMapView(place: place),
                   const SizedBox(height: 16),

@@ -2,7 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/widgets.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
-const double bulletSize = 12;      // 바깥 원 지름
+const double bulletSize = 12;      
 const double lineThickness = 1;
 
 class DottedLineVertical extends StatelessWidget {

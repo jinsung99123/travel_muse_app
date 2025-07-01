@@ -8,7 +8,6 @@ import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/utills/latlng_helper.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/utills/marker_helper.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_sheet.dart';
 
 class MapViewModel extends StateNotifier<MapState> {
@@ -23,7 +22,7 @@ class MapViewModel extends StateNotifier<MapState> {
 
   /// 커스텀 마커 아이콘 비트맵을 비동기로 로드합니다.
   Future<void> _loadAssets() async {
-    _pinIcon = await bitmapDescriptorFromSvgAsset('assets/icons/map_pin.svg');
+   _pinIcon = await MarkerIconLoader.loadCustomIcon();
     _iconReady = true;
     state = state.copyWith();
   }
