@@ -64,14 +64,26 @@ class CommentRepository {
   Future<void> deleteComment(String postId, String commentId) async {
     final postRef = _firestore.collection('posts').doc(postId);
     final commentRef = getCommentsRef(postId).doc(commentId);
+    final repliesQuery =
+        await getCommentsRef(
+          postId,
+        ).where('parentId', isEqualTo: commentId).get();
+
+    final totalDeleteCount = 1 + repliesQuery.docs.length;
 
     await _firestore.runTransaction((txn) async {
       final postSnap = await txn.get(postRef);
+      final currentCount = (postSnap.data()?['commentCount'] ?? 0) as int;
 
-      final currentCount = (postSnap.data()?['commentCount'] ?? 1) as int;
-
+      // 원댓글 삭제
       txn.delete(commentRef);
-      txn.update(postRef, {'commentCount': currentCount - 1});
+
+      // 답글들 삭제
+      for (final doc in repliesQuery.docs) {
+        txn.delete(doc.reference);
+      }
+
+      txn.update(postRef, {'commentCount': currentCount - totalDeleteCount});
     });
   }
 
