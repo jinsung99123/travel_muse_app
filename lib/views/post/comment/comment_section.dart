@@ -8,9 +8,9 @@ import 'package:travel_muse_app/views/post/%08comment/widgets/comment_item.dart'
 import 'package:uuid/uuid.dart';
 
 class CommentSection extends ConsumerWidget {
-  const CommentSection({super.key, required this.postId});
+  const CommentSection({super.key, required this.postId, this.onCommentAdded});
   final String postId;
-
+  final VoidCallback? onCommentAdded;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -72,6 +72,7 @@ class CommentSection extends ConsumerWidget {
                 );
                 viewModel.addComment(comment);
                 controller.clear();
+                onCommentAdded?.call();
               },
             ),
           ],
