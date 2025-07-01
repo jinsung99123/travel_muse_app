@@ -9,7 +9,8 @@ class NotificationSettingPage extends StatefulWidget {
   const NotificationSettingPage({super.key});
 
   @override
-  State<NotificationSettingPage> createState() => _NotificationSettingPageState();
+  State<NotificationSettingPage> createState() =>
+      _NotificationSettingPageState();
 }
 
 class _NotificationSettingPageState extends State<NotificationSettingPage> {
@@ -114,45 +115,70 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
       body:
           _switchValues.length < settingsItems.length
               ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                itemCount: settingsItems.length,
-                itemBuilder: (context, index) {
-                  final item = settingsItems[index];
-                  final value = _switchValues[item] ?? true;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
+              : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView.builder(
+                  itemCount: settingsItems.length,
+                  itemBuilder: (context, index) {
+                    final item = settingsItems[index];
+                    final value = _switchValues[item] ?? true;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.75,
-                          child: Text(
-                            item,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: AppColors.black,
-                              fontSize: 16,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              height: 1.50,
-                            ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: AppColors.grey[50]!,
                           ),
                         ),
-                        Switch(
-                          value: value,
-                          onChanged: (bool val) => _onSwitchChanged(item, val),
-                          activeColor: AppColors.primary[300],
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                color: AppColors.black,
+                                fontSize: 16,
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                                height: 1.50,
+                              ),
+                            ),
+                          ),
+                          Switch(
+                            value: value,
+                            onChanged:
+                                (bool val) => _onSwitchChanged(item, val),
+
+                            thumbColor: MaterialStateProperty.all(Colors.white),
+
+                            trackColor: MaterialStateProperty.resolveWith((
+                              states,
+                            ) {
+                              if (states.contains(MaterialState.selected)) {
+                                return AppColors.primary[300];
+                              }
+                              return AppColors.grey[200]!;
+                            }),
+
+                            trackOutlineColor: MaterialStateProperty.all(
+                              Colors.transparent,
+                            ),
+
+                            splashRadius: 20,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
       bottomNavigationBar: const BottomBar(),
     );
