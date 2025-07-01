@@ -5,99 +5,94 @@ import 'package:travel_muse_app/views/my_page/my_post_page.dart';
 import 'package:travel_muse_app/views/my_page/my_scrap_list_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
+import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
 
 class MyPageMenu extends StatelessWidget {
   const MyPageMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildMenuTitle('내 활동'),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildMenuTitle('내 활동'),
 
-          _buildMenuItem(
-            title: '나의 여행',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PlanListPage()),
-              );
-            },
-          ),
+            _buildMenuItem(
+              title: '나의 여행',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PlanListPage()),
+                );
+              },
+            ),
 
-          _buildMenuItem(
-            title: '북마크',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyScrapListPage()),
-              );
-            },
-          ),
+            _buildMenuItem(
+              title: '북마크',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyScrapListPage(),
+                  ),
+                );
+              },
+            ),
 
-          _buildMenuItem(
-            title: '내 게시글',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyPostPage()),
-              );
-            },
-          ),
+            _buildMenuItem(
+              title: '내 게시글',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyPostPage()),
+                );
+              },
+            ),
 
-          _buildMenuTitle('여행 성향 테스트'),
+            _buildMenuItem(
+              title: '좋아요한 게시글',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LikeListPage()),
+                );
+              },
+            ),
 
-          _buildMenuItem(
-            title: '나의 여행 성향',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PreferenceListPage()),
-              );
-            },
-          ),
+            _buildMenuTitle('여행 성향 테스트'),
 
-          _buildMenuItem(
-            title: '여행 성향 재검사',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PreferenceTestPage()),
-              );
-            },
-          ),
+            _buildMenuItem(
+              title: '나의 여행 성향',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PreferenceListPage(),
+                  ),
+                );
+              },
+            ),
 
-          _buildMenuItem(
-            title: '좋아요한 게시글',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LikeListPage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            title: '설정',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingPage()),
-              );
-            },
-          ),
-        ],
+            _buildMenuItem(
+              title: '여행 성향 재검사',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PreferenceTestPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-
-  ///
-  /// 페이지 위젯
-  ///
 
   Padding _buildMenuTitle(String title) {
     return Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:travel_muse_app/utills/format_time_ago.dart';
@@ -48,30 +49,61 @@ class ReplyPreview extends ConsumerWidget {
             children: [
               ...preview.map(
                 (reply) => Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: const EdgeInsets.only(left: 40.0, bottom: 12),
                   child: FutureBuilder<Map<String, String>>(
                     future: viewModel.getUserInfo(reply.userId),
                     builder: (context, snapshot) {
                       final nickname = snapshot.data?['nickname'] ?? '닉네임';
                       final profileUrl = snapshot.data?['profileImage'] ?? '';
-                      return ListTile(
-                        leading:
-                            profileUrl.isNotEmpty
-                                ? CircleAvatar(
-                                  backgroundImage: NetworkImage(profileUrl),
-                                )
-                                : const CircleAvatar(child: Icon(Icons.person)),
-                        title: Text(reply.content),
-                        subtitle: Text(
-                          '$nickname • ${timeAgo(reply.createdAt)}',
-                        ),
+
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor:
+                                profileUrl.isEmpty
+                                    ? AppColors.primary[100]
+                                    : null,
+                            backgroundImage:
+                                profileUrl.isNotEmpty
+                                    ? NetworkImage(profileUrl)
+                                    : null,
+                            child: profileUrl.isEmpty ? null : null,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  nickname,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  timeAgo(reply.createdAt),
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(reply.content),
+                              ],
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 40.0),
+                padding: const EdgeInsets.only(left: 40.0, top: 4),
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(

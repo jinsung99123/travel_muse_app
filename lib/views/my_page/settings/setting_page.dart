@@ -48,7 +48,6 @@ class _SettingPageState extends State<SettingPage> {
 
     final List<Map<String, dynamic>> settingsItems = [
       {'title': '알림 설정', 'route': const NotificationSettingPage()},
-      {'title': '환경 설정', 'route': const EnvironmentSettingPage()},
       {'title': '계정 관리', 'route': const AccountSettingPage()},
       {'title': '서비스 약관', 'route': const ServiceTermPage()},
       {'title': '고객 지원', 'route': const SupportPage()},
@@ -59,48 +58,62 @@ class _SettingPageState extends State<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('설정'),
+        title: Text('설정', style: TextStyle(color: AppColors.grey[800])),
         leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
-      body: ListView.builder(
-        itemCount: settingsItems.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => settingsItems[index]['route']),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: AppColors.grey[50]!)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    child: Text(
-                      settingsItems[index]['title'],
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w600,
-                        height: 1.50,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView.builder(
+          itemCount: settingsItems.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => settingsItems[index]['route'],
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      child: Text(
+                        settingsItems[index]['title'],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w600,
+                          height: 1.50,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[600]),
-                ],
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: AppColors.grey[600],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       bottomNavigationBar: const BottomBar(),
     );
