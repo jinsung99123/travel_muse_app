@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/repositories/plan/plan_repository.dart';
 import 'package:travel_muse_app/repositories/plan/schedule_repository.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
@@ -14,6 +15,12 @@ Future<void> generateAndSaveEnrichedAiRoute({
   final planRepo = PlanRepository();
   final scheduleRepo = ScheduleRepository();
   final placeService = PlaceSearchService();
+
+  // 여행일수 제한 (10일 초과 시 중단)
+  if (days > 10) {
+    CustomToast.show(context: context, message: '여행일정은 최대 10일까지 가능합니다.');
+    return;
+  }
 
   // Gemini 프롬프트 호출
   final aiPlan = await planRepo.getOptimizedPlanFromAI(
