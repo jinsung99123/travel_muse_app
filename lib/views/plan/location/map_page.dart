@@ -20,7 +20,7 @@ class MapPage extends ConsumerStatefulWidget {
 class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
-  LatLng _initialLatLng = const LatLng(33.4996, 126.5312);
+  LatLng _initialLatLng = const LatLng(37.5665, 126.9780);
   late final MapViewModel _viewModel;
   TabController? _tabController;
   void _onTabChanged() {
