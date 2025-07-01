@@ -1,35 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
+import 'package:travel_muse_app/utills/marker_helper.dart';
 
-class PlaceMapView extends StatelessWidget {
+class PlaceMapView extends StatefulWidget {
   const PlaceMapView({super.key, required this.place});
-
   final HomePlace place;
 
   @override
+  State<PlaceMapView> createState() => _PlaceMapViewState();
+}
+
+class _PlaceMapViewState extends State<PlaceMapView> {
+  BitmapDescriptor? _customIcon;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMarker();
+  }
+
+  Future<void> _loadMarker() async {
+    final icon = await bitmapDescriptorFromSvgAsset('assets/icons/icon_active/map-pin.svg');
+    setState(() {
+      _customIcon = icon;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final LatLng position = place.latLng;
+    final LatLng position = widget.place.latLng;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
         height: 200,
-        child: GoogleMap(
-          initialCameraPosition: CameraPosition(target: position, zoom: 13),
-          markers: {
-            Marker(
-              markerId: MarkerId(place.id),
-              position: position,
-              infoWindow: InfoWindow(title: place.title),
-            ),
-          },
-          myLocationButtonEnabled: false,
-          zoomControlsEnabled: false,
-          onTap: (_) {
-            // 추후 추가 예정 지도 상세로 이동
-          },
-        ),
+        child: _customIcon == null
+            ? const Center(child: CircularProgressIndicator())
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: position,
+                  zoom: 13,
+                ),
+                markers: {
+                  Marker(
+                    markerId: MarkerId(widget.place.id),
+                    position: position,
+                    icon: _customIcon!,
+                    infoWindow: InfoWindow(title: widget.place.title),
+                  ),
+                },
+                myLocationButtonEnabled: false,
+                zoomControlsEnabled: false,
+                onTap: (_) {},
+              ),
       ),
     );
   }
