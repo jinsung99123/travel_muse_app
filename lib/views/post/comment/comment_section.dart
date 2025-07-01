@@ -109,6 +109,7 @@ class CommentSection extends ConsumerWidget {
                       .doc(postId)
                       .update({'commentCount': FieldValue.increment(1)});
                   controller.clear();
+                  onCommentAdded?.call();
                 },
               ),
             ],
