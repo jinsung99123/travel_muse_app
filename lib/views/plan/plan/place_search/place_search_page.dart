@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
@@ -80,7 +79,6 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 검색바
             Padding(
               padding: const EdgeInsets.all(16),
               child: SearchBar(
@@ -89,18 +87,15 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
                 onSubmitted: _handleSearch,
               ),
             ),
-            // 최근 검색어
             RecentSearchSection(
               onSelect: (word) {
                 _searchController.text = word;
                 _handleSearch(word);
               },
             ),
-            // 지역 추천 안내
             if (_showInitialMessage)
               RegionRecommendHeader(region: widget.region),
             const SizedBox(height: 8),
-            // 검색 결과
             Expanded(
               child:
                   searchResults.isEmpty

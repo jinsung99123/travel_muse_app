@@ -52,7 +52,6 @@ class PlaceCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            // 썸네일
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child:
@@ -71,8 +70,6 @@ class PlaceCard extends StatelessWidget {
                       ),
             ),
             const SizedBox(width: 16),
-
-            // 텍스트들
             Expanded(
               child: SizedBox(
                 height: 90,
@@ -103,8 +100,6 @@ class PlaceCard extends StatelessWidget {
                 ),
               ),
             ),
-
-            // 체크 아이콘
             if (isSelected)
               Padding(
                 padding: const EdgeInsets.all(8.0),

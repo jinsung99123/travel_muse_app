@@ -26,7 +26,6 @@ class ScheduleConfirmDialog extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(10),
         ),
-        // color: AppColors.white,
         width: 300,
         height: 158,
         padding: const EdgeInsets.all(16),
