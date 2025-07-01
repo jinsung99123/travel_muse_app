@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
-import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/place_description.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_info_section.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_map_view.dart';
 
@@ -98,8 +96,6 @@ class _RecommendedPlaceDetailSheetState
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
-                        PlaceDescription(),
                         const SizedBox(height: 24),
                         PlaceMapView(place: place),
                         const SizedBox(height: 16),
