@@ -65,9 +65,9 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     });
 
     if (addableFiles.length < pickedFiles.length) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')),
+      );
     }
   }
 
@@ -78,8 +78,12 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       );
       return;
     }
-    final titleError = PostValidator.validateTitle(titleController.text);
-    final contentError = PostValidator.validateContent(contentController.text);
+    final titleError = PostValidator.validateTitle(
+      titleController.text,
+    );
+    final contentError = PostValidator.validateContent(
+      contentController.text,
+    );
 
     if (titleError != null || contentError != null) {
       setState(() {
@@ -104,16 +108,16 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       if (widget.post != null) {
         Navigator.pop(context, true); // 수정인 경우 → true 반환
         CustomToast.show(
-        context: context,
-        message: '게시물 수정이 완료되었습니다.',
-        duration: const Duration(seconds: 2),
-      );
+          context: context,
+          message: '게시물 수정이 완료되었습니다.',
+          duration: const Duration(seconds: 2),
+        );
       } else if (createdPost != null) {
         CustomToast.show(
-        context: context,
-        message: '게시물을 성공적으로 업로드했습니다.',
-        duration: const Duration(seconds: 2),
-      );
+          context: context,
+          message: '게시물을 성공적으로 업로드했습니다.',
+          duration: const Duration(seconds: 2),
+        );
         Navigator.pop(context, createdPost); // 새 글 작성인 경우 → post 반환
       }
     }
@@ -122,7 +126,8 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
   @override
   Widget build(BuildContext context) {
     final isWritable =
-        titleController.text.isNotEmpty || contentController.text.isNotEmpty;
+        titleController.text.isNotEmpty ||
+        contentController.text.isNotEmpty;
     final postState = ref.watch(postViewModelProvider);
     final isLoading = postState is AsyncLoading;
 
@@ -193,8 +198,10 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
                             title: selectedPlace!['title'] ?? '',
                             address: selectedPlace!['address'] ?? '',
                             latLng: LatLng(
-                              (selectedPlace!['lat'] as num).toDouble(),
-                              (selectedPlace!['lng'] as num).toDouble(),
+                              (selectedPlace!['lat'] as num)
+                                  .toDouble(),
+                              (selectedPlace!['lng'] as num)
+                                  .toDouble(),
                             ),
                           ),
                           Positioned(
@@ -226,16 +233,20 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
             ),
             PostLocationCategory(
               selectedTags: selectedTags,
-              onTagsChanged: (tags) => setState(() => selectedTags = tags),
+              onTagsChanged:
+                  (tags) => setState(() => selectedTags = tags),
               selectedPlace: selectedPlace,
-              onPlaceChanged: (place) => setState(() => selectedPlace = place),
+              onPlaceChanged:
+                  (place) => setState(() => selectedPlace = place),
             ),
             const SizedBox(height: 8),
             if (imagePaths.isNotEmpty) ...[
               const SizedBox(height: 12),
               ImagePreviewList(
                 imagePaths: imagePaths.take(5).toList(),
-                onRemove: (index) => setState(() => imagePaths.removeAt(index)),
+                onRemove:
+                    (index) =>
+                        setState(() => imagePaths.removeAt(index)),
               ),
             ],
             const SizedBox(height: 8),
@@ -251,4 +262,3 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     );
   }
 }
-

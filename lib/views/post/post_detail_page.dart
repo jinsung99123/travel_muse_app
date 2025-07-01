@@ -8,6 +8,7 @@ import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
+import 'package:travel_muse_app/providers/post/post_list_view_model_provider.dart';
 import 'package:travel_muse_app/providers/post/post_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/views/post/%08comment/comment_section.dart';
@@ -180,6 +181,12 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                             await ref
                                 .read(postViewModelProvider.notifier)
                                 .deletePost(currentPost.postId);
+
+                            await ref
+                                .read(
+                                  postListViewModelProvider.notifier,
+                                )
+                                .fetchInitialPosts();
 
                             if (mounted) {
                               Navigator.pop(context, true);
