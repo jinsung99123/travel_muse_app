@@ -23,9 +23,12 @@ class CommentSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FutureBuilder<DocumentSnapshot>(
-          future:
-              FirebaseFirestore.instance.collection('posts').doc(postId).get(),
+        StreamBuilder<DocumentSnapshot>(
+          stream:
+              FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(postId)
+                  .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData || !snapshot.data!.exists)
               return const SizedBox();
@@ -104,10 +107,7 @@ class CommentSection extends ConsumerWidget {
                     createdAt: Timestamp.now(),
                   );
                   viewModel.addComment(comment);
-                  FirebaseFirestore.instance
-                      .collection('posts')
-                      .doc(postId)
-                      .update({'commentCount': FieldValue.increment(1)});
+
                   controller.clear();
                   onCommentAdded?.call();
                 },
