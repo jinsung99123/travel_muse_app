@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
-import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
 
@@ -86,11 +85,11 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   .read(scheduleViewModelProvider.notifier)
                   .getTripDays(planId);
 
-              if (tripDays >= 5) {
+              if (tripDays >= 10) {
                 if (context.mounted) {
                   CustomToast.show(
                     context: context,
-                    message: '5일 이상 일정은 지도로 확인할 수 없어요.',
+                    message: '10일 이상 일정은 지도로 확인할 수 없어요.',
                     duration: const Duration(seconds: 2),
                   );
                 }
@@ -115,3 +114,4 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+

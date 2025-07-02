@@ -17,7 +17,8 @@ class MapPage extends ConsumerStatefulWidget {
   ConsumerState<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin {
+class _MapPageState extends ConsumerState<MapPage>
+    with TickerProviderStateMixin {
   GoogleMapController? _mapController;
   bool _cameraMoved = false;
   LatLng _initialLatLng = const LatLng(37.5665, 126.9780);
@@ -31,19 +32,14 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
     if (!_tabController!.indexIsChanging) {
       setState(() {});
       final index = _tabController!.index;
-      if (index == 0) {
-        final allPlaces = _viewModel.getAllPlaces();
-        _viewModel.moveCameraToFitAll(_mapController, allPlaces);
-      } else {
-        final newPlaces = mapState.dayPlaces[dayKeys[_tabController!.index - 1]] ?? [];
-        _viewModel.moveCameraToFitAll(_mapController, newPlaces);
-      }
+      final newPlaces = mapState.dayPlaces[dayKeys[index]] ?? [];
+      _viewModel.moveCameraToFitAll(_mapController, newPlaces);
     }
   }
 
   bool _isLoading(TabController? tabController, List<String> dayKeys) {
     if (tabController == null || dayKeys.isEmpty) return true;
-    if (tabController.index >= dayKeys.length + 1) return true;
+    if (tabController.index >= dayKeys.length) return true;
     return false;
   }
 
@@ -52,7 +48,7 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
     await _viewModel.loadPlanAndRoute(widget.planId, this);
     final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
     if (dayKeys.isEmpty) return;
-    _tabController = TabController(length: dayKeys.length + 1, vsync: this);
+    _tabController = TabController(length: dayKeys.length, vsync: this);
     _tabController!.addListener(_onTabChanged);
     setState(() {});
   }
@@ -97,16 +93,13 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
     }
     final index = _tabController!.index;
     List<Map<String, dynamic>> selectedPlaces;
-    if (index == 0) {
-      selectedPlaces = _viewModel.getAllPlaces();
-    } else {
-      selectedPlaces = mapState.dayPlaces[dayKeys[index - 1]] ?? [];
-    }
+    selectedPlaces = mapState.dayPlaces[dayKeys[index]] ?? [];
+
     _initCameraPosition(selectedPlaces);
     final points = _viewModel.extractLatLngs(selectedPlaces);
     final markers = _viewModel.getMarkers(
       places: selectedPlaces,
-      selectedDayKey: index == 0 ? 'all' : dayKeys[index - 1],
+      selectedDayKey: dayKeys[index],
       onTap: (place) => _viewModel.selectPlace(place),
       onPageChanged: (index) {
         if (!_tabController!.indexIsChanging) {
@@ -114,7 +107,8 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
         }
       },
     );
-    final displayDayTabs = ['All', ...dayKeys.map(getDisplayDayTab)];
+    final displayDayTabs = dayKeys.map(getDisplayDayTab).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('지도'),
@@ -131,7 +125,10 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
                 _mapController = controller;
                 if (!_cameraMoved && selectedPlaces.isNotEmpty) {
                   Future.delayed(const Duration(milliseconds: 300), () {
-                    _viewModel.moveCameraToFitAll(_mapController, selectedPlaces);
+                    _viewModel.moveCameraToFitAll(
+                      _mapController,
+                      selectedPlaces,
+                    );
                     _cameraMoved = true;
                   });
                 }
@@ -163,3 +160,4 @@ class _MapPageState extends ConsumerState<MapPage> with TickerProviderStateMixin
     );
   }
 }
+

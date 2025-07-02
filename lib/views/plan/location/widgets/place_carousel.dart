@@ -29,41 +29,9 @@ class PlaceCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final allPlaces = viewModel.getAllPlaces();
-    final allController = viewModel.getPageController('all');
-
     return TabBarView(
       controller: tabController,
       children: [
-        PageView.builder(
-          itemCount: allPlaces.length,
-          controller: allController,
-          onPageChanged: (index) {
-            final place = allPlaces[index];
-            final latLng = parseLatLng(place);
-            if (latLng != null) {
-              mapController?.animateCamera(
-                CameraUpdate.newLatLngZoom(latLng, 14),
-              );
-            }
-            viewModel.selectPlace(place);
-          },
-          itemBuilder: (context, index) {
-            final place = allPlaces[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 12,
-              ),
-              child: PlaceCard(
-                placeData: place,
-                isSelected: selectedPlace?['id'] == place['id'],
-                isSelectMode: isSelectMode,
-              ),
-            );
-          },
-        ),
-
         for (final day in dayKeys)
           Builder(
             builder: (context) {
@@ -116,3 +84,4 @@ class PlaceCarousel extends StatelessWidget {
     );
   }
 }
+
