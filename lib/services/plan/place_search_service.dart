@@ -123,34 +123,47 @@ class PlaceSearchService {
 
   /// 내부 공통 로직: 캐시 -> 리미트 -> 네트워크
   Future<List<Place>> _requestPlaces(Uri url) async {
-    final key = url.toString();
-    final cached = _searchCache[key];
-    if (cached != null && !_isExpired(cached.createdAt)) return cached.value;
+  final key = url.toString();
 
-    await _limiter.take();
-    try {
-      final res = await http.get(
-        url,
-        headers: {'Authorization': _apiKey, 'User-Agent': 'TravelMuse/1.0'},
-      );
-      if (res.statusCode == 429) {
-        debugPrint('Kakao 429 Too Many Requests → ${url.path}');
-        return [];
-      }
-      if (res.statusCode != 200) {
-        throw Exception('Kakao API 실패: ${res.statusCode}');
-      }
-      final docs =
-          (json.decode(res.body)['documents'] as List<dynamic>)
-              .map((e) => Place.fromKakaoJson(e))
-              .toList();
-      _searchCache[key] = _CacheItem(docs);
-      return docs;
-    } catch (e) {
-      debugPrint('Kakao 요청 오류: $e');
+  // 캐시 확인
+  final cached = _searchCache[key];
+  if (cached != null && !_isExpired(cached.createdAt)) return cached.value;
+
+  // 레이트리미터 통과
+  await _limiter.take();
+
+  try {
+    // 카카오 API 호출
+    final res = await http.get(
+      url,
+      headers: {'Authorization': _apiKey, 'User-Agent': 'TravelMuse/1.0'},
+    );
+
+    // 429 또는 오류 처리
+    if (res.statusCode == 429) {
+      debugPrint('Kakao 429 Too Many Requests → ${url.path}');
       return [];
     }
+    if (res.statusCode != 200) {
+      throw Exception('Kakao API 실패: ${res.statusCode}');
+    }
+
+    // 결과 파싱
+    final docs = (json.decode(res.body)['documents'] as List<dynamic>)
+        .map((e) => Place.fromKakaoJson(e))
+        .toList();
+
+    // 결과가 있을 때만 캐시
+    if (docs.isNotEmpty) {
+      _searchCache[key] = _CacheItem(docs);
+    }
+
+    return docs;
+  } catch (e) {
+    debugPrint('Kakao 요청 오류: $e');
+    return [];
   }
+}
 
   /// 썸네일(키워드당 1장) 캐시
   static final _thumbCache =
@@ -177,7 +190,7 @@ class PlaceSearchService {
         final docs = json.decode(res.body)['documents'] as List<dynamic>;
         return docs.isNotEmpty ? docs[0]['thumbnail_url'] as String : null;
       }
-      if (res.statusCode == 429) return null; // 그대로 처리
+      if (res.statusCode == 429) return null; 
     } on HttpException catch (e) {
       debugPrint('썸네일 재시도 $attempt: $e');
       await Future.delayed(const Duration(milliseconds: 100));
