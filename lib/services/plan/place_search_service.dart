@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -156,28 +157,35 @@ class PlaceSearchService {
     quiver.LruMap<String, _CacheItem<String>>(maximumSize: 1000);
 
   ///썸네일
-  Future<String?> fetchImageThumbnail(String keyword) async {
-    await _limiter.take(); 
-    final url = Uri.parse(
-      '$_baseImageUrl?query=${Uri.encodeQueryComponent(keyword)}&size=1',
-    );
+ Future<String?> fetchImageThumbnail(String keyword) async {
+  await _limiter.take();
+  final url = Uri.parse(
+    '$_baseImageUrl?query=${Uri.encodeQueryComponent(keyword)}&size=1',
+  );
+
+  for (var attempt = 0; attempt < 3; attempt++) {
     try {
       final res = await http.get(
         url,
-        headers: {'Authorization': _apiKey, 'User-Agent': 'TravelMuse/1.0'},
+        headers: {
+          'Authorization': _apiKey,
+          'User-Agent': 'TravelMuse/1.0',
+          'Connection': 'close'         
+        },
       );
-      if (res.statusCode == 429) {
-        debugPrint('Kakao 이미지 429: $keyword');
-        return null;
+      if (res.statusCode == 200) {
+        final docs = json.decode(res.body)['documents'] as List<dynamic>;
+        return docs.isNotEmpty ? docs[0]['thumbnail_url'] as String : null;
       }
-      if (res.statusCode != 200) return null;
-      final docs = json.decode(res.body)['documents'] as List<dynamic>;
-      return docs.isNotEmpty ? docs[0]['thumbnail_url'] as String : null;
-    } catch (e) {
-      debugPrint('썸네일 요청 실패: $e');
-      return null;
+      if (res.statusCode == 429) return null; // 그대로 처리
+    } on HttpException catch (e) {
+      debugPrint('썸네일 재시도 $attempt: $e');
+      await Future.delayed(const Duration(milliseconds: 100));
     }
   }
+  return null; // 3회 실패
+}
+
 
   Future<String?> getThumbnailCached(String keyword) async {
   final cached = _thumbCache[keyword];
