@@ -23,18 +23,23 @@ class _CacheItem<T> {
 //   capacity 만큼 토큰을 들고 시작 -> period(1초)마다 재충전
 //   take() 호출로 토큰 확보, 없으면 대기큐에 들어감
 class _RateLimiter {
-  _RateLimiter(this.capacity, this.period) // 최초 토큰량 = capacity
-    : _tokens = capacity,
-      _last = DateTime.now();
-  final int capacity; // 버킷 크기 (5)
-  final Duration period; // 리필 주기 (1초)
+  _RateLimiter(this.capacity, this.period)
+      : _tokens = capacity,
+        _last = DateTime.now() {
+    _timer = Timer.periodic(period, (_) => _refill());
+  }
 
-  int _tokens; // 남은 토큰 수
-  DateTime _last; // 마지막 리필 시각
-  final _queue = <Completer<void>>[]; // 대기
+  final int capacity;          
+  final Duration period;      
+
+  int _tokens;
+  DateTime _last;
+  final _queue = <Completer<void>>[];
+
+  late final Timer _timer;     
+  void dispose() => _timer.cancel();
 
   Future<void> take() {
-    _refill();
     final c = Completer<void>();
     if (_tokens > 0) {
       _tokens--;
@@ -45,19 +50,17 @@ class _RateLimiter {
     return c.future;
   }
 
-  /// 토큰 재충전 + 대기 해제
+  ///타이머에서 호출 ― 토큰 충전 & 대기열 해제
   void _refill() {
-    final now = DateTime.now();
-    if (now.difference(_last) >= period) {
-      _tokens = capacity;
-      _last = now;
-      while (_tokens > 0 && _queue.isNotEmpty) {
-        _tokens--;
-        _queue.removeAt(0).complete();
-      }
+    _tokens = capacity;
+    _last = DateTime.now();
+    while (_tokens > 0 && _queue.isNotEmpty) {
+      _tokens--;
+      _queue.removeAt(0).complete();
     }
   }
 }
+
 
 class PlaceSearchService {
   static const _baseKeywordUrl =
@@ -149,9 +152,12 @@ class PlaceSearchService {
   }
 
   /// 썸네일(키워드당 1장) 캐시
-  final Map<String, String> _thumbCache = {}; // keyword -> url
+  static final _thumbCache =
+    quiver.LruMap<String, _CacheItem<String>>(maximumSize: 1000);
 
+  ///썸네일
   Future<String?> fetchImageThumbnail(String keyword) async {
+    await _limiter.take(); 
     final url = Uri.parse(
       '$_baseImageUrl?query=${Uri.encodeQueryComponent(keyword)}&size=1',
     );
@@ -174,11 +180,13 @@ class PlaceSearchService {
   }
 
   Future<String?> getThumbnailCached(String keyword) async {
-    if (_thumbCache.containsKey(keyword)) return _thumbCache[keyword];
-    final url = await fetchImageThumbnail(keyword);
-    if (url != null) _thumbCache[keyword] = url;
-    return url;
-  }
+  final cached = _thumbCache[keyword];
+  if (cached != null && !_isExpired(cached.createdAt)) return cached.value;
+
+  final url = await fetchImageThumbnail(keyword);
+  if (url != null) _thumbCache[keyword] = _CacheItem(url);   
+  return url;
+}
 
   /// 주소 -> 좌표 변환
   Future<LatLng?> getLatLngFromRegion(String region) async {
