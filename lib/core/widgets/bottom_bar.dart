@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/bottom_bar_provider.dart';
+import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
@@ -23,7 +24,12 @@ class BottomBar extends ConsumerWidget {
       Widget page;
       switch (index) {
         case 0:
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const HomePage()),
+            (route) => false,
+          );
+          // Navigator.of(context).popUntil((route) => route.isFirst);
           return;
         case 1:
           page = const PlanListPage();
