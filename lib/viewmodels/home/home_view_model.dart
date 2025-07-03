@@ -17,15 +17,19 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
   final NearbyPlaceService _svc;
   final PlaceSearchService _placeSvc;
 
+  static const LatLng kFallbackLatLng = LatLng(37.5662952, 126.9779451);
+
   //초기 로드
   Future<void> _init() async {
-    try {
-      final loc = await _ref.read(locationProvider.future);
-      await load(loc);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+  try {
+    // 위치 권한 GPS 오류가 나면 catch 블록에서 폴백 좌표 사용
+    final loc = await _ref.read(locationProvider.future);
+    await load(loc);
+  } catch (_) {
+    // 권한 OFF 실패 시 기본 좌표로 추천 불러오기
+    await load(kFallbackLatLng);
   }
+}
 
   //썸네일 병렬 로드 + 매핑
   Future<List<HomePlace>> _mapWithThumbs(List<Place> raw) async {
