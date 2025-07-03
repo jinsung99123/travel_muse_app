@@ -54,9 +54,9 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-    ref.read(selectedIndexProvider.notifier).clear();
-  });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(selectedIndexProvider.notifier).clear();
+    });
 
     _loadRecommendedPlacesByRegion();
   }
@@ -83,8 +83,9 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               padding: const EdgeInsets.all(16),
               child: SearchBar(
                 controller: _searchController,
-                onSearch: () => _handleSearch(_searchController.text),
-                onSubmitted: _handleSearch,
+                onSearch:
+                    () => _handleSearch(_searchController.text), 
+                onQueryChanged: _handleSearch,
               ),
             ),
             RecentSearchSection(
