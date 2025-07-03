@@ -4,7 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/post/comment_model.dart';
 import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:travel_muse_app/utills/format_time_ago.dart';
-import 'package:travel_muse_app/views/post/%08comment/comment_detail_page.dart';
+import 'package:travel_muse_app/views/post/comment/comment_detail_page.dart';
 
 class ReplyPreview extends ConsumerWidget {
   const ReplyPreview({

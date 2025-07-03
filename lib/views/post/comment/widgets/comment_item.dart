@@ -8,8 +8,8 @@ import 'package:travel_muse_app/providers/post/comment_provider.dart';
 import 'package:travel_muse_app/providers/scoial/report_provider.dart';
 import 'package:travel_muse_app/utills/format_time_ago.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
-import 'package:travel_muse_app/views/post/%08comment/widgets/action_item.dart';
-import 'package:travel_muse_app/views/post/%08comment/widgets/reply_preivew.dart';
+import 'package:travel_muse_app/views/post/comment/widgets/action_item.dart';
+import 'package:travel_muse_app/views/post/comment/widgets/reply_preivew.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
 
