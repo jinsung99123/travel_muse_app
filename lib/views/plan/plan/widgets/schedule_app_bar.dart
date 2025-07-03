@@ -5,6 +5,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/map_confirm_dialog.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
 
 class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -95,6 +96,26 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 }
                 return;
               }
+
+              final isAllPlacesValid = await ref
+                  .read(scheduleViewModelProvider.notifier)
+                  .hasOnlyValidLatLng(planId);
+
+              if (!isAllPlacesValid) {
+                if (context.mounted) {
+                  await showDialog(
+                    context: context,
+                    builder:
+                        (context) => const MapConfirmDialog(
+                          title: '지도 확인 불가',
+                          description: '위치 정보가 없는 장소가 포함된 일정은\n지도로 확인할 수 없어요.\n일정삭제 후 다시 추가해주시고 24시간 후 다시 시도해주세요.',
+                          confirmText: '확인',
+                        ),
+                  );
+                }
+                return;
+              }
+
               if (context.mounted) {
                 await Navigator.push(
                   context,
@@ -114,4 +135,3 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-
