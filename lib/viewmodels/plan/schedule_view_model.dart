@@ -187,4 +187,27 @@ class ScheduleViewModel extends StateNotifier<AsyncValue<ScheduleState>> {
       return 1; // 기본값
     }
   }
+
+  /// 해당 plan에 포함된 모든 장소가 유효한 위경도 정보를 가지고 있는지 확인
+  Future<bool> hasOnlyValidLatLng(String planId) async {
+    try {
+      final route = await _repository.fetchRoute(planId);
+      for (final day in route.values) {
+        for (final place in day) {
+          final lat = place['lat'];
+          final lng = place['lng'];
+          if (lat == null ||
+              lng == null ||
+              lat.toString().isEmpty ||
+              lng.toString().isEmpty) {
+            return false; // 하나라도 없으면 false
+          }
+        }
+      }
+      return true; // 전부 다 유효하면 true
+    } catch (e) {
+      log('위경도 유효성 검사 실패: $e');
+      return false;
+    }
+  }
 }
