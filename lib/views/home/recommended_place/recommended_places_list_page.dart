@@ -22,7 +22,7 @@ class RecommendedPlacesListPage extends ConsumerWidget {
       body: SafeArea(
         child: homeAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Center(child: Text('추천 명소를 불러오지 못했어요')),
+          error: (_, __) => const Center(child: Text('일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.')),
           data: (state) {
             final spots = state.spots;
             if (spots.isEmpty) {
