@@ -24,7 +24,7 @@ class PostDetailHeader extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         Text(
-          nickname ?? '닉네임',
+          nickname ?? '',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
