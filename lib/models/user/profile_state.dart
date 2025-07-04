@@ -21,6 +21,7 @@ class ProfileState {
     this.planId = const [],
 
     this.isUploading = false,
+    this.fallbackTypeCode,
   });
   final String? profileImageUrl;
   final String? temporaryImagePath;
@@ -43,6 +44,7 @@ class ProfileState {
   final List<String> planId;
 
   final bool isUploading;
+  final String? fallbackTypeCode;
 
   ProfileState copyWith({
     String? profileImageUrl,
@@ -66,6 +68,7 @@ class ProfileState {
     List<String>? planId,
 
     bool? isUploading,
+    String? fallbackTypeCode,
   }) {
     return ProfileState(
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
@@ -89,6 +92,7 @@ class ProfileState {
       planId: planId ?? this.planId,
 
       isUploading: isUploading ?? this.isUploading,
+      fallbackTypeCode: fallbackTypeCode ?? this.fallbackTypeCode,
     );
   }
 }

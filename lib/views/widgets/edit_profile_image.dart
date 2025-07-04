@@ -24,12 +24,20 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
     });
   }
 
+  final resultImageMap = {
+    '계획러': 'assets/images/planner.png',
+    '자유인': 'assets/images/free_spirit.png',
+    '자연인': 'assets/images/nature_lover.png',
+    '도시러': 'assets/images/city_explorer.png',
+    '균형러': 'assets/images/balancer.png',
+    '모험가': 'assets/images/adventurer.png',
+  };
   @override
   Widget build(BuildContext context) {
     final profileState = ref.watch(profileViewModelProvider);
+    final fallbackAsset = resultImageMap[profileState.fallbackTypeCode];
     final imageUrlToShow =
-        profileState.temporaryImagePath ??
-        profileState.profileImageUrl; // 임시 저장 이미지가 없으면 기존 프로필 이미지 표시
+        profileState.temporaryImagePath ?? profileState.profileImageUrl;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -61,10 +69,15 @@ class _EditProfileImageState extends ConsumerState<EditProfileImage> {
                                         as ImageProvider,
                             fit: BoxFit.cover,
                           )
-                          : null,
+                          : (fallbackAsset != null
+                              ? DecorationImage(
+                                image: AssetImage(fallbackAsset),
+                                fit: BoxFit.cover,
+                              )
+                              : null),
                 ),
                 child:
-                    imageUrlToShow == null
+                    (imageUrlToShow == null && fallbackAsset == null)
                         ? Center(
                           child: SvgPicture.asset('assets/icons/camera.svg'),
                         )
