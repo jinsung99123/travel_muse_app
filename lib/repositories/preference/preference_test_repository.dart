@@ -135,4 +135,19 @@ class PreferenceTestRepository {
       'testCount': FieldValue.increment(1),
     }, SetOptions(merge: true));
   }
+
+  Future<PreferenceTest?> fetchFirstPreferenceTest(String userId) async {
+    final query =
+        await FirebaseFirestore.instance
+            .collection('preference_test')
+            .where('userId', isEqualTo: userId)
+            .orderBy('createAt', descending: false)
+            .limit(1)
+            .get();
+
+    if (query.docs.isEmpty) return null;
+
+    final doc = query.docs.first;
+    return PreferenceTest.fromDoc(doc.id, doc.data());
+  }
 }
