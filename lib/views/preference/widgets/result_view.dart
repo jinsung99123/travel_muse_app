@@ -28,12 +28,12 @@ class ResultView extends ConsumerStatefulWidget {
 
 class _ResultViewState extends ConsumerState<ResultView> {
   final Map<String, String> resultImageMap = {
-    '계획러': 'assets/images/계획러.png',
-    '자유인': 'assets/images/자유인.png',
-    '자연인': 'assets/images/자연인.png',
-    '도시러': 'assets/images/도시러.png',
-    '균형러': 'assets/images/균형러.png',
-    '모험가': 'assets/images/모험가.png',
+    '계획러': 'assets/images/planner.png',
+    '자유인': 'assets/images/free_spirit.png',
+    '자연인': 'assets/images/nature_lover.png',
+    '도시러': 'assets/images/city_explorer.png',
+    '균형러': 'assets/images/balancer.png',
+    '모험가': 'assets/images/adventurer.png',
   };
 
   @override

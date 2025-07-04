@@ -6,11 +6,11 @@ class QuestionListView extends StatelessWidget {
     super.key,
     required this.options,
     required this.onOptionSelected,
-    required this.selectedOption,
+    required this.selectedOptions,
   });
 
   final List<String> options;
-  final String? selectedOption;
+  final List<String> selectedOptions;
   final void Function(String) onOptionSelected;
 
   @override
@@ -23,7 +23,7 @@ class QuestionListView extends StatelessWidget {
         itemCount: options.length,
         itemBuilder: (context, index) {
           final option = options[index];
-          final isSelected = option == selectedOption;
+          final isSelected = selectedOptions.contains(option);
           return OptionButton(
             text: option,
             isSelected: isSelected,

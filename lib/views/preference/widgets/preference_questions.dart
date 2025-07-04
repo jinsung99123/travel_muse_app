@@ -11,7 +11,7 @@ final List<Map<String, String>> preferenceQuestions = [
     'question': '이동수단을 고를 때, 가장 중요하게 생각하는 요소는?',
     'type': 'preference',
     'details':
-        '시간 절약과 효율성, 편안함과 여유, 비용 절감, 특별한 경험(케이블카, 산악열차), 환경 친화(걷기, 대중교통), 복잡해도 현지 감성',
+        '시간 절약과 효율성, 편안함과 여유, 비용 절감, 특별한 경험(산악열차), 환경 친화(대중교통), 복잡해도 현지 감성',
   },
   {
     'questionId': 'q3',
@@ -24,7 +24,7 @@ final List<Map<String, String>> preferenceQuestions = [
     'question': '가장 기대되는 여행 활동은 무엇인가요?',
     'type': 'preference',
     'details':
-        '핫플 사진 찍기, 현지 음식 탐방, 자연 감상·트레킹, 익스트림 액티비티(서핑·번지), 온천·스파 등 휴식, 로컬 문화 체험',
+        '핫플 사진 찍기, 현지 음식 탐방, 자연 감상·트레킹, 익스트림 액티비티(서핑), 온천 스파 등 휴식, 로컬 문화 체험',
   },
   {
     'questionId': 'q5',
