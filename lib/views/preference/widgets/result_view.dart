@@ -28,12 +28,12 @@ class ResultView extends ConsumerStatefulWidget {
 
 class _ResultViewState extends ConsumerState<ResultView> {
   final Map<String, String> resultImageMap = {
-    '계획러': 'assets/images/result_planner.jpg',
-    '자유인': 'assets/images/result_free_spirit.jpg',
-    '자연인': 'assets/images/result_nature_lover.jpg',
-    '도시러': 'assets/images/result_city_explorer.jpg',
-    '균형러': 'assets/images/result_balanced_traveler.jpg',
-    '모험가': 'assets/images/result_experience_seeker.jpg',
+    '계획러': 'assets/images/계획러.png',
+    '자유인': 'assets/images/자유인.png',
+    '자연인': 'assets/images/자연인.png',
+    '도시러': 'assets/images/도시러.png',
+    '균형러': 'assets/images/균형러.png',
+    '모험가': 'assets/images/모험가.png',
   };
 
   @override
@@ -41,7 +41,9 @@ class _ResultViewState extends ConsumerState<ResultView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.testId != '') {
-        ref.read(preferenceTestStateNotifierProvider.notifier).loadTest(widget.testId);
+        ref
+            .read(preferenceTestStateNotifierProvider.notifier)
+            .loadTest(widget.testId);
       }
     });
   }
@@ -65,7 +67,8 @@ class _ResultViewState extends ConsumerState<ResultView> {
           !widget.showButtons
               ? AppBar(
                 title: const Text('나의 여행 성향'),
-                leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+                leading:
+                    Navigator.canPop(context) ? const CustomBackButton() : null,
                 actions: [
                   PopupMenuButton<String>(
                     color: Colors.white,
@@ -88,7 +91,8 @@ class _ResultViewState extends ConsumerState<ResultView> {
                                   ),
                                 ],
                                 cancelButton: CupertinoActionSheetAction(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed:
+                                      () => Navigator.pop(context, false),
                                   child: const Text('취소'),
                                 ),
                               ),
@@ -96,7 +100,9 @@ class _ResultViewState extends ConsumerState<ResultView> {
 
                         if (confirm == true) {
                           await ref
-                              .read(preferenceTestStateNotifierProvider.notifier)
+                              .read(
+                                preferenceTestStateNotifierProvider.notifier,
+                              )
                               .deleteTest(widget.testId);
                           if (context.mounted) {
                             /// 리스트 Provider invalidate
@@ -119,7 +125,10 @@ class _ResultViewState extends ConsumerState<ResultView> {
                         (_) => [
                           const PopupMenuItem<String>(
                             value: 'delete',
-                            child: Text('삭제', style: TextStyle(color: Colors.red)),
+                            child: Text(
+                              '삭제',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
                         ],
                   ),
@@ -134,7 +143,10 @@ class _ResultViewState extends ConsumerState<ResultView> {
                 ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -190,7 +202,9 @@ class _ResultViewState extends ConsumerState<ResultView> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          CupertinoPageRoute(builder: (_) => const ResultViewDetail()),
+                          CupertinoPageRoute(
+                            builder: (_) => const ResultViewDetail(),
+                          ),
                         );
                       },
                       child: Row(
