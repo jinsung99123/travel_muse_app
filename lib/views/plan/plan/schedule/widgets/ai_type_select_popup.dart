@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
+import 'package:travel_muse_app/repositories/plan/schedule_repository.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/show_ai_route_result_popup.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/type_select_item.dart';
 
 class AiTypeSelectPopup extends StatefulWidget {
   const AiTypeSelectPopup({super.key, required this.onComplete});
-  final Future<void> Function(String typeCode) onComplete;
+  final Future<String> Function(String typeCode) onComplete;
 
   @override
   State<AiTypeSelectPopup> createState() => _AiTypeSelectPopupState();
@@ -151,10 +153,21 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                   final typeCode =
                                       _selectedTest!.result['type']!;
 
-                                  await Future.delayed(
-                                    const Duration(milliseconds: 500),
+                                  // planId 리턴받기
+                                  final planId = await widget.onComplete(
+                                    typeCode,
                                   );
-                                  await widget.onComplete(typeCode);
+
+                                  // 저장된 route 일정 불러오기
+                                  final enriched = await ScheduleRepository()
+                                      .fetchRoute(planId);
+                                  await EasyLoading.dismiss();
+                                  // 팝업 띄우기
+                                  await showAiRouteResultPopup(
+                                    context: dialogContext,
+                                    typeCode: typeCode,
+                                    enriched: enriched,
+                                  );
                                 } catch (e, s) {
                                   log(
                                     'onComplete error',
@@ -162,9 +175,8 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                     stackTrace: s,
                                   );
                                 } finally {
-                                  await EasyLoading.dismiss();
                                   // ignore: use_build_context_synchronously
-                                    Navigator.pop(dialogContext);
+                                  Navigator.pop(dialogContext);
                                 }
                               },
                       borderRadius: BorderRadius.circular(10),
