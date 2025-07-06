@@ -11,6 +11,7 @@ import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/firebase_options.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/views/user/splash/splash_page.dart';
+import 'package:travel_muse_app/views/widgets/easy_loading_config.dart';
 
 final RouteObserver<ModalRoute<void>> routeObserver =
     RouteObserver<ModalRoute<void>>();
@@ -21,25 +22,15 @@ void main() async {
   await dotenv.load(fileName: '.env');
   await NotificationHelper.init();
 
-  configEasyLoading();
   // Firebase Crashlytics 에러 핸들링 추가
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
+  setupEasyLoading();
   runApp(const ProviderScope(child: MyApp()));
   await initializeDateFormatting('ko', '');
-}
-
-void configEasyLoading() {
-  EasyLoading.instance
-    ..indicatorColor = Colors.black
-    ..textColor = Colors.black
-    ..backgroundColor = Colors.white
-    ..maskColor = Colors.white.withOpacity(0.3)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle;
 }
 
 class MyApp extends StatelessWidget {
