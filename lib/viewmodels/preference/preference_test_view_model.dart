@@ -23,12 +23,12 @@ class PreferenceTestViewModel {
   void saveAnswer({
     required List<Map<String, String>> answers,
     required Map<String, String> question,
-    required String selectedOption,
+    required List<String> selectedOptions,
   }) {
     final answer = {
       'questionId': question['questionId']!,
       'question': question['question']!,
-      'selectedOption': selectedOption,
+      'selectedOption': selectedOptions.join(', '),
       'type': question['type']!,
       'details': question['details']!,
     };

@@ -10,12 +10,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:travel_muse_app/models/user/profile_state.dart';
+import 'package:travel_muse_app/repositories/preference/preference_test_repository.dart';
 import 'package:travel_muse_app/repositories/user/app_user_repository.dart';
 import 'package:travel_muse_app/utills/validators.dart';
 
 class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   final _repository = AppUserRepository();
   final currentUser = FirebaseAuth.instance.currentUser;
+  final repo = PreferenceTestRepository();
 
   final _picker = ImagePicker();
   late File? pickedImage;
@@ -42,6 +44,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       if (currentUser == null) return;
       final appUser = await _repository.fetchLatestAppUser(currentUser!.uid);
       if (appUser == null) return;
+      final firstTest = await repo.fetchFirstPreferenceTest(currentUser!.uid);
+      final typeCode = firstTest?.result['type'];
       state = state.copyWith(
         currentNickname: appUser.nickname,
         profileImageUrl: appUser.profileImage,
@@ -49,6 +53,7 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         gender: appUser.gender,
         testId: appUser.testId,
         planId: appUser.planId,
+        fallbackTypeCode: typeCode,
       );
       if (state.currentNickname != null) {
         state = state.copyWith(buttonState: '확인 완료');
@@ -77,7 +82,8 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     if (!await customFolder.exists()) {
       await customFolder.create(recursive: true);
     }
-    final fileName = 'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final fileName =
+        'user_profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final localImagePath = '${customFolder.path}/$fileName';
 
     await resized.copy(localImagePath);
@@ -136,7 +142,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       );
 
       /// 스토리지의 이미지 url을 appUser profileImageUrl 필드에 업데이트
-      await _repository.updateProfileImage(uid: currentUser!.uid, fileUrl: imageUrl);
+      await _repository.updateProfileImage(
+        uid: currentUser!.uid,
+        fileUrl: imageUrl,
+      );
 
       state = state.copyWith(profileImageUrl: imageUrl);
     } catch (e) {
@@ -194,7 +203,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   void validateNickname() {
     final nicknameErrorText = Validators.validateNickname(state.nicknameInput);
     if (nicknameErrorText != null) {
-      state = state.copyWith(isNicknameValid: false, nicknameMessage: nicknameErrorText);
+      state = state.copyWith(
+        isNicknameValid: false,
+        nicknameMessage: nicknameErrorText,
+      );
     } else {
       state = state.copyWith(isNicknameValid: true, nicknameMessage: null);
     }
@@ -255,7 +267,9 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         return;
       }
 
-      log('닉네임 업데이트 시도 - user ${currentUser!.uid}, 새 닉네임 : ${nicknameController.text}');
+      log(
+        '닉네임 업데이트 시도 - user ${currentUser!.uid}, 새 닉네임 : ${nicknameController.text}',
+      );
       await _repository.updateNickname(
         uid: currentUser!.uid,
         nickname: nicknameController.text,
@@ -291,7 +305,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
     if (state.birthDateInput == null) return;
     final errorMessage = Validators.validateBirthDate(state.birthDateInput);
     if (errorMessage != null) {
-      state = state.copyWith(isBirthDateValid: false, birthDateMessage: errorMessage);
+      state = state.copyWith(
+        isBirthDateValid: false,
+        birthDateMessage: errorMessage,
+      );
     } else {
       state = state.copyWith(isBirthDateValid: true, birthDateMessage: null);
     }
@@ -357,7 +374,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       }
 
       /// 닉네임 업데이트
-      await _repository.updateNickname(uid: uid, nickname: state.nicknameInput!);
+      await _repository.updateNickname(
+        uid: uid,
+        nickname: state.nicknameInput!,
+      );
 
       /// 생년월일 업데이트
       // await _repository.updateBirthDate(uid: uid, birthDate: state.birthDateInput!);
@@ -398,7 +418,10 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
 
       /// 닉네임 업데이트
       if (state.nicknameInput != null) {
-        await _repository.updateNickname(uid: uid, nickname: state.nicknameInput!);
+        await _repository.updateNickname(
+          uid: uid,
+          nickname: state.nicknameInput!,
+        );
       }
       state = state.copyWith(isUploading: false);
     } catch (e) {

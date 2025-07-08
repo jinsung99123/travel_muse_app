@@ -22,29 +22,32 @@ class PreferenceTestPage extends ConsumerStatefulWidget {
 class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
   int _currentIndex = 0;
   final List<Map<String, String>> _answers = [];
-  String? _selectedOption;
+  List<String> _selectedOptions = [];
 
   /// 보기 선택 시 실행되는 콜백
-  void _onAnswerSelected(String selectedOption) {
+  void _onAnswerSelected(String option) {
     setState(() {
-      _selectedOption = selectedOption;
+      if (_selectedOptions.contains(option)) {
+        _selectedOptions.remove(option);
+      } else {
+        _selectedOptions.add(option);
+      }
     });
   }
 
   /// "다음" 버튼을 눌렀을 때의 처리
   void _onNextPressed() {
     final viewModel = PreferenceTestViewModel(ref);
-    final selected = _selectedOption;
-    if (selected == null) return;
+    if (_selectedOptions.isEmpty) return;
 
     final currentQuestion = viewModel.getCurrentQuestion(_currentIndex);
     viewModel.saveAnswer(
       answers: _answers,
       question: currentQuestion,
-      selectedOption: selected,
+      selectedOptions: _selectedOptions,
     );
 
-    _selectedOption = null;
+    _selectedOptions = [];
     _goToNext();
   }
 
@@ -94,7 +97,7 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
                   if (_currentIndex > 0) {
                     setState(() {
                       _currentIndex--;
-                      _selectedOption = null;
+                      _selectedOptions = [];
                     });
                   } else {
                     Navigator.pop(context);
@@ -127,7 +130,11 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
       child: SafeArea(
         child:
             isFinished
-                ? ResultView(onRestart: _restartTest, showButtons: true, testId: '')
+                ? ResultView(
+                  onRestart: _restartTest,
+                  showButtons: true,
+                  testId: '',
+                )
                 : Column(
                   children: [
                     Expanded(
@@ -138,17 +145,20 @@ class _PreferenceTestPageState extends ConsumerState<PreferenceTestPage> {
                           QuestionCard(question: currentQuestion['question']!),
                           QuestionListView(
                             options: currentOptions,
-                            selectedOption: _selectedOption,
+                            selectedOptions: _selectedOptions,
                             onOptionSelected: _onAnswerSelected,
                           ),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: NextButton(
                         onPressed: _onNextPressed,
-                        enabled: _selectedOption != null,
+                        enabled: _selectedOptions.isNotEmpty,
                       ),
                     ),
                   ],

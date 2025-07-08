@@ -8,8 +8,7 @@ class MyProfileScreen extends ConsumerStatefulWidget {
   const MyProfileScreen({super.key});
 
   @override
-  ConsumerState<MyProfileScreen> createState() =>
-      _MyProfileScreenState();
+  ConsumerState<MyProfileScreen> createState() => _MyProfileScreenState();
 }
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
@@ -17,15 +16,22 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref
-          .read(profileViewModelProvider.notifier)
-          .fetchUserProfile();
+      await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
     });
   }
 
+  final Map<String, String> resultImageMap = {
+    '계획러': 'assets/images/planner.png',
+    '자유인': 'assets/images/free_spirit.png',
+    '자연인': 'assets/images/nature_lover.png',
+    '도시러': 'assets/images/city_explorer.png',
+    '균형러': 'assets/images/balancer.png',
+    '모험가': 'assets/images/adventurer.png',
+  };
   @override
   Widget build(BuildContext context) {
     final profileState = ref.watch(profileViewModelProvider);
+    final fallbackImagePath = resultImageMap[profileState.fallbackTypeCode];
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -36,8 +42,10 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             backgroundImage:
                 profileState.profileImageUrl != null
                     ? NetworkImage(profileState.profileImageUrl!)
-                    : null, // TODO: 프로필이미지 없는 경우
-            backgroundColor: AppColors.grey[100],
+                    : (fallbackImagePath != null
+                        ? AssetImage(fallbackImagePath) as ImageProvider
+                        : null),
+            backgroundColor: AppColors.primary[100],
           ),
           const SizedBox(height: 15),
           Text(
@@ -55,9 +63,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             onTap: () async {
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => EditProfilePage(),
-                ),
+                MaterialPageRoute(builder: (context) => EditProfilePage()),
               );
               if (result == true) {
                 await ref
