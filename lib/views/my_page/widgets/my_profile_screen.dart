@@ -8,7 +8,8 @@ class MyProfileScreen extends ConsumerStatefulWidget {
   const MyProfileScreen({super.key});
 
   @override
-  ConsumerState<MyProfileScreen> createState() => _MyProfileScreenState();
+  ConsumerState<MyProfileScreen> createState() =>
+      _MyProfileScreenState();
 }
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
@@ -16,7 +17,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(profileViewModelProvider.notifier).fetchUserProfile();
+      await ref
+          .read(profileViewModelProvider.notifier)
+          .fetchUserProfile();
     });
   }
 
@@ -34,7 +37,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 profileState.profileImageUrl != null
                     ? NetworkImage(profileState.profileImageUrl!)
                     : null, // TODO: 프로필이미지 없는 경우
-            backgroundColor: AppColors.primary[100],
+            backgroundColor: AppColors.grey[100],
           ),
           const SizedBox(height: 15),
           Text(
@@ -52,7 +55,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             onTap: () async {
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => EditProfilePage(),
+                ),
               );
               if (result == true) {
                 await ref

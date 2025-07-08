@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 
 class PostDetailHeader extends StatelessWidget {
   const PostDetailHeader({
@@ -15,20 +16,19 @@ class PostDetailHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 24,
-          backgroundColor: const Color(0xFFCED2D4),
+          backgroundColor: AppColors.grey[100],
           backgroundImage:
               (profileUrl?.isNotEmpty ?? false)
                   ? NetworkImage(profileUrl!)
                   : null,
-          child:
-              (profileUrl?.isEmpty ?? true)
-                  ? const Text('프로필', style: TextStyle(fontSize: 12))
-                  : null,
         ),
         const SizedBox(width: 12),
         Text(
-          nickname ?? '닉네임',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          nickname ?? '',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
