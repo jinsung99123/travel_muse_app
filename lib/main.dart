@@ -11,8 +11,10 @@ import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/firebase_options.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/views/user/splash/splash_page.dart';
+import 'package:travel_muse_app/views/widgets/easy_loading_config.dart';
 
-final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +28,7 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-
+  setupEasyLoading();
   runApp(const ProviderScope(child: MyApp()));
   await initializeDateFormatting('ko', '');
 }
