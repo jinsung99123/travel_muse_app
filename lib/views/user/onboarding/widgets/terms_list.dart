@@ -4,7 +4,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/models/user/terms_model.dart';
 import 'package:travel_muse_app/providers/user/terms_view_model_provider.dart';
-import 'package:travel_muse_app/views/user/onboarding/terms_web_view_page.dart';
+import 'package:travel_muse_app/views/user/onboarding/terms_detail_bottom_sheet.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/custom_check_toggle.dart';
 
 class TermsList extends ConsumerWidget {
@@ -25,7 +25,9 @@ class TermsList extends ConsumerWidget {
                     width: double.maxFinite,
                     child: Row(
                       children: [
-                        CustomCheckToggle(termId: termsList[index].id),
+                        CustomCheckToggle(
+                          termId: termsList[index].id,
+                        ),
                         SizedBox(width: 12),
                         Text(
                           '''${termsList[index].isRequired ? '(필수)' : '(선택)'} ${termsList[index].title}''',
@@ -39,7 +41,8 @@ class TermsList extends ConsumerWidget {
                       ],
                     ),
                   ),
-              separatorBuilder: (context, index) => SizedBox(height: 12),
+              separatorBuilder:
+                  (context, index) => SizedBox(height: 12),
             ),
         loading: () => CircularProgressIndicator(),
         error: (e, _) => Text('약관 불러오기 실패: $e'),
@@ -51,15 +54,15 @@ class TermsList extends ConsumerWidget {
     required BuildContext context,
     required Terms term,
   }) {
-    return term.url.isNotEmpty
+    return term.content.isNotEmpty
         ? GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (_) => TermsWebViewPage(title: term.title, url: term.url),
-              ),
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) {
+                return TermsDetailBottomSheet(term: term);
+              },
             );
           },
           child: Text(
