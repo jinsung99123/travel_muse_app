@@ -6,6 +6,7 @@ import 'package:travel_muse_app/models/user/terms_model.dart';
 import 'package:travel_muse_app/providers/user/terms_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/onboarding/terms_web_view_page.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/custom_check_toggle.dart';
+import 'package:travel_muse_app/views/user/onboarding/widgets/terms_detail_bottom_sheet.dart';
 
 class TermsList extends ConsumerWidget {
   const TermsList({super.key});
@@ -25,7 +26,9 @@ class TermsList extends ConsumerWidget {
                     width: double.maxFinite,
                     child: Row(
                       children: [
-                        CustomCheckToggle(termId: termsList[index].id),
+                        CustomCheckToggle(
+                          termId: termsList[index].id,
+                        ),
                         SizedBox(width: 12),
                         Text(
                           '''${termsList[index].isRequired ? '(필수)' : '(선택)'} ${termsList[index].title}''',
@@ -39,7 +42,8 @@ class TermsList extends ConsumerWidget {
                       ],
                     ),
                   ),
-              separatorBuilder: (context, index) => SizedBox(height: 12),
+              separatorBuilder:
+                  (context, index) => SizedBox(height: 12),
             ),
         loading: () => CircularProgressIndicator(),
         error: (e, _) => Text('약관 불러오기 실패: $e'),
@@ -54,12 +58,12 @@ class TermsList extends ConsumerWidget {
     return term.url.isNotEmpty
         ? GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (_) => TermsWebViewPage(title: term.title, url: term.url),
-              ),
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) {
+                return const TermsDetailBottomSheet();
+              },
             );
           },
           child: Text(
