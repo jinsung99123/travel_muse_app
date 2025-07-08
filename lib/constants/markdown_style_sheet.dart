@@ -7,10 +7,11 @@ MarkdownStyleSheet markdownStyle = MarkdownStyleSheet(
     fontSize: 24,
     height: 1.5,
     fontWeight: FontWeight.bold,
-    color: AppColors.primary[500],
+    color: AppColors.black,
   ),
   h2: TextStyle(
     fontSize: 20,
+    color: AppColors.grey[700],
     height: 1.5,
     fontWeight: FontWeight.bold,
   ),

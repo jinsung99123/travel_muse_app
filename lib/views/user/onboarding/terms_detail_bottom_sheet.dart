@@ -5,6 +5,7 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/constants/markdown_style_sheet.dart';
 import 'package:travel_muse_app/models/user/terms_model.dart';
+import 'package:travel_muse_app/providers/user/user_agreement_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/onboarding/widgets/duplicate_button_themes.dart';
 
 class TermsDetailBottomSheet extends ConsumerWidget {
@@ -30,7 +31,7 @@ class TermsDetailBottomSheet extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 24),
+            SizedBox(height: 28),
             Expanded(
               child: ListView(
                 children: [
@@ -44,9 +45,16 @@ class TermsDetailBottomSheet extends ConsumerWidget {
                 ],
               ),
             ),
+            SizedBox(height: 8),
             GestureDetector(
               onTap: () {
-                // 해당 약관 동의 처리
+                ref
+                    .read(userAgreementViewModelProvider.notifier)
+                    .toggleAgreedByTermId(
+                      termId: term.id,
+                      agreeOnly: true,
+                    );
+                Navigator.pop(context);
               },
               child: Container(
                 height: 56,
