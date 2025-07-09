@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
+import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
@@ -10,6 +12,7 @@ import 'package:travel_muse_app/views/plan/plan/place_search/place_search_page.d
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_list.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/distance_sort_button.dart';
+import 'package:travel_muse_app/views/plan/plan/schedule/widgets/place_detail_bottom_sheet.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_bottom_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_header.dart';
 import 'package:travel_muse_app/views/plan/plan/widgets/schedule_app_bar.dart';
@@ -128,10 +131,27 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   return DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
+
                     isEditing: _isEditing,
                     onReorder: _onReorder,
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
+                    onPlaceTap: (place) {
+                      final converted = HomePlace(
+                        id: place['id'] ?? '',
+                        title: place['title'] ?? '',
+                        subtitle: place['subtitle'] ?? '', 
+                        address: place['address'] ?? '',
+                        thumbnail: place['image']?? '', 
+                        latLng: LatLng(
+                          double.tryParse(place['lat'] ?? '') ?? 0.0,
+                          double.tryParse(place['lng'] ?? '') ?? 0.0,
+                        ),
+                        category: place['category'] ?? '', 
+                      );
+
+                      PlaceDetailBottomSheet.show(context, converted, showSelectButton: false,);
+                    },
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),

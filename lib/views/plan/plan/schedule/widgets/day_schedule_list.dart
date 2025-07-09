@@ -11,6 +11,7 @@ class DayScheduleList extends StatelessWidget {
     required this.onReorder,
     required this.onAddPlace,
     required this.onRemovePlace,
+    this.onPlaceTap,
   });
 
   final Plans selectedPlan;
@@ -19,6 +20,7 @@ class DayScheduleList extends StatelessWidget {
   final void Function(int dayIndex, int oldIndex, int newIndex) onReorder;
   final Future<void> Function(int dayIndex) onAddPlace;
   final void Function(int dayIndex, int placeIndex) onRemovePlace;
+  final void Function(Map<String, String> place)? onPlaceTap;
 
   String _getWeekday(int weekday) {
     const days = ['월', '화', '수', '목', '금', '토', '일'];
@@ -50,6 +52,7 @@ class DayScheduleList extends StatelessWidget {
           onReorder: onReorder,
           onAddPlace: onAddPlace,
           onRemovePlace: onRemovePlace,
+          onPlaceTap: onPlaceTap,
         );
       },
     );

@@ -13,10 +13,12 @@ class RecommendedPlaceDetailSheet extends ConsumerStatefulWidget {
     super.key,
     required this.place,
     this.scrollController,
+    this.showSelectButton = true,
   });
 
   final HomePlace place;
   final ScrollController? scrollController;
+  final bool showSelectButton;
 
   @override
   ConsumerState<RecommendedPlaceDetailSheet> createState() =>
@@ -63,7 +65,12 @@ class _RecommendedPlaceDetailSheetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageSlider(
-                    imageUrls: [place.thumbnail],
+                    imageUrls:
+                        widget.place.thumbnail.isNotEmpty
+                            ? [widget.place.thumbnail]
+                            : [
+                              'https://cdn.pixabay.com/photo/2017/06/24/04/37/cloud-2436676_1280.jpg',
+                            ],
                     currentPage: _currentPage,
                     pageController: _pageController,
                     onPageChanged:
@@ -110,6 +117,7 @@ class _RecommendedPlaceDetailSheetState
           ),
 
           // 하단 버튼
+          if (widget.showSelectButton)
           Padding(
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomPadding),
             child: ElevatedButton(
