@@ -11,7 +11,8 @@ class PlaceMapView extends StatefulWidget {
   State<PlaceMapView> createState() => _PlaceMapViewState();
 }
 
-class _PlaceMapViewState extends State<PlaceMapView> {
+class _PlaceMapViewState extends State<PlaceMapView>
+    with AutomaticKeepAliveClientMixin {
   BitmapDescriptor? _customIcon;
 
   @override
@@ -29,6 +30,7 @@ class _PlaceMapViewState extends State<PlaceMapView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); 
     final LatLng position = widget.place.latLng;
 
     return ClipRRect(
@@ -38,6 +40,7 @@ class _PlaceMapViewState extends State<PlaceMapView> {
         child: _customIcon == null
             ? const Center(child: CircularProgressIndicator())
             : GoogleMap(
+                key: ValueKey(widget.place.id), 
                 initialCameraPosition: CameraPosition(
                   target: position,
                   zoom: 13,
@@ -57,4 +60,7 @@ class _PlaceMapViewState extends State<PlaceMapView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

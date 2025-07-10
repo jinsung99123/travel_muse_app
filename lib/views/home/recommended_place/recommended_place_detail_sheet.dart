@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
+import 'package:travel_muse_app/providers/home/place_detail_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/location_row.dart';
-import 'package:travel_muse_app/views/home/recommended_place/widgets/place_info_section.dart';
+import 'package:travel_muse_app/views/home/recommended_place/widgets/place_detail_section.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/place_map_view.dart';
 
 class RecommendedPlaceDetailSheet extends ConsumerStatefulWidget {
@@ -13,10 +12,12 @@ class RecommendedPlaceDetailSheet extends ConsumerStatefulWidget {
     super.key,
     required this.place,
     this.scrollController,
+    this.showSelectButton = true,
   });
 
   final HomePlace place;
   final ScrollController? scrollController;
+  final bool showSelectButton;
 
   @override
   ConsumerState<RecommendedPlaceDetailSheet> createState() =>
@@ -29,9 +30,26 @@ class _RecommendedPlaceDetailSheetState
   final PageController _pageController = PageController();
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref
+          .read(placeDetailViewModelProvider.notifier)
+          .fetchDetail(
+            widget.place.title,
+            widget.place.address,
+            widget.place.latLng.latitude,
+            widget.place.latLng.longitude,
+          );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final place = widget.place;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final detail = ref.watch(placeDetailViewModelProvider);
 
     return SafeArea(
       child: Column(
@@ -63,7 +81,12 @@ class _RecommendedPlaceDetailSheetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageSlider(
-                    imageUrls: [place.thumbnail],
+                    imageUrls:
+                        widget.place.thumbnail.isNotEmpty
+                            ? [widget.place.thumbnail]
+                            : [
+                              'https://cdn.pixabay.com/photo/2017/06/24/04/37/cloud-2436676_1280.jpg',
+                            ],
                     currentPage: _currentPage,
                     pageController: _pageController,
                     onPageChanged:
@@ -71,37 +94,31 @@ class _RecommendedPlaceDetailSheetState
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 12),
-                        LocationRow(place: place),
-                        const SizedBox(height: 24),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/alert-circle.svg',
-                              width: 20,
-                              height: 20,
-                            ),
-                            const SizedBox(width: 4),
-                            const Text(
-                              '매장 정보',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.black,
-                                fontFamily: 'Pretendard',
+                    child: detail.when(
+                      loading:
+                          () => SizedBox(
+                            height: 200,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.cpBlue,
                               ),
                             ),
+                          ),
+                      error: (e, _) => Text('정보 불러오기 실패: $e'),
+                      data: (data) {
+                        if (data == null) return const SizedBox.shrink();
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 12),
+                            const SizedBox(height: 24),
+                            PlaceDetailSection(detail: data),
+                            const SizedBox(height: 24),
+                            PlaceMapView(place: place),
+                            const SizedBox(height: 80),
                           ],
-                        ),
-                        const SizedBox(height: 24),
-                        PlaceMapView(place: place),
-                        const SizedBox(height: 16),
-                        PlaceInfoSection(place: place),
-                        const SizedBox(height: 80),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -110,28 +127,29 @@ class _RecommendedPlaceDetailSheetState
           ),
 
           // 하단 버튼
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomPadding),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary[300],
-                foregroundColor: Colors.white,
-                minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          if (widget.showSelectButton)
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomPadding),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary[300],
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
+                onPressed: () {
+                  Navigator.pop(context, {
+                    'title': place.title,
+                    'lat': place.latLng.latitude,
+                    'lng': place.latLng.longitude,
+                    'address': place.address,
+                  });
+                },
+                child: const Text('선택하기', style: TextStyle(fontSize: 16)),
               ),
-              onPressed: () {
-                Navigator.pop(context, {
-                  'title': place.title,
-                  'lat': place.latLng.latitude,
-                  'lng': place.latLng.longitude,
-                  'address': place.address,
-                });
-              },
-              child: const Text('선택하기', style: TextStyle(fontSize: 16)),
             ),
-          ),
         ],
       ),
     );
