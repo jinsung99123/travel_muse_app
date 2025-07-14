@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
@@ -18,7 +19,6 @@ class SchedulePlaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // 편집 모드일 때만 카드 높이/패딩 축소
     final double cardMinH = showHandle ? 80 : 100;
     final double vPadding = showHandle ? 8 : 16;
 
@@ -53,7 +53,7 @@ class SchedulePlaceCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.5),
             boxShadow: [
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.05),
+                color: const Color.fromRGBO(0, 0, 0, 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -63,7 +63,7 @@ class SchedulePlaceCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //썸네일
+              // 썸네일
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
@@ -74,6 +74,8 @@ class SchedulePlaceCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
+
+              // 텍스트 정보
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 125),
                 child: Column(
@@ -120,15 +122,18 @@ class SchedulePlaceCard extends StatelessWidget {
                   ],
                 ),
               ),
+
               const Spacer(),
-              // 드래그 핸들
+
               if (showHandle)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: SvgPicture.asset(
-                    'assets/icons/menu.svg',
-                    width: 24,
-                    height: 24,
+                DragHandle(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: SvgPicture.asset(
+                      'assets/icons/menu.svg',
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                 ),
             ],

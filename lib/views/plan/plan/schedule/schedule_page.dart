@@ -30,6 +30,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   bool _isEditing = false;
   Map<int, List<Map<String, String>>> daySchedules = {};
   Plans? selectedPlan;
+  final Map<int, bool> _expandedMap = {};
 
   @override
   void initState() {
@@ -53,12 +54,20 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   }
 
   // 일정 편집 관련
-  void _onReorder(int dayIndex, int oldIndex, int newIndex) {
+  void _onReorder(int fromDay, int fromIndex, int toDay, int toIndex) {
     setState(() {
-      if (newIndex > oldIndex) newIndex -= 1;
-      final moved = daySchedules[dayIndex]!.removeAt(oldIndex);
-      daySchedules[dayIndex]!.insert(newIndex, moved);
+      final moved = daySchedules[fromDay]!.removeAt(fromIndex);
+      daySchedules.putIfAbsent(toDay, () => []);
+
+      final list = daySchedules[toDay]!;
+
+      final safeIndex = toIndex.clamp(0, list.length);
+      list.insert(safeIndex, moved);
     });
+
+    ref
+        .read(scheduleViewModelProvider.notifier)
+        .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
   }
 
   Future<void> _addPlace(int dayIndex) async {
@@ -103,6 +112,17 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     }
   }
 
+  void _insertPlace(int dayIndex, Map<String, String> place) {
+    setState(() {
+      daySchedules.putIfAbsent(dayIndex, () => []);
+      daySchedules[dayIndex]!.insert(0, place);
+    });
+
+    ref
+        .read(scheduleViewModelProvider.notifier)
+        .saveDaySchedules(planId: widget.planId, daySchedules: daySchedules);
+  }
+
   @override
   Widget build(BuildContext context) {
     final planState = ref.watch(scheduleViewModelProvider);
@@ -131,26 +151,37 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   return DayScheduleList(
                     selectedPlan: selectedPlan!,
                     daySchedules: daySchedules,
-
+                    expandedMap: _expandedMap,
+                    onToggleExpanded: (dayIndex) {
+                      setState(() {
+                        _expandedMap[dayIndex] =
+                            !(_expandedMap[dayIndex] ?? true);
+                      });
+                    },
                     isEditing: _isEditing,
                     onReorder: _onReorder,
                     onAddPlace: _addPlace,
                     onRemovePlace: _removePlace,
+                    onInsertPlace: _insertPlace,
                     onPlaceTap: (place) {
                       final converted = HomePlace(
                         id: place['id'] ?? '',
                         title: place['title'] ?? '',
-                        subtitle: place['subtitle'] ?? '', 
+                        subtitle: place['subtitle'] ?? '',
                         address: place['address'] ?? '',
-                        thumbnail: place['image']?? '', 
+                        thumbnail: place['image'] ?? '',
                         latLng: LatLng(
                           double.tryParse(place['lat'] ?? '') ?? 0.0,
                           double.tryParse(place['lng'] ?? '') ?? 0.0,
                         ),
-                        category: place['category'] ?? '', 
+                        category: place['category'] ?? '',
                       );
 
-                      PlaceDetailBottomSheet.show(context, converted, showSelectButton: false,);
+                      PlaceDetailBottomSheet.show(
+                        context,
+                        converted,
+                        showSelectButton: false,
+                      );
                     },
                   );
                 },
