@@ -1,13 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/views/my_page/settings/account_setting_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/notification_setting_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/service_term_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/support_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/version_page.dart';
-import 'package:travel_muse_app/views/user/admin/admin_entry.dart';
-import 'package:travel_muse_app/views/user/admin/admin_report_entry.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class SettingPage extends StatefulWidget {
@@ -45,13 +38,13 @@ class _SettingPageState extends State<SettingPage> {
     }
 
     final List<Map<String, dynamic>> settingsItems = [
-      {'title': '알림 설정', 'route': const NotificationSettingPage()},
-      {'title': '계정 관리', 'route': const AccountSettingPage()},
-      {'title': '서비스 약관', 'route': const ServiceTermPage()},
-      {'title': '고객 지원', 'route': const SupportPage()},
-      {'title': '버전 정보', 'route': const VersionPage()},
-      if (_isAdmin) {'title': '운영자 권한 설정', 'route': const AdminEntry()},
-      if (_isAdmin) {'title': '신고 컨텐츠 관리', 'route': const AdminReportEntry()},
+      {'title': '알림 설정', 'route': '/notification_setting'},
+      {'title': '계정 관리', 'route': '/account_setting'},
+      {'title': '서비스 약관', 'route': '/service_term'},
+      {'title': '고객 지원', 'route': '/support'},
+      {'title': '버전 정보', 'route': '/version'},
+      if (_isAdmin) {'title': '운영자 권한 설정', 'route': '/admin_entry'},
+      if (_isAdmin) {'title': '신고 컨텐츠 관리', 'route': '/admin_report_entry'},
     ];
 
     return Scaffold(
@@ -66,12 +59,7 @@ class _SettingPageState extends State<SettingPage> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => settingsItems[index]['route'],
-                  ),
-                );
+                Navigator.of(context).pushNamed(settingsItems[index]['route']);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(

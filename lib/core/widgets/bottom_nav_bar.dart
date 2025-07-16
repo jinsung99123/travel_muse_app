@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/bottom_bar_provider.dart';
-import 'package:travel_muse_app/views/my_page/my_page.dart';
-import 'package:travel_muse_app/views/post/post_list_page.dart';
+import 'package:travel_muse_app/views/widgets/community_tab.dart';
 import 'package:travel_muse_app/views/widgets/home_tab.dart';
+import 'package:travel_muse_app/views/widgets/my_page_tab.dart';
 import 'package:travel_muse_app/views/widgets/recommended_places_tab.dart';
 
 class BottomNavBar extends ConsumerWidget {
@@ -41,8 +41,8 @@ class BottomNavBar extends ConsumerWidget {
     final tabs = const [
       HomeTab(),
       RecommendedPlacesTab(),
-      PostListPage(),
-      MyPage(),
+      CommunityTab(),
+      MyPageTab(),
     ];
 
     void onItemTapped(int index) {
