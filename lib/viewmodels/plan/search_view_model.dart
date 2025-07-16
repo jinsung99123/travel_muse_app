@@ -32,16 +32,29 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
     }
   }
 
-  ///추천 명소 맛집 로드 (지역 기반)
-  Future<void> loadRecommendedByRegion(String region) async {
+  ///추천 명소 로드 (지역 기반)
+  Future<void> loadRecommendedByRegion(
+    String region, [
+    String? categoryCode,
+  ]) async {
     final latLng = await _placeService.getLatLngFromRegion(region);
     if (latLng == null) return;
 
-    final spots = await _nearbyService.fetchSpots(loc: latLng);
-    final foods = await _nearbyService.fetchFoods(loc: latLng);
-    final combined = await _mapPlacesToViewData([...spots, ...foods]);
+    List<Place> places;
 
-    state = combined;
+    if (categoryCode == null) {
+      final spots = await _nearbyService.fetchSpots(loc: latLng);
+      final foods = await _nearbyService.fetchFoods(loc: latLng);
+      places = [...spots, ...foods];
+    } else {
+      places = await _nearbyService.fetchSpotsByCategory(
+        loc: latLng,
+        categoryCode: categoryCode,
+      );
+    }
+
+    final result = await _mapPlacesToViewData(places);
+    state = result;
   }
 
   ///지역 기반 또는 전국 검색 처리

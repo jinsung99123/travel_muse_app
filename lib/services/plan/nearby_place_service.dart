@@ -58,4 +58,19 @@ class NearbyPlaceService {
     page: page,
     size: size,
   );
+  //카테고리 코드 기반 검색
+  Future<List<Place>> fetchSpotsByCategory({
+    required LatLng loc,
+    required String categoryCode,
+    int radius = 10000,
+    int page = 1,
+    int size = 15,
+  }) => base.searchByCategory(
+    categoryCode: categoryCode,
+    lat: loc.latitude,
+    lng: loc.longitude,
+    radius: radius,
+    page: page,
+    size: size,
+  );
 }

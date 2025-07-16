@@ -9,7 +9,8 @@ class Place {
     required this.longitude,
     required this.category,
     required this.phone,
-    required this.placeUrl
+    required this.placeUrl,
+    this.categoryCode
   });
 
   final String id;
@@ -21,7 +22,8 @@ class Place {
   final double longitude;
   final String category;
   final String? phone;        
-  final String? placeUrl;    
+  final String? placeUrl;  
+  final String? categoryCode;  
 
   factory Place.fromKakaoJson(Map<String, dynamic> json) {
     final address = json['address_name'] ?? '';
@@ -37,7 +39,8 @@ class Place {
       longitude: double.tryParse(json['x'] ?? '0') ?? 0,
       category: json['category_name'] ?? '',
       phone: json['phone'] ?? '',
-      placeUrl: json['placeUrl'] ?? ''
+      placeUrl: json['placeUrl'] ?? '',
+      categoryCode: json['category_group_code'],
     );
   }
 }
