@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_restaurant_list_card.dart';
+import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class RecommendedRestaurantsListPage extends ConsumerWidget {
   const RecommendedRestaurantsListPage({super.key});
@@ -14,22 +15,15 @@ class RecommendedRestaurantsListPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          '추천 맛집',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Pretendard',
-          ),
-        ),
-        backgroundColor: AppColors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: AppColors.black),
+        title: const Text('추천 맛집'),
+        leading: const CustomBackButton(),
       ),
       body: homeAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => const Center(child: Text('일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.')),
+        error:
+            (_, __) => const Center(
+              child: Text('일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.'),
+            ),
         data: (state) {
           final restaurants = state.foods;
           if (restaurants.isEmpty) {
