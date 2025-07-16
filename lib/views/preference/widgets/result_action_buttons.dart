@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/bottom_nav_bar.dart';
 import 'package:travel_muse_app/providers/preference/preference_test_provider.dart';
-import 'package:travel_muse_app/views/home/home_page.dart';
 
 class ResultActionButtons extends ConsumerWidget {
   const ResultActionButtons({super.key, required this.onRestart});
@@ -59,7 +59,9 @@ class ResultActionButtons extends ConsumerWidget {
                   if (context.mounted) {
                     await Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(
+                        builder: (context) => const BottomNavBar(),
+                      ),
                     );
                   }
                 } catch (e) {

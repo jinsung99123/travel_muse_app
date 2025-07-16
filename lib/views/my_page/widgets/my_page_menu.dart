@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/views/preference/preference_test_page.dart';
 
 class MyPageMenu extends StatelessWidget {
   const MyPageMenu({super.key});
@@ -54,7 +55,9 @@ class MyPageMenu extends StatelessWidget {
             _buildMenuItem(
               title: '여행 성향 재검사',
               onTap: () {
-                Navigator.of(context).pushNamed('/preference_test');
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (_) => const PreferenceTestPage()),
+                );
               },
             ),
           ],

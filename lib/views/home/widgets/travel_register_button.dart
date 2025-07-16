@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/svg_icon.dart';
-import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/calendar_page.dart';
 
 class TravelRegisterButton extends StatelessWidget {
@@ -27,10 +26,7 @@ class TravelRegisterButton extends StatelessWidget {
             height: buttonHeight,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PlanListPage()),
-                );
+                Navigator.of(context).pushNamed('/plan_list');
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -70,10 +66,10 @@ class TravelRegisterButton extends StatelessWidget {
             height: buttonHeight,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.of(
                   context,
-                  MaterialPageRoute(builder: (_) => const CalendarPage()),
-                );
+                  rootNavigator: true,
+                ).push(MaterialPageRoute(builder: (_) => const CalendarPage()));
               },
               child: Container(
                 padding: const EdgeInsets.all(16),

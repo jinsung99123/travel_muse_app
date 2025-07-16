@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/core/bottom_bar_provider.dart';
+import 'package:travel_muse_app/core/widgets/bottom_nav_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
-import 'package:travel_muse_app/views/home/home_page.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/place_search_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_list.dart';
@@ -205,9 +206,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   message: '일정이 저장되었습니다.',
                   duration: const Duration(seconds: 2),
                 );
+                ref.read(bottomBarProvider.notifier).state = 0;
                 await Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => const HomePage()),
+                  MaterialPageRoute(builder: (_) => const BottomNavBar()),
                 );
               },
             ),
