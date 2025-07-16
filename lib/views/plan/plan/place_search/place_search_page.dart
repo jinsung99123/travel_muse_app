@@ -2,8 +2,10 @@ import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
+import 'package:travel_muse_app/providers/plan/schedule/selected_category_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
+import 'package:travel_muse_app/views/plan/plan/place_search/widgets/category_filter_chip.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/confirm_add_button.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/recent_search_section.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/region_recommend_header.dart';
@@ -65,6 +67,15 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
   Widget build(BuildContext context) {
     final searchResults = ref.watch(searchViewModelProvider);
     final selectedIndexes = ref.watch(selectedIndexProvider);
+    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final categories = ['전체', '자연', '카페', '맛집', '가볼만한 곳'];
+    final categoryCodeMap = {
+      '전체': null,
+      '자연': 'AT4',
+      '카페': 'CE7',
+      '맛집': 'FD6',
+      '액티비티': 'CT1',
+    };
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -83,8 +94,7 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               padding: const EdgeInsets.all(16),
               child: SearchBar(
                 controller: _searchController,
-                onSearch:
-                    () => _handleSearch(_searchController.text), 
+                onSearch: () => _handleSearch(_searchController.text),
                 onQueryChanged: _handleSearch,
               ),
             ),
@@ -94,27 +104,70 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
                 _handleSearch(word);
               },
             ),
-            if (_showInitialMessage)
+            if (_showInitialMessage) ...[
               RegionRecommendHeader(region: widget.region),
-            const SizedBox(height: 8),
+
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children:
+                        categories.map((category) {
+                          final isSelected = selectedCategory == category;
+
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: CategoryFilterChip(
+                              label: category,
+                              selected: isSelected,
+                              onTap: () async {
+                                ref
+                                    .read(selectedCategoryProvider.notifier)
+                                    .state = category;
+
+                                final kakaoCode = categoryCodeMap[category];
+                                await ref
+                                    .read(searchViewModelProvider.notifier)
+                                    .loadRecommendedByRegion(
+                                      widget.region,
+                                      kakaoCode,
+                                    );
+                              },
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8),
+            ],
             Expanded(
-  child: searchResults.isEmpty
-      ? Center(
-          child: Text(
-            _showInitialMessage
-                ? '일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.'
-                : '검색 결과가 없습니다.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-        )
-      : SearchResultList(
-          places: searchResults,
-          selectedIndexes: selectedIndexes,
-          onToggle: (i) =>
-              ref.read(selectedIndexProvider.notifier).toggle(i),
-        ),
-),
+              child:
+                  searchResults.isEmpty
+                      ? Center(
+                        child: Text(
+                          _showInitialMessage
+                              ? '일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.'
+                              : '검색 결과가 없습니다.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                      : SearchResultList(
+                        places: searchResults,
+                        selectedIndexes: selectedIndexes,
+                        onToggle:
+                            (i) => ref
+                                .read(selectedIndexProvider.notifier)
+                                .toggle(i),
+                      ),
+            ),
           ],
         ),
       ),

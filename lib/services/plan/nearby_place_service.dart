@@ -2,29 +2,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/models/plan/place.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
 
-///  - 명소(AT4) · 맛집(FD6) 등 카테고리 전용 호출
 ///  - 키워드 + 위치 검색
 class NearbyPlaceService {
   NearbyPlaceService(this.base);
 
   final PlaceSearchService base;
-
-  //명소(관광)
-  /// 내 위치 [loc] 기준 관광명소(카테고리 AT4)를 거리순으로 가져옵니다.
-  /// [radius] : 검색 반경(m) – 10000m(10km) 기본
-  Future<List<Place>> fetchSpots({
-    required LatLng loc,
-    int radius = 10000,
-    int page = 1,
-    int size = 15,
-  }) => base.searchByCategory(
-    categoryCode: 'AT4',
-    lat: loc.latitude,
-    lng: loc.longitude,
-    radius: radius,
-    page: page,
-    size: size,
-  );
 
   //맛집(음식점)
   /// 내 위치 [loc] 기준 맛집(카테고리 FD6)를 거리순으로 가져옵니다.
@@ -52,6 +34,21 @@ class NearbyPlaceService {
     int size = 15,
   }) => base.searchByKeyword(
     query: query,
+    lat: loc.latitude,
+    lng: loc.longitude,
+    radius: radius,
+    page: page,
+    size: size,
+  );
+  //카테고리 코드 기반 검색
+  Future<List<Place>> fetchSpotsByCategory({
+    required LatLng loc,
+    required String categoryCode,
+    int radius = 10000,
+    int page = 1,
+    int size = 15,
+  }) => base.searchByCategory(
+    categoryCode: categoryCode,
     lat: loc.latitude,
     lng: loc.longitude,
     radius: radius,
