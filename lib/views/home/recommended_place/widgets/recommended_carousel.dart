@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedCarousel extends StatelessWidget {
   const RecommendedCarousel({
@@ -25,12 +24,9 @@ class RecommendedCarousel extends StatelessWidget {
           final p = places[idx];
           return GestureDetector(
             onTap: () {
-              Navigator.push(
+              Navigator.of(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => RecommendedPlaceDetailPage(place: p),
-                ),
-              );
+              ).pushNamed('/recommended_detail', arguments: p);
             },
             child: SizedBox(
               width: 118,

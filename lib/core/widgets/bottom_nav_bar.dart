@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/bottom_bar_provider.dart';
-import 'package:travel_muse_app/views/home/home_page.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/my_page/my_page.dart';
 import 'package:travel_muse_app/views/post/post_list_page.dart';
+import 'package:travel_muse_app/views/widgets/home_tab.dart';
+import 'package:travel_muse_app/views/widgets/recommended_places_tab.dart';
 
 class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({super.key});
@@ -38,20 +38,23 @@ class BottomNavBar extends ConsumerWidget {
       },
     ];
 
-    final pages = [
-      const HomePage(),
-      const RecommendedPlacesListPage(),
-      const PostListPage(),
-      const MyPage(),
+    final tabs = const [
+      HomeTab(),
+      RecommendedPlacesTab(),
+      PostListPage(),
+      MyPage(),
     ];
 
     void onItemTapped(int index) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      ref.read(bottomBarProvider.notifier).state = index;
+      if (index == currentIndex) {
+        return;
+      } else {
+        ref.read(bottomBarProvider.notifier).state = index;
+      }
     }
 
     return Scaffold(
-      body: IndexedStack(index: currentIndex, children: pages),
+      body: IndexedStack(index: currentIndex, children: tabs),
       bottomNavigationBar: Container(
         height: 100,
         decoration: const BoxDecoration(
