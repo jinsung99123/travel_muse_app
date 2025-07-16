@@ -21,15 +21,15 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
 
   //초기 로드
   Future<void> _init() async {
-  try {
-    // 위치 권한 GPS 오류가 나면 catch 블록에서 폴백 좌표 사용
-    final loc = await _ref.read(locationProvider.future);
-    await load(loc);
-  } catch (_) {
-    // 권한 OFF 실패 시 기본 좌표로 추천 불러오기
-    await load(kFallbackLatLng);
+    try {
+      // 위치 권한 GPS 오류가 나면 catch 블록에서 폴백 좌표 사용
+      final loc = await _ref.read(locationProvider.future);
+      await load(loc);
+    } catch (_) {
+      // 권한 OFF 실패 시 기본 좌표로 추천 불러오기
+      await load(kFallbackLatLng);
+    }
   }
-}
 
   //썸네일 병렬 로드 + 매핑
   Future<List<HomePlace>> _mapWithThumbs(List<Place> raw) async {
@@ -47,61 +47,34 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
   }
 
   //첫 페이지 로드
-  Future<void> load(LatLng loc) async {
+  Future<void> load(LatLng loc, {String? categoryCode}) async {
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {
-      final rawSpots = await _svc.fetchSpots(loc: loc, page: 1);
+      final rawSpots = await _svc.fetchSpotsByCategory(
+        loc: loc,
+        categoryCode: categoryCode ?? 'AT4',
+        page: 1,
+      );
       final rawFoods = await _svc.fetchFoods(loc: loc, page: 1);
 
       final spots = await _mapWithThumbs(rawSpots);
       final foods = await _mapWithThumbs(rawFoods);
 
-      return HomeState(spots: spots, foods: foods);
+      return HomeState(
+        originalSpots: spots, // AT4 원본 저장
+        spots: spots,
+        foods: foods,
+      );
     });
   }
 
   List<HomePlace> getFilteredSpots(List<HomePlace> spots, String? selectedTag) {
-    const tagCategoryMap = {
-      '#전체': [
-        '자연',
-        '산책',
-        '강',
-        '호수',
-        '공원',
-        '숲',
-        '휴양',
-        '계곡',
-        '풍경',
-        '정원',
-        '드라이브',
-        '힐링',
-        '산',
-        '둘레길',
-        '도보여행',
-        '전망대',
-        '산책로',
-        '야경',
-        '피톤치드',
-        '문화',
-        '유적',
-        '사적',
-        '역사',
-        '고궁',
-        '성',
-        '탑',
-        '박물관',
-        '기념관',
-        '전통',
-        '사찰',
-        '고건축',
-        '유교',
-        '불교',
-        '서원',
-        '문화재',
-        '유물',
-        '전시관',
-      ],
+    if (selectedTag == null || selectedTag == '#전체') return spots;
+
+    const categoryCodeMap = {'#카페': 'CE7', '#가볼만한 곳': 'CT1'};
+
+    const tagKeywordMap = {
       '#힐링': [
         '자연',
         '산책',
@@ -206,14 +179,45 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
         '아쿠아리움',
         '키즈카페',
         '실내놀이터',
+        '놀이터',
+        '놀이',
+        '가족',
+        '테마',
       ],
     };
+    if (categoryCodeMap.containsKey(selectedTag)) {
+      final code = categoryCodeMap[selectedTag];
+      return spots.where((p) => p.categoryCode?.toUpperCase() == code).toList();
+    }
 
-    if (selectedTag == null) return spots;
-
-    final keywords = tagCategoryMap[selectedTag] ?? [];
+    final keywords = tagKeywordMap[selectedTag] ?? [];
     return spots
-        .where((p) => keywords.any((kw) => p.category.contains(kw)))
+        .where((p) => keywords.any((k) => p.category.contains(k)))
         .toList();
+  }
+
+  Future<void> reloadWithTag(String selectedTag) async {
+    const categoryCodeMap = {'#자연': 'AT4', '#카페': 'CE7', '#가볼만한 곳': 'CT1'};
+
+    final code = categoryCodeMap[selectedTag];
+    final loc = await _ref.read(locationProvider.future);
+
+    if (code != null) {
+      final raw = await _svc.fetchSpotsByCategory(loc: loc, categoryCode: code);
+      final mapped = await _mapWithThumbs(raw);
+
+      final current = state.value;
+      if (current != null) {
+        state = AsyncValue.data(
+          current.copyWith(spots: mapped), 
+        );
+      }
+    } else {
+      // 코드 없을 땐 원래 AT4 원본에서 다시 보여줌
+      final current = state.value;
+      if (current != null) {
+        state = AsyncValue.data(current.copyWith(spots: current.originalSpots));
+      }
+    }
   }
 }

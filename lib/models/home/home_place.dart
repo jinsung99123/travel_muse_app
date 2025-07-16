@@ -14,6 +14,7 @@ class HomePlace {
     this.placeUrl,
     this.isFavorite = false,
     this.distance,
+    this.categoryCode
   });
 
   final String id;
@@ -27,6 +28,7 @@ class HomePlace {
   final String? placeUrl;
   final bool isFavorite;
   final int? distance;
+  final String? categoryCode; 
 
   factory HomePlace.fromPlace(Place p, {String thumb = '', int? distance}) {
     return HomePlace(
@@ -40,6 +42,7 @@ class HomePlace {
       phone: p.phone,
       placeUrl: p.placeUrl,
       distance: distance,
+      categoryCode: p.categoryCode,
     );
   }
 
@@ -59,6 +62,7 @@ class HomePlace {
       placeUrl: map['placeUrl'],
       isFavorite: map['isFavorite'] ?? false,
       distance: map['distance'],
+      categoryCode: map['categoryCode'],
     );
   }
 
@@ -76,6 +80,7 @@ class HomePlace {
       'placeUrl': placeUrl,
       'isFavorite': isFavorite,
       'distance': distance,
+      'categoryCode': categoryCode,
     };
   }
 }
@@ -92,5 +97,6 @@ extension PlaceMapping on Place {
     phone: phone,
     placeUrl: placeUrl,
     distance: distance,
+    categoryCode: categoryCode,
   );
 }

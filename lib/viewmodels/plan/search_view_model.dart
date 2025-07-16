@@ -43,7 +43,10 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
     List<Place> places;
 
     if (categoryCode == null) {
-      final spots = await _nearbyService.fetchSpots(loc: latLng);
+      final spots = await _nearbyService.fetchSpotsByCategory(
+      loc: latLng,
+      categoryCode: 'AT4',
+    );
       final foods = await _nearbyService.fetchFoods(loc: latLng);
       places = [...spots, ...foods];
     } else {
