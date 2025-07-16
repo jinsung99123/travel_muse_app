@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/like_provider.dart';
 import 'package:travel_muse_app/views/post/post_detail_page.dart';
@@ -52,7 +51,9 @@ class _LikeListPageState extends ConsumerState<LikeListPage> {
           }
 
           final posts =
-              (snapshot.data ?? []).where((post) => post.isDeleted == false).toList();
+              (snapshot.data ?? [])
+                  .where((post) => post.isDeleted == false)
+                  .toList();
 
           if (posts.isEmpty) {
             return const Center(child: Text('좋아요한 게시글이 없습니다.'));
@@ -70,7 +71,9 @@ class _LikeListPageState extends ConsumerState<LikeListPage> {
                 onTap: () async {
                   final result = await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => PostDetailPage(post: post)),
+                    MaterialPageRoute(
+                      builder: (_) => PostDetailPage(post: post),
+                    ),
                   );
 
                   if (mounted) setState(() {}); // 좋아요 취소 시 목록 갱신
@@ -81,7 +84,10 @@ class _LikeListPageState extends ConsumerState<LikeListPage> {
                   decoration: ShapeDecoration(
                     color: AppColors.white,
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 0.20, color: AppColors.grey[200]!),
+                      side: BorderSide(
+                        width: 0.20,
+                        color: AppColors.grey[200]!,
+                      ),
                     ),
                   ),
                   child: PostItem(screenWidth: screenWidth, post: post),
@@ -91,7 +97,6 @@ class _LikeListPageState extends ConsumerState<LikeListPage> {
           );
         },
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

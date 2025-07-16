@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
@@ -83,8 +82,7 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               padding: const EdgeInsets.all(16),
               child: SearchBar(
                 controller: _searchController,
-                onSearch:
-                    () => _handleSearch(_searchController.text), 
+                onSearch: () => _handleSearch(_searchController.text),
                 onQueryChanged: _handleSearch,
               ),
             ),
@@ -98,27 +96,32 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
               RegionRecommendHeader(region: widget.region),
             const SizedBox(height: 8),
             Expanded(
-  child: searchResults.isEmpty
-      ? Center(
-          child: Text(
-            _showInitialMessage
-                ? '일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.'
-                : '검색 결과가 없습니다.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-        )
-      : SearchResultList(
-          places: searchResults,
-          selectedIndexes: selectedIndexes,
-          onToggle: (i) =>
-              ref.read(selectedIndexProvider.notifier).toggle(i),
-        ),
-),
+              child:
+                  searchResults.isEmpty
+                      ? Center(
+                        child: Text(
+                          _showInitialMessage
+                              ? '일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.'
+                              : '검색 결과가 없습니다.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                      : SearchResultList(
+                        places: searchResults,
+                        selectedIndexes: selectedIndexes,
+                        onToggle:
+                            (i) => ref
+                                .read(selectedIndexProvider.notifier)
+                                .toggle(i),
+                      ),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

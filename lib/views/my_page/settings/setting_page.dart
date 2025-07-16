@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/my_page/settings/account_setting_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/notification_setting_page.dart';
 import 'package:travel_muse_app/views/my_page/settings/service_term_page.dart';
@@ -42,9 +41,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final List<Map<String, dynamic>> settingsItems = [
@@ -53,22 +50,14 @@ class _SettingPageState extends State<SettingPage> {
       {'title': '서비스 약관', 'route': const ServiceTermPage()},
       {'title': '고객 지원', 'route': const SupportPage()},
       {'title': '버전 정보', 'route': const VersionPage()},
-      if (_isAdmin)
-        {'title': '운영자 권한 설정', 'route': const AdminEntry()},
-      if (_isAdmin)
-        {'title': '신고 컨텐츠 관리', 'route': const AdminReportEntry()},
+      if (_isAdmin) {'title': '운영자 권한 설정', 'route': const AdminEntry()},
+      if (_isAdmin) {'title': '신고 컨텐츠 관리', 'route': const AdminReportEntry()},
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '설정',
-          style: TextStyle(color: AppColors.grey[800]),
-        ),
-        leading:
-            Navigator.canPop(context)
-                ? const CustomBackButton()
-                : null,
+        title: Text('설정', style: TextStyle(color: AppColors.grey[800])),
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -91,10 +80,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(
-                      width: 1,
-                      color: AppColors.grey[50]!,
-                    ),
+                    bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
                   ),
                 ),
                 child: Row(
@@ -127,7 +113,6 @@ class _SettingPageState extends State<SettingPage> {
           },
         ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

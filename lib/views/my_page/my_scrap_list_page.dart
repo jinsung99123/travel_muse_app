@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
@@ -135,7 +134,6 @@ class MyScrapListPage extends ConsumerWidget {
           );
         },
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }
@@ -176,4 +174,3 @@ class _EmptyScrapView extends StatelessWidget {
     );
   }
 }
-

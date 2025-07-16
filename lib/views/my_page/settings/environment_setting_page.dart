@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class EnvironmentSettingPage extends StatelessWidget {
@@ -30,7 +29,9 @@ class EnvironmentSettingPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1, color: AppColors.grey[50]!)),
+                border: Border(
+                  bottom: BorderSide(width: 1, color: AppColors.grey[50]!),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,14 +51,17 @@ class EnvironmentSettingPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[600]),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: AppColors.grey[600],
+                  ),
                 ],
               ),
             ),
           );
         },
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

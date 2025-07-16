@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/providers/user/profile_view_model_provider.dart';
@@ -119,7 +118,6 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
                   },
                 ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

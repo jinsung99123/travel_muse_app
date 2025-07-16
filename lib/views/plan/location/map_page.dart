@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/map_provider.dart';
 import 'package:travel_muse_app/utills/map_utils.dart';
 import 'package:travel_muse_app/viewmodels/plan/map_view_model.dart';
@@ -156,8 +155,6 @@ class _MapPageState extends ConsumerState<MapPage>
           ),
         ],
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }
-

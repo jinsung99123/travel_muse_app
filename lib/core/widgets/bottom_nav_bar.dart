@@ -46,7 +46,7 @@ class BottomNavBar extends ConsumerWidget {
     ];
 
     void onItemTapped(int index) {
-      if (index == currentIndex) return;
+      Navigator.of(context).popUntil((route) => route.isFirst);
       ref.read(bottomBarProvider.notifier).state = index;
     }
 
@@ -56,9 +56,7 @@ class BottomNavBar extends ConsumerWidget {
         height: 100,
         decoration: const BoxDecoration(
           color: Colors.white,
-          border: Border(
-            top: BorderSide(color: Color(0xFFE9EBEB), width: 1),
-          ),
+          border: Border(top: BorderSide(color: Color(0xFFE9EBEB), width: 1)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -80,11 +78,7 @@ class BottomNavBar extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(
-                        iconPath,
-                        width: 24,
-                        height: 24,
-                      ),
+                      SvgPicture.asset(iconPath, width: 24, height: 24),
                       const SizedBox(height: 2),
                       Text(
                         label,
