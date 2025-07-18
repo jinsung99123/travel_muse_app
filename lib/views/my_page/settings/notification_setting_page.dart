@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/utills/notification_helper.dart';
 import 'package:travel_muse_app/utills/notification_setting.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart'; // SharedPreferences 저장소
@@ -180,7 +179,6 @@ class _NotificationSettingPageState extends State<NotificationSettingPage> {
                   },
                 ),
               ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

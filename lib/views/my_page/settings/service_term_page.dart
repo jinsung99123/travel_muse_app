@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/user/terms_view_model_provider.dart';
 import 'package:travel_muse_app/views/user/onboarding/terms_detail_page.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
@@ -16,10 +15,7 @@ class ServiceTermPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('서비스 약관', style: TextStyle()),
-        leading:
-            Navigator.canPop(context)
-                ? const CustomBackButton()
-                : null,
+        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: termsListAsync.when(
         data:
@@ -36,9 +32,7 @@ class ServiceTermPage extends ConsumerWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (_) =>
-                                          TermsDetailPage(term: term),
+                                  builder: (_) => TermsDetailPage(term: term),
                                 ),
                               );
                             }
@@ -57,13 +51,10 @@ class ServiceTermPage extends ConsumerWidget {
                         ),
                       ),
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width:
-                                MediaQuery.of(context).size.width *
-                                0.75,
+                            width: MediaQuery.of(context).size.width * 0.75,
                             child: Text(
                               term.title,
                               overflow: TextOverflow.ellipsis,
@@ -91,11 +82,9 @@ class ServiceTermPage extends ConsumerWidget {
                 },
               ),
             ),
-        error:
-            (error, st) => Center(child: CircularProgressIndicator()),
+        error: (error, st) => Center(child: CircularProgressIndicator()),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_place_list_card.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
@@ -17,12 +16,18 @@ class RecommendedPlacesListPage extends ConsumerWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text('추천 명소'),
-        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+        leading: const CustomBackButton(goHome: true),
       ),
       body: SafeArea(
         child: homeAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Center(child: Text('일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.')),
+          loading:
+              () => const Center(child: CircularProgressIndicator()),
+          error:
+              (_, __) => const Center(
+                child: Text(
+                  '일시적인 문제로 추천을 불러오지 못했어요\n잠시 후 다시 시도해 주세요.',
+                ),
+              ),
           data: (state) {
             final spots = state.spots;
             if (spots.isEmpty) {
@@ -44,7 +49,11 @@ class RecommendedPlacesListPage extends ConsumerWidget {
                       isActive: true,
                       place: spot,
                     ),
-                    Divider(height: 1, thickness: 0.5, color: AppColors.grey[200]),
+                    Divider(
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.grey[200],
+                    ),
                   ],
                 );
               },
@@ -52,7 +61,6 @@ class RecommendedPlacesListPage extends ConsumerWidget {
           },
         ),
       ),
-      bottomNavigationBar: BottomBar(),
     );
   }
 }

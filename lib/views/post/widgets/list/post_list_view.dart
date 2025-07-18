@@ -4,7 +4,6 @@ import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/providers/post/post_list_view_model_provider.dart';
 import 'package:travel_muse_app/utills/throttler.dart';
-import 'package:travel_muse_app/views/post/post_detail_page.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_item.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_loading_item.dart';
 
@@ -83,12 +82,9 @@ class _PostListViewState extends ConsumerState<PostListView> {
                     key: ValueKey(post.postId),
                     child: GestureDetector(
                       onTap: () async {
-                        final result = await Navigator.push(
+                        final result = await Navigator.of(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => PostDetailPage(post: post),
-                          ),
-                        );
+                        ).pushNamed('/post_detail', arguments: post);
                         // result가 Post면 리스트 반영
                         if (result is Post) {
                           ref

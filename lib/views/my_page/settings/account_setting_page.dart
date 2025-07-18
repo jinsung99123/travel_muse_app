@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/user/auth_view_model_provider.dart';
 import 'package:travel_muse_app/views/my_page/widgets/account_info.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
@@ -62,7 +61,6 @@ class _AccountSettingPageState extends ConsumerState<AccountSettingPage> {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 

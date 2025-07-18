@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_list_view.dart';
-import 'package:travel_muse_app/views/post/widgets/list/post_search_page.dart';
 import 'package:travel_muse_app/views/post/widgets/list/tag_bar.dart';
 import 'package:travel_muse_app/views/post/widgets/write/write_fab.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
@@ -23,7 +21,6 @@ class _PostListPageState extends State<PostListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('커뮤니티'),
-        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15),
@@ -35,14 +32,12 @@ class _PostListPageState extends State<PostListPage> {
                 color: AppColors.grey[700],
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const PostSearchPage()),
-                );
+                Navigator.of(context).pushNamed('/post_search');
               },
             ),
           ),
         ],
+        leading: const CustomBackButton(goHome: true),
       ),
       body: Column(
         children: [
@@ -51,7 +46,6 @@ class _PostListPageState extends State<PostListPage> {
         ],
       ),
       floatingActionButton: const WriteFab(),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

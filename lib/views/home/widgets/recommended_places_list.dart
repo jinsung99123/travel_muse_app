@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/bottom_bar_provider.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/providers/home/selected_tag_provider.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_places_list_page.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/hashtag_selector.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/recommended_carousel.dart';
 
@@ -58,13 +58,9 @@ class RecommendedPlacesList extends ConsumerWidget {
           child: Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed:
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RecommendedPlacesListPage(),
-                    ),
-                  ),
+              onPressed: () {
+                ref.read(bottomBarProvider.notifier).state = 1;
+              },
               child: Text(
                 '더보기 >',
                 style: TextStyle(

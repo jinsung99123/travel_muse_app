@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
-import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
 
 class RecommendedRestaurantListCard extends StatelessWidget {
   const RecommendedRestaurantListCard({
@@ -27,12 +26,9 @@ class RecommendedRestaurantListCard extends StatelessWidget {
       onTap:
           isActive && place != null
               ? () {
-                Navigator.push(
+                Navigator.of(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => RecommendedPlaceDetailPage(place: place!),
-                  ),
-                );
+                ).pushNamed('/recommended_detail', arguments: place);
               }
               : null,
       child: Container(
@@ -81,11 +77,11 @@ class RecommendedRestaurantListCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                     maxLines: 1,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 14, color: AppColors.grey[700]),
                   ),
-                   Text(
+                  Text(
                     catecory,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/bottom_bar_provider.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/main.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/location_provider.dart';
@@ -17,7 +16,8 @@ class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> with RouteAware {
@@ -60,9 +60,9 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
           data: (user) {
             // 권한 여부에 따라 제목 결정
             final String titleText = locAsync.when(
-              data:    (_)     => '${user.nickname}님의 위치 기반 추천 명소예요',
-              loading: ()      => '${user.nickname}님의 위치 기반 추천 명소예요',
-              error:   (_, __) => '오늘의 추천 명소예요',
+              data: (_) => '${user.nickname}님의 위치 기반 추천 명소예요',
+              loading: () => '${user.nickname}님의 위치 기반 추천 명소예요',
+              error: (_, __) => '오늘의 추천 명소예요',
             );
 
             return SingleChildScrollView(
@@ -113,12 +113,10 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
               ),
             );
           },
-          error: (e, st) =>
-              const Text('홈 화면 불러오기 실패. 앱을 재시작해 주세요.'),
+          error: (e, st) => const Text('홈 화면 불러오기 실패. 앱을 재시작해 주세요.'),
           loading: () => const CircularProgressIndicator(),
         ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

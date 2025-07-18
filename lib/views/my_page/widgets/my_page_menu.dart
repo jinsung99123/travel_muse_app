@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/views/my_page/like_list_page.dart';
-import 'package:travel_muse_app/views/my_page/my_post_page.dart';
-import 'package:travel_muse_app/views/my_page/my_scrap_list_page.dart';
-import 'package:travel_muse_app/views/my_page/plan_list_page.dart';
-import 'package:travel_muse_app/views/my_page/preference_list_page.dart';
 import 'package:travel_muse_app/views/preference/preference_test_page.dart';
-import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
 
 class MyPageMenu extends StatelessWidget {
   const MyPageMenu({super.key});
@@ -24,42 +18,28 @@ class MyPageMenu extends StatelessWidget {
             _buildMenuItem(
               title: '나의 여행',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PlanListPage()),
-                );
+                Navigator.of(context).pushNamed('/my_plan');
               },
             ),
 
             _buildMenuItem(
               title: '북마크',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyScrapListPage(),
-                  ),
-                );
+                Navigator.of(context).pushNamed('/my_scrap');
               },
             ),
 
             _buildMenuItem(
               title: '내 게시글',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyPostPage()),
-                );
+                Navigator.of(context).pushNamed('/my_post');
               },
             ),
 
             _buildMenuItem(
               title: '좋아요한 게시글',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LikeListPage()),
-                );
+                Navigator.of(context).pushNamed('/my_like');
               },
             ),
 
@@ -68,23 +48,15 @@ class MyPageMenu extends StatelessWidget {
             _buildMenuItem(
               title: '나의 여행 성향',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PreferenceListPage(),
-                  ),
-                );
+                Navigator.of(context).pushNamed('/my_preference');
               },
             ),
 
             _buildMenuItem(
               title: '여행 성향 재검사',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PreferenceTestPage(),
-                  ),
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (_) => const PreferenceTestPage()),
                 );
               },
             ),

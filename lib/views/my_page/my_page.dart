@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
-import 'package:travel_muse_app/views/my_page/settings/setting_page.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_menu.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_profile_screen.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
@@ -26,18 +24,15 @@ class MyPage extends StatelessWidget {
             fontFamily: 'Pretendard',
           ),
         ),
-        leading: Navigator.canPop(context) ? const CustomBackButton() : null,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings, color: AppColors.black),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingPage()),
-              );
+              Navigator.of(context).pushNamed('/setting');
             },
           ),
         ],
+        leading: const CustomBackButton(goHome: true),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -54,7 +49,6 @@ class MyPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }

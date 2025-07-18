@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_muse_app/core/widgets/bottom_bar.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_category_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
@@ -171,7 +170,6 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomBar(),
     );
   }
 }
