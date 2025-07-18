@@ -61,12 +61,20 @@ class PlaceCard extends StatelessWidget {
                         width: 90,
                         height: 90,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/default_image.jpg',
+                            width: 90,
+                            height: 90,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       )
-                      : Container(
+                      : Image.asset(
+                        'assets/images/default_image.jpg',
                         width: 90,
                         height: 90,
-                        color: AppColors.grey[100],
-                        child: const Icon(Icons.image_not_supported),
+                        fit: BoxFit.cover,
                       ),
             ),
             const SizedBox(width: 16),

@@ -67,10 +67,19 @@ class SchedulePlaceCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  place['image'] ?? 'https://via.placeholder.com/80',
+                  (place['image'] != null && place['image']!.isNotEmpty)
+                      ? place['image']!
+                      : 'https://via.placeholder.com/80', // 기본 이미지
                   width: 75,
                   height: 75,
                   fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) => Image.asset(
+                        'assets/images/default_image.jpg',
+                        width: 75,
+                        height: 75,
+                        fit: BoxFit.cover,
+                      ),
                 ),
               ),
               const SizedBox(width: 12),
