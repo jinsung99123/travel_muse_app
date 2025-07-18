@@ -17,8 +17,12 @@ class NotificationHelper {
       requestSoundPermission: true,
       requestBadgePermission: true,
     );
+    final androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final initSetting = InitializationSettings(iOS: darwinSetting);
+    final initSetting = InitializationSettings(
+      android: androidSetting,
+      iOS: darwinSetting,
+    );
 
     await flutterNotificationsPlugin.initialize(
       initSetting,
