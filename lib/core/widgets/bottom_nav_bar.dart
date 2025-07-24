@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/bottom_bar_provider.dart';
-import 'package:travel_muse_app/views/widgets/community_tab.dart';
-import 'package:travel_muse_app/views/widgets/home_tab.dart';
-import 'package:travel_muse_app/views/widgets/my_page_tab.dart';
-import 'package:travel_muse_app/views/widgets/recommended_places_tab.dart';
+import 'package:travel_muse_app/core/bottom_nav_bar_provider.dart';
+import 'package:travel_muse_app/views/tabs/community_tab.dart';
+import 'package:travel_muse_app/views/tabs/home_tab.dart';
+import 'package:travel_muse_app/views/tabs/my_page_tab.dart';
+import 'package:travel_muse_app/views/tabs/recommended_places_tab.dart';
 
 class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = ref.watch(bottomBarProvider);
+    final currentIndex = ref.watch(bottomNavBarProvider);
 
     final items = [
       {
@@ -49,7 +49,7 @@ class BottomNavBar extends ConsumerWidget {
       if (index == currentIndex) {
         return;
       } else {
-        ref.read(bottomBarProvider.notifier).state = index;
+        ref.read(bottomNavBarProvider.notifier).state = index;
       }
     }
 

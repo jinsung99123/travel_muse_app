@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/bottom_bar_provider.dart';
+import 'package:travel_muse_app/core/bottom_nav_bar_provider.dart';
 import 'package:travel_muse_app/providers/home/home_view_model_provider.dart';
 import 'package:travel_muse_app/providers/home/selected_tag_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/hashtag_selector.dart';
@@ -22,7 +22,7 @@ class RecommendedPlacesList extends ConsumerWidget {
       children: [
         HashtagSelector(
           selectedTag: selectedTag,
-          onTagTap: (tag) async{
+          onTagTap: (tag) async {
             selectedTagNotifier.state = tag;
             if (tag != null) {
               await viewModel.reloadWithTag(tag);
@@ -59,7 +59,7 @@ class RecommendedPlacesList extends ConsumerWidget {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                ref.read(bottomBarProvider.notifier).state = 1;
+                ref.read(bottomNavBarProvider.notifier).state = 1;
               },
               child: Text(
                 '더보기 >',

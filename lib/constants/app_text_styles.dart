@@ -188,4 +188,27 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.50,
   );
+
+  // 리스트 페이지 비어있는 경우 안내 메세지
+  static TextStyle emptyListMessage = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.grey,
+  );
+
+  // 장소 리스트 항목 타이틀
+  static TextStyle placeTitle = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.black,
+  );
+  // 장소 리스트 항목 주소
+  static TextStyle placeAddress = TextStyle(
+    fontFamily: 'Pretendard',
+    fontSize: 14,
+    color: AppColors.black,
+    fontWeight: FontWeight.w400,
+  );
 }

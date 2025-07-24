@@ -36,6 +36,7 @@ class AppUserRepository {
     }
   }
 
+  // 유저 파일 있는지 확인
   Future<bool> doesUserDocumentExist(String uid) async {
     final doc = await _firestore.collection('appUser').doc(uid).get();
     return doc.exists;
@@ -43,7 +44,8 @@ class AppUserRepository {
 
   /// 데이터베이스에서 uid로 해당 유저 정보 get
   Future<AppUser?> fetchLatestAppUser(String uid) async {
-    final doc = await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
     if (doc.data() == null) {
       return null;
     }
@@ -51,7 +53,10 @@ class AppUserRepository {
   }
 
   /// 프로필 이미지 스토리지에 업로드, url return
-  Future<String> uploadProfileImage({required String uid, required File file}) async {
+  Future<String> uploadProfileImage({
+    required String uid,
+    required File file,
+  }) async {
     final fileName = '${uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     /// 이미지 업로드 & get url
@@ -64,7 +69,8 @@ class AppUserRepository {
 
   /// appUser 프로필이미지 url 가져오기
   Future<String?> fetchProfileImageUrl({required String uid}) async {
-    final doc = await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
+    final doc =
+        await FirebaseFirestore.instance.collection('appUser').doc(uid).get();
 
     final url = doc.data()?['profileImage'];
 
@@ -75,8 +81,13 @@ class AppUserRepository {
   }
 
   /// 유저 프로필이미지 업데이트
-  Future<void> updateProfileImage({required String uid, required String fileUrl}) async {
-    await _firestore.collection('appUser').doc(uid).update({'profileImage': fileUrl});
+  Future<void> updateProfileImage({
+    required String uid,
+    required String fileUrl,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({
+      'profileImage': fileUrl,
+    });
   }
 
   /// 유저 닉네임 중복확인
@@ -92,22 +103,20 @@ class AppUserRepository {
   }
 
   /// 유저 닉네임 업데이트
-  Future<void> updateNickname({required String uid, required String nickname}) async {
-    await _firestore.collection('appUser').doc(uid).update({'nickname': nickname});
-  }
-
-  /// 유저 생년월일 업데이트
-  Future<void> updateBirthDate({required String uid, required String birthDate}) async {
-    await _firestore.collection('appUser').doc(uid).update({'birthDate': birthDate});
-  }
-
-  /// 유저 성별 업데이트
-  Future<void> updateGender({required String uid, required String gender}) async {
-    await _firestore.collection('appUser').doc(uid).update({'gender': gender});
+  Future<void> updateNickname({
+    required String uid,
+    required String nickname,
+  }) async {
+    await _firestore.collection('appUser').doc(uid).update({
+      'nickname': nickname,
+    });
   }
 
   /// 유저 약관 동의(UserAgreement) 업데이트
-  Future<void> uploadUserAgreements(String uid, List<UserAgreement> agreementList) async {
+  Future<void> uploadUserAgreements(
+    String uid,
+    List<UserAgreement> agreementList,
+  ) async {
     final batch = _firestore.batch();
 
     final collectionRef = _firestore
@@ -149,7 +158,10 @@ class AppUserRepository {
 
     // plans 문서 중 userId == user.uid 인 문서 모두 삭제
     final plansSnapshot =
-        await _firestore.collection('plans').where('userId', isEqualTo: user.uid).get();
+        await _firestore
+            .collection('plans')
+            .where('userId', isEqualTo: user.uid)
+            .get();
     for (final doc in plansSnapshot.docs) {
       await doc.reference.delete();
     }

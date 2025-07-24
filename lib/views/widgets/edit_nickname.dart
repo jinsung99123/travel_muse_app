@@ -27,7 +27,6 @@ class EditNickname extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    // 텍스트폼필드
                     child: TextFormField(
                       onChanged: (value) {
                         ref
@@ -62,7 +61,10 @@ class EditNickname extends ConsumerWidget {
           SizedBox(
             child: Text(
               state.nicknameMessage ?? '',
-              style: showAsError ? AppTextStyles.errorText : AppTextStyles.helperText,
+              style:
+                  showAsError
+                      ? AppTextStyles.errorText
+                      : AppTextStyles.helperText,
             ),
           ),
         ],

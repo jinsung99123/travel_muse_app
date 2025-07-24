@@ -280,60 +280,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   }
 
   ///
-  /// ------------------------------ 생년월일 ----------------------------------
-  ///
-
-  /// 사용자 입력 변경 감지
-  void checkBirthDateChanged(String value) {
-    if (state.isBirthDateValid != null) {
-      state = state.copyWith(
-        isBirthDateValid: null,
-        birthDateMessage: null,
-        canCheckBirthDate: true,
-      );
-    }
-    final isBlank = value.trim().isEmpty;
-    state = state.copyWith(canCheckBirthDate: !isBlank, birthDateInput: value);
-
-    if (state.canCheckBirthDate) {
-      validateBirthDate();
-    }
-  }
-
-  /// validator 실행
-  void validateBirthDate() {
-    if (state.birthDateInput == null) return;
-    final errorMessage = Validators.validateBirthDate(state.birthDateInput);
-    if (errorMessage != null) {
-      state = state.copyWith(
-        isBirthDateValid: false,
-        birthDateMessage: errorMessage,
-      );
-    } else {
-      state = state.copyWith(isBirthDateValid: true, birthDateMessage: null);
-    }
-
-    checkUpdateAvailable();
-  }
-
-  ///
-  /// ------------------------------ 성별 ----------------------------------
-  ///
-
-  /// 성별 선택
-  void selectGender(String gender) {
-    state = state.copyWith(gender: gender);
-
-    /// 성별 선택 확인
-    if (state.gender == null) {
-      state = state.copyWith(isGenderValid: false);
-    } else {
-      state = state.copyWith(isGenderValid: true);
-    }
-    checkUpdateAvailable();
-  }
-
-  ///
   /// ------------------------------ 전체 업데이트 ----------------------------------
   ///
 
@@ -345,16 +291,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
       return;
     }
 
-    /// 생년월일 확인
-    // if (state.isBirthDateValid != true) {
-    //   state = state.copyWith(canUpdateProfile: false);
-    //   return;
-    // }
-    // 성별 확인
-    // if (state.isGenderValid != true) {
-    //   state = state.copyWith(canUpdateProfile: false);
-    //   return;
-    // }
     state = state.copyWith(canUpdateProfile: true);
   }
 
@@ -363,7 +299,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
   Future<void> updateProfile() async {
     if (currentUser == null) return;
     if (state.nicknameInput == null) return;
-    // if (state.birthDateInput == null) return;
 
     final uid = currentUser!.uid;
 
@@ -378,12 +313,6 @@ class ProfileViewModel extends AutoDisposeNotifier<ProfileState> {
         uid: uid,
         nickname: state.nicknameInput!,
       );
-
-      /// 생년월일 업데이트
-      // await _repository.updateBirthDate(uid: uid, birthDate: state.birthDateInput!);
-
-      /// 성별 업데이트
-      // await _repository.updateGender(uid: uid, gender: state.gender!);
     } catch (e) {
       log('프로필 업데이트 실패: $e');
     }

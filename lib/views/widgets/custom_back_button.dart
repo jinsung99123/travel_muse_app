@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:travel_muse_app/core/bottom_bar_provider.dart';
+import 'package:travel_muse_app/core/bottom_nav_bar_provider.dart';
 
 class CustomBackButton extends ConsumerWidget {
   const CustomBackButton({super.key, this.goHome});
@@ -13,7 +13,7 @@ class CustomBackButton extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         if (goHome == true) {
-          ref.read(bottomBarProvider.notifier).state = 0;
+          ref.read(bottomNavBarProvider.notifier).state = 0;
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
           Navigator.of(context).maybePop();

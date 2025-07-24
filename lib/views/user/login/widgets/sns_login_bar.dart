@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,16 +31,13 @@ class SnsLoginBar extends ConsumerWidget {
         await loginFunction();
         final state = ref.watch(authViewModelProvider);
         if (state.user != null) {
-          log('sns로그인 성공');
           final hasAppUserDoc = await ref
               .read(appUserViewModelProvider.notifier)
               .doesUserDocumentExist(state.user!.uid);
-          log('appUser 문서 생성되었는가? : $hasAppUserDoc');
           if (hasAppUserDoc) {
             final isNew = ref.read(authViewModelProvider).isUserNew;
             final nextPage =
                 isNew != null ? const OnboardingPage() : const HomePage();
-            log('nextPage == $nextPage');
 
             unawaited(
               navigator.pushReplacement(

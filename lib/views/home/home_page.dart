@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/core/bottom_bar_provider.dart';
+import 'package:travel_muse_app/core/bottom_nav_bar_provider.dart';
 import 'package:travel_muse_app/main.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/location_provider.dart';
@@ -16,8 +16,7 @@ class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _HomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> with RouteAware {
@@ -45,7 +44,7 @@ class _HomePageState extends ConsumerState<HomePage> with RouteAware {
 
   @override
   void didPopNext() {
-    ref.read(bottomBarProvider.notifier).state = 0;
+    ref.read(bottomNavBarProvider.notifier).state = 0;
   }
 
   @override

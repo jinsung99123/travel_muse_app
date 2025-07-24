@@ -16,6 +16,7 @@ class AppUserViewModel extends AutoDisposeAsyncNotifier<AppUserState> {
     return AppUserState();
   }
 
+  // db에서 현재 로그인한 appUser 가져오기
   Future<AppUser?> fetchAppUser() async {
     try {
       if (currentUser == null) return null;
@@ -42,6 +43,7 @@ class AppUserViewModel extends AutoDisposeAsyncNotifier<AppUserState> {
     }
   }
 
+  // 현재 유저의 appUser 문서 존재여부 확인
   Future<bool> doesUserDocumentExist(String uid) async {
     try {
       return await _repository.doesUserDocumentExist(uid);
