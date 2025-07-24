@@ -10,8 +10,7 @@ class TagBar extends ConsumerStatefulWidget {
   const TagBar({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _TagBarState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _TagBarState();
 }
 
 class _TagBarState extends ConsumerState<TagBar> {
@@ -25,17 +24,11 @@ class _TagBarState extends ConsumerState<TagBar> {
 
     final reorderedTags =
         (selectedFilter != null && allTags.contains(selectedFilter))
-            ? [
-              selectedFilter,
-              ...allTags.where((tag) => tag != selectedFilter),
-            ]
+            ? [selectedFilter, ...allTags.where((tag) => tag != selectedFilter)]
             : allTags;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -58,9 +51,6 @@ class _TagBarState extends ConsumerState<TagBar> {
                       ref
                           .read(postListViewModelProvider.notifier)
                           .setFilterState(newFilter);
-                      // ref
-                      //     .read(postListViewModelProvider.notifier)
-                      //     .filterPostsByTag(tag);
                     },
                     child: Container(
                       height: 30,
@@ -84,8 +74,7 @@ class _TagBarState extends ConsumerState<TagBar> {
                     ),
                   );
                 },
-                separatorBuilder:
-                    (context, index) => SizedBox(width: 8),
+                separatorBuilder: (context, index) => SizedBox(width: 8),
               ),
             ),
           ),

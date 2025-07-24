@@ -115,6 +115,7 @@ class UserAgreementViewModel extends AutoDisposeNotifier<UserAgreementState> {
     checkAllRequiredAgreed();
   }
 
+  // 유저 동의 정보 서버 업로드
   Future<void> uploadUserAgreements() async {
     final repository = AppUserRepository();
     final user = FirebaseAuth.instance.currentUser;

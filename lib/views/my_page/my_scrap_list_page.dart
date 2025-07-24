@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/constants/app_text_styles.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/home/scrap_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/recommended_place_detail_page.dart';
@@ -73,24 +74,14 @@ class MyScrapListPage extends ConsumerWidget {
                               place.title,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.black,
-                              ),
+                              style: AppTextStyles.placeTitle,
                             ),
                             const SizedBox(height: 4),
                             Text(
                               place.address,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontSize: 14,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w400,
-                              ),
+                              style: AppTextStyles.placeAddress,
                             ),
                             const SizedBox(height: 2),
                             Text(
@@ -114,7 +105,6 @@ class MyScrapListPage extends ConsumerWidget {
                         onPressed: () async {
                           final confirm = await _showDeleteDialog(context);
                           if (confirm != true) return;
-
                           await ref
                               .read(scrapListViewModelProvider.notifier)
                               .remove(place);

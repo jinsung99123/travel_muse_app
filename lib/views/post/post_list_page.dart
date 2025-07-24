@@ -29,7 +29,10 @@ class _PostListPageState extends State<PostListPage> {
                 'assets/icons/search.svg',
                 width: 24,
                 height: 24,
-                color: AppColors.grey[700],
+                colorFilter: ColorFilter.mode(
+                  AppColors.grey[700]!,
+                  BlendMode.srcATop,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pushNamed('/post_search');
