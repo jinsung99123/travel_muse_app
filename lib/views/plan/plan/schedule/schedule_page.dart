@@ -207,10 +207,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   duration: const Duration(seconds: 2),
                 );
                 ref.read(bottomNavBarProvider.notifier).state = 0;
-                await Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const BottomNavBar()),
-                );
+                Navigator.popUntil(context, (route) => route.isFirst);
               },
             ),
           ],
