@@ -164,6 +164,7 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                   await EasyLoading.dismiss();
                                   // 팝업 띄우기
                                   await showAiRouteResultPopup(
+                                    // ignore: use_build_context_synchronously
                                     context: dialogContext,
                                     typeCode: typeCode,
                                     enriched: enriched,

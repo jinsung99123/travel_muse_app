@@ -4,6 +4,7 @@ import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/preference/preference_test_model.dart';
 import 'package:travel_muse_app/repositories/preference/preference_test_repository.dart';
 import 'package:travel_muse_app/services/plan/ai_service.dart';
+import 'package:travel_muse_app/utills/logger_util.dart';
 
 class PreferenceTestService {
   final _aiService = AiService();
@@ -30,11 +31,14 @@ class PreferenceTestService {
   ) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
+      logger.e('로그인되지 않은 상태에서 테스트 요청');
       throw Exception('로그인되지 않은 상태입니다.');
     }
+
     // 테스트 제한 체크
     final allowed = await _repo.canTakeTest(user.uid);
     if (!allowed) {
+      logger.w('테스트 횟수 초과됨: ${user.uid}');
       CustomToast.show(
         // ignore: use_build_context_synchronously
         context: context,
@@ -45,6 +49,7 @@ class PreferenceTestService {
 
     // 테스트 횟수 증가
     await _repo.incrementTestCount(user.uid);
+
     // 응답 파싱
     final answers =
         answersRaw.map((a) {
@@ -88,6 +93,11 @@ $resultSummary
 
     // ignore: use_build_context_synchronously
     final typeCode = await _aiService.getTypeCodeFromAI(prompt, context);
+
+    if (!_typeDescriptions.containsKey(typeCode)) {
+      logger.w('알 수 없는 typeCode 반환됨: $typeCode');
+    }
+
     final description = _typeDescriptions[typeCode] ?? '알 수 없는 유형';
     final now = DateTime.now();
 

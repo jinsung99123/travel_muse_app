@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/repositories/plan/plan_repository.dart';
-import 'package:travel_muse_app/repositories/plan/schedule_repository.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_type_select_popup.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ground_circle_icon.dart';
@@ -46,7 +45,6 @@ class AiButton extends StatelessWidget {
                       );
                     }
                     return planId;
-                    ;
                   }
 
                   // 횟수 증가

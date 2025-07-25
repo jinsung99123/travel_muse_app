@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/repositories/post/like_repository.dart';
-import 'package:travel_muse_app/viewmodels/post/like_viewmodel.dart';
+import 'package:travel_muse_app/viewmodels/post/like_view_model.dart';
 
 final likeRepositoryProvider = Provider<LikeRepository>((ref) {
   return LikeRepositoryImpl(FirebaseFirestore.instance);

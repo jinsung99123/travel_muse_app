@@ -78,21 +78,22 @@ class _ResultViewState extends ConsumerState<ResultView> {
                         final confirm = await showCupertinoModalPopup<bool>(
                           context: context,
                           builder:
-                              (_) => CupertinoActionSheet(
+                              (ctx) => CupertinoActionSheet(
                                 title: const Text('성향 테스트 삭제'),
                                 message: const Text('이 테스트 결과를 삭제하시겠어요?'),
                                 actions: [
                                   CupertinoActionSheetAction(
                                     isDestructiveAction: true,
                                     onPressed: () {
-                                      Navigator.pop(context, true);
+                                      Navigator.pop(ctx, true);
                                     },
                                     child: const Text('삭제하기'),
                                   ),
                                 ],
                                 cancelButton: CupertinoActionSheetAction(
-                                  onPressed:
-                                      () => Navigator.pop(context, false),
+                                  onPressed: () {
+                                    Navigator.pop(ctx, false);
+                                  },
                                   child: const Text('취소'),
                                 ),
                               ),
