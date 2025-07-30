@@ -10,8 +10,9 @@ import 'package:travel_muse_app/views/plan/location/widgets/place_carousel.dart'
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
 class MapPage extends ConsumerStatefulWidget {
-  const MapPage({super.key, required this.planId});
+  const MapPage({super.key, required this.planId, this.useInjected = false});
   final String planId;
+  final bool useInjected;
   @override
   ConsumerState<MapPage> createState() => _MapPageState();
 }
@@ -44,9 +45,24 @@ class _MapPageState extends ConsumerState<MapPage>
 
   Future<void> initializeControllers() async {
     if (!mounted) return;
+
+    if (widget.useInjected) {
+      ///외부에서 상태를 주입받은 경우: Firestore fetch 생략
+      final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
+      if (dayKeys.isEmpty) return;
+
+      _tabController = TabController(length: dayKeys.length, vsync: this);
+      _tabController!.addListener(_onTabChanged);
+      setState(() {});
+      return;
+    }
+
+    ///기본 모드: Firestore에서 플랜 경로 로드
     await _viewModel.loadPlanAndRoute(widget.planId, this);
+
     final dayKeys = ref.read(mapViewModelProvider).dayPlaces.keys.toList();
     if (dayKeys.isEmpty) return;
+
     _tabController = TabController(length: dayKeys.length, vsync: this);
     _tabController!.addListener(_onTabChanged);
     setState(() {});

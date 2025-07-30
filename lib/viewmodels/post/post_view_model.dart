@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/repositories/post/post_repository.dart';
+import 'package:travel_muse_app/utills/logger_util.dart';
 
 class PostViewModel extends StateNotifier<AsyncValue<void>> {
   PostViewModel(this._repository) : super(const AsyncData(null));
@@ -44,6 +45,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
       state = const AsyncData(null);
       return post;
     } catch (e, st) {
+      logger.e('게시글 생성 실패', error: e, stackTrace: st);
       state = AsyncError(e, st);
       rethrow;
     }
@@ -70,6 +72,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
       );
       state = const AsyncData(null);
     } catch (e, st) {
+      logger.e('게시글 수정 실패', error: e, stackTrace: st);
       state = AsyncError(e, st);
     }
   }
@@ -81,6 +84,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
       await _repository.deletePost(postId);
       state = const AsyncData(null);
     } catch (e, st) {
+      logger.e('게시글 삭제 실패', error: e, stackTrace: st);
       state = AsyncError(e, st);
     }
   }
@@ -129,6 +133,7 @@ class PostViewModel extends StateNotifier<AsyncValue<void>> {
         return createdPost;
       }
     } catch (e, st) {
+      logger.e('게시글 생성/수정(submitPost) 실패', error: e, stackTrace: st);
       state = AsyncError(e, st);
       return null;
     }

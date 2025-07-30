@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:travel_muse_app/core/bottom_nav_bar_provider.dart';
-import 'package:travel_muse_app/core/widgets/bottom_nav_bar.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
@@ -134,7 +133,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     }
 
     return Scaffold(
-      appBar: ScheduleAppBar(planId: widget.planId),
+      appBar: ScheduleAppBar(planId: widget.planId, daySchedules: daySchedules),
       body: SafeArea(
         child: Column(
           children: [
@@ -207,10 +206,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   duration: const Duration(seconds: 2),
                 );
                 ref.read(bottomNavBarProvider.notifier).state = 0;
-                await Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const BottomNavBar()),
-                );
+                Navigator.popUntil(context, (route) => route.isFirst);
               },
             ),
           ],
@@ -219,39 +215,37 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 60, right: 16, left: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            DistanceSortButton(
-              daySchedules: daySchedules,
-              onResult: (sorted) {
-                setState(() {
-                  daySchedules = sorted;
-                });
-              },
-            ),
-
-            // 오른쪽: AI 추천 버튼
-            AiButton(
-              planId: widget.planId,
-              days: calculateTripDays(
-                selectedPlan!.startDate,
-                selectedPlan!.endDate,
-              ),
-              region: selectedPlan!.region,
-              onResult: (parsed) async {
-                setState(() {
-                  daySchedules = parsed;
-                });
-                await ref
-                    .read(scheduleViewModelProvider.notifier)
-                    .saveDaySchedules(
-                      planId: widget.planId,
-                      daySchedules: parsed,
-                    );
-              },
-            ),
-          ],
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child:
+              _isEditing
+                  ? DistanceSortButton(
+                    daySchedules: daySchedules,
+                    onResult: (sorted) {
+                      setState(() {
+                        daySchedules = sorted;
+                      });
+                    },
+                  )
+                  : AiButton(
+                    planId: widget.planId,
+                    days: calculateTripDays(
+                      selectedPlan!.startDate,
+                      selectedPlan!.endDate,
+                    ),
+                    region: selectedPlan!.region,
+                    onResult: (parsed) async {
+                      setState(() {
+                        daySchedules = parsed;
+                      });
+                      await ref
+                          .read(scheduleViewModelProvider.notifier)
+                          .saveDaySchedules(
+                            planId: widget.planId,
+                            daySchedules: parsed,
+                          );
+                    },
+                  ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

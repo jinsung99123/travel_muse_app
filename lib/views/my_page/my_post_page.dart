@@ -21,6 +21,7 @@ class MyPostPage extends ConsumerWidget {
       ),
       body: postAsync.when(
         data: (data) {
+          /// 삭제되지 않은 게시글만 필터링
           final filtered =
               data.where((post) => post.isDeleted == false).toList();
 
@@ -60,8 +61,11 @@ class MyPostPage extends ConsumerWidget {
           );
         },
 
-        loading: () => SizedBox.shrink(),
-        error: (error, stackTrace) => Center(child: Text('작성글을 불러올 수 없습니다')),
+        loading: () => const Center(child: CircularProgressIndicator()),
+
+        error:
+            (error, stackTrace) =>
+                const Center(child: Text('게시글을 불러오는 중 오류가 발생했습니다.')),
       ),
     );
   }
