@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
+import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/map_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
+import 'package:travel_muse_app/views/plan/plan/location_setting/district_setting_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/map_confirm_dialog.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_confirm_dialog.dart';
 
@@ -20,6 +22,7 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String planId;
   final Map<int, List<Map<String, String>>>? daySchedules;
   final bool isMapButtonEnabled;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
@@ -35,12 +38,26 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
           );
 
           if (shouldPop == true) {
-            Navigator.of(context).pop();
+            if (context.mounted) {
+              final region =
+                  ref.read(calendarLocationViewModelProvider).region ?? '';
+              final selectedProvince =
+                  region.isNotEmpty ? region.split(' ').first : '';
+
+              await Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (_) => DistrictSettingPage(
+                        selectedProvince: selectedProvince,
+                      ),
+                ),
+              );
+            }
           }
         },
-
         child: Container(
-          padding: EdgeInsets.only(top: 4),
+          padding: const EdgeInsets.only(top: 4),
           width: 44,
           height: 44,
           color: Colors.transparent,
@@ -52,7 +69,6 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-
       title: Text(
         '여행 일정 등록',
         style: TextStyle(
@@ -89,7 +105,6 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   return;
                 }
 
-                //여행일수 계산
                 final tripDays = await ref
                     .read(scheduleViewModelProvider.notifier)
                     .getTripDays(planId);
