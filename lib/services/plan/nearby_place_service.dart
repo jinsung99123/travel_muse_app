@@ -24,22 +24,6 @@ class NearbyPlaceService {
     size: size,
   );
 
-  //키워드 + 위치 검색
-  /// 검색어 [query] 를 내 위치 [loc] 반경 안에서 검색합니다.
-  Future<List<Place>> searchKeywordNearby({
-    required String query,
-    required LatLng loc,
-    int radius = 3000,
-    int page = 1,
-    int size = 15,
-  }) => base.searchByKeyword(
-    query: query,
-    lat: loc.latitude,
-    lng: loc.longitude,
-    radius: radius,
-    page: page,
-    size: size,
-  );
   //카테고리 코드 기반 검색
   Future<List<Place>> fetchSpotsByCategory({
     required LatLng loc,

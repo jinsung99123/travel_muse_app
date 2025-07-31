@@ -17,7 +17,6 @@ class ReportedCard extends StatelessWidget {
   final VoidCallback onClear;
   final VoidCallback? onShowReasons; 
 
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,9 +26,9 @@ class ReportedCard extends StatelessWidget {
         onTap: onTap,
         trailing: PopupMenuButton<String>(
           onSelected: (value) {
-            if (value == 'delete') onDelete();
-            else if (value == 'clear') onClear();
-            else if (value == 'reasons' && onShowReasons != null) onShowReasons!();
+            if (value == 'delete') {onDelete();}
+            else if (value == 'clear') {onClear();}
+            else if (value == 'reasons' && onShowReasons != null) {onShowReasons!();}
           },
           itemBuilder: (_) => [
             const PopupMenuItem(value: 'delete', child: Text('삭제')),

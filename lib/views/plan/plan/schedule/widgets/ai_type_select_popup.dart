@@ -163,11 +163,13 @@ class _AiTypeSelectPopupState extends State<AiTypeSelectPopup> {
                                       .fetchRoute(planId);
                                   await EasyLoading.dismiss();
                                   // 팝업 띄우기
+                                  if (context.mounted){
                                   await showAiRouteResultPopup(
                                     context: dialogContext,
                                     typeCode: typeCode,
                                     enriched: enriched,
                                   );
+                                  }
                                 } catch (e, s) {
                                   log(
                                     'onComplete error',

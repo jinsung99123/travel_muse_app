@@ -45,19 +45,16 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
       await ref.read(scheduleViewModelProvider.notifier).deletePlanById(planId);
       await ref.read(scheduleViewModelProvider.notifier).fetchSavedPlans();
 
-      if (context.mounted) {
+      if (!mounted) return false;
         CustomToast.show(
           context: context,
           message: '일정이 삭제되었습니다.',
           duration: const Duration(seconds: 2),
         );
-      }
       return true;
     }
-
     return false;
   }
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_muse_app/models/scoial/reported_comment.dart';
 import 'package:travel_muse_app/models/scoial/reported_post.dart';
@@ -124,8 +125,8 @@ class AdminReportRepository {
           .doc(commentId)
           .delete();
     } catch (e, st) {
-      print('[ERROR] 댓글 삭제 실패: $e');
-      print('[ERROR] StackTrace: $st');
+      log('[ERROR] 댓글 삭제 실패: $e');
+      log('[ERROR] StackTrace: $st');
       rethrow;
     }
   }
@@ -144,8 +145,8 @@ class AdminReportRepository {
                   .doc(docId);
 
       await ref.update({'isReposted': false, 'reportCount': 0});
-    } catch (e, st) {
-      print('[ERROR] clearReport 실패 ($type - $docId): $e');
+    } catch (e) {
+      log('[ERROR] clearReport 실패 ($type - $docId): $e');
       rethrow;
     }
   }

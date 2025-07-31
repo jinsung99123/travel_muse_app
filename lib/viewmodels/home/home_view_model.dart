@@ -69,6 +69,7 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
     });
   }
 
+/// 선택된 태그에 따라 장소 리스트를 필터링
   List<HomePlace> getFilteredSpots(List<HomePlace> spots, String? selectedTag) {
     if (selectedTag == null || selectedTag == '#전체') return spots;
 
@@ -196,6 +197,9 @@ class HomeViewModel extends StateNotifier<AsyncValue<HomeState>> {
         .toList();
   }
 
+/// 선택된 태그에 따라 장소 리스트를 다시 로드
+/// - `#자연`, `#카페`, `#가볼만한 곳` 태그는 categoryCode를 기반으로 장소 데이터를 새로 불러옴
+/// 장소 데이터는 썸네일과 함께 매핑된 후 상태(state)에 반영됩니다.
   Future<void> reloadWithTag(String selectedTag) async {
     const categoryCodeMap = {'#자연': 'AT4', '#카페': 'CE7', '#가볼만한 곳': 'CT1'};
 

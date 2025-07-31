@@ -8,7 +8,6 @@ class CustomToast {
     Duration duration = const Duration(seconds: 2),
   }) {
     final overlay = Overlay.of(context);
-    if (overlay == null) return;
 
     final overlayEntry = OverlayEntry(
       builder: (_) => _ToastWidget(

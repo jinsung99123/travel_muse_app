@@ -49,7 +49,9 @@ class _AdminReportScreenState extends ConsumerState<AdminReportScreen> {
                         final postRepo = ref.read(postRepositoryProvider);
                         final post = await postRepo.fetchPostById(item.postId);
 
-                        if (post != null && context.mounted) {
+                        if (post != null &&
+                            context.mounted &&
+                            post.isDeleted == false) {
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -57,12 +59,13 @@ class _AdminReportScreenState extends ConsumerState<AdminReportScreen> {
                             ),
                           );
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('게시글을 불러올 수 없습니다.')),
-                          );
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('게시글을 불러올 수 없습니다.')),
+                            );
+                          }
                         }
                       },
-
                       onDelete: () => viewModel.deletePost(item.postId),
                       onClear: () => viewModel.clearReport('post', item.postId),
                       onShowReasons: () {
@@ -78,19 +81,31 @@ class _AdminReportScreenState extends ConsumerState<AdminReportScreen> {
                       title: '[댓글] ${item.content}',
                       subtitle:
                           '작성자: ${item.nickname}\n신고 수: ${item.reportCount}',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (_) => PostDetailPage(
-                                  postId: item.postId,
-                                  scrollToCommentId: item.commentId,
-                                ),
-                          ),
-                        );
-                      },
+                      onTap: () async {
+                        final postRepo = ref.read(postRepositoryProvider);
+                        final post = await postRepo.fetchPostById(item.postId);
 
+                        if (post != null &&
+                            context.mounted &&
+                            post.isDeleted == false) {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => PostDetailPage(
+                                    post: post,
+                                    scrollToCommentId: item.commentId,
+                                  ),
+                            ),
+                          );
+                        } else {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('삭제된 게시글입니다.')),
+                            );
+                          }
+                        }
+                      },
                       onDelete:
                           () => viewModel.deleteComment(
                             item.postId,

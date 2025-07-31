@@ -27,7 +27,7 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 ),
           );
 
-          if (shouldPop == true) {
+          if (shouldPop == true && context.mounted) {
             Navigator.of(context).pop();
           }
         },
