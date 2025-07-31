@@ -182,32 +182,7 @@ class MapViewModel extends StateNotifier<MapState> {
     );
   }
 
-  /// 전체 날짜의 모든 장소 리스트를 반환합니다.
-  List<Map<String, dynamic>> getAllPlaces() {
-    return state.dayPlaces.values.expand((list) => list).toList();
-  }
-
-  ///전체 위경도 반환
-  List<LatLng> getAllLatLngs() {
-    return extractLatLngs(getAllPlaces());
-  }
-
-  //전체 마커 반환
-  Set<Marker> getAllMarkers({
-    required Function(Map<String, dynamic>) onTap,
-    required Function(int) onPageChanged,
-  }) {
-    return createMarkers(
-      places: getAllPlaces(),
-      icon: _currentIcon,
-      onTap: onTap,
-      onPageChanged: onPageChanged,
-      animateToPage: (idx) {
-        // 전체 탭은 Carousel 안 보이게 할 수도 있음
-      },
-    );
-  }
-
+/// 더미 데이터를 세팅하여 초기 상태를 구성합니다.
   void setDummyDayPlaces() {
     state = state.copyWith(
       dayPlaces: {
@@ -216,6 +191,7 @@ class MapViewModel extends StateNotifier<MapState> {
     );
   }
 
+/// 선택 모드에서 사용할 장소 리스트를 dayPlaces에 세팅합니다.
   void setDayPlacesForSelectMode(List<Map<String, dynamic>> places) {
     final convertedPlaces =
         places.map((e) {
@@ -232,6 +208,7 @@ class MapViewModel extends StateNotifier<MapState> {
     );
   }
 
+/// 검색어에 해당하는 장소를 찾아 지도 카메라를 해당 위치로 이동시키고, 선택된 장소로 설정한다
   Future<void> moveCameraToPlace({
     required GoogleMapController mapController,
     required String query,

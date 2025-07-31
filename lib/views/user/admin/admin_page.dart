@@ -28,11 +28,13 @@ class _AdminPageState extends State<AdminPage> {
     try {
       if (_grantMode) {
         await _viewModel.giveAdminRole(email);
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$email 에게 관리자 권한을 부여했습니다.')),
         );
       } else {
         await _viewModel.revokeAdminRole(email);
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('$email 의 관리자 권한을 박탈했습니다.')),
         );
@@ -43,7 +45,6 @@ class _AdminPageState extends State<AdminPage> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -34,12 +34,14 @@ class _RateLimiter {
   final Duration period;      
 
   int _tokens;
+  // ignore: unused_field
   DateTime _last;
   final _queue = <Completer<void>>[];
 
   late final Timer _timer;     
   void dispose() => _timer.cancel();
 
+/// 토큰을 하나 소비하거나, 없으면 대기 큐에 등록
   Future<void> take() {
     final c = Completer<void>();
     if (_tokens > 0) {
@@ -199,7 +201,7 @@ class PlaceSearchService {
   return null; // 3회 실패
 }
 
-
+/// 키워드 기반으로 썸네일 이미지를 반환, 캐시가 있으면 재사용
   Future<String?> getThumbnailCached(String keyword) async {
   final cached = _thumbCache[keyword];
   if (cached != null && !_isExpired(cached.createdAt)) return cached.value;

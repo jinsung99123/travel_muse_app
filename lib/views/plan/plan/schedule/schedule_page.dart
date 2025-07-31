@@ -199,7 +199,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 await ref
                     .read(scheduleViewModelProvider.notifier)
                     .addPlanIdToAppUser(widget.planId);
-                if (!mounted) return;
+                if (context.mounted){
                 CustomToast.show(
                   context: context,
                   message: '일정이 저장되었습니다.',
@@ -209,6 +209,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   context,
                   MaterialPageRoute(builder: (_) => const PlanListPage()),
                 );
+                }
               },
             ),
           ],

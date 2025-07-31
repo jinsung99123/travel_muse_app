@@ -7,7 +7,7 @@ void showReasonDialog(
 ) {
   showDialog(
     context: context,
-    builder: (_) => AlertDialog(
+    builder: (dialogContext) => AlertDialog(
       title: const Text('신고 사유'),
       content: SizedBox(
         width: double.maxFinite,
@@ -26,7 +26,7 @@ void showReasonDialog(
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(dialogContext),
           child: const Text('닫기'),
         ),
       ],

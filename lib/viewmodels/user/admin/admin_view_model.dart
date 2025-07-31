@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +8,9 @@ class AdminViewModel extends ChangeNotifier {
     final callable = FirebaseFunctions.instance.httpsCallable('setAdminByEmail');
     try {
       final result = await callable.call({'email': email});
-      print(result.data['message']);
+      log(result.data['message']);
     } catch (e) {
-      print('오류 발생 (부여): $e');
+      log('오류 발생 (부여): $e');
       rethrow;
     }
   }
@@ -19,9 +20,9 @@ class AdminViewModel extends ChangeNotifier {
     final callable = FirebaseFunctions.instance.httpsCallable('revokeAdminByEmail');
     try {
       final result = await callable.call({'email': email});
-      print(result.data['message']);
+      log(result.data['message']);
     } catch (e) {
-      print('오류 발생 (박탈): $e');
+      log('오류 발생 (박탈): $e');
       rethrow;
     }
   }
