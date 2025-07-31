@@ -40,7 +40,7 @@ class TravelRegisterButton extends StatelessWidget {
                     Align(
                       alignment: Alignment.topRight,
                       child: Text(
-                        '여행 일정\n변경',
+                        '여행 일정\n목록',
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 22,

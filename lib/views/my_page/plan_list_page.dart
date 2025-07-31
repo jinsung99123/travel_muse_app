@@ -10,6 +10,7 @@ import 'package:travel_muse_app/utills/format_region.dart';
 import 'package:travel_muse_app/viewmodels/plan/schedule_view_model.dart';
 import 'package:travel_muse_app/views/my_page/widgets/confirm_dialog.dart';
 import 'package:travel_muse_app/views/my_page/widgets/my_page_list_item.dart';
+import 'package:travel_muse_app/views/plan/plan/calendar/calendar_page.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/schedule_page.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
@@ -117,6 +118,17 @@ class _PlanListPageState extends ConsumerState<PlanListPage> {
                     );
                   },
                 ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary[400],
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CalendarPage()),
+          );
+        },
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
