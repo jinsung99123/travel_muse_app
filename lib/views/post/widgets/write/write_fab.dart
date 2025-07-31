@@ -34,6 +34,7 @@ class WriteFab extends ConsumerWidget {
           borderRadius: BorderRadius.circular(100),
           boxShadow: [
             BoxShadow(
+              // ignore: deprecated_member_use
               color: Colors.black.withOpacity(0.15),
               blurRadius: 8,
               offset: const Offset(0, 4),

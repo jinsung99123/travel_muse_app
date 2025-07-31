@@ -1,64 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
-import 'package:travel_muse_app/models/post/post_model.dart';
-import 'package:travel_muse_app/providers/post/like_provider.dart';
+import 'package:travel_muse_app/providers/post/liked_post_list_provider.dart';
 import 'package:travel_muse_app/views/post/post_detail_page.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_item.dart';
 import 'package:travel_muse_app/views/widgets/custom_back_button.dart';
 
-class LikeListPage extends ConsumerStatefulWidget {
+class LikeListPage extends ConsumerWidget {
   const LikeListPage({super.key});
 
   @override
-  ConsumerState<LikeListPage> createState() => _LikeListPageState();
-}
-
-class _LikeListPageState extends ConsumerState<LikeListPage> {
-  late final String? userId;
-
-  @override
-  void initState() {
-    super.initState();
-    userId = FirebaseAuth.instance.currentUser?.uid;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final postsAsync = ref.watch(likedPostListProvider);
     final screenWidth = MediaQuery.of(context).size.width;
-
-    if (userId == null) {
-      return const Scaffold(body: Center(child: Text('로그인이 필요합니다')));
-    }
-
-    final likeRepository = ref.read(likeRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('좋아요한 게시글'),
         leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
-      body: FutureBuilder<List<Post>>(
-        future: likeRepository.fetchLikedPosts(userId!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('오류 발생: ${snapshot.error}'));
-          }
-
-          final posts =
-              (snapshot.data ?? [])
-                  .where((post) => post.isDeleted == false)
-                  .toList();
-
-          if (posts.isEmpty) {
-            return const Center(child: Text('좋아요한 게시글이 없습니다.'));
-          }
-
+      body: postsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text('오류 발생: $e')),
+        data: (posts) {
           if (posts.isEmpty) {
             return const Center(child: Text('좋아요한 게시글이 없습니다.'));
           }
@@ -76,7 +40,9 @@ class _LikeListPageState extends ConsumerState<LikeListPage> {
                     ),
                   );
 
-                  if (mounted) setState(() {}); // 좋아요 취소 시 목록 갱신
+                  if (result == 'updated') {
+                    ref.invalidate(likedPostListProvider);
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.all(16),

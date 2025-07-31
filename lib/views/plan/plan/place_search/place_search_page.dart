@@ -79,7 +79,7 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
-      appBar: ScheduleAppBar(planId: widget.planId),
+      appBar: ScheduleAppBar(planId: widget.planId, isMapButtonEnabled: false),
       floatingActionButton: ConfirmAddButton(
         visible: selectedIndexes.isNotEmpty,
         onTap: () => _confirmSelection(searchResults),

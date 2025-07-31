@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  final String title;
-  final String description;
-  final String cancelText;
-  final String confirmText;
-
   const ConfirmDialog({
     super.key,
     required this.title,
@@ -14,6 +9,10 @@ class ConfirmDialog extends StatelessWidget {
     this.cancelText = '취소',
     this.confirmText = '확인',
   });
+  final String title;
+  final String description;
+  final String cancelText;
+  final String confirmText;
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,7 @@ class PostDetailImages extends StatelessWidget {
       context: context,
       builder:
           (_) => Dialog(
+            // ignore: deprecated_member_use
             backgroundColor: Colors.black.withOpacity(0.9),
             insetPadding: EdgeInsets.zero,
             child: GestureDetector(

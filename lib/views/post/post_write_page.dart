@@ -52,6 +52,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     final remaining = 5 - imagePaths.length;
 
     if (remaining <= 0) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
       );
@@ -65,9 +66,10 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     });
 
     if (addableFiles.length < pickedFiles.length) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')),
-      );
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')));
     }
   }
 
@@ -78,12 +80,8 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
       );
       return;
     }
-    final titleError = PostValidator.validateTitle(
-      titleController.text,
-    );
-    final contentError = PostValidator.validateContent(
-      contentController.text,
-    );
+    final titleError = PostValidator.validateTitle(titleController.text);
+    final contentError = PostValidator.validateContent(contentController.text);
 
     if (titleError != null || contentError != null) {
       setState(() {
@@ -126,8 +124,7 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
   @override
   Widget build(BuildContext context) {
     final isWritable =
-        titleController.text.isNotEmpty ||
-        contentController.text.isNotEmpty;
+        titleController.text.isNotEmpty || contentController.text.isNotEmpty;
     final postState = ref.watch(postViewModelProvider);
     final isLoading = postState is AsyncLoading;
 
@@ -198,10 +195,8 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
                             title: selectedPlace!['title'] ?? '',
                             address: selectedPlace!['address'] ?? '',
                             latLng: LatLng(
-                              (selectedPlace!['lat'] as num)
-                                  .toDouble(),
-                              (selectedPlace!['lng'] as num)
-                                  .toDouble(),
+                              (selectedPlace!['lat'] as num).toDouble(),
+                              (selectedPlace!['lng'] as num).toDouble(),
                             ),
                           ),
                           Positioned(
@@ -233,20 +228,16 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
             ),
             PostLocationCategory(
               selectedTags: selectedTags,
-              onTagsChanged:
-                  (tags) => setState(() => selectedTags = tags),
+              onTagsChanged: (tags) => setState(() => selectedTags = tags),
               selectedPlace: selectedPlace,
-              onPlaceChanged:
-                  (place) => setState(() => selectedPlace = place),
+              onPlaceChanged: (place) => setState(() => selectedPlace = place),
             ),
             const SizedBox(height: 8),
             if (imagePaths.isNotEmpty) ...[
               const SizedBox(height: 12),
               ImagePreviewList(
                 imagePaths: imagePaths.take(5).toList(),
-                onRemove:
-                    (index) =>
-                        setState(() => imagePaths.removeAt(index)),
+                onRemove: (index) => setState(() => imagePaths.removeAt(index)),
               ),
             ],
             const SizedBox(height: 8),

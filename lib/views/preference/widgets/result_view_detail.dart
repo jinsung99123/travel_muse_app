@@ -90,6 +90,7 @@ class ResultViewDetail extends ConsumerWidget {
                 ],
               ),
             );
+            // ignore: unnecessary_to_list_in_spreads
           }).toList(),
 
           const SizedBox(height: 65),
