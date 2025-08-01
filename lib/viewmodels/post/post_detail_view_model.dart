@@ -28,11 +28,17 @@ class PostDetailViewModel extends StateNotifier<PostDetailState> {
 
       final updatedPost = await _repo.fetchPostById(targetPost.postId);
       final user = await _repo.fetchUser(targetPost.userId);
+      final rawTypeCode = await _repo.fetchUserTypeCode(targetPost.userId);
+      final userTypeCode =
+          (rawTypeCode != null && rawTypeCode.trim().isNotEmpty)
+              ? rawTypeCode
+              : '자유인';
 
       state = PostDetailState(
         post: updatedPost,
         nickname: user?.nickname ?? '알 수 없음',
         profileUrl: user?.profileImage,
+        typeCode: userTypeCode,
         isLoading: false,
       );
     } catch (e, st) {
