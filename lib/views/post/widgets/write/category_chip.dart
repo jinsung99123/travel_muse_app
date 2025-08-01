@@ -7,6 +7,7 @@ class CategoryChip extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
   });
+
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
@@ -26,8 +27,9 @@ class CategoryChip extends StatelessWidget {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF34393B),
             fontFamily: 'Pretendard',
+            color: Color(0xFF34393B),
+            height: 1.5,
           ),
         ),
       ),
