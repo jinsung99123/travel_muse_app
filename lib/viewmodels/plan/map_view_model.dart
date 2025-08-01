@@ -235,29 +235,4 @@ class MapViewModel extends StateNotifier<MapState> {
       debugPrint('❌ moveCameraToPlace 실패: $e');
     }
   }
-
-  /// SchedulePage에서 전달받은 daySchedules 상태를 그대로 반영
-  void injectFromSchedule(Map<int, List<Map<String, String>>> schedule) {
-    final converted = <String, List<Map<String, String>>>{};
-
-    for (final entry in schedule.entries) {
-      converted['DAY${entry.key}'] = List<Map<String, String>>.from(
-        entry.value,
-      );
-    }
-
-    state = state.copyWith(
-      dayPlaces: converted,
-      selectedPlace:
-          converted.isNotEmpty && converted.values.first.isNotEmpty
-              ? converted.values.first.first
-              : null,
-    );
-
-    // PageController 초기화
-    _pageControllers.clear();
-    for (final key in converted.keys) {
-      _pageControllers[key] = PageController(viewportFraction: 1);
-    }
-  }
 }

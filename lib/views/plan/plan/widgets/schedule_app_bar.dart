@@ -143,15 +143,11 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 }
 
                 if (context.mounted) {
-                  ref
-                      .read(mapViewModelProvider.notifier)
-                      .injectFromSchedule(daySchedules!);
-
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder:
-                          (_) => MapPage(planId: planId, useInjected: true),
+                          (_) => MapPage(planId: planId),
                     ),
                   );
                 }
