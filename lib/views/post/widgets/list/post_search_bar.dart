@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_muse_app/constants/search_bar_widget.dart';
 
 class PostSearchBar extends StatelessWidget {
   const PostSearchBar({super.key, required this.onChanged});
@@ -7,16 +8,6 @@ class PostSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: TextField(
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: '제목 또는 내용 검색',
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      ),
-    );
+    return SearchBarWidget(hintText: '제목 또는 내용 검색', onChanged: onChanged);
   }
 }
