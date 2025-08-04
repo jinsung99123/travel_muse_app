@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
 import 'package:travel_muse_app/providers/plan/calendar_location_provider.dart';
-import 'package:travel_muse_app/providers/plan/schedule/map_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
 import 'package:travel_muse_app/views/plan/location/map_page.dart';
 import 'package:travel_muse_app/views/plan/plan/location_setting/district_setting_page.dart';
