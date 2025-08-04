@@ -108,13 +108,11 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
         CustomToast.show(
           context: context,
           message: '게시물 수정이 완료되었습니다.',
-          duration: const Duration(seconds: 2),
         );
       } else if (createdPost != null) {
         CustomToast.show(
           context: context,
           message: '게시물을 성공적으로 업로드했습니다.',
-          duration: const Duration(seconds: 2),
         );
         Navigator.pop(context, createdPost); // 새 글 작성인 경우 → post 반환
       }

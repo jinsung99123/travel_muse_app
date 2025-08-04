@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/long_bottom_button.dart';
 import 'package:travel_muse_app/providers/plan/schedule/search_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_category_provider.dart';
 import 'package:travel_muse_app/providers/plan/schedule/selected_index_provider.dart';
 import 'package:travel_muse_app/services/plan/place_search_service.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/category_filter_chip.dart';
-import 'package:travel_muse_app/views/plan/plan/place_search/widgets/confirm_add_button.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/recent_search_section.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/region_recommend_header.dart';
 import 'package:travel_muse_app/views/plan/plan/place_search/widgets/search_bar.dart';
@@ -80,9 +81,12 @@ class _PlaceSearchPageState extends ConsumerState<PlaceSearchPage> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: ScheduleAppBar(planId: widget.planId, isMapButtonEnabled: false),
-      floatingActionButton: ConfirmAddButton(
+      floatingActionButton: LongBottomButton(
         visible: selectedIndexes.isNotEmpty,
-        onTap: () => _confirmSelection(searchResults),
+        onEditTap: () => _confirmSelection(searchResults),
+        isFloating: true,
+        buttonText: '추가하기',
+        backgroundColor: AppColors.primary[300]!,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(

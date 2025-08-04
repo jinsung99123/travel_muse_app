@@ -83,10 +83,11 @@ class _RecommendedPlaceDetailPageState
             ),
             onPressed: () {
               ref.read(scrapViewModelProvider.notifier).toggleScrap(place);
+              final isNowScrapped = ref.read(scrapViewModelProvider).contains(place.id);
+
               CustomToast.show(
                 context: context,
-                message: '북마크에 저장했습니다.',
-                duration: const Duration(seconds: 2),
+                message: isNowScrapped ? '북마크가 해제되었습니다.': '북마크에 저장했습니다.',
               );
             },
           ),

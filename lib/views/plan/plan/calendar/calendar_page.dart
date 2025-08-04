@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/long_bottom_button.dart';
 import 'package:travel_muse_app/providers/plan/calendar_provider.dart';
 import 'package:travel_muse_app/utills/date_utils.dart';
 import 'package:travel_muse_app/views/plan/plan/calendar/widgets/calendar_guide_text.dart';
@@ -22,19 +23,28 @@ class CalendarPage extends ConsumerWidget {
         leading: Navigator.canPop(context) ? const CustomBackButton() : null,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const CalendarGuideText(),
-              const SizedBox(height: 24),
-              Expanded(
+        child: Column(
+          children: [
+            // 위쪽 텍스트 + 간격
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  CalendarGuideText(),
+                  SizedBox(height: 24),
+                ],
+              ),
+            ),
+
+            // 리스트 영역 (스크롤 가능)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
                   itemCount: 12,
                   itemBuilder: (context, index) {
-                    final year =
-                        state.focusedDay.year +
+                    final year = state.focusedDay.year +
                         ((state.focusedDay.month + index - 1) ~/ 12);
                     final month = ((state.focusedDay.month + index - 1) % 12) + 1;
 
@@ -52,49 +62,42 @@ class CalendarPage extends ConsumerWidget {
                   },
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    final viewModel = ref.read(calendarViewModelProvider.notifier);
-                    final state = ref.read(calendarViewModelProvider);
+            ),
 
-                    final start = state.startDay;
-                    final end = state.endDay;
+            // 버튼 영역 (좌우 패딩 없이 꽉 차게)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: LongBottomButton(
+                onEditTap: () {
+                  final viewModel = ref.read(calendarViewModelProvider.notifier);
+                  final state = ref.read(calendarViewModelProvider);
 
-                    if (start != null) {
-                      viewModel.ensureEndDay();
+                  final start = state.startDay;
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProvinceSettingPage(),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(const SnackBar(content: Text('여행 날짜를 선택해주세요.')));
-                    }
-                  },
+                  if (start != null) {
+                    viewModel.ensureEndDay();
 
-                  child: Text(
-                    getButtonText(state.startDay, state.endDay),
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProvinceSettingPage(),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('여행 날짜를 선택해주세요.')),
+                    );
+                  }
+                },
+                buttonText: getButtonText(
+                  ref.read(calendarViewModelProvider).startDay,
+                  ref.read(calendarViewModelProvider).endDay,
                 ),
+                backgroundColor: AppColors.primary[300]!,
+                textColor: Colors.white,
               ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:travel_muse_app/constants/app_colors.dart';
 import 'package:travel_muse_app/core/widgets/custom_toast.dart';
+import 'package:travel_muse_app/core/widgets/long_bottom_button.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/models/plan/plans.dart';
 import 'package:travel_muse_app/providers/plan/schedule/schedule_provider.dart';
@@ -12,7 +14,6 @@ import 'package:travel_muse_app/views/plan/plan/schedule/widgets/ai_button.dart'
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/day_schedule_list.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/distance_sort_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/place_detail_bottom_sheet.dart';
-import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_bottom_button.dart';
 import 'package:travel_muse_app/views/plan/plan/schedule/widgets/schedule_header.dart';
 import 'package:travel_muse_app/views/plan/plan/widgets/schedule_app_bar.dart';
 
@@ -188,7 +189,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 error: (e, _) => Center(child: Text('에러 발생: $e')),
               ),
             ),
-            ScheduleBottomButtons(
+            LongBottomButton(
               onEditTap: () async {
                 await ref
                     .read(scheduleViewModelProvider.notifier)
@@ -203,7 +204,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 CustomToast.show(
                   context: context,
                   message: '일정이 저장되었습니다.',
-                  duration: const Duration(seconds: 2),
                 );
                 await Navigator.pushReplacement(
                   context,
@@ -211,6 +211,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 );
                 }
               },
+              buttonText: '일정 저장하기',
+              backgroundColor: AppColors.primary[300]!,
             ),
           ],
         ),
