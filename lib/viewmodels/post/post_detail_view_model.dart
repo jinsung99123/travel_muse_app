@@ -9,6 +9,8 @@ class PostDetailViewModel extends StateNotifier<PostDetailState> {
 
   final PostRepository _repo;
 
+  /// - 게시물 데이터(post) 또는 게시물 ID(postId) 중 하나를 받아 처리.
+  /// - 조회수 증가 후 최신 게시물 및 작성자 정보 업데이트.
   Future<void> load({Post? post, String? postId}) async {
     try {
       state = state.copyWith(isLoading: true);
@@ -24,8 +26,10 @@ class PostDetailViewModel extends StateNotifier<PostDetailState> {
         return;
       }
 
+      // 조회수 증가
       await _repo.incrementViewCount(targetPost.postId);
 
+      // 최신 게시물 및 작성자 정보 갱신
       final updatedPost = await _repo.fetchPostById(targetPost.postId);
       final user = await _repo.fetchUser(targetPost.userId);
       final rawTypeCode = await _repo.fetchUserTypeCode(targetPost.userId);
@@ -47,6 +51,7 @@ class PostDetailViewModel extends StateNotifier<PostDetailState> {
     }
   }
 
+  /// 게시물 데이터를 새로고침 (최신 데이터로 갱신)
   Future<void> refresh() async {
     try {
       final updated = await _repo.fetchPostById(state.post?.postId ?? '');

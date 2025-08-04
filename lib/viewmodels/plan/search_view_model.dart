@@ -44,9 +44,9 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
 
     if (categoryCode == null) {
       final spots = await _nearbyService.fetchSpotsByCategory(
-      loc: latLng,
-      categoryCode: 'AT4',
-    );
+        loc: latLng,
+        categoryCode: 'AT4',
+      );
       final foods = await _nearbyService.fetchFoods(loc: latLng);
       places = [...spots, ...foods];
     } else {
@@ -78,7 +78,7 @@ class SearchViewModel extends StateNotifier<List<Map<String, String>>> {
     return await _placeService.search(query);
   }
 
-  /// Place -> Map<String, String> 형태로 변환
+  /// Place -> Map 형태로 변환
   Future<List<Map<String, String>>> _mapPlacesToViewData(
     List<Place> places,
   ) async {
