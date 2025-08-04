@@ -7,6 +7,8 @@ import 'package:travel_muse_app/repositories/post/like_repository.dart';
 class LikedPostListViewModel extends AsyncNotifier<List<Post>> {
   late final LikeRepository _repository;
 
+  /// 좋아요한 게시물 목록을 불러와 비동기 상태로 관리.
+  /// 삭제되지 않은 게시물만 필터링하여 반환.
   @override
   Future<List<Post>> build() async {
     _repository = ref.read(likeRepositoryProvider);
