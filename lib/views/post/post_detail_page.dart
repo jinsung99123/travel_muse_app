@@ -77,6 +77,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                             .refresh();
                         // ignore: use_build_context_synchronously
                         Navigator.pop(
+                          // ignore: use_build_context_synchronously
                           context,
                           ref.read(postDetailViewModelProvider).post,
                         );
@@ -141,6 +142,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                             );
                         // ignore: use_build_context_synchronously
                         CustomToast.show(
+                          // ignore: use_build_context_synchronously
                           context: context,
                           message: '신고 되었습니다.',
                         );
@@ -163,7 +165,6 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(postDetailViewModelProvider);
     final user = FirebaseAuth.instance.currentUser;
-
     if (user == null) {
       return const Center(child: Text('로그인이 필요합니다.'));
     }
@@ -211,6 +212,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
               PostDetailHeader(
                 nickname: state.nickname,
                 profileUrl: state.profileUrl,
+                fallbackTypeCode: state.typeCode,
               ),
               const SizedBox(height: 16),
               PostDetailContent(title: post.title, content: post.content),

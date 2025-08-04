@@ -8,6 +8,7 @@ class BottomSheetCategory extends StatefulWidget {
     required this.initialSelectedTags,
     required this.onChanged,
   });
+
   final Set<String> initialSelectedTags;
   final void Function(Set<String>) onChanged;
 
@@ -17,7 +18,6 @@ class BottomSheetCategory extends StatefulWidget {
 
 class _BottomSheetCategoryState extends State<BottomSheetCategory> {
   final List<String> allTags = PostTagsList.allTags;
-
   late Set<String> selectedTags;
 
   @override
@@ -32,7 +32,6 @@ class _BottomSheetCategoryState extends State<BottomSheetCategory> {
           ? selectedTags.remove(tag)
           : selectedTags.add(tag);
     });
-
     widget.onChanged(selectedTags);
   }
 
@@ -45,24 +44,33 @@ class _BottomSheetCategoryState extends State<BottomSheetCategory> {
       expand: false,
       builder: (context, scrollController) {
         return Container(
+          clipBehavior: Clip.antiAlias,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
           ),
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '카테고리 추가하기',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Text(
+                  '카테고리 추가하기',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w700,
+                    height: 1.5,
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
               Expanded(
                 child: SingleChildScrollView(
                   controller: scrollController,
+                  padding: const EdgeInsets.all(16),
                   child: Wrap(
-                    spacing: 22,
+                    spacing: 10,
                     runSpacing: 15,
                     children:
                         allTags.map((tag) {
@@ -75,6 +83,18 @@ class _BottomSheetCategoryState extends State<BottomSheetCategory> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              Center(
+                child: Container(
+                  width: 144,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
             ],
           ),
         );

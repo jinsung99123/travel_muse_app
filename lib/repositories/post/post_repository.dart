@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:travel_muse_app/models/post/post_model.dart';
 import 'package:travel_muse_app/models/user/app_user_model.dart';
+import 'package:travel_muse_app/utills/logger_util.dart';
 import 'package:uuid/uuid.dart';
 
 class PostRepository {
@@ -78,5 +79,31 @@ class PostRepository {
         .get(const GetOptions(source: Source.server));
     if (!snapshot.exists) return null;
     return AppUser.fromJson(snapshot.data()!);
+  }
+
+  Future<String?> fetchUserTypeCode(String userId) async {
+    try {
+      final query =
+          await FirebaseFirestore.instance
+              .collection('preference_test')
+              .where('userId', isEqualTo: userId)
+              .orderBy('createAt') // 가장 첫 테스트 기준
+              .limit(1)
+              .get();
+
+      if (query.docs.isEmpty) {
+        return '자유인';
+      }
+
+      final data = query.docs.first.data();
+
+      final resultMap = data['result'];
+      final type = resultMap is Map ? resultMap['type'] : null;
+
+      return type ?? '자유인';
+    } catch (e, st) {
+      logger.e(' fetchUserTypeCode 예외 발생', error: e, stackTrace: st);
+      return '자유인';
+    }
   }
 }
