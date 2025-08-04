@@ -108,12 +108,12 @@ class MyScrapListPage extends ConsumerWidget {
                           await ref
                               .read(scrapListViewModelProvider.notifier)
                               .remove(place);
-
+                          if(context.mounted){
                           CustomToast.show(
                             context: context,
                             message: '북마크에서 삭제했습니다.',
-                            duration: const Duration(seconds: 2),
                           );
+                          }
                         },
                       ),
                     ],

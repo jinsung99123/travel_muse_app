@@ -99,7 +99,6 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     CustomToast.show(
                       context: context,
                       message: '일정을 먼저 등록해주세요.',
-                      duration: const Duration(seconds: 2),
                     );
                   }
                   return;
@@ -115,7 +114,6 @@ class ScheduleAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     CustomToast.show(
                       context: context,
                       message: '10일 이상 일정은 지도로 확인할 수 없어요.',
-                      duration: const Duration(seconds: 2),
                     );
                   }
                   return;

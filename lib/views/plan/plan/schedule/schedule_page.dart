@@ -204,7 +204,6 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                 CustomToast.show(
                   context: context,
                   message: '일정이 저장되었습니다.',
-                  duration: const Duration(seconds: 2),
                 );
                 await Navigator.pushReplacement(
                   context,

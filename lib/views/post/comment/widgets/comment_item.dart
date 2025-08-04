@@ -245,7 +245,6 @@ class _CommentItemState extends ConsumerState<CommentItem> {
                           CustomToast.show(
                             context: context,
                             message: '댓글이 삭제되었습니다.',
-                            duration: const Duration(seconds: 2),
                           );
                         }
                       }
