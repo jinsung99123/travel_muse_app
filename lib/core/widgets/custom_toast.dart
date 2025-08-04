@@ -5,7 +5,7 @@ class CustomToast {
   static void show({
     required BuildContext context,
     required String message,
-    Duration duration = const Duration(seconds: 2),
+    Duration duration = const Duration(seconds: 8),
   }) {
     final overlay = Overlay.of(context);
 
