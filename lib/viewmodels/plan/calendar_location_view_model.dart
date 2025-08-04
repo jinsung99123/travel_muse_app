@@ -9,18 +9,22 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
 
   final Ref ref;
 
+  /// 여행 시작 날짜를 설정
   void setStartDate(DateTime date) {
     state = state.copyWith(startDate: date);
   }
 
+  /// 여행 종료 날짜를 설정
   void setEndDate(DateTime date) {
     state = state.copyWith(endDate: date);
   }
 
+  /// 여행 지역(region)을 설정
   void setRegion(String region) {
     state = state.copyWith(region: region);
   }
 
+  /// 기존 planId를 기반으로 여행 일정(날짜 및 지역)을 저장
   Future<void> savePlan(String planId) async {
     final start = state.startDate;
     final end = state.endDate;
@@ -43,6 +47,7 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     state = state.copyWith(planId: planId);
   }
 
+  /// 새로운 여행(plan)을 생성 후 저장하고 planId를 반환
   Future<String> createAndSavePlan() async {
     final start = state.startDate;
     final end = state.endDate;
@@ -62,14 +67,15 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     );
 
     state = state.copyWith(planId: planId);
-
     return planId;
   }
 
+  /// 여행 시작일과 종료일을 한 번에 설정
   void setDateRange(DateTime start, DateTime end) {
     state = state.copyWith(startDate: start, endDate: end);
   }
 
+  /// 사용자 계정에서 가장 가까운 여행(plan)을 불러와 상태로 세팅
   Future<void> loadNearestUpcomingPlan() async {
     final userId = ref.read(authViewModelProvider).user?.uid;
     if (userId == null) {
@@ -90,7 +96,9 @@ class CalendarLocationViewModel extends StateNotifier<PlanState> {
     }
   }
 
-  /// 날짜와 지역을 인자로 받아 상태를 세팅하고 저장까지 처리하는 통합 함수
+  /// 날짜와 지역을 인자로 받아 상태를 세팅하고 저장까지 처리하는 통합 함수.
+  /// - 기존 planId가 있으면 업데이트.
+  /// - 없으면 새로운 planId 생성 후 저장.
   Future<String> savePlanWithDates(
     String region,
     DateTime startDate,
