@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
+import 'package:travel_muse_app/core/widgets/long_bottom_button.dart';
 import 'package:travel_muse_app/models/home/home_place.dart';
 import 'package:travel_muse_app/providers/home/place_detail_provider.dart';
 import 'package:travel_muse_app/views/home/recommended_place/widgets/image_slider.dart';
@@ -128,18 +129,8 @@ class _RecommendedPlaceDetailSheetState
 
           // 하단 버튼
           if (widget.showSelectButton)
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomPadding),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary[300],
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: () {
+              LongBottomButton(
+                onEditTap: () {
                   Navigator.pop(context, {
                     'title': place.title,
                     'lat': place.latLng.latitude,
@@ -147,9 +138,11 @@ class _RecommendedPlaceDetailSheetState
                     'address': place.address,
                   });
                 },
-                child: const Text('선택하기', style: TextStyle(fontSize: 16)),
+                buttonText: '선택하기',
+                backgroundColor: AppColors.primary[300]!,
+                textColor: Colors.white,
               ),
-            ),
+            // ),
         ],
       ),
     );
