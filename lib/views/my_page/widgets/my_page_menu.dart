@@ -103,7 +103,7 @@ class MyPageMenu extends StatelessWidget {
                 height: 1.50,
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[600]),
+            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[500]),
           ],
         ),
       ),

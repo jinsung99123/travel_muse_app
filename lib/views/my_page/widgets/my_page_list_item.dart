@@ -42,7 +42,7 @@ class MyPageListItem extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[600]),
+            Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.grey[500]),
           ],
         ),
       ),
