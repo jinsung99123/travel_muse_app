@@ -30,8 +30,9 @@ class CommentSection extends ConsumerWidget {
                   .doc(postId)
                   .snapshots(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData || !snapshot.data!.exists)
+            if (!snapshot.hasData || !snapshot.data!.exists) {
               return const SizedBox();
+            }
             final postData = snapshot.data!.data() as Map<String, dynamic>;
             final likeCount = postData['likeCount'] ?? 0;
             final commentCount = postData['commentCount'] ?? 0;

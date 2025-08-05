@@ -13,6 +13,8 @@ import 'package:travel_muse_app/views/post/comment/widgets/reply_preivew.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
 
+// ignore_for_file: use_build_context_synchronously
+
 class CommentItem extends ConsumerStatefulWidget {
   const CommentItem({
     super.key,
@@ -86,8 +88,9 @@ class _CommentItemState extends ConsumerState<CommentItem> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final isLiked = widget.comment.likedUserIds
-                                    .contains(widget.currentUserId);
+                                widget.comment.likedUserIds.contains(
+                                  widget.currentUserId,
+                                );
                                 await ref
                                     .read(
                                       commentViewModelProvider(
