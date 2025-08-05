@@ -25,28 +25,24 @@ class CalendarPage extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 위쪽 텍스트 + 간격
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  CalendarGuideText(),
-                  SizedBox(height: 24),
-                ],
+                children: const [CalendarGuideText(), SizedBox(height: 24)],
               ),
             ),
-
-            // 리스트 영역 (스크롤 가능)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
                   itemCount: 12,
                   itemBuilder: (context, index) {
-                    final year = state.focusedDay.year +
+                    final year =
+                        state.focusedDay.year +
                         ((state.focusedDay.month + index - 1) ~/ 12);
-                    final month = ((state.focusedDay.month + index - 1) % 12) + 1;
+                    final month =
+                        ((state.focusedDay.month + index - 1) % 12) + 1;
 
                     final focusedMonth = DateTime(year, month);
 
@@ -64,12 +60,13 @@ class CalendarPage extends ConsumerWidget {
               ),
             ),
 
-            // 버튼 영역 (좌우 패딩 없이 꽉 차게)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: LongBottomButton(
                 onEditTap: () {
-                  final viewModel = ref.read(calendarViewModelProvider.notifier);
+                  final viewModel = ref.read(
+                    calendarViewModelProvider.notifier,
+                  );
                   final state = ref.read(calendarViewModelProvider);
 
                   final start = state.startDay;

@@ -13,6 +13,8 @@ import 'package:travel_muse_app/views/post/comment/widgets/action_item.dart';
 import 'package:travel_muse_app/views/post/widgets/detail/show_report_reason_dialog.dart';
 import 'package:uuid/uuid.dart';
 
+// ignore_for_file: use_build_context_synchronously
+
 class CommentDetailPage extends ConsumerStatefulWidget {
   const CommentDetailPage({
     super.key,

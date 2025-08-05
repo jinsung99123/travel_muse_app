@@ -12,6 +12,8 @@ import 'package:travel_muse_app/views/post/widgets/write/post_action_buttons.dar
 import 'package:travel_muse_app/views/post/widgets/write/post_location_category.dart';
 import 'package:travel_muse_app/views/post/widgets/write/post_text_fields.dart';
 
+// ignore_for_file: use_build_context_synchronously
+
 class PostWritePage extends ConsumerStatefulWidget {
   const PostWritePage({super.key, this.post});
 
@@ -52,7 +54,6 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     final remaining = 5 - imagePaths.length;
 
     if (remaining <= 0) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('이미지는 최대 5장까지만 업로드할 수 있어요.')),
       );
@@ -66,7 +67,6 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     });
 
     if (addableFiles.length < pickedFiles.length) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('최대 5장까지만 업로드할 수 있어요.')));
@@ -105,15 +105,9 @@ class _PostWritePageState extends ConsumerState<PostWritePage> {
     if (mounted) {
       if (widget.post != null) {
         Navigator.pop(context, true); // 수정인 경우 → true 반환
-        CustomToast.show(
-          context: context,
-          message: '게시물 수정이 완료되었습니다.',
-        );
+        CustomToast.show(context: context, message: '게시물 수정이 완료되었습니다.');
       } else if (createdPost != null) {
-        CustomToast.show(
-          context: context,
-          message: '게시물을 성공적으로 업로드했습니다.',
-        );
+        CustomToast.show(context: context, message: '게시물을 성공적으로 업로드했습니다.');
         Navigator.pop(context, createdPost); // 새 글 작성인 경우 → post 반환
       }
     }
