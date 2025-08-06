@@ -1,3 +1,4 @@
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_muse_app/constants/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:travel_muse_app/providers/post/post_list_view_model_provider.dar
 import 'package:travel_muse_app/utills/throttler.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_item.dart';
 import 'package:travel_muse_app/views/post/widgets/list/post_loading_item.dart';
+import 'package:travel_muse_app/views/widgets/custom_circular_indicator.dart';
 
 class PostListView extends ConsumerStatefulWidget {
   const PostListView({super.key, required this.keyword, this.onPostUpdated});
@@ -69,10 +71,22 @@ class _PostListViewState extends ConsumerState<PostListView> {
               }
               return false;
             },
-            child: RefreshIndicator(
+            child: CustomRefreshIndicator(
               onRefresh: () async {
                 _refreshThrottler.run();
                 return Future.value();
+              },
+              builder: (context, child, controller) {
+                return Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    child,
+                    if (controller.isDragging ||
+                        controller.isArmed ||
+                        controller.isLoading)
+                      Positioned(top: 16, child: CustomCircularIndicator()),
+                  ],
+                );
               },
               child: ListView.builder(
                 itemCount: filteredPosts.length,
@@ -85,17 +99,14 @@ class _PostListViewState extends ConsumerState<PostListView> {
                         final result = await Navigator.of(
                           context,
                         ).pushNamed('/post_detail', arguments: post);
-                        // result가 Post면 리스트 반영
                         if (result is Post) {
                           ref
                               .read(postListViewModelProvider.notifier)
                               .updatePost(result);
                         }
-
                         if (result == true) {
                           ref.invalidate(postListViewModelProvider);
                         }
-
                         widget.onPostUpdated?.call();
                       },
                       child: Container(
