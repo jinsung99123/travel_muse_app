@@ -37,9 +37,15 @@ class PostItem extends StatelessWidget {
               children: [
                 TimeAgoText(createdAt: post.createAt),
                 SizedBox(width: 8),
-                Text('댓글 ${post.commentCount}', style: AppTextStyles.postListContent),
+                Text(
+                  '댓글 ${post.commentCount}',
+                  style: AppTextStyles.postListContent,
+                ),
                 SizedBox(width: 8),
-                Text('조회 ${post.viewCount}', style: AppTextStyles.postListContent),
+                Text(
+                  '조회 ${post.viewCount}',
+                  style: AppTextStyles.postListContent,
+                ),
               ],
             ),
           ],
@@ -56,15 +62,19 @@ class PostItem extends StatelessWidget {
                     child: Image.network(post.thumbnail!, fit: BoxFit.cover),
                   ),
                 ),
-                Container(
-                  width: 23,
-                  height: 23,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: AppOtherStyles.imageCountContainer,
-                  child: Center(
-                    child: Text('${post.images.length}', style: AppTextStyles.imageCount),
+                if (post.images.length > 1)
+                  Container(
+                    width: 23,
+                    height: 23,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: AppOtherStyles.imageCountContainer,
+                    child: Center(
+                      child: Text(
+                        '${post.images.length}',
+                        style: AppTextStyles.imageCount,
+                      ),
+                    ),
                   ),
-                ),
               ],
             )
             : SizedBox.shrink(),
