@@ -187,6 +187,15 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: Navigator.canPop(context) ? const CustomBackButton() : null,
+          title: const Text(
+            '게시글',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: true,
           actions: [
             GestureDetector(
               onTap: () => _showOptions(post),
